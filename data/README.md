@@ -3,7 +3,7 @@
 This authored module owns the source lock, input verification and generators
 for the active [catalog](../generated/data/README.md). Its module path is
 `github.com/bedrock-mc/protocolgen/data`. Runtime consumers import
-`github.com/bedrock-mc/protocolgen/generated/data` instead. The runtime module uses only the standard library. The tooling module uses a
+`github.com/cinnabar-mc/protocolgen/generated/data` instead. The runtime module uses only the standard library. The tooling module uses a
 pinned NBT codec to normalize registry payloads; neither module imports the other.
 
 ## Layout and ownership

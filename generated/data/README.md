@@ -1,7 +1,7 @@
 # Active Bedrock game catalog
 
 This module provides shared game facts for Bedrock servers and clients. Import
-it as `github.com/bedrock-mc/protocolgen/generated/data`. It uses only the Go
+it as `github.com/cinnabar-mc/protocolgen/generated/data`. It uses only the Go
 standard library and does not import the generators or source loader.
 
 There is one active catalog. Older releases remain available through Git and
@@ -14,7 +14,7 @@ compare the catalog hash against SHA-256 of `json.Marshal(sources.Lock)` to
 reject mismatched module revisions even when the game version is unchanged.
 
 ```go
-import "github.com/bedrock-mc/protocolgen/generated/data/block"
+import "github.com/cinnabar-mc/protocolgen/generated/data/block"
 
 state, ok := block.StateByHash(hash)
 if ok {
