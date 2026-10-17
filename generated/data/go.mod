@@ -1,3 +1,3 @@
-module github.com/bedrock-mc/protocolgen/generated/data
+module github.com/cinnabar-mc/protocolgen/generated/data
 
 go 1.24.0

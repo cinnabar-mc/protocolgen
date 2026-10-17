@@ -1,14 +1,17 @@
 package data_test
 
 import (
+	"os"
+	"reflect"
+	"strings"
 	"testing"
 
-	"github.com/bedrock-mc/protocolgen/generated/data"
-	"github.com/bedrock-mc/protocolgen/generated/data/biome"
-	"github.com/bedrock-mc/protocolgen/generated/data/block"
-	"github.com/bedrock-mc/protocolgen/generated/data/entity"
-	"github.com/bedrock-mc/protocolgen/generated/data/item"
-	"github.com/bedrock-mc/protocolgen/generated/data/voxelshape"
+	"github.com/cinnabar-mc/protocolgen/generated/data"
+	"github.com/cinnabar-mc/protocolgen/generated/data/biome"
+	"github.com/cinnabar-mc/protocolgen/generated/data/block"
+	"github.com/cinnabar-mc/protocolgen/generated/data/entity"
+	"github.com/cinnabar-mc/protocolgen/generated/data/item"
+	"github.com/cinnabar-mc/protocolgen/generated/data/voxelshape"
 )
 
 // TestGeneratedCountsAndIndexes verifies cross-package data references.
@@ -86,5 +89,20 @@ func TestRepresentativeLookups(t *testing.T) {
 	}
 	if value, ok := item.LookupFood("minecraft:apple"); !ok || value.Nutrition != 4 {
 		t.Fatalf("unexpected apple food: %+v, found=%t", value, ok)
+	}
+}
+
+// TestModulePath keeps the published catalog identity aligned with Go imports and go.mod.
+func TestModulePath(t *testing.T) {
+	if got := reflect.TypeFor[data.Counts]().PkgPath(); got != data.ModulePath {
+		t.Fatalf("compiled module path: got %q, want %q", got, data.ModulePath)
+	}
+	manifest, err := os.ReadFile("go.mod")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fields := strings.Fields(string(manifest))
+	if len(fields) < 2 || fields[0] != "module" || fields[1] != data.ModulePath {
+		t.Fatal("go.mod does not declare the catalog module path")
 	}
 }

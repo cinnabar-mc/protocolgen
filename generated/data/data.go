@@ -1,6 +1,9 @@
 // Package data reports the target release, source versions and catalog counts.
 package data
 
+// ModulePath identifies this runtime catalog module.
+const ModulePath = "github.com/cinnabar-mc/protocolgen/generated/data"
+
 // Counts reports the number of records in each generated dataset.
 type Counts struct {
 	BlockStates uint32 `json:"block_states"`

@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/bedrock-mc/protocolgen/generated/data"
-	"github.com/bedrock-mc/protocolgen/generated/data/block"
-	"github.com/bedrock-mc/protocolgen/generated/data/registry"
+	"github.com/cinnabar-mc/protocolgen/generated/data"
+	"github.com/cinnabar-mc/protocolgen/generated/data/block"
+	"github.com/cinnabar-mc/protocolgen/generated/data/registry"
 )
 
 // TestReleaseMetadata verifies that both projections used the same complete lock.
