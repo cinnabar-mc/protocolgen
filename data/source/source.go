@@ -16,7 +16,10 @@ import (
 	"time"
 )
 
-//go:embed lock.json releases.json inputs
+//go:embed lock.json releases.json
+var manifests embed.FS
+
+//go:embed inputs
 var bundled embed.FS
 
 // Upstream pins a public GitHub repository once for all of its input files.
@@ -78,7 +81,7 @@ func Open(path string) (*Sources, error) {
 	var err error
 	s := &Sources{}
 	if path == "" {
-		data, err = bundled.ReadFile("lock.json")
+		data, err = manifests.ReadFile("lock.json")
 	} else {
 		data, err = os.ReadFile(path)
 		s.dir = filepath.Dir(path)
@@ -170,59 +173,79 @@ func (s *Sources) URL(name string) string {
 	return "https://raw.githubusercontent.com/" + upstream.Repository + "/" + upstream.Revision + "/" + input.File
 }
 
-// Read loads one locked source. Downloaded files use a digest-addressed cache;
-// cached and local files are authenticated just like fresh downloads.
+// Read loads one locked source, including bundled generator inputs. Runtime
+// consumers that only need downloads should use ReadRemote to avoid embedding inputs.
 func (s *Sources) Read(ctx context.Context, name, cache string) ([]byte, error) {
 	input, ok := s.Lock.Inputs[name]
 	if !ok {
 		return nil, fmt.Errorf("source %q is not in the lock", name)
 	}
+	if input.Path == "" {
+		return s.ReadRemote(ctx, name, cache)
+	}
 	var data []byte
 	var err error
-	if input.Path != "" {
-		if s.dir == "" {
-			data, err = bundled.ReadFile(input.Path)
-		} else {
-			data, err = os.ReadFile(filepath.Join(s.dir, input.Path))
-		}
+	if s.dir == "" {
+		data, err = bundled.ReadFile(input.Path)
 	} else {
-		cachePath := ""
-		if cache != "" {
-			cachePath = filepath.Join(cache, input.SHA256)
-			data, err = os.ReadFile(cachePath)
-			if err != nil && !os.IsNotExist(err) {
-				return nil, fmt.Errorf("read source cache: %w", err)
-			}
+		data, err = os.ReadFile(filepath.Join(s.dir, input.Path))
+	}
+	return authenticate(name, input, data, err)
+}
+
+// ReadRemote loads only a locked upstream input, rejecting local inputs. Downloaded
+// and cached bytes are authenticated without linking bundled generator payloads.
+func (s *Sources) ReadRemote(ctx context.Context, name, cache string) ([]byte, error) {
+	input, ok := s.Lock.Inputs[name]
+	if !ok {
+		return nil, fmt.Errorf("source %q is not in the lock", name)
+	}
+	if input.Path != "" {
+		return nil, fmt.Errorf("source %q is local; use Read for generator inputs", name)
+	}
+	var data []byte
+	var err error
+	cachePath := ""
+	if cache != "" {
+		cachePath = filepath.Join(cache, input.SHA256)
+		data, err = os.ReadFile(cachePath)
+		if err != nil && !os.IsNotExist(err) {
+			return nil, fmt.Errorf("read source cache: %w", err)
 		}
-		if data == nil {
-			request, reqErr := http.NewRequestWithContext(ctx, http.MethodGet, s.URL(name), nil)
-			if reqErr != nil {
-				return nil, reqErr
+	}
+	if data == nil {
+		request, reqErr := http.NewRequestWithContext(ctx, http.MethodGet, s.URL(name), nil)
+		if reqErr != nil {
+			return nil, reqErr
+		}
+		client := &http.Client{Timeout: 2 * time.Minute}
+		response, reqErr := client.Do(request)
+		if reqErr != nil {
+			return nil, reqErr
+		}
+		defer response.Body.Close()
+		if response.StatusCode != http.StatusOK {
+			return nil, fmt.Errorf("fetch source %q: %s", name, response.Status)
+		}
+		const limit = 256 << 20
+		data, err = io.ReadAll(io.LimitReader(response.Body, limit+1))
+		if len(data) > limit {
+			return nil, fmt.Errorf("source %q exceeds %d bytes", name, limit)
+		}
+		if err == nil && fmt.Sprintf("%x", sha256.Sum256(data)) == input.SHA256 && cachePath != "" {
+			if err := os.MkdirAll(cache, 0o755); err != nil {
+				return nil, err
 			}
-			client := &http.Client{Timeout: 2 * time.Minute}
-			response, reqErr := client.Do(request)
-			if reqErr != nil {
-				return nil, reqErr
-			}
-			defer response.Body.Close()
-			if response.StatusCode != http.StatusOK {
-				return nil, fmt.Errorf("fetch source %q: %s", name, response.Status)
-			}
-			const limit = 256 << 20
-			data, err = io.ReadAll(io.LimitReader(response.Body, limit+1))
-			if len(data) > limit {
-				return nil, fmt.Errorf("source %q exceeds %d bytes", name, limit)
-			}
-			if err == nil && fmt.Sprintf("%x", sha256.Sum256(data)) == input.SHA256 && cachePath != "" {
-				if err := os.MkdirAll(cache, 0o755); err != nil {
-					return nil, err
-				}
-				if err := writeCache(cachePath, data); err != nil {
-					return nil, err
-				}
+			if err := writeCache(cachePath, data); err != nil {
+				return nil, err
 			}
 		}
 	}
+	return authenticate(name, input, data, err)
+}
+
+// authenticate checks read errors and requires the exact digest declared by the lock.
+func authenticate(name string, input Input, data []byte, err error) ([]byte, error) {
 	if err != nil {
 		return nil, fmt.Errorf("read source %q: %w", name, err)
 	}
