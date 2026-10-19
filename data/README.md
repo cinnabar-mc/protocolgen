@@ -6,6 +6,10 @@ for the active [catalog](../generated/data/README.md). Its module path is
 `github.com/cinnabar-mc/protocolgen/generated/data` instead. The runtime module uses only the standard library. The tooling module uses a
 pinned NBT codec to normalize registry payloads; neither module imports the other.
 
+Runtime download tools may use `source.Open` with `Sources.ReadRemote` to keep
+the shared revisions, digest checks and cache without embedding raw generator
+inputs. `Sources.Read` also supports bundled local inputs and is for generators.
+
 ## Layout and ownership
 
 - `source/` holds the release lock, verified input loader and selected native measurements and reviewed

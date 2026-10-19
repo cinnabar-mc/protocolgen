@@ -32,7 +32,7 @@ type ReleaseIndex struct {
 // Releases loads the shared release registry, including explicit preview aliases.
 func Releases() (ReleaseIndex, error) {
 	var index ReleaseIndex
-	contents, err := bundled.ReadFile("releases.json")
+	contents, err := manifests.ReadFile("releases.json")
 	if err != nil {
 		return index, err
 	}
