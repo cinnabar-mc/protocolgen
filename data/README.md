@@ -8,14 +8,14 @@ pinned NBT codec to normalize registry payloads; neither module imports the othe
 
 ## Layout and ownership
 
-- `source/` holds the release lock, verified input loader and small reviewed
+- `source/` holds the release lock, verified input loader and selected native measurements and reviewed
   registry/correction inputs. External packs remain outside the repository.
 - `internal/generator` and `cmd/generate` produce semantic values.
 - `internal/registrygen` and `cmd/registrygen` normalize block palettes, data-driven
   block components and complete item component payloads.
 - `internal/runtimegen` and `cmd/runtimegen` produce runtime item values and
   release metadata.
-- `internal/mininggen` and `cmd/mininggen` produce provisional block tool facts.
+- `internal/mininggen` and `cmd/mininggen` produce native block tool facts with provisional special-tool speed evidence.
 - `../generated/data/` is the single active output catalog. It has its own
   `go.mod`; it is not a versioned packet-output directory.
 
@@ -35,8 +35,8 @@ go run ./cmd/mininggen
 ```
 
 The runtime catalog targets Minecraft 1.26.50, protocol 2193, with 2,076 items.
-Sources include the locked Cloudburst registry, Allay item properties and tags, and
-reviewed corrections. Generation rejects missing values and stale corrections.
+Sources include the locked Cloudburst registry, native item properties and tags,
+two supplemental Allay inventory-capability tags, and measured corrections. Generation rejects missing values and stale corrections.
 It writes `item/runtime_generated.go`, `release_generated.go` and `release.json`
 in one rollback-protected batch. The source-lock identity is SHA-256 over
 the canonical input lock and its resolved release record. JSON indentation does
@@ -55,20 +55,21 @@ semantic generator verifies all three Cloudburst semantic files and every
 consumed BDS JSON file before writing. Added, missing or changed input files fail validation.
 The independent BDS 1.26.32.2 semantic provenance is preserved; it is not a
 claim that all inputs were captured from the target runtime release.
-Cloudburst `blocks.json` supplies all block fields, including collision, outline
-and tint; there is no separate Allay block overlay. Its pinned revision is
-`659ce1e2eee3a67045693f4fd5515c6ccf571953`, shared by the biome, named
-voxel-shape and runtime item registry inputs. The catalog contains 22,091 block states, 89 biomes and
-220 named voxel shapes. Named shapes are decoded from occupied grid cells into
-block-local boxes; no BDS shape-pack overlay is required.
+The vendored CC0-1.0 [didntpot snapshot](source/inputs/1.26.51/native/README.md)
+supplies the block palette, scalar block properties, tool requirements and tags,
+item stack fields and tags, and biome scalar values and numeric IDs. It covers
+22,091 states, 1,477 block identifiers, 2,076 items and 89 biomes. State ordinals,
+hashes and identifier domains must match the independent registries; absent
+required fields, mismatched IDs and inconsistent tag memberships fail generation.
+The snapshot is release 1.26.51, protocol 2193; the runtime target retains its
+1.26.50 protocol label. The unknown-block hash keeps the catalog's reserved value.
 
-Cloudburst supplies biome properties and names but no numeric IDs. The locked
-[`biome_ids.json`](source/inputs/1.26.50/biome_ids.json) adds the 89 retail
-1.26.50/protocol 2193 IDs from Cinnabar's public, BDS-verified biome registry.
-This is a transitional input, not a protocolgen BDS capture. Generation rejects
-missing, extra, duplicate, or conflicting IDs when it joins the two sources.
-The versioned source lock records the Cinnabar commit and input digest. A future
-1.26.51 capture adapter can replace this snapshot with packet-derived IDs.
+Cloudburst `blocks.json` remains the source for collision, outline and rendering
+fields. Cloudburst also supplies biome tag memberships, named voxel shapes,
+item identities and component payloads, all from the revision in the lock.
+Native biome IDs replace the previous Cinnabar registry snapshot. Native scalars
+replace the corresponding Cloudburst fields, with exact-domain validation.
+Named shapes are decoded from occupied grid cells into block-local boxes.
 
 Thirty liquid-clip boxes in this extract have reversed bounds. The reviewed
 `liquid_clip_omissions` input identifies each exact name, hash and source box.
@@ -116,41 +117,22 @@ See [NOTICE.md](NOTICE.md) for source attribution.
 
 ## Remaining sources
 
-Cloudburst's item registry covers all 2,076 items, but its component extract does
-not supply complete stack sizes or inventory capabilities. Allay item properties
-and supplemental tags remain explicit locked inputs, with reviewed corrections.
-Removing them requires a complete version-matched item extract containing stack
-limits, effective offhand acceptance and equipment-slot eligibility. Missing
-component data is not evidence for a default stack size or an unavailable slot.
+The native item dump stores raw fields, not every effective runtime getter.
+Twelve bucket stack limits therefore use measured corrections: generation
+requires the raw value to remain unchanged, rejecting stale overrides. Effective
+durability is not exposed from this dump: component-based items can have zero or
+conflicting raw values. Consumers must retain their measured durability inputs.
 
-BDS behavior-pack inputs still supply base entity components and food at their
-independently recorded source version. Cloudburst entity IDs and synchronized
-properties do not contain those behavior components. The existing
-`vanilla-data/endstone` exporter is a separate route for collecting live registry
-facts from a matching BDS build; a packet registry alone does not contain all
-item capabilities. This update does not change those behavior-pack inputs.
+Only `minecraft:allow_offhand` and `minecraft:head` remain from Allay's supplemental
+tag table. The native dump does not provide these inventory-capability getters.
+Body-slot flags and recipe tags use native memberships. Missing data never means
+a default inventory capability.
 
-## Release and upstream ownership
-
-[source/releases.json](source/releases.json) connects each supported codec snapshot
-to its protocol, release channel, accepted labels and capture adapter. The active
-input lock selects a record by `release`. Retail `1.26.50` uses snapshot
-`1.26.51` and protocol 2193; snapshot `1.26.50` describes preview protocol 2187.
-Do not select a codec directory from a game label alone. CI checks the registry
-against committed manifests and validates all declared capture adapters without
-connecting to BDS. The Rust matrix, capture defaults and adapter arguments use
-this same record. Current retail has no capture adapter declared yet.
-
-The source lock declares each GitHub repository and commit once in `upstreams`.
-Remote inputs specify an upstream, file path (or archive) and SHA-256. Download
-URLs are derived. Local corrections can refer to the upstream they qualify.
-`Sources.Revision(name)` resolves either form; `Lock.Target` exposes the selected
-release. Independent BDS pack versions remain separate provenance.
-
-`mininggen` reads the authenticated Prismarine Bedrock 1.26.30 `blocks.json`
-pin from the same lock. It writes `block/mining_generated.go` with separate
-effective-tool and drop-qualifying-tool families and a minimum harvest tier.
-The classifications are provisional for the active 1.26.50 catalog. Blocks
-without usable evidence remain unknown; they are not assumed hand-harvestable.
-Run `mininggen` again after any source-lock change so its recorded lock digest
-matches the other generated outputs.
+Ordinary pickaxe, axe, shovel and hoe effectiveness, plus harvest tool and tier
+requirements, use native block tags and `requiresCorrectToolForDrops`. Known
+no-tool blocks are emitted explicitly, including beds. Prismarine's older input
+is used only for sword/shears speed targets absent from the dump. Those speed
+rules remain provisional; complete native mining parity needs additional evidence.
+Cloudburst geometry, biome tags and item components, and official pack-derived
+entity/food data also remain independent inputs because the selected dump does
+not replace them completely.

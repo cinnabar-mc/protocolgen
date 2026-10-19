@@ -3,7 +3,9 @@ package registrygen
 import (
 	"bytes"
 	"compress/gzip"
+	"context"
 	"encoding/json"
+	"github.com/bedrock-mc/protocolgen/data/source"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -67,7 +69,7 @@ func TestGenerateRejectsRegistryDrift(t *testing.T) {
 		change func(*Inputs)
 		want   string
 	}{
-		{"truncated_gzip", func(in *Inputs) { in.BlockPalette = in.BlockPalette[:len(in.BlockPalette)-4] }, "block palette"},
+		{"truncated_palette", func(in *Inputs) { in.BlockPalette = in.BlockPalette[:len(in.BlockPalette)-4] }, "block palette"},
 		{"missing_components", func(in *Inputs) { in.ItemComponents = sourceNBT(t, map[string]any{"minecraft:a": map[string]any{}}) }, "component count"},
 		{"unknown_components", func(in *Inputs) {
 			in.ItemComponents = sourceNBT(t, map[string]any{"minecraft:a": map[string]any{}, "minecraft:extra": map[string]any{}})
@@ -81,30 +83,17 @@ func TestGenerateRejectsRegistryDrift(t *testing.T) {
 			in.DataDrivenBlocks = sourceNBT(t, map[string]any{"minecraft:unknown": map[string]any{}})
 		}, "no palette state"},
 		{"empty_palette", func(in *Inputs) {
-			in.BlockPalette = sourceNBT(t, struct {
-				Blocks []rawBlockState `nbt:"blocks"`
-			}{[]rawBlockState{}})
+			in.BlockPalette = nil
 		}, "palette is empty"},
-		{"duplicate_block_hash", func(in *Inputs) {
-			states := fixtureStates()
-			states[1].NetworkID = states[0].NetworkID
-			in.BlockPalette = sourceNBT(t, struct {
-				Blocks []rawBlockState `nbt:"blocks"`
-			}{states})
-		}, "duplicate block network hash"},
 		{"duplicate_block_state", func(in *Inputs) {
 			states := fixtureStates()
 			states[1].Name = states[0].Name
-			in.BlockPalette = sourceNBT(t, struct {
-				Blocks []rawBlockState `nbt:"blocks"`
-			}{states})
+			in.BlockPalette = paletteNBT(t, states)
 		}, "duplicate block state"},
 		{"invalid_property_type", func(in *Inputs) {
 			states := fixtureStates()
 			states[0].States["invalid"] = float32(1)
-			in.BlockPalette = sourceNBT(t, struct {
-				Blocks []rawBlockState `nbt:"blocks"`
-			}{states})
+			in.BlockPalette = paletteNBT(t, states)
 		}, "unsupported type"},
 	} {
 		t.Run(test.name, func(t *testing.T) {
@@ -125,10 +114,18 @@ func TestLockedRegistryOutput(t *testing.T) {
 		t.Skip("set PROTOCOLGEN_REGISTRY_DIR to the locked Cloudburst input directory")
 	}
 	var input Inputs
+	inputs, err := source.Open("")
+	if err != nil {
+		t.Fatal(err)
+	}
+	input.BlockPalette, err = inputs.Read(context.Background(), "block_palette", "")
+	if err != nil {
+		t.Fatal(err)
+	}
 	for _, file := range []struct {
 		name string
 		out  *[]byte
-	}{{"block_palette.nbt", &input.BlockPalette}, {"data_driven_blocks.nbt", &input.DataDrivenBlocks}, {"runtime_item_states.json", &input.ItemRegistry}, {"item_components.nbt", &input.ItemComponents}} {
+	}{{"data_driven_blocks.nbt", &input.DataDrivenBlocks}, {"runtime_item_states.json", &input.ItemRegistry}, {"item_components.nbt", &input.ItemComponents}} {
 		data, err := os.ReadFile(filepath.Join(dir, file.name))
 		if err != nil {
 			t.Fatal(err)
@@ -164,9 +161,7 @@ func registryFixture(t *testing.T) Inputs {
 		t.Fatal(err)
 	}
 	return Inputs{
-		BlockPalette: sourceNBT(t, struct {
-			Blocks []rawBlockState `nbt:"blocks"`
-		}{fixtureStates()}),
+		BlockPalette:     paletteNBT(t, fixtureStates()),
 		DataDrivenBlocks: sourceNBT(t, map[string]any{"minecraft:z": fixtureComponents()}),
 		ItemRegistry:     registry,
 		ItemComponents:   sourceNBT(t, map[string]any{"minecraft:z": fixtureComponents(), "minecraft:a": map[string]any{}}),
@@ -174,10 +169,10 @@ func registryFixture(t *testing.T) Inputs {
 }
 
 // fixtureStates returns a non-lexical source palette with multiple NBT property types.
-func fixtureStates() []rawBlockState {
-	return []rawBlockState{
-		{Name: "minecraft:z", States: map[string]any{"age": int32(3), "open": uint8(1)}, Version: 1, NetworkID: 30},
-		{Name: "minecraft:a", States: map[string]any{"age": int32(3), "open": uint8(1)}, Version: 1, NetworkID: 20},
+func fixtureStates() []blockState {
+	return []blockState{
+		{Name: "minecraft:z", States: map[string]any{"age": int32(3), "open": uint8(1)}, Version: 1},
+		{Name: "minecraft:a", States: map[string]any{"age": int32(3), "open": uint8(1)}, Version: 1},
 	}
 }
 
@@ -200,6 +195,20 @@ func sourceNBT(t *testing.T, value any) []byte {
 	}
 	if err := writer.Close(); err != nil {
 		t.Fatal(err)
+	}
+	return output.Bytes()
+}
+
+// paletteNBT emits native palette compounds in their sequential network order.
+func paletteNBT(t *testing.T, states []blockState) []byte {
+	t.Helper()
+	var output bytes.Buffer
+	encoder := nbt.NewEncoder(&output)
+	encoder.SortMaps = true
+	for _, state := range states {
+		if err := encoder.Encode(state); err != nil {
+			t.Fatal(err)
+		}
 	}
 	return output.Bytes()
 }

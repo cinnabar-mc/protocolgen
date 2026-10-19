@@ -5,9 +5,11 @@ package data
 const (
 	SchemaVersion = 1
 	CloudburstRef = "659ce1e2eee3a67045693f4fd5515c6ccf571953"
-	BDSVersion    = "1.26.32.2"
+	// NativeRef pins native block, biome and item measurements independently of shapes.
+	NativeRef  = "bb896a46ba856c58383e3cfb962a38c45a0dea78"
+	BDSVersion = "1.26.32.2"
 	// SemanticSourceLockSHA256 identifies the lock used for semantic generation.
-	SemanticSourceLockSHA256 = "7672d394035aade326e9f36edb00d6414911e1f841137bc2eef871781a088f97"
+	SemanticSourceLockSHA256 = "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4"
 )
 
 var GeneratedCounts = Counts{

@@ -73,21 +73,67 @@ func lockedFixture(t *testing.T) (lockPath, cloudburst, bds string) {
 	if err := os.WriteFile(filepath.Join(dir, "omissions.json"), omissions, 0o644); err != nil {
 		t.Fatal(err)
 	}
-	biomeInput := []byte(`{"schema_version":1,"minecraft_version":"1.26.50","protocol_version":2193,"source":"fixture","source_sha256":"1111111111111111111111111111111111111111111111111111111111111111","biomes":[{"name":"minecraft:plains","id":1}]}`)
-	if err := os.WriteFile(filepath.Join(dir, "biome_ids.json"), biomeInput, 0o644); err != nil {
-		t.Fatal(err)
-	}
 	lock := source.Lock{
 		SchemaVersion: 2, Release: "1.26.51",
 		Upstreams: map[string]source.Upstream{"cloudburst": {Repository: "example/data", Revision: strings.Repeat("1", 40)}},
 		Inputs: map[string]source.Input{
 			"liquid_clip_omissions": {Path: "omissions.json", Upstream: "cloudburst", SHA256: fmt.Sprintf("%x", sha256.Sum256(omissions))},
-			"biome_ids":             {Path: "biome_ids.json", Revision: strings.Repeat("1", 40), SHA256: fmt.Sprintf("%x", sha256.Sum256(biomeInput))},
 		},
 		Semantic: source.SemanticInputs{
 			Cloudburst: "cloudburst", BDSVersion: "locked-bds",
 			CloudburstFiles: cloudburstFiles, BDSFiles: bdsFiles,
 		},
+	}
+	blocks, err := os.ReadFile(filepath.Join(cloudburst, "blocks.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var raw []map[string]any
+	if err := json.Unmarshal(blocks, &raw); err != nil {
+		t.Fatal(err)
+	}
+	properties := make(map[string]any)
+	states := make(map[string]any)
+	for i, block := range raw {
+		properties[block["name"].(string)] = map[string]any{"requiresCorrectToolForDrops": block["requiresCorrectToolForDrops"]}
+		state := make(map[string]any)
+		for _, key := range []string{"friction", "explosionResistance", "lightEmission", "flameOdds", "burnOdds"} {
+			state[key] = block[key]
+		}
+		state["hashedNetworkId"] = block["blockStateHash"]
+		state["destroySpeed"] = block["hardness"]
+		state["lightDamping"] = block["lightDampening"]
+		state["solid"] = block["isSolid"]
+		states[fmt.Sprint(i)] = state
+	}
+	biomeData, err := os.ReadFile(filepath.Join(cloudburst, "stripped_biome_definitions.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	var biomes map[string]map[string]any
+	if err := json.Unmarshal(biomeData, &biomes); err != nil {
+		t.Fatal(err)
+	}
+	for _, biome := range biomes {
+		biome["mapWaterColor"] = "#ff336699"
+	}
+	for key, value := range map[string]any{
+		"native_biome_ids":        map[string]int{"minecraft:plains": 1},
+		"native_biomes":           biomes,
+		"native_version":          map[string]any{"protocol": 2193, "version": "1.26.51"},
+		"native_block_properties": properties,
+		"native_block_states":     states,
+		"native_block_tags":       map[string][]string{},
+	} {
+		data, err := json.Marshal(value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		filename := key + ".json"
+		if err := os.WriteFile(filepath.Join(dir, filename), data, 0o644); err != nil {
+			t.Fatal(err)
+		}
+		lock.Inputs[key] = source.Input{Path: filename, Revision: strings.Repeat("2", 40), SHA256: fmt.Sprintf("%x", sha256.Sum256(data))}
 	}
 	data, err := json.Marshal(lock)
 	if err != nil {

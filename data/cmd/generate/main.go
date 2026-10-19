@@ -11,6 +11,7 @@ import (
 	"path/filepath"
 
 	"github.com/bedrock-mc/protocolgen/data/internal/generator"
+	"github.com/bedrock-mc/protocolgen/data/internal/nativeblock"
 	"github.com/bedrock-mc/protocolgen/data/source"
 )
 
@@ -57,15 +58,27 @@ func run(lockPath, cache, cloudburstDir, bdsDir, outputDir string) (generator.St
 	if err := json.Unmarshal(omitted, &omissions); err != nil {
 		return generator.Stats{}, fmt.Errorf("decode liquid clip omissions: %w", err)
 	}
-	encodedBiomeIDs, err := sources.Read(context.Background(), "biome_ids", cache)
+	encodedBiomeIDs, err := sources.Read(context.Background(), "native_biome_ids", cache)
 	if err != nil {
 		return generator.Stats{}, fmt.Errorf("read biome IDs: %w", err)
 	}
-	biomeIDs, err := generator.DecodeBiomeIDs(encodedBiomeIDs, sources.Lock.Target.MinecraftVersion, sources.Lock.Target.ProtocolVersion)
+	biomeIDs, err := generator.DecodeNativeBiomeIDs(encodedBiomeIDs)
+	if err != nil {
+		return generator.Stats{}, err
+	}
+	encodedBiomes, err := sources.Read(context.Background(), "native_biomes", cache)
+	if err != nil {
+		return generator.Stats{}, err
+	}
+	nativeBiomes, err := generator.DecodeNativeBiomes(encodedBiomes)
 	if err != nil {
 		return generator.Stats{}, err
 	}
 	digest, err := sources.Lock.SHA256()
+	if err != nil {
+		return generator.Stats{}, err
+	}
+	native, err := nativeblock.Read(context.Background(), sources, cache)
 	if err != nil {
 		return generator.Stats{}, err
 	}
@@ -75,8 +88,11 @@ func run(lockPath, cache, cloudburstDir, bdsDir, outputDir string) (generator.St
 		CloudburstRef:       sources.Lock.CloudburstRevision(),
 		BDSVersion:          sources.Lock.Semantic.BDSVersion,
 		BiomeIDs:            biomeIDs,
+		NativeBiomes:        nativeBiomes,
 		LiquidClipOmissions: omissions,
 		SourceLockSHA256:    digest,
+		NativeBlocks:        &native,
+		NativeRef:           sources.Revision("native_block_states"),
 	})
 	if err != nil {
 		return generator.Stats{}, err

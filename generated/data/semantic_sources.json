@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "cloudburst_ref": "659ce1e2eee3a67045693f4fd5515c6ccf571953",
+  "native_ref": "bb896a46ba856c58383e3cfb962a38c45a0dea78",
   "bds_version": "1.26.32.2",
   "liquid_clip_omissions": [
     {
@@ -364,7 +365,7 @@
       ]
     }
   ],
-  "source_lock_sha256": "7672d394035aade326e9f36edb00d6414911e1f841137bc2eef871781a088f97",
+  "source_lock_sha256": "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4",
   "counts": {
     "block_states": 22091,
     "biomes": 89,

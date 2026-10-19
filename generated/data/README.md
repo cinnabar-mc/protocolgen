@@ -28,10 +28,10 @@ if ok {
 | Package | Contents |
 | --- | --- |
 | `data` | Target release, independent source versions and generated counts |
-| `block` | State hashes, physical properties, light, tint, shapes and provisional mining-tool facts |
+| `block` | State hashes, physical properties, light, tint, shapes and mining-tool facts with explicit evidence status |
 | `biome` | Climate, terrain values, water color, rain and tags |
 | `entity` | Base collision, health, movement, scale, projectile and family values |
-| `item` | Runtime registry, stack limits, equipment flags and food values |
+| `item` | Runtime registry, stack limits, native tags, equipment flags and food values |
 | `voxelshape` | Named shapes in block-local coordinates |
 
 Named values include `block.Stone`, `biome.Plains`, `entity.Arrow`, `item.Apple`
@@ -41,23 +41,30 @@ Treat returned slices and definitions as immutable.
 ## Independent source versions
 
 The runtime target is Minecraft 1.26.50, protocol 2193, with 2,076 runtime items.
-The semantic snapshot uses CloudburstMC/Data commit
-`659ce1e2eee3a67045693f4fd5515c6ccf571953` for blocks, biomes and named voxel
-shapes, and BDS `1.26.32.2` for base entity and food inputs. The same Cloudburst
-revision supplies runtime item identities; Allay remains an item-property and
-supplemental-tag input only.
-These inputs contain 22,091 block states, 89 biomes, 96 entities, 38 foods and
-220 named voxel shapes. Biome metadata may lack a numeric ID; check `HasID`
-before using `ID`. [semantic_sources.json](semantic_sources.json) and
-`version_generated.go` record these independent versions and counts.
-`BDSVersion` describes the entity and food inputs, not the runtime
-protocol target.
+The native snapshot is release 1.26.51, protocol 2193. `NativeRef` pins its commit.
+It supplies the block palette, scalar block properties, ordinary-tool and harvest
+classifications, item fields and tags, and biome scalar values and IDs. Selected
+CC0-1.0 input files are vendored so regeneration does not require upstream access.
+The catalog retains measured bucket stack corrections because raw field values
+can differ from effective runtime limits. Raw durability is not exposed.
 
-`block.MiningByName` reports effective tools, drop-qualifying tools and a
-minimum tier from pinned Prismarine Bedrock 1.26.30 data. These classifications
-are provisional for the target release. A false lookup means the source lacks
-usable classification; it does not establish that a block is hand-harvestable.
-The evidence version, commit and SHA-256 are exposed beside the table.
+CloudburstMC/Data supplies geometry, rendering fields, biome tags, item identities
+and component payloads. Allay supplies only the two missing offhand/head capability
+tags. BDS `1.26.32.2` supplies base entity and food inputs; `BDSVersion` describes
+those inputs, independently of the target protocol. The catalog contains 22,091
+block states, 89 biomes, 96 entities, 38 foods and 220 named voxel shapes.
+[semantic_sources.json](semantic_sources.json) and `release.json` record the pins.
+
+`block.MiningByName` provides native ordinary-tool effectiveness and harvest
+requirements, including explicit no-tool results. Its `Evidence` is `MiningNative`.
+Sword/shears speed targets still use the older Prismarine Bedrock 1.26.30 input;
+`SpecialEvidence` is `MiningProvisional`. These tags do not define the complete
+mining algorithm. A false lookup means an unmeasured identifier and must not be
+interpreted as permission to harvest by hand. Native and special-tool source
+identities are exposed beside the table.
+
+`item.RuntimeTags(name)` returns native recipe and equipment tag memberships.
+Unknown or untagged identifiers return nil; returned slices are immutable.
 
 Entity values describe base components. They do not execute goals, events,
 filters or component-group transitions. Food definitions alone are not a

@@ -128,13 +128,15 @@ func TestNativeTagsDoNotInventInventoryCapabilities(t *testing.T) {
 // TestRuntimeSourcesUseNativeProperties exercises locked native input with supplemental capability tags.
 func TestRuntimeSourcesUseNativeProperties(t *testing.T) {
 	cache := t.TempDir()
-	inputs := &source.Sources{Lock: source.Lock{Inputs: map[string]source.Input{}}}
+	inputs := &source.Sources{Lock: source.Lock{Release: "1.26.51", Target: source.Release{ProtocolVersion: 2193}, Inputs: map[string]source.Input{}}}
 	for name, data := range map[string]string{
-		"item_registry": `[{"name":"minecraft:apple","id":1,"componentBased":false,"version":2},{"name":"minecraft:new","id":2,"componentBased":true,"version":0}]`,
+		"native_version": `{"protocol":2193,"version":"1.26.51"}`,
+		"item_registry":  `[{"name":"minecraft:apple","id":1,"componentBased":false,"version":2},{"name":"minecraft:new","id":2,"componentBased":true,"version":0}]`,
 		"native_item_properties": `{
 			"minecraft:apple":{"id":1,"maxStackSize":64,"maxDamage":0},
 			"minecraft:new":{"id":2,"maxStackSize":64,"maxDamage":59,"tags":["minecraft:harness"]}
 		}`,
+		"native_item_tags": `{"minecraft:harness":["minecraft:new"]}`,
 		"item_tags":        `{"minecraft:allow_offhand":["minecraft:apple"],"minecraft:head":["minecraft:apple"]}`,
 		"item_corrections": `{"stack_limits":{"minecraft:new":{"expected_source_count":64,"effective_count":1}},"offhand":["minecraft:new"],"evidence":{"fixture":"synthetic"}}`,
 	} {
@@ -322,5 +324,18 @@ func TestDecodeRegistry(t *testing.T) {
 		if _, err := DecodeRegistry([]byte(input)); err == nil {
 			t.Fatalf("accepted invalid registry %s", input)
 		}
+	}
+}
+
+// TestNativeTagMembershipRejectsDrift prevents either view of the dump from silently losing members.
+func TestNativeTagMembershipRejectsDrift(t *testing.T) {
+	properties := map[string]Properties{"minecraft:apple": {Tags: []string{"minecraft:food"}}}
+	for _, data := range []string{`{}`, `{"minecraft:food":["minecraft:new"]}`, `{"minecraft:food":["minecraft:apple","minecraft:apple"]}`} {
+		if err := validateNativeTags(properties, []byte(data)); err == nil {
+			t.Fatalf("accepted inconsistent native tags %s", data)
+		}
+	}
+	if err := validateNativeTags(properties, []byte(`{"minecraft:food":["minecraft:apple"]}`)); err != nil {
+		t.Fatal(err)
 	}
 }

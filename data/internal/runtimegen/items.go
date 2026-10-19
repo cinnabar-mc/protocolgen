@@ -48,6 +48,9 @@ type StackLimit struct {
 
 // FromSources authenticates all inputs and generates the complete runtime catalog.
 func FromSources(ctx context.Context, inputs *source.Sources, cache string) ([]byte, error) {
+	if err := inputs.ValidateNative(ctx, cache); err != nil {
+		return nil, err
+	}
 	registryJSON, err := inputs.Read(ctx, "item_registry", cache)
 	if err != nil {
 		return nil, err
@@ -63,6 +66,13 @@ func FromSources(ctx context.Context, inputs *source.Sources, cache string) ([]b
 	properties, err := DecodeNativeProperties(propertiesJSON, registry)
 	if err != nil {
 		return nil, fmt.Errorf("decode native_item_properties: %w", err)
+	}
+	nativeTags, err := inputs.Read(ctx, "native_item_tags", cache)
+	if err != nil {
+		return nil, err
+	}
+	if err := validateNativeTags(properties, nativeTags); err != nil {
+		return nil, err
 	}
 	var tags map[string][]string
 	var corrections Corrections
@@ -215,6 +225,12 @@ func Generate(registry map[string]RegistryEntry, properties map[string]Propertie
 		body := slices.Contains(props.Tags, "minecraft:horse_armor") || slices.Contains(props.Tags, "minecraft:nautilus_armor") || slices.Contains(props.Tags, "minecraft:harness")
 		fmt.Fprintf(&output, "{Name:%q, RuntimeID:%d, ComponentBased:%t, Version:%d, MaxCount:%d, BodyWearable:%t, AllowOffHand:%t, ArmourSlot:0, ArmourWearable:%t},\n", name, entry.RuntimeID, entry.ComponentBased, entry.Version, count, body, offhand[name], helmet[name])
 	}
+	fmt.Fprintln(&output, "}\n\nvar runtimeTags = map[string][]string{")
+	for _, name := range names {
+		if len(properties[name].Tags) > 0 {
+			fmt.Fprintf(&output, "%q:%#v,\n", name, properties[name].Tags)
+		}
+	}
 	fmt.Fprintln(&output, "}")
 	return format.Source(output.Bytes())
 }
@@ -235,4 +251,39 @@ func correctedTag(registry map[string]RegistryEntry, members, corrections []stri
 		result[name] = true
 	}
 	return result, nil
+}
+
+// validateNativeTags requires the per-item and per-tag dumps to describe the same memberships.
+func validateNativeTags(properties map[string]Properties, data []byte) error {
+	var declared map[string][]string
+	if err := json.Unmarshal(data, &declared); err != nil {
+		return fmt.Errorf("decode native item tags: %w", err)
+	}
+	actual := make(map[string][]string)
+	for name, item := range properties {
+		seen := make(map[string]bool)
+		for _, tag := range item.Tags {
+			if tag == "" || seen[tag] {
+				return fmt.Errorf("item %s has empty or duplicate tag %q", name, tag)
+			}
+			seen[tag] = true
+			actual[tag] = append(actual[tag], name)
+		}
+	}
+	if len(actual) != len(declared) {
+		return fmt.Errorf("native item tag domains differ: %d versus %d", len(actual), len(declared))
+	}
+	for tag, members := range declared {
+		expected, ok := actual[tag]
+		if !ok || len(members) == 0 {
+			return fmt.Errorf("native item tag %s has no matching members", tag)
+		}
+		members = slices.Clone(members)
+		sort.Strings(members)
+		sort.Strings(expected)
+		if !slices.Equal(members, expected) {
+			return fmt.Errorf("native item tag %s membership differs from item properties", tag)
+		}
+	}
+	return nil
 }

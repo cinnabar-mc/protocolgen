@@ -7,9 +7,9 @@
       "upstream": "mojang_samples"
     },
     "block_palette": {
-      "file": "block_palette.nbt",
-      "sha256": "54c9bed0bef30aadc316b21c6e82b5ac407c5c6e351b9d9690aa4e9a49fec912",
-      "upstream": "cloudburst"
+      "path": "inputs/1.26.51/native/canonical_block_states.nbt",
+      "sha256": "f0784a6284d6ca7d98cc3472f4ce84241a11e11b18ed16f6591dfd5e6da6fbd6",
+      "upstream": "native"
     },
     "data_driven_blocks": {
       "file": "data_driven_blocks.nbt",
@@ -22,15 +22,10 @@
       "upstream": "cloudburst"
     },
     "item_corrections": {
-      "description": "Reviewed omissions in the pinned Allay extract, with public evidence in the correction file",
+      "description": "Reviewed inventory capabilities not present in the native property dump",
       "path": "inputs/1.26.50/item_corrections.json",
       "revision": "1196af7684e7986aa78fecc09d731017b500509c",
-      "sha256": "f680c774792da2bd0bfb7339a64d8296038748828766e316f81aa961dcfac64a"
-    },
-    "item_properties": {
-      "file": "data/resources/items.json",
-      "sha256": "07ed576de6713f8b1152db26ef53f53df0766d35a261bd1d399fd02596635571",
-      "upstream": "allay"
+      "sha256": "5fa9e7952c87220307b86f703bcc957292c426eca0862c7c2bc7ed427739f1fe"
     },
     "item_registry": {
       "description": "Vanilla item identities from the same Cloudburst revision as block and biome data",
@@ -39,8 +34,9 @@
       "upstream": "cloudburst"
     },
     "item_tags": {
-      "file": "data/resources/item_tags_custom.json",
-      "sha256": "b6406e2a4ef0b02d1eb56802592440f7669e9bcbf354c5297bf5e0e8a20ab495",
+      "description": "Only the offhand/head capability tags absent from the native item dump; extracted from the pinned Allay supplemental table",
+      "path": "inputs/1.26.51/inventory_capability_tags.json",
+      "sha256": "d2be09bff37d2e1e095d8c500f45e3ccab40e9a33df3c965d8bc3ce15576be84",
       "upstream": "allay"
     },
     "liquid_clip_omissions": {
@@ -49,20 +45,54 @@
       "sha256": "f3aa28c068265d9c1b78de9a27b8f44f8c14aacdf90c231c018451f9b515eb20",
       "upstream": "cloudburst"
     },
+    "native_biome_ids": {
+      "path": "inputs/1.26.51/native/biome_id_map.json",
+      "sha256": "a4d67dd4bd577e0a3f30d785bab061911883c5c4443b0ea4768bd5f7f2f50919",
+      "upstream": "native"
+    },
+    "native_biomes": {
+      "path": "inputs/1.26.51/native/biome_definitions.json",
+      "sha256": "20e2da2467f8162ea9fc511cb6bd472c62e7741e72d941ac05a7a823cb0d1271",
+      "upstream": "native"
+    },
+    "native_block_properties": {
+      "path": "inputs/1.26.51/native/block_properties_table.json",
+      "sha256": "8df2196ec64aa37032eaad27fbd6f45741523a850836b66906cbc8cc76fe95a7",
+      "upstream": "native"
+    },
+    "native_block_states": {
+      "path": "inputs/1.26.51/native/block_state_data.json",
+      "sha256": "1ba588b762c35412282b877cbff2a3033879f119755ab1e2f2edb86063ed5cd8",
+      "upstream": "native"
+    },
+    "native_block_tags": {
+      "path": "inputs/1.26.51/native/block_tags.json",
+      "sha256": "241c10a929c2fd7cfca4915702edbe1c9d60a0093a392ae464ccc61c9c3d9ec0",
+      "upstream": "native"
+    },
+    "native_item_properties": {
+      "path": "inputs/1.26.51/native/item_properties_table.json",
+      "sha256": "2d298982999b1ed1fcb99f0ad042986fd197321311bc43a270bf62a5e8eed063",
+      "upstream": "native"
+    },
+    "native_item_tags": {
+      "path": "inputs/1.26.51/native/item_tags.json",
+      "sha256": "4af255938ccb9617cb7d33f9d531e38e5f2cbfeda28dbaca80bcb6076350227d",
+      "upstream": "native"
+    },
+    "native_version": {
+      "path": "inputs/1.26.51/native/version.json",
+      "sha256": "22e35cfdca2d6a83d506c8482ebde37d91c63ef233ec199d649b7e0a0d586280",
+      "upstream": "native"
+    },
     "resource_pack": {
       "archive": true,
       "description": "Official Mojang/bedrock-samples v1.26.50.27-preview resources for the 1.26.50 content line",
       "sha256": "48374e11c5696adc8f4b3b39b0837192917e07179e671297e23c382de5a343d7",
       "upstream": "mojang_samples"
     },
-    "biome_ids": {
-      "description": "1.26.50 retail numeric biome IDs derived from Cinnabar's public BDS-verified BIOREG01 artifact; transitional until protocolgen captures the retail packet",
-      "path": "inputs/1.26.50/biome_ids.json",
-      "revision": "9fc5ac80a8b4a9f897dc992ad55ccc30a2afaf16",
-      "sha256": "e224516a6fb602b03a3b850ff2ba8a6cdab838dcd8ec20fc95ec46787dee0cce"
-    },
-    "mining_tools": {
-      "description": "Provisional Bedrock 1.26.30 block tool and harvest classifications; not verified against target 1.26.50",
+    "special_mining_tools": {
+      "description": "Retained sword/shears speed classifications only; native tags and properties own ordinary tool effectiveness and all harvest requirements",
       "file": "data/bedrock/1.26.30/blocks.json",
       "sha256": "12ff90b5094006b42d87ca7c296ed1bef0e1c2d6d67498aea85b6ece9408b494",
       "upstream": "prismarine"
@@ -233,6 +263,10 @@
     "mojang_samples": {
       "repository": "Mojang/bedrock-samples",
       "revision": "847bd28a260da9369f0dfd4fded1893ccf5aed86"
+    },
+    "native": {
+      "repository": "didntpot/bedrock-data",
+      "revision": "bb896a46ba856c58383e3cfb962a38c45a0dea78"
     },
     "prismarine": {
       "repository": "PrismarineJS/minecraft-data",

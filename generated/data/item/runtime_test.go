@@ -27,3 +27,22 @@ func TestRuntimeCatalogCoverageAndInventoryLimits(t *testing.T) {
 		}
 	}
 }
+
+// TestRuntimeTagsPreserveNativeMemberships checks known tags without changing registry comparability.
+func TestRuntimeTagsPreserveNativeMemberships(t *testing.T) {
+	if tags := RuntimeTags("custom:unknown"); tags != nil {
+		t.Fatalf("unknown item tags = %v", tags)
+	}
+	found := false
+	for _, tag := range RuntimeTags("minecraft:apple") {
+		found = found || tag == "minecraft:is_food"
+	}
+	if !found {
+		t.Fatalf("apple lost native food membership: %v", RuntimeTags("minecraft:apple"))
+	}
+	for name := range runtimeTags {
+		if _, ok := LookupRuntime(name); !ok {
+			t.Fatalf("tags reference unknown item %s", name)
+		}
+	}
+}
