@@ -26,10 +26,14 @@ func Generate(native nativeblock.Catalog, special []byte, nativeVersion, nativeR
 	if err := json.Unmarshal(special, &old); err != nil {
 		return nil, 0, fmt.Errorf("decode special-tool evidence: %w", err)
 	}
+	if len(old) == 0 {
+		return nil, 0, fmt.Errorf("special-tool evidence is empty")
+	}
 	specialTools := make(map[string]uint8, len(old))
 	for _, row := range old {
-		if row.Name == "" {
-			return nil, 0, fmt.Errorf("special-tool evidence has an empty name")
+		name := "minecraft:" + row.Name
+		if _, duplicate := specialTools[name]; row.Name == "" || duplicate {
+			return nil, 0, fmt.Errorf("special-tool evidence has an empty or duplicate name %q", row.Name)
 		}
 		var tools uint8
 		for _, material := range strings.Split(row.Material, ";") {
@@ -42,7 +46,7 @@ func Generate(native nativeblock.Catalog, special []byte, nativeVersion, nativeR
 				tools |= sword
 			}
 		}
-		specialTools["minecraft:"+row.Name] = tools
+		specialTools[name] = tools
 	}
 	names := make([]string, 0, len(native.Properties))
 	for name := range native.Properties {

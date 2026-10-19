@@ -35,3 +35,23 @@ func TestEffectiveToolDoesNotRequireThatToolToHarvest(t *testing.T) {
 		t.Fatalf("effectiveness incorrectly restricted drops: %+v, %v", fact, err)
 	}
 }
+
+// TestGenerateRejectsMissingSpecialEvidence prevents absent or conflicting input from removing speed targets.
+func TestGenerateRejectsMissingSpecialEvidence(t *testing.T) {
+	required := false
+	native := nativeblock.Catalog{Properties: map[string]nativeblock.Properties{
+		"minecraft:bed": {RequiresCorrectToolForDrops: &required},
+	}}
+	for _, evidence := range []string{
+		"null",
+		"[]",
+		`[{"name":"bed","material":"wool"},{"name":"bed","material":"leaves"}]`,
+	} {
+		if _, _, err := Generate(native, []byte(evidence), "native-version", "native-revision", "special-revision", "special-digest", "lock-digest"); err == nil {
+			t.Errorf("invalid special-tool evidence %s accepted", evidence)
+		}
+	}
+	if _, count, err := Generate(native, []byte(`[{"name":"bed","material":""}]`), "native-version", "native-revision", "special-revision", "special-digest", "lock-digest"); err != nil || count != 1 {
+		t.Fatalf("measured absence of special targets rejected: count=%d, error=%v", count, err)
+	}
+}

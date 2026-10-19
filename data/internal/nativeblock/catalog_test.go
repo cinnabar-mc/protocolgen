@@ -2,7 +2,11 @@ package nativeblock
 
 import (
 	"context"
+	"crypto/sha256"
 	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/bedrock-mc/protocolgen/data/source"
@@ -91,5 +95,51 @@ func TestNativeSnapshotRejectsDifferentRelease(t *testing.T) {
 		if err := inputs.ValidateNative(context.Background(), ""); err == nil {
 			t.Fatal("different native snapshot accepted")
 		}
+	}
+}
+
+// TestReadRejectsNullTags distinguishes absent evidence from an empty measured tag map.
+func TestReadRejectsNullTags(t *testing.T) {
+	properties, states := fixture(t)
+	propertyData, err := json.Marshal(properties)
+	if err != nil {
+		t.Fatal(err)
+	}
+	stateData, err := json.Marshal(states)
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, tags := range []string{"null", "{}"} {
+		t.Run(tags, func(t *testing.T) {
+			inputs, err := source.Open("")
+			if err != nil {
+				t.Fatal(err)
+			}
+			cache := t.TempDir()
+			for name, data := range map[string][]byte{
+				"native_block_properties": propertyData,
+				"native_block_states":     stateData,
+				"native_block_tags":       []byte(tags),
+			} {
+				digest := fmt.Sprintf("%x", sha256.Sum256(data))
+				if err := os.WriteFile(filepath.Join(cache, digest), data, 0o600); err != nil {
+					t.Fatal(err)
+				}
+				inputs.Lock.Inputs[name] = source.Input{SHA256: digest}
+			}
+			catalog, err := Read(context.Background(), inputs, cache)
+			if tags == "null" {
+				if err == nil {
+					t.Fatal("null block-tag document accepted as measured evidence")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("empty measured tag object rejected: %v", err)
+			}
+			if len(catalog.Tags) != 0 || *catalog.Properties["minecraft:bed"].RequiresCorrectToolForDrops {
+				t.Fatal("empty tag object lost the known no-tool block")
+			}
+		})
 	}
 }

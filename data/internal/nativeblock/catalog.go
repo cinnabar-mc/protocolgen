@@ -62,6 +62,9 @@ func Read(ctx context.Context, sources *source.Sources, cache string) (Catalog, 
 			return Catalog{}, fmt.Errorf("decode %s: %w", input.name, err)
 		}
 	}
+	if raw.Tags == nil {
+		return Catalog{}, fmt.Errorf("native block tags must be a non-null object")
+	}
 	return Decode(raw.Properties, raw.States, raw.Tags)
 }
 
