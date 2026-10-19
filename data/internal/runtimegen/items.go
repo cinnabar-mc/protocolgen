@@ -26,16 +26,25 @@ type RegistryEntry struct {
 // Properties contains the inventory fields needed from a vanilla item extract.
 type Properties struct {
 	MaxStackSize int      `json:"maxStackSize"`
+	MaxDamage    int      `json:"maxDamage"`
 	Tags         []string `json:"tags"`
 }
 
 // Corrections fills known omissions in the locked extraction. A correction
 // becomes an error when its source gains the field or its item leaves the registry.
 type Corrections struct {
-	StackSizes map[string]int    `json:"stack_sizes"`
-	Offhand    []string          `json:"offhand"`
-	Helmets    []string          `json:"helmets"`
-	Evidence   map[string]string `json:"evidence"`
+	StackSizes  map[string]int        `json:"stack_sizes"`
+	StackLimits map[string]StackLimit `json:"stack_limits"`
+	Offhand     []string              `json:"offhand"`
+	Helmets     []string              `json:"helmets"`
+	Evidence    map[string]string     `json:"evidence"`
+}
+
+// StackLimit replaces a raw item field with its measured effective stack limit.
+// ExpectedSourceCount makes an upstream change fail instead of retaining a stale override.
+type StackLimit struct {
+	ExpectedSourceCount int `json:"expected_source_count"`
+	EffectiveCount      int `json:"effective_count"`
 }
 
 // FromSources authenticates all inputs and generates the complete runtime catalog.
@@ -48,13 +57,20 @@ func FromSources(ctx context.Context, inputs *source.Sources, cache string) ([]b
 	if err != nil {
 		return nil, fmt.Errorf("decode item_registry: %w", err)
 	}
-	var properties map[string]Properties
+	propertiesJSON, err := inputs.Read(ctx, "native_item_properties", cache)
+	if err != nil {
+		return nil, err
+	}
+	properties, err := DecodeNativeProperties(propertiesJSON, registry)
+	if err != nil {
+		return nil, fmt.Errorf("decode native_item_properties: %w", err)
+	}
 	var tags map[string][]string
 	var corrections Corrections
 	for _, input := range []struct {
 		name string
 		out  any
-	}{{"item_properties", &properties}, {"item_tags", &tags}, {"item_corrections", &corrections}} {
+	}{{"item_tags", &tags}, {"item_corrections", &corrections}} {
 		data, err := inputs.Read(ctx, input.name, cache)
 		if err != nil {
 			return nil, err
@@ -90,6 +106,50 @@ func DecodeRegistry(data []byte) (map[string]RegistryEntry, error) {
 	return registry, nil
 }
 
+// DecodeNativeProperties reads stack sizes, durability and native tags when the dump
+// covers the registry exactly. Missing tags mean no tags; inventory slot
+// capabilities are supplied separately rather than inferred from these tags.
+func DecodeNativeProperties(data []byte, registry map[string]RegistryEntry) (map[string]Properties, error) {
+	var rows map[string]*struct {
+		ID           *int32   `json:"id"`
+		MaxStackSize *int     `json:"maxStackSize"`
+		MaxDamage    *int     `json:"maxDamage"`
+		Tags         []string `json:"tags"`
+	}
+	if err := json.Unmarshal(data, &rows); err != nil {
+		return nil, err
+	}
+	if len(registry) == 0 {
+		return nil, fmt.Errorf("item registry is empty")
+	}
+	properties := make(map[string]Properties, len(rows))
+	for name, row := range rows {
+		entry, ok := registry[name]
+		if !ok {
+			return nil, fmt.Errorf("native properties reference unknown item %s", name)
+		}
+		if row == nil || row.ID == nil || row.MaxStackSize == nil || row.MaxDamage == nil {
+			return nil, fmt.Errorf("native item %s has incomplete properties", name)
+		}
+		if *row.ID != entry.RuntimeID {
+			return nil, fmt.Errorf("native item %s has runtime ID %d, registry has %d", name, *row.ID, entry.RuntimeID)
+		}
+		if size := *row.MaxStackSize; size < 1 || size > 64 {
+			return nil, fmt.Errorf("native item %s has invalid stack size %d", name, size)
+		}
+		if *row.MaxDamage < 0 {
+			return nil, fmt.Errorf("native item %s has negative maximum damage %d", name, *row.MaxDamage)
+		}
+		properties[name] = Properties{MaxStackSize: *row.MaxStackSize, MaxDamage: *row.MaxDamage, Tags: row.Tags}
+	}
+	for name := range registry {
+		if _, ok := properties[name]; !ok {
+			return nil, fmt.Errorf("native properties are missing item %s", name)
+		}
+	}
+	return properties, nil
+}
+
 // Generate emits one deterministic inventory catalog without importing consumers.
 func Generate(registry map[string]RegistryEntry, properties map[string]Properties, tags map[string][]string, corrections Corrections) ([]byte, error) {
 	if len(registry) == 0 {
@@ -100,7 +160,7 @@ func Generate(registry map[string]RegistryEntry, properties map[string]Propertie
 			return nil, fmt.Errorf("required item tag %q is missing or empty", required)
 		}
 	}
-	if len(corrections.Evidence) == 0 && (len(corrections.StackSizes)+len(corrections.Offhand)+len(corrections.Helmets) > 0) {
+	if len(corrections.Evidence) == 0 && (len(corrections.StackSizes)+len(corrections.StackLimits)+len(corrections.Offhand)+len(corrections.Helmets) > 0) {
 		return nil, fmt.Errorf("item corrections need evidence")
 	}
 	for name, size := range corrections.StackSizes {
@@ -112,6 +172,17 @@ func Generate(registry map[string]RegistryEntry, properties map[string]Propertie
 		}
 		if size < 1 || size > 64 {
 			return nil, fmt.Errorf("stack correction for %s has invalid count %d", name, size)
+		}
+	}
+	for name, limit := range corrections.StackLimits {
+		if _, ok := registry[name]; !ok {
+			return nil, fmt.Errorf("stack limit correction references unknown item %s", name)
+		}
+		if limit.ExpectedSourceCount < 1 || limit.ExpectedSourceCount > 64 || limit.EffectiveCount < 1 || limit.EffectiveCount > 64 {
+			return nil, fmt.Errorf("stack limit correction for %s has invalid counts", name)
+		}
+		if properties[name].MaxStackSize != limit.ExpectedSourceCount || limit.ExpectedSourceCount == limit.EffectiveCount {
+			return nil, fmt.Errorf("stack limit correction for %s is stale: source count is %d", name, properties[name].MaxStackSize)
 		}
 	}
 	offhand, err := correctedTag(registry, tags["minecraft:allow_offhand"], corrections.Offhand)
@@ -140,11 +211,17 @@ func Generate(registry map[string]RegistryEntry, properties map[string]Propertie
 		if count <= 0 {
 			count = corrections.StackSizes[name]
 		}
+		if limit, ok := corrections.StackLimits[name]; ok {
+			count = limit.EffectiveCount
+		}
 		if count < 1 || count > 64 {
 			return nil, fmt.Errorf("item %s has missing or invalid stack size %d", name, count)
 		}
+		if props.MaxDamage < 0 {
+			return nil, fmt.Errorf("item %s has negative maximum damage %d", name, props.MaxDamage)
+		}
 		body := slices.Contains(props.Tags, "minecraft:horse_armor") || slices.Contains(props.Tags, "minecraft:nautilus_armor") || slices.Contains(props.Tags, "minecraft:harness")
-		fmt.Fprintf(&output, "{Name:%q, RuntimeID:%d, ComponentBased:%t, Version:%d, MaxCount:%d, BodyWearable:%t, AllowOffHand:%t, ArmourSlot:0, ArmourWearable:%t},\n", name, entry.RuntimeID, entry.ComponentBased, entry.Version, count, body, offhand[name], helmet[name])
+		fmt.Fprintf(&output, "{Name:%q, RuntimeID:%d, ComponentBased:%t, Version:%d, MaxCount:%d, MaxDamage:%d, BodyWearable:%t, AllowOffHand:%t, ArmourSlot:0, ArmourWearable:%t},\n", name, entry.RuntimeID, entry.ComponentBased, entry.Version, count, props.MaxDamage, body, offhand[name], helmet[name])
 	}
 	fmt.Fprintln(&output, "}")
 	return format.Source(output.Bytes())
