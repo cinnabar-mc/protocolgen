@@ -13,6 +13,8 @@ import (
 	"strconv"
 	"strings"
 	"unicode"
+
+	"github.com/bedrock-mc/protocolgen/data/internal/nativeblock"
 )
 
 // GeneratedMarker identifies files owned by the semantic generator.
@@ -25,8 +27,11 @@ type Config struct {
 	CloudburstRef       string
 	BDSVersion          string
 	BiomeIDs            map[string]int32
+	NativeBiomes        map[string]rawBiome
 	LiquidClipOmissions []LiquidClipOmission
 	SourceLockSHA256    string
+	NativeBlocks        *nativeblock.Catalog
+	NativeRef           string
 }
 
 // Stats reports the number of records generated from each source.
@@ -48,7 +53,7 @@ func GenerateCloudburst(cfg Config) (map[string][]byte, Stats, error) {
 	files := make(map[string][]byte)
 	var stats Stats
 
-	blockFiles, count, err := generateBlocks(filepath.Join(cfg.CloudburstDir, "blocks.json"), cfg.LiquidClipOmissions)
+	blockFiles, count, err := generateBlocks(filepath.Join(cfg.CloudburstDir, "blocks.json"), cfg.LiquidClipOmissions, cfg.NativeBlocks)
 	if err != nil {
 		return nil, stats, fmt.Errorf("generate blocks: %w", err)
 	}
@@ -58,7 +63,7 @@ func GenerateCloudburst(cfg Config) (map[string][]byte, Stats, error) {
 	stats.BlockStates = count
 	stats.UnavailableLiquidClipShapes = len(cfg.LiquidClipOmissions)
 
-	biomeFiles, count, err := generateBiomes(filepath.Join(cfg.CloudburstDir, "stripped_biome_definitions.json"), cfg.BiomeIDs)
+	biomeFiles, count, err := generateBiomes(filepath.Join(cfg.CloudburstDir, "stripped_biome_definitions.json"), cfg.BiomeIDs, cfg.NativeBiomes)
 	if err != nil {
 		return nil, stats, fmt.Errorf("generate biomes: %w", err)
 	}
@@ -119,6 +124,8 @@ package data
 const (
 	SchemaVersion = 1
 	CloudburstRef = %q
+	// NativeRef pins native block, biome and item measurements independently of shapes.
+	NativeRef = %q
 	BDSVersion = %q
 	// SemanticSourceLockSHA256 identifies the lock used for semantic generation.
 	SemanticSourceLockSHA256 = %q
@@ -132,7 +139,7 @@ var GeneratedCounts = Counts{
 	Foods: %d,
 	UnavailableLiquidClipShapes: %d,
 }
-`, GeneratedMarker, cfg.CloudburstRef, cfg.BDSVersion, cfg.SourceLockSHA256, stats.BlockStates, stats.Biomes, stats.VoxelShapes, stats.Entities, stats.Foods, stats.UnavailableLiquidClipShapes))
+`, GeneratedMarker, cfg.CloudburstRef, cfg.NativeRef, cfg.BDSVersion, cfg.SourceLockSHA256, stats.BlockStates, stats.Biomes, stats.VoxelShapes, stats.Entities, stats.Foods, stats.UnavailableLiquidClipShapes))
 	if err != nil {
 		return nil, stats, err
 	}
@@ -141,6 +148,7 @@ var GeneratedCounts = Counts{
 	manifest, err := json.MarshalIndent(struct {
 		SchemaVersion       int                  `json:"schema_version"`
 		CloudburstRef       string               `json:"cloudburst_ref"`
+		NativeRef           string               `json:"native_ref,omitempty"`
 		BDSVersion          string               `json:"bds_version"`
 		LiquidClipOmissions []LiquidClipOmission `json:"liquid_clip_omissions,omitempty"`
 		SourceLockSHA256    string               `json:"source_lock_sha256"`
@@ -148,6 +156,7 @@ var GeneratedCounts = Counts{
 	}{
 		SchemaVersion:       1,
 		CloudburstRef:       cfg.CloudburstRef,
+		NativeRef:           cfg.NativeRef,
 		BDSVersion:          cfg.BDSVersion,
 		LiquidClipOmissions: cfg.LiquidClipOmissions,
 		SourceLockSHA256:    cfg.SourceLockSHA256,
@@ -223,13 +232,18 @@ type generatedState struct {
 }
 
 // generateBlocks normalizes state properties and compacts shared block shapes.
-func generateBlocks(path string, omissions []LiquidClipOmission) (map[string][]byte, int, error) {
+func generateBlocks(path string, omissions []LiquidClipOmission, native *nativeblock.Catalog) (map[string][]byte, int, error) {
 	var raw []rawBlockState
 	if err := readJSON(path, &raw, false); err != nil {
 		return nil, 0, err
 	}
 	if len(raw) > math.MaxUint16 {
 		return nil, 0, fmt.Errorf("state count %d exceeds uint16 lookup capacity", len(raw))
+	}
+	if native != nil {
+		if err := applyNativeBlocks(raw, *native); err != nil {
+			return nil, 0, err
+		}
 	}
 	if err := prepareBlockShapes(raw, omissions); err != nil {
 		return nil, 0, err
@@ -469,10 +483,17 @@ type rawBiome struct {
 }
 
 // generateBiomes emits named biome values and their lookup index.
-func generateBiomes(path string, ids map[string]int32) (map[string][]byte, int, error) {
+func generateBiomes(path string, ids map[string]int32, native map[string]rawBiome) (map[string][]byte, int, error) {
 	var raw map[string]rawBiome
 	if err := readJSON(path, &raw, false); err != nil {
 		return nil, 0, err
+	}
+	if native != nil {
+		var err error
+		raw, err = applyNativeBiomes(raw, native)
+		if err != nil {
+			return nil, 0, err
+		}
 	}
 	if len(ids) != len(raw) {
 		return nil, 0, fmt.Errorf("biome IDs cover %d names, Cloudburst has %d", len(ids), len(raw))

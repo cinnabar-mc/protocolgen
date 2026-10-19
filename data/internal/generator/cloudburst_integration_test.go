@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/bedrock-mc/protocolgen/data/internal/nativeblock"
 	"github.com/bedrock-mc/protocolgen/data/source"
 )
 
@@ -36,15 +37,27 @@ func TestLockedCloudburstOutput(t *testing.T) {
 	if err := json.Unmarshal(encoded, &omissions); err != nil {
 		t.Fatal(err)
 	}
-	biomeInput, err := inputs.Read(context.Background(), "biome_ids", "")
+	biomeInput, err := inputs.Read(context.Background(), "native_biome_ids", "")
 	if err != nil {
 		t.Fatal(err)
 	}
-	biomeIDs, err := DecodeBiomeIDs(biomeInput, inputs.Lock.Target.MinecraftVersion, inputs.Lock.Target.ProtocolVersion)
+	biomeIDs, err := DecodeNativeBiomeIDs(biomeInput)
 	if err != nil {
 		t.Fatal(err)
 	}
-	files, _, err := GenerateCloudburst(Config{CloudburstDir: dir, BiomeIDs: biomeIDs, LiquidClipOmissions: omissions})
+	encodedBiomes, err := inputs.Read(context.Background(), "native_biomes", "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	nativeBiomes, err := DecodeNativeBiomes(encodedBiomes)
+	if err != nil {
+		t.Fatal(err)
+	}
+	native, err := nativeblock.Read(context.Background(), inputs, "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	files, _, err := GenerateCloudburst(Config{CloudburstDir: dir, BiomeIDs: biomeIDs, NativeBiomes: nativeBiomes, LiquidClipOmissions: omissions, NativeBlocks: &native})
 	if err != nil {
 		t.Fatal(err)
 	}

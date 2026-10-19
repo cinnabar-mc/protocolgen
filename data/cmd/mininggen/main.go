@@ -1,4 +1,4 @@
-// Command mininggen emits provisional mining facts from the pinned public input.
+// Command mininggen joins native tool facts with retained special-tool evidence.
 package main
 
 import (
@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/bedrock-mc/protocolgen/data/internal/mininggen"
+	"github.com/bedrock-mc/protocolgen/data/internal/nativeblock"
 	"github.com/bedrock-mc/protocolgen/data/source"
 )
 
@@ -30,11 +31,11 @@ func run(lockPath, cache, outputDir string) error {
 	if err != nil {
 		return err
 	}
-	input, ok := sources.Lock.Inputs["mining_tools"]
+	input, ok := sources.Lock.Inputs["special_mining_tools"]
 	if !ok || input.Upstream != "prismarine" || input.File != "data/bedrock/1.26.30/blocks.json" {
-		return fmt.Errorf("mining_tools must pin Prismarine Bedrock 1.26.30 blocks.json")
+		return fmt.Errorf("special_mining_tools must pin the retained Bedrock special-tool evidence")
 	}
-	data, err := sources.Read(context.Background(), "mining_tools", cache)
+	data, err := sources.Read(context.Background(), "special_mining_tools", cache)
 	if err != nil {
 		return err
 	}
@@ -42,7 +43,11 @@ func run(lockPath, cache, outputDir string) error {
 	if err != nil {
 		return err
 	}
-	generated, count, err := mininggen.Generate(data, sources.Revision("mining_tools"), input.SHA256, lockSHA)
+	native, err := nativeblock.Read(context.Background(), sources, cache)
+	if err != nil {
+		return err
+	}
+	generated, count, err := mininggen.Generate(native, data, sources.Lock.Release, sources.Revision("native_block_tags"), sources.Revision("special_mining_tools"), input.SHA256, lockSHA)
 	if err != nil {
 		return err
 	}
@@ -62,6 +67,6 @@ func run(lockPath, cache, outputDir string) error {
 	if err := os.Rename(file.Name(), path); err != nil {
 		return err
 	}
-	fmt.Printf("generated %d provisional mining classifications\n", count)
+	fmt.Printf("generated %d mining classifications\n", count)
 	return nil
 }

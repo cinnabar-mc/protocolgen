@@ -29,3 +29,7 @@ func LookupRuntime(name string) (Runtime, bool) {
 	}
 	return runtimeItems[i], true
 }
+
+// RuntimeTags returns native tag memberships for an item identifier. Unknown or
+// untagged items return nil. The returned slice is shared and must not be changed.
+func RuntimeTags(name string) []string { return runtimeTags[name] }

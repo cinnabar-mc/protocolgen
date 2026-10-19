@@ -1,0 +1,21 @@
+{
+  "minecraft:allow_offhand": [
+    "minecraft:shield",
+    "minecraft:arrow",
+    "minecraft:firework_rocket",
+    "minecraft:totem_of_undying",
+    "minecraft:filled_map",
+    "minecraft:nautilus_shell",
+    "minecraft:sparkler"
+  ],
+  "minecraft:head": [
+    "minecraft:creeper_head",
+    "minecraft:dragon_head",
+    "minecraft:piglin_head",
+    "minecraft:player_head",
+    "minecraft:skull",
+    "minecraft:skeleton_skull",
+    "minecraft:wither_skeleton_skull",
+    "minecraft:zombie_head"
+  ]
+}

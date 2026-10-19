@@ -6,27 +6,31 @@ The semantic generator and initial data snapshot were moved from
 
 The semantic values are derived from:
 
-- Block properties, geometry, named voxel shapes, biome values, block palettes, data-driven block components,
-  and complete item registry identities/components from
-  [CloudburstMC/Data](https://github.com/CloudburstMC/Data)
-- Numeric biome IDs for the retail 1.26.50 catalog from the public,
-  BDS-verified [Cinnabar biome registry](https://github.com/bedrock-mc/cinnabar/blob/9fc5ac80a8b4a9f897dc992ad55ccc30a2afaf16/crates/assets/data/biome-registry-v2193.bin)
+- Native block palettes, scalar properties and tags, item fields and tags, and
+  biome scalar values and numeric IDs from the CC0-1.0
+  [didntpot/bedrock-data](https://github.com/didntpot/bedrock-data) snapshot.
+  Selected original files and its licence are retained in
+  [source/inputs/1.26.51/native](source/inputs/1.26.51/native/README.md).
+- Block geometry and rendering fields, named voxel shapes, biome tag memberships,
+  data-driven block components and complete item registry identities/components
+  from [CloudburstMC/Data](https://github.com/CloudburstMC/Data)
 - Base entity components and food definitions distributed
   with Minecraft Bedrock Dedicated Server
-- Item properties and supplemental tags from
+- The offhand/head inventory-capability tags from
   [AllayMC/Allay](https://github.com/AllayMC/Allay), plus the documented corrections
   in the source inputs
 - Resource inputs from [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples)
-- Provisional block tool and harvest classifications from
+- Provisional sword/shears speed classifications from
   [PrismarineJS/minecraft-data](https://github.com/PrismarineJS/minecraft-data),
-  pinned to its Bedrock 1.26.30 `blocks.json` extract. Its README declares MIT;
-  these facts have not been verified for the catalog's target Bedrock release.
+  pinned to Bedrock 1.26.30 `blocks.json`. Its README declares MIT. Native
+  tool requirements replace its harvest classifications; special-tool speed
+  targets remain unverified for the catalog's target release.
 
 The source revisions and versions are recorded in
 [`semantic_sources.json`](../generated/data/semantic_sources.json), with input digests in
 [`source/lock.json`](source/lock.json). Upstream data and Minecraft
 materials remain subject to their respective terms. No full BDS source pack,
-raw generated source catalog or executable is included in this module.
+proprietary source catalog or executable is included in this module.
 
 The pinned Cloudburst extract contains 30 invalid liquid-clip boxes. Their exact
 source values are recorded as omissions; the catalog reports those shapes as

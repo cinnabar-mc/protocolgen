@@ -74,9 +74,9 @@ func TestGroupedSourcesRejectDrift(t *testing.T) {
 		}},
 		{"mixed registry", func(l *Lock) { i := l.Inputs["item_registry"]; i.Upstream = "allay"; l.Inputs["item_registry"] = i }},
 		{"unknown upstream", func(l *Lock) {
-			i := l.Inputs["item_properties"]
+			i := l.Inputs["native_item_properties"]
 			i.Upstream = "missing"
-			l.Inputs["item_properties"] = i
+			l.Inputs["native_item_properties"] = i
 		}},
 		{"moving ref", func(l *Lock) { u := l.Upstreams["cloudburst"]; u.Revision = "master"; l.Upstreams["cloudburst"] = u }},
 		{"ambiguous input", func(l *Lock) { i := l.Inputs["item_registry"]; i.Path = "local.json"; l.Inputs["item_registry"] = i }},

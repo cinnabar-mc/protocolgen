@@ -139,7 +139,7 @@ func Open(path string) (*Sources, error) {
 	if s.Lock.CloudburstRevision() == "" {
 		return nil, fmt.Errorf("source lock has no Cloudburst upstream")
 	}
-	for _, name := range []string{"item_registry", "block_palette", "data_driven_blocks", "item_components", "liquid_clip_omissions"} {
+	for _, name := range []string{"item_registry", "data_driven_blocks", "item_components", "liquid_clip_omissions"} {
 		if input, ok := s.Lock.Inputs[name]; ok && input.Upstream != s.Lock.Semantic.Cloudburst {
 			return nil, fmt.Errorf("source %q must use the semantic Cloudburst upstream", name)
 		}
@@ -248,4 +248,23 @@ func writeCache(path string, data []byte) error {
 		return err
 	}
 	return os.Rename(file.Name(), path)
+}
+
+// ValidateNative checks the authenticated native snapshot against the selected release and protocol.
+func (s *Sources) ValidateNative(ctx context.Context, cache string) error {
+	data, err := s.Read(ctx, "native_version", cache)
+	if err != nil {
+		return err
+	}
+	var version struct {
+		Protocol int    `json:"protocol"`
+		Version  string `json:"version"`
+	}
+	if err := json.Unmarshal(data, &version); err != nil {
+		return fmt.Errorf("decode native_version: %w", err)
+	}
+	if version.Protocol != s.Lock.Target.ProtocolVersion || version.Version != s.Lock.Release {
+		return fmt.Errorf("native snapshot %s/%d does not match release %s/%d", version.Version, version.Protocol, s.Lock.Release, s.Lock.Target.ProtocolVersion)
+	}
+	return nil
 }
