@@ -26,7 +26,6 @@ type RegistryEntry struct {
 // Properties contains the inventory fields needed from a vanilla item extract.
 type Properties struct {
 	MaxStackSize int      `json:"maxStackSize"`
-	MaxDamage    int      `json:"maxDamage"`
 	Tags         []string `json:"tags"`
 }
 
@@ -106,14 +105,13 @@ func DecodeRegistry(data []byte) (map[string]RegistryEntry, error) {
 	return registry, nil
 }
 
-// DecodeNativeProperties reads stack sizes, durability and native tags when the dump
+// DecodeNativeProperties reads stack sizes and native tags when the dump
 // covers the registry exactly. Missing tags mean no tags; inventory slot
 // capabilities are supplied separately rather than inferred from these tags.
 func DecodeNativeProperties(data []byte, registry map[string]RegistryEntry) (map[string]Properties, error) {
 	var rows map[string]*struct {
 		ID           *int32   `json:"id"`
 		MaxStackSize *int     `json:"maxStackSize"`
-		MaxDamage    *int     `json:"maxDamage"`
 		Tags         []string `json:"tags"`
 	}
 	if err := json.Unmarshal(data, &rows); err != nil {
@@ -128,7 +126,7 @@ func DecodeNativeProperties(data []byte, registry map[string]RegistryEntry) (map
 		if !ok {
 			return nil, fmt.Errorf("native properties reference unknown item %s", name)
 		}
-		if row == nil || row.ID == nil || row.MaxStackSize == nil || row.MaxDamage == nil {
+		if row == nil || row.ID == nil || row.MaxStackSize == nil {
 			return nil, fmt.Errorf("native item %s has incomplete properties", name)
 		}
 		if *row.ID != entry.RuntimeID {
@@ -137,10 +135,7 @@ func DecodeNativeProperties(data []byte, registry map[string]RegistryEntry) (map
 		if size := *row.MaxStackSize; size < 1 || size > 64 {
 			return nil, fmt.Errorf("native item %s has invalid stack size %d", name, size)
 		}
-		if *row.MaxDamage < 0 {
-			return nil, fmt.Errorf("native item %s has negative maximum damage %d", name, *row.MaxDamage)
-		}
-		properties[name] = Properties{MaxStackSize: *row.MaxStackSize, MaxDamage: *row.MaxDamage, Tags: row.Tags}
+		properties[name] = Properties{MaxStackSize: *row.MaxStackSize, Tags: row.Tags}
 	}
 	for name := range registry {
 		if _, ok := properties[name]; !ok {
@@ -217,11 +212,8 @@ func Generate(registry map[string]RegistryEntry, properties map[string]Propertie
 		if count < 1 || count > 64 {
 			return nil, fmt.Errorf("item %s has missing or invalid stack size %d", name, count)
 		}
-		if props.MaxDamage < 0 {
-			return nil, fmt.Errorf("item %s has negative maximum damage %d", name, props.MaxDamage)
-		}
 		body := slices.Contains(props.Tags, "minecraft:horse_armor") || slices.Contains(props.Tags, "minecraft:nautilus_armor") || slices.Contains(props.Tags, "minecraft:harness")
-		fmt.Fprintf(&output, "{Name:%q, RuntimeID:%d, ComponentBased:%t, Version:%d, MaxCount:%d, MaxDamage:%d, BodyWearable:%t, AllowOffHand:%t, ArmourSlot:0, ArmourWearable:%t},\n", name, entry.RuntimeID, entry.ComponentBased, entry.Version, count, props.MaxDamage, body, offhand[name], helmet[name])
+		fmt.Fprintf(&output, "{Name:%q, RuntimeID:%d, ComponentBased:%t, Version:%d, MaxCount:%d, BodyWearable:%t, AllowOffHand:%t, ArmourSlot:0, ArmourWearable:%t},\n", name, entry.RuntimeID, entry.ComponentBased, entry.Version, count, body, offhand[name], helmet[name])
 	}
 	fmt.Fprintln(&output, "}")
 	return format.Source(output.Bytes())

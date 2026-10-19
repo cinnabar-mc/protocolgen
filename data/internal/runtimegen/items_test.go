@@ -41,12 +41,12 @@ func TestRuntimeCatalogCombinesSourcesDeterministically(t *testing.T) {
 	if err != nil || !bytes.Equal(first, second) {
 		t.Fatalf("generation is not deterministic: %v", err)
 	}
-	if !bytes.Contains(first, []byte(`Name: "minecraft:new", RuntimeID: 2, ComponentBased: true, Version: 0, MaxCount: 16, MaxDamage: 0, BodyWearable: true, AllowOffHand: true, ArmourSlot: 0, ArmourWearable: false`)) {
+	if !bytes.Contains(first, []byte(`Name: "minecraft:new", RuntimeID: 2, ComponentBased: true, Version: 0, MaxCount: 16, BodyWearable: true, AllowOffHand: true, ArmourSlot: 0, ArmourWearable: false`)) {
 		t.Fatalf("registry, stack and capability inputs were not combined:\n%s", first)
 	}
 }
 
-// TestNativePropertiesKeepInventoryFacts checks optional empty tags and explicit zero durability.
+// TestNativePropertiesKeepInventoryFacts checks stack sizes and optional empty tags.
 func TestNativePropertiesKeepInventoryFacts(t *testing.T) {
 	registry := map[string]RegistryEntry{
 		"minecraft:air": {RuntimeID: -158},
@@ -59,11 +59,11 @@ func TestNativePropertiesKeepInventoryFacts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if got := properties["minecraft:air"]; got.MaxStackSize != 64 || got.MaxDamage != 0 || len(got.Tags) != 0 {
+	if got := properties["minecraft:air"]; got.MaxStackSize != 64 || len(got.Tags) != 0 {
 		t.Fatalf("empty-tag item facts = %#v", got)
 	}
-	if got := properties["minecraft:new"]; got.MaxStackSize != 1 || got.MaxDamage != 59 || len(got.Tags) != 1 || got.Tags[0] != "minecraft:harness" {
-		t.Fatalf("durable item facts = %#v", got)
+	if got := properties["minecraft:new"]; got.MaxStackSize != 1 || len(got.Tags) != 1 || got.Tags[0] != "minecraft:harness" {
+		t.Fatalf("tagged item facts = %#v", got)
 	}
 }
 
@@ -81,8 +81,6 @@ func TestNativePropertiesRejectIncompleteOrMismatchedDumps(t *testing.T) {
 		{"missing size", `{"minecraft:air":{"id":-158,"maxDamage":0}}`, "incomplete properties"},
 		{"zero size", `{"minecraft:air":{"id":-158,"maxStackSize":0,"maxDamage":0}}`, "invalid stack size"},
 		{"oversized stack", `{"minecraft:air":{"id":-158,"maxStackSize":65,"maxDamage":0}}`, "invalid stack size"},
-		{"missing durability", `{"minecraft:air":{"id":-158,"maxStackSize":64}}`, "incomplete properties"},
-		{"negative durability", `{"minecraft:air":{"id":-158,"maxStackSize":64,"maxDamage":-1}}`, "negative maximum damage"},
 	} {
 		t.Run(scenario.name, func(t *testing.T) {
 			if _, err := DecodeNativeProperties([]byte(scenario.input), registry); err == nil || !strings.Contains(err.Error(), scenario.want) {
@@ -119,7 +117,7 @@ func TestNativeTagsDoNotInventInventoryCapabilities(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			want := fmt.Sprintf(`Name: "minecraft:new", RuntimeID: 2, ComponentBased: true, Version: 0, MaxCount: 1, MaxDamage: 59, BodyWearable: %t, AllowOffHand: false, ArmourSlot: 0, ArmourWearable: false`, scenario.body)
+			want := fmt.Sprintf(`Name: "minecraft:new", RuntimeID: 2, ComponentBased: true, Version: 0, MaxCount: 1, BodyWearable: %t, AllowOffHand: false, ArmourSlot: 0, ArmourWearable: false`, scenario.body)
 			if !bytes.Contains(output, []byte(want)) {
 				t.Fatalf("native facts fabricated or lost inventory capabilities:\n%s", output)
 			}
@@ -150,7 +148,7 @@ func TestRuntimeSourcesUseNativeProperties(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if !bytes.Contains(output, []byte(`MaxCount: 1, MaxDamage: 59, BodyWearable: true, AllowOffHand: true`)) {
+	if !bytes.Contains(output, []byte(`MaxCount: 1, BodyWearable: true, AllowOffHand: true`)) {
 		t.Fatalf("native facts or supplemental capability correction were lost:\n%s", output)
 	}
 }

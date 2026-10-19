@@ -11,8 +11,6 @@ type Runtime struct {
 	ComponentBased bool
 	Version        int32
 	MaxCount       int
-	// MaxDamage is the native maximum durability damage, or zero for items without durability.
-	MaxDamage      int
 	BodyWearable   bool
 	AllowOffHand   bool
 	ArmourSlot     uint8
