@@ -14,6 +14,8 @@ on:
 jobs:
   bench:
     runs-on: ubuntu-latest
+    env:
+      BENCH_GO_PROCS: 4 # the Go benches' -cpu, which bench-compare must be told
     steps:
       - uses: actions/checkout@v4
 
@@ -45,7 +47,7 @@ jobs:
         run: |
           set -o pipefail
           mkdir -p build/bench
-          go -C differential/retail test -run '^$' -bench . -benchmem -count 5 . | tee build/bench/go.txt
+          go -C differential/retail test -run '^$' -bench . -benchmem -count 5 -cpu "$BENCH_GO_PROCS" . | tee build/bench/go.txt
 
       - name: Rust benches (contract crate)
         run: |
@@ -58,14 +60,15 @@ jobs:
           set -o pipefail
           cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
 
-      # bench-compare exits 1 when a Rust path is slower than Go beyond the
-      # margin, which is reported as a warning; 2 (unreadable input) and 3
-      # (a path without its counterpart) fail the job.
+      # bench-compare validates its inputs first, exiting 2 on malformed input
+      # and 3 on a missing or stale one-sided path, which fail the job; it
+      # then exits 1 when a Rust path is slower than Go beyond the margin,
+      # which is reported as a warning.
       - name: Compare
         shell: bash
         run: |
           set +e
-          go -C differential/retail tool bench-compare --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" > build/bench/compare.md
+          go -C differential/retail tool bench-compare --go-procs "$BENCH_GO_PROCS" --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" > build/bench/compare.md
           status=$?
           set -e
           {

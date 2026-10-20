@@ -2,6 +2,8 @@ github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020105954-88f
 github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020105954-88ff04df79bc/go.mod h1:U1Dj5n/GY3/5MgJnvjpy1JZshcsw0SNr6zA6T1XjdJA=
 github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020125603-201e797a7d39 h1:fnWQg0Vy4Ee104uaEvFZh9mRsVY/XPRHc9kJ023254E=
 github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020125603-201e797a7d39/go.mod h1:U1Dj5n/GY3/5MgJnvjpy1JZshcsw0SNr6zA6T1XjdJA=
+github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020152135-56993bbeae0c h1:U9EmcdGw24mzcayTCXSqxb3krydNEOymAyRT5jtgtj0=
+github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020152135-56993bbeae0c/go.mod h1:U1Dj5n/GY3/5MgJnvjpy1JZshcsw0SNr6zA6T1XjdJA=
 github.com/go-gl/mathgl v1.1.0 h1:0lzZ+rntPX3/oGrDzYGdowSLC2ky8Osirvf5uAwfIEA=
 github.com/go-gl/mathgl v1.1.0/go.mod h1:yhpkQzEiH9yPyxDUGzkmgScbaBVlhC06qodikEM0ZwQ=
 github.com/google/uuid v1.6.0 h1:NIvaJDMOsjHA8n1jAhLSgzrAzy1Hgr+hNrb57e+94F0=

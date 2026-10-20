@@ -269,17 +269,18 @@ retail:
 # Run gophertunnel's and the contract crate's codec benches over testdata/bench
 # and print bench-compare's table (see .github/workflows/bench.yml).
 BENCH_OUT := build/bench
+BENCH_GO_PROCS ?= 4
 BENCH_CARGO = cargo bench --manifest-path $(RETAIL)/bench/Cargo.toml --target-dir build/bench-target
 
 .PHONY: bench
 
 bench:
 	mkdir -p $(BENCH_OUT)
-	$(GO) -C $(RETAIL) test -run '^$$' -bench . -benchmem -count 5 . > $(BENCH_OUT)/go.txt
+	$(GO) -C $(RETAIL) test -run '^$$' -bench . -benchmem -count 5 -cpu $(BENCH_GO_PROCS) . > $(BENCH_OUT)/go.txt
 	rm -rf build/bench-target/criterion
 	CRITERION_HOME=$(CURDIR)/build/bench-target/criterion $(BENCH_CARGO) --bench codec -- --warm-up-time 1 --measurement-time 3
 	$(BENCH_CARGO) --bench allocs
-	$(GO) -C $(RETAIL) tool bench-compare --go $(CURDIR)/$(BENCH_OUT)/go.txt --criterion $(CURDIR)/build/bench-target/criterion
+	$(GO) -C $(RETAIL) tool bench-compare --go-procs $(BENCH_GO_PROCS) --go $(CURDIR)/$(BENCH_OUT)/go.txt --criterion $(CURDIR)/build/bench-target/criterion
 
 # Emit the 1.26.51 tree laid out like the gophertunnel checkout in
 # LAYOUT_GOPHERTUNNEL_DIR (constants beside their packets under fork names, fork field
