@@ -27,7 +27,8 @@ each verified against oracle source:
 ## Retail 2193
 
 `make retail` (CI job `retail`) runs the 53 batches pinned in
-`retail/corpus.json` through four decoders and fails on any disagreement that
+`retail/corpus.json`, and the 30 synthetic batches in `testdata/bench`, through
+four decoders and fails on any disagreement that
 `retail/exceptions.json` does not accept, or on an exception that accepts
 nothing. `scripts/fetch-cinnabar.sh` checks out the pinned Cinnabar commit,
 sparsely, into `build/cinnabar`, and Valentine from the last Cinnabar commit
@@ -51,8 +52,23 @@ Each decoder writes `build/retail/verdicts/<decoder>.tsv`, one line per entry:
 fixture, case, entry, header (`id:sender:target`), outcome, error class, then
 digests (8 bytes of SHA-256) of the received entry, of the decoder's own
 rendering of the decoded value and of the re-encoded entry, whether decoding
-the re-encoding renders the same, and a detail. Field renderings are per
-decoder, so they are compared only across that round trip.
+the re-encoding renders the same, and a detail. Field digests are per
+decoder, so they are compared only across that round trip. Across decoders,
+`compare` checks the Rust runner's `Debug` rendering of each `retail`,
+`crafting` and `large` entry (`build/retail/fields/rust.tsv`) field by field
+against the generated Go decoding of the same entry; both come from one
+manifest, so any difference is a `fields` disagreement.
+
+The synthetic batches are gophertunnel encodings of packets built as a
+Dragonfly-style server builds them: the large packets (StartGame, LevelChunk,
+SubChunk, CraftingData, AvailableCommands, BiomeDefinitionList, ItemRegistry,
+CreativeContent), client input and inventory packets, a hot-packet set and
+four multi-packet batches. `go -C differential/retail run ./cmd/retail synth`
+regenerates them and the encode-from-struct entries in `testdata/encode`;
+`TestSyntheticCorpusIsCurrent` fails when they drift. Those entries are also
+built as generated-Go structs (`encode_test.go`) and Rust structs
+(`retail/bench/tests/encode_from_struct.rs`), which must encode them byte for
+byte.
 
 | Case | Input | Expected |
 | --- | --- | --- |
@@ -65,6 +81,7 @@ decoder, so they are compared only across that round trip.
 | `element-limit` | retail, Rust and Go with a zero element limit | the two agree; errors are limit errors |
 | `alloc-failure` | `large`, Rust with allocations over 64 KiB refused | `AllocationFailed`, no abort |
 | `zero-copy` | `unknown-id`, Rust | frame and unknown bodies share the batch; `compact` copies |
+| `oversized` | entries at and past client collection, string and byte-slice ceilings, huge server packets, declared lengths past the input | accepted or rejected as gophertunnel decides |
 
 A panic is its own outcome and always fails the comparison, even on
 malformed input. Startup cancellation is session behavior and is not exercised
@@ -74,3 +91,12 @@ An exception names a decoder, case, kind and the fixtures (or `*`) that share
 one cause, with a reason and evidence; each listed fixture must still disagree.
 Exceptions about gophertunnel carry `oracle`, the module version in
 `retail/go.mod`, and stop loading when that pin moves.
+
+## Benches
+
+`make bench` (workflow `Bench`, not a required check) runs gophertunnel's
+`testing.B` benches in `retail/bench_test.go` and the contract crate's
+criterion benches in `retail/bench` over the same `testdata/bench` files under
+the same names (`Decode`, `Encode`, `DecodeBatch`, `EncodeBatch` / case), then
+joins them with `bench-compare`, which `retail/go.mod` pins as a tool. The
+`allocs` bench prints the contract crate's allocations per decode and encode.

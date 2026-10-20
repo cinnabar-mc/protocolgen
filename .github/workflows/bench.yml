@@ -48,7 +48,7 @@ jobs:
       - name: Rust benches (contract crate)
         run: |
           rm -rf build/bench-target/criterion
-          cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench codec -- --warm-up-time 1 --measurement-time 3
+          CRITERION_HOME="$PWD/build/bench-target/criterion" cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench codec -- --warm-up-time 1 --measurement-time 3
 
       - name: Rust allocations per decode and encode
         run: cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
@@ -58,7 +58,7 @@ jobs:
           {
             echo "## gophertunnel vs contract crate"
             echo
-            go -C differential/retail tool bench-compare --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" | tee "$PWD/build/bench/compare.md"
+            go -C differential/retail tool bench-compare --strict-pairs --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" | tee "$PWD/build/bench/compare.md"
             status=${PIPESTATUS[0]}
             echo
             echo "## Rust allocations"
