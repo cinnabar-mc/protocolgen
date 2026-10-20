@@ -121,6 +121,8 @@ generated code reads, writes, bounds and reports those layouts.
   - a known id from the wrong sender is rejected before the body is read;
   - the body must consume its entry exactly, or the result is `TrailingBytes`.
   Every error from `decode_frame` covers that entry only.
+- Reusing an output buffer lets frame encoding predict the length-prefix width
+  from spare capacity. When it matches, the encoded body stays in place.
 - Header bits above the target subclient are ignored, as gophertunnel's
   `Header.Read` does. `UnknownPacket` keeps the entry as received, so
   `UnknownPacket::encode_frame` forwards it byte for byte, those bits
@@ -130,7 +132,7 @@ generated code reads, writes, bounds and reports those layouts.
 
 - Packet directions come from the manifest's reviewed `directions.json`.
   `PacketId::direction` and `wire::Direction::permits(Peer)` expose them.
-- `decode_from` and `decode_frame` reject a packet the sender may not send.
+- `decode_from`, `decode_frame` and `decode_framed` reject a packet the sender may not send.
   `encode_frame` refuses to write one the local peer may not send.
   `wire::Direction` and `wire::Peer` are protocol-independent.
 
