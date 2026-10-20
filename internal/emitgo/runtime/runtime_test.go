@@ -451,3 +451,36 @@ func TestRGBAIsALittleEndianARGBInt(t *testing.T) {
 		t.Fatalf("decoded %#v", decoded)
 	}
 }
+
+// TestFuncSliceBoundsAllocation checks truncated counts without reserving their declared size.
+func TestFuncSliceBoundsAllocation(t *testing.T) {
+	for _, count := range []uint32{1 << 20, math.MaxUint32} {
+		for _, payload := range [][]byte{nil, {7}} {
+			writer := NewWriter()
+			writer.Varuint32(&count)
+			data := append(writer.Data(), payload...)
+			reader := NewReaderWithoutLimit(data)
+			var values []uint64
+			calls := 0
+			FuncSlice(reader, &values, reader.Varuint32, func(value *uint64) {
+				calls++
+				if cap(values) > len(payload)+1 {
+					t.Fatalf("reserved %d elements from %d payload bytes", cap(values), len(payload))
+				}
+				reader.Uint64(value)
+			})
+			if reader.Err() == nil || calls != 1 || len(values) != 0 {
+				t.Fatalf("error = %v, calls = %d, values = %v", reader.Err(), calls, values)
+			}
+		}
+	}
+}
+
+func TestFuncSliceAllowsElementsWithoutWireBytes(t *testing.T) {
+	reader := NewReaderWithoutLimit([]byte{5})
+	var values []struct{}
+	FuncSlice(reader, &values, reader.Varuint32, func(*struct{}) {})
+	if reader.Err() != nil || len(values) != 5 {
+		t.Fatalf("error = %v, length = %d", reader.Err(), len(values))
+	}
+}
