@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	gophertunnelpacket "github.com/sandertv/gophertunnel/minecraft/protocol/packet"
-	generatedpacket "protocolgen/generated/1.26.40/go/protocol/packet"
+	generatedpacket "protocolgen/generated/1.26.51/go/protocol/packet"
 )
 
 func TestDifferentialCorpus(t *testing.T) {

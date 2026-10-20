@@ -248,12 +248,13 @@ rust-contract:
 RETAIL := differential/retail
 RETAIL_OUT := build/retail
 RETAIL_CINNABAR := build/cinnabar
+RETAIL_VALENTINE := build/valentine
 RETAIL_RUNNER = cargo run --manifest-path $(RETAIL)/runner/Cargo.toml --target-dir build/retail-target --
 
 .PHONY: retail
 
 retail:
-	scripts/fetch-cinnabar.sh $(RETAIL)/corpus.json $(RETAIL_CINNABAR)
+	scripts/fetch-cinnabar.sh $(RETAIL)/corpus.json $(RETAIL_CINNABAR) $(RETAIL_VALENTINE)
 	rm -rf $(RETAIL_OUT)
 	$(GO) -C $(RETAIL) vet ./...
 	$(GO) -C $(RETAIL) test ./...

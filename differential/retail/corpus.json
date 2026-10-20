@@ -4,8 +4,12 @@
   "protocol_version": 2193,
   "source": {
     "repository": "https://github.com/bedrock-mc/cinnabar",
-    "commit": "991cf4c3a90a78c7d50c80382a9402e18b9fddbb",
+    "commit": "b3f359b3b676c9f45dda9e02c7e2c981cfc23179",
     "directory": "crates/protocol/fixtures"
+  },
+  "valentine": {
+    "commit": "991cf4c3a90a78c7d50c80382a9402e18b9fddbb",
+    "directory": "crates/protocol/vendor/valentine"
   },
   "format": "uncompressed batch: 0xfe, then var_u32-length entries of header varint and body",
   "fixtures": [
@@ -196,7 +200,7 @@
       "id": 101,
       "direction": "bidirectional",
       "sender": "client",
-      "sha256": "7f03491c9c39214c52fc608799a4f5694da9f9b7eece50d298d481ab86912001"
+      "sha256": "6b89b941127b88673b3719d6ec33fccf61b4bbdc7eee537a28d3f2910ec7dacb"
     },
     {
       "name": "ModalFormResponseClosed",

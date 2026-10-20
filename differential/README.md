@@ -1,9 +1,8 @@
 # Differential codec harness
 
-This module compares protocol 2168 payloads between the generated Go codec and the pinned gophertunnel fork at `be6713da4dc051a4197f897d04835e89e9c54321`.
+This module compares protocol 2193 payloads between the generated 1.26.51 Go codec and the gophertunnel fork commit that `gophertunnel.json` pins. That lock is the one gophertunnel pin for every module here: `scripts/pin-gophertunnel.sh [VERSION]` rewrites their `go.mod` files from it, and `TestGophertunnelPinsMatchTheLock` fails when one disagrees.
 
-Pool parity accepts five deprecated oracle-only IDs that are still registered by gophertunnel but absent from the manifest: 55 `AdventureSettings`, 117 `ScriptCustomEvent`, 163 `FilterText`, 173 `PhotoInfoRequest`, and 197 `ClientCheatAbility`. The canonical manifest also contains server-only ID 16 `ServerPlayerPostMovePosition`, which the pinned oracle reserves and does not register.
-
+Pool parity accepts five deprecated oracle-only IDs that are still registered by gophertunnel but absent from the manifest: 55 `AdventureSettings`, 117 `ScriptCustomEvent`, 163 `FilterText`, 173 `PhotoInfoRequest`, and 197 `ClientCheatAbility`.
 Run `go test ./...` for the committed corpus. Run `go test -fuzz=FuzzDifferential -fuzztime=10m -promote` to fuzz and promote successful cases.
 
 ## Comparison rules
@@ -31,7 +30,8 @@ each verified against oracle source:
 `retail/corpus.json` through four decoders and fails on any disagreement that
 `retail/exceptions.json` does not accept, or on an exception that accepts
 nothing. `scripts/fetch-cinnabar.sh` checks out the pinned Cinnabar commit,
-sparsely, into `build/cinnabar`.
+sparsely, into `build/cinnabar`, and Valentine from the last Cinnabar commit
+that vendored it into `build/valentine`.
 
 - **valentine:** Cinnabar's vendored crate, framed as `codec.rs`'s
   `decode_batch` frames, without Cinnabar's UI and audio policy checks.
@@ -41,8 +41,9 @@ sparsely, into `build/cinnabar`.
 - **go:** the generated Go, with the reader's limits for client packets only.
   An id outside the manifest is forwarded as unknown; a manifest id from the
   wrong sender is a direction error.
-- **gophertunnel:** the fork commit Cinnabar's fixturegen pins, which encoded
-  the fixtures (`prepare` checks they match), used as its connections use it:
+- **gophertunnel:** the fork commit `gophertunnel.json` pins, which is also
+  the one Cinnabar's fixturegen pins at the corpus commit (`prepare` checks
+  they match), used as its connections use it:
   `packet.Decoder` framing, the sender's pool, `packet.Unknown` for absent
   ids, limits for client packets.
 

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	gophertunnelpacket "github.com/sandertv/gophertunnel/minecraft/protocol/packet"
-	generatedpacket "protocolgen/generated/1.26.40/go/protocol/packet"
+	generatedpacket "protocolgen/generated/1.26.51/go/protocol/packet"
 )
 
 func TestPacketPoolsHaveMatchingIDs(t *testing.T) {
@@ -30,9 +30,6 @@ func TestPacketPoolsHaveMatchingIDs(t *testing.T) {
 					extra = append(extra, id)
 				}
 			}
-			if tc.name == "server" {
-				missing = removeAccepted(missing, 16)
-			}
 			for _, id := range extra {
 				if !deprecatedOraclePacketIDs[id] {
 					missing = append(missing, id)
@@ -54,16 +51,6 @@ var deprecatedOraclePacketIDs = map[uint32]bool{
 	163: true,
 	173: true,
 	197: true,
-}
-
-func removeAccepted(ids []uint32, accepted uint32) []uint32 {
-	result := ids[:0]
-	for _, id := range ids {
-		if id != accepted {
-			result = append(result, id)
-		}
-	}
-	return result
 }
 
 func filterUnexpectedIDs(ids []uint32, accepted map[uint32]bool) []uint32 {

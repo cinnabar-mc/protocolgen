@@ -35,83 +35,11 @@
         "*"
       ],
       "kind": "accepted",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81",
+      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261019151115-85d4022854e1",
       "reason": "gophertunnel connections look the id up in the peer's pool (server pool for Dial, client pool for Listener) and decode an id missing from it as packet.Unknown rather than rejecting it, so a packet from the wrong peer is accepted as unknown or, where the fork registers the id for both peers, decoded.",
       "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/packet.go (packetData.decodePacket)",
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol.go (pool selection by peer)"
-      ]
-    },
-    {
-      "decoder": "gophertunnel",
-      "case": "truncated",
-      "fixtures": [
-        "inventory_transaction_attack_actor.bin",
-        "inventory_transaction_attack_actor_empty_hand.bin",
-        "inventory_transaction_interact_actor.bin",
-        "inventory_transaction_interact_actor_empty_hand.bin",
-        "item_stack_request_manual_craft.bin",
-        "level_sound_event.bin",
-        "network_settings.bin",
-        "play_sound.bin",
-        "player_auth_input.bin",
-        "player_auth_input_block_actions.bin",
-        "player_auth_input_block_actions_and_break_block.bin",
-        "player_auth_input_break_block.bin",
-        "player_auth_input_mine_block.bin",
-        "player_auth_input_mine_block_and_predict.bin",
-        "player_auth_input_use_block.bin"
-      ],
-      "kind": "accepted",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81",
-      "reason": "Oracle short-read leniency. Reader.Uint16 through Float64 call Read on the payload buffer and check only its error; bytes.Buffer.Read returns a short count with a nil error, so a fixed-width field cut short keeps stale bytes from the reader's scratch buffer. Every listed packet ends in such a read: NetworkSettings, PlaySound and LevelSoundEvent in Float32 (the throttle scalar, the playback position, the fire-at Vec3), PlayerAuthInput in the RawMoveVector Vec2, the attack and interact InventoryTransactions in the clicked-position Vec3, and ItemStackRequest in the Int32 filter cause. Fixtures ending in a byte, varint or string read are rejected, as the generated codecs reject all of these.",
-      "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/reader_little_endian.go#L11 (fixed-width reads ignore Read's count)",
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/packet.go (decodePacket reads from a bytes.Buffer payload)"
-      ]
-    },
-    {
-      "decoder": "gophertunnel",
-      "case": "crafting",
-      "fixtures": [
-        "crafting_material_reducers.bin"
-      ],
-      "kind": "reencode",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81",
-      "reason": "Oracle bug in the material reducer key. The wire field is one zigzag varint key, item id << 16 | aux, which the writer builds correctly; the reader reconstructs the id as key << 16 instead of key >> 16, so a decoded reducer re-encodes with a different key. Vanilla splits the key the same way the writer builds it.",
-      "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/reader.go#L515 (Reader.MaterialReducer: NetworkID: mix << 16)",
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/writer.go#L405 (Writer.MaterialReducer: NetworkID << 16 | MetadataValue)"
-      ]
-    },
-    {
-      "decoder": "go",
-      "case": "crafting",
-      "fixtures": [
-        "crafting_shapeless_molang.bin"
-      ],
-      "kind": "decode",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81",
-      "reason": "The fixture is the oracle's encoding, not vanilla's. Vanilla serializes a recipe ingredient as a var_u32-counted string-to-string map, then the zigzag aux value and count, and a molang descriptor's map is the single entry tags=<expression>. The pinned gophertunnel writes the key molang and then an int16 molang version where the aux varint belongs, so a manifest-layout decoder reads the version's low byte as aux, its high byte as the count, and is misaligned from there. The manifest layout is correct; the oracle's molang writer is not.",
-      "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/writer.go#L285 (Writer.ItemDescriptorCount writes the \"molang\" name, then MoLangItemDescriptor.Marshal)",
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/item_descriptor.go#L58 (MoLangItemDescriptor.Marshal: expression string, then Int16 version)",
-        "Vanilla 1.26.50 molang ingredient map: one entry, key \"tags\", value the expression; no version"
-      ]
-    },
-    {
-      "decoder": "rust",
-      "case": "crafting",
-      "fixtures": [
-        "crafting_shapeless_molang.bin"
-      ],
-      "kind": "decode",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81",
-      "reason": "The fixture is the oracle's encoding, not vanilla's. Vanilla serializes a recipe ingredient as a var_u32-counted string-to-string map, then the zigzag aux value and count, and a molang descriptor's map is the single entry tags=<expression>. The pinned gophertunnel writes the key molang and then an int16 molang version where the aux varint belongs, so a manifest-layout decoder reads the version's low byte as aux, its high byte as the count, and is misaligned from there. The manifest layout is correct; the oracle's molang writer is not.",
-      "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/writer.go#L285 (Writer.ItemDescriptorCount writes the \"molang\" name, then MoLangItemDescriptor.Marshal)",
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/item_descriptor.go#L58 (MoLangItemDescriptor.Marshal: expression string, then Int16 version)",
-        "Vanilla 1.26.50 molang ingredient map: one entry, key \"tags\", value the expression; no version"
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/packet.go (packetData.decodePacket)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol.go (pool selection by peer)"
       ]
     },
     {
@@ -121,11 +49,11 @@
         "crafting_shapeless_molang.bin"
       ],
       "kind": "decode",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81",
+      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261019151115-85d4022854e1",
       "reason": "The fixture is the oracle's encoding, not vanilla's. Vanilla serializes a recipe ingredient as a var_u32-counted string-to-string map, then the zigzag aux value and count, and a molang descriptor's map is the single entry tags=<expression>. The pinned gophertunnel writes the key molang and then an int16 molang version where the aux varint belongs, so a manifest-layout decoder reads the version's low byte as aux, its high byte as the count, and is misaligned from there. The manifest layout is correct; the oracle's molang writer is not.",
       "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/writer.go#L285 (Writer.ItemDescriptorCount writes the \"molang\" name, then MoLangItemDescriptor.Marshal)",
-        "https://github.com/hashimthearab/gophertunnel/blob/169f954bbe81c88346618d7c37df1d020a778018/minecraft/protocol/item_descriptor.go#L58 (MoLangItemDescriptor.Marshal: expression string, then Int16 version)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/writer.go#L285 (Writer.ItemDescriptorCount writes the \"molang\" name, then MoLangItemDescriptor.Marshal)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/item_descriptor.go#L58 (MoLangItemDescriptor.Marshal: expression string, then Int16 version)",
         "Vanilla 1.26.50 molang ingredient map: one entry, key \"tags\", value the expression; no version"
       ]
     }

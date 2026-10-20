@@ -15,8 +15,9 @@ require (
 	golang.org/x/image v0.21.0 // indirect
 )
 
-// The fixtures' encoder: the fork commit Cinnabar's tools/fixturegen pins at
-// the corpus commit. prepare checks the two still agree.
-replace github.com/sandertv/gophertunnel => github.com/hashimthearab/gophertunnel v1.25.3-0.20261011201053-169f954bbe81
+// The fixtures' encoder, as ../gophertunnel.json pins it: the fork commit
+// Cinnabar's tools/fixturegen pins at the corpus commit. prepare checks the
+// two still agree.
+replace github.com/sandertv/gophertunnel => github.com/hashimthearab/gophertunnel v1.25.3-0.20261019151115-85d4022854e1
 
 replace protocolgen => ../..

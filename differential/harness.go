@@ -17,8 +17,8 @@ import (
 
 	gophertunnelprotocol "github.com/sandertv/gophertunnel/minecraft/protocol"
 	gophertunnelpacket "github.com/sandertv/gophertunnel/minecraft/protocol/packet"
-	generatedprotocol "protocolgen/generated/1.26.40/go/protocol"
-	generatedpacket "protocolgen/generated/1.26.40/go/protocol/packet"
+	generatedprotocol "protocolgen/generated/1.26.51/go/protocol"
+	generatedpacket "protocolgen/generated/1.26.51/go/protocol/packet"
 )
 
 type direction string
@@ -305,7 +305,7 @@ func loadAccepted() (map[acceptedKey]bool, error) {
 	if err := json.Unmarshal(data, &file); err != nil {
 		return nil, err
 	}
-	if file.SchemaVersion != 1 || file.MinecraftVersion != "1.26.40" || file.ProtocolVersion != 2168 {
+	if file.SchemaVersion != 1 || file.MinecraftVersion != "1.26.51" || file.ProtocolVersion != 2193 {
 		return nil, errors.New("accepted-divergences.json has the wrong target")
 	}
 	result := make(map[acceptedKey]bool, len(file.Entries))
