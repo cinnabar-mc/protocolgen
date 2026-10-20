@@ -454,7 +454,7 @@ func TestRGBAIsALittleEndianARGBInt(t *testing.T) {
 
 // TestFuncSliceBoundsAllocation checks truncated counts without reserving their declared size.
 func TestFuncSliceBoundsAllocation(t *testing.T) {
-	for _, count := range []uint32{1 << 20, math.MaxUint32} {
+	for _, count := range []uint32{1 << 20, uint32(min(uint64(math.MaxUint32), uint64(math.MaxInt)))} {
 		for _, payload := range [][]byte{nil, {7}} {
 			writer := NewWriter()
 			writer.Varuint32(&count)
