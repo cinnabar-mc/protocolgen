@@ -178,16 +178,44 @@ impl Packet {
         sender: Peer,
         limits: &wire::Limits,
     ) -> wire::DecodeResult<Decoded> {
-        let header = frame.header();
-        let body = frame.body();
+        let mut reader = frame.body_reader().with_limits(limits);
+        Self::decode_entry(frame.header(), frame.frame(), &mut reader, sender)
+    }
+
+    /// Decodes exactly one length-prefixed entry, borrowing the input
+    /// until a decoded byte field or unknown packet needs shared ownership.
+    pub fn decode_framed(
+        frame: &bytes::Bytes,
+        sender: Peer,
+        limits: &wire::Limits,
+    ) -> wire::DecodeResult<Decoded> {
+        let mut reader = wire::Reader::from_shared(frame).with_limits(limits);
+        let declared = reader.read_var_u32()? as usize;
+        if declared > reader.remaining() {
+            return Err(wire::DecodeError::UnexpectedEof { needed: declared, remaining: reader.remaining() });
+        }
+        if declared < reader.remaining() {
+            return Err(wire::DecodeError::TrailingBytes(reader.remaining() - declared));
+        }
+        let header = wire::PacketHeader::from_raw(reader.read_var_u32()?);
+        Self::decode_entry(header, frame, &mut reader, sender)
+    }
+
+    /// Decodes a bounded entry body and preserves unknown entries exactly.
+    fn decode_entry(
+        header: wire::PacketHeader,
+        frame: &bytes::Bytes,
+        reader: &mut wire::Reader<'_>,
+        sender: Peer,
+    ) -> wire::DecodeResult<Decoded> {
         let Some(id) = PacketId::from_raw(header.id) else {
-            return Ok(Decoded::Unknown(UnknownPacket { header, body, frame: frame.frame().clone() }));
+            let body = reader.take_shared(reader.remaining())?;
+            return Ok(Decoded::Unknown(UnknownPacket { header, body, frame: frame.clone() }));
         };
         if !id.direction().permits(sender) {
             return Err(wire::DecodeError::UnexpectedDirection(header.id));
         }
-        let mut reader = wire::Reader::from_shared(&body).with_limits(limits);
-        let packet = Self::decode_body(id, &mut reader)?;
+        let packet = Self::decode_body(id, reader)?;
         reader.expect_consumed()?;
         Ok(Decoded::Known(packet))
     }
@@ -252,6 +280,15 @@ where
     assert_eq!(frames[0].header().sender_subclient, 1);
     assert_eq!(frames[0].header().target_subclient, 2);
     let decoded = Packet::decode_frame(&frames[0], sender, &wire::Limits::receiving_from(sender));
+    let direct = Packet::decode_framed(frames[0].frame(), sender, &wire::Limits::receiving_from(sender));
+    assert_eq!(direct, decoded, "{name} borrowed and owned frames differ");
+    let wrong_sender = match sender { Peer::Client => Peer::Server, Peer::Server => Peer::Client };
+    if !packet.id().direction().permits(wrong_sender) {
+        assert_eq!(
+            Packet::decode_framed(frames[0].frame(), wrong_sender, &wire::Limits::unbounded()),
+            Err(wire::DecodeError::UnexpectedDirection(packet.id() as u32)),
+        );
+    }
     assert_eq!(decoded, Ok(Decoded::Known(packet)), "{name} did not survive a frame round trip");
 }
 
@@ -315,6 +352,24 @@ fn unknown_packets_keep_exact_boundaries() {
     assert!(matches!(&decoded[1], Decoded::Unknown(packet) if packet.body.is_empty()));
 }
 
+/// Borrowed single-entry decoding validates both prefixes and the exact entry boundary.
+#[test]
+fn framed_decode_rejects_bad_boundaries() {
+    let limits = wire::Limits::unbounded();
+    for bytes in [
+        &[0x80][..],
+        &[0x80, 0],
+        &[0xff, 0xff, 0xff, 0xff, 0x10],
+        &[0],
+        &[2, 1],
+        &[1, 1, 0],
+        &[2, 0x80, 0],
+        &[5, 0xff, 0xff, 0xff, 0xff, 0x10],
+    ] {
+        assert!(Packet::decode_framed(&bytes::Bytes::copy_from_slice(bytes), Peer::Server, &limits).is_err(), "{bytes:?}");
+    }
+}
+
 /// Header bits above the target subclient are ignored on decode but must
 /// survive forwarding an unknown entry.
 #[test]
@@ -331,6 +386,7 @@ fn unknown_packets_forward_byte_for_byte() {
     writer.write_u8(0xab).unwrap();
     let frame = wire::Frames::new(entry.clone().into(), 1).next().unwrap().unwrap();
     let decoded = Packet::decode_frame(&frame, Peer::Server, &wire::Limits::unbounded());
+    assert_eq!(Packet::decode_framed(frame.frame(), Peer::Server, &wire::Limits::unbounded()), decoded);
     let Ok(Decoded::Unknown(packet)) = &decoded else {
         panic!("unknown id decoded as {decoded:?}");
     };

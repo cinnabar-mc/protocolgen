@@ -98,6 +98,11 @@ impl RawFrame {
         self.frame.slice(self.body_start..)
     }
 
+    /// Borrows the body while sharing the frame only when a decoded field needs ownership.
+    pub(crate) fn body_reader(&self) -> Reader<'_> {
+        Reader { buf: &self.frame[self.body_start..], ..Reader::from_shared(&self.frame) }
+    }
+
     /// The complete entry, including its length prefix, for forwarding as is.
     pub fn frame(&self) -> &bytes::Bytes {
         &self.frame

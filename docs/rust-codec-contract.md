@@ -112,6 +112,9 @@ generated code reads, writes, bounds and reports those layouts.
   Framing errors end the batch: a missing `0xfe` with `from_batch`, a declared
   length past the input, a header that overruns its entry, or more entries
   than the configured maximum.
+- `Packet::decode_framed(bytes, sender, limits)` decodes exactly one length-prefixed
+  entry from a borrowed `Bytes` buffer. It avoids creating an owned frame for
+  known packets and shares input only when decoded fields retain bytes.
 - `Packet::decode_frame(frame, sender, limits)` decodes one entry:
   - an id missing from the manifest returns `Decoded::Unknown`, with the
     header and the exact body;

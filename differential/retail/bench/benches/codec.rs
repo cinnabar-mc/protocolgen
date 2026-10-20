@@ -31,11 +31,8 @@ fn benches(c: &mut Criterion) {
         group.throughput(Throughput::Bytes(case.entry_len(0) as u64));
         group.bench_function(case.file.name.as_str(), |b| {
             b.iter(|| {
-                let frame = Frames::new(black_box(framed.clone()), 1)
-                    .next()
-                    .expect("one entry")
-                    .expect("frame");
-                Packet::decode_frame(&frame, case.sender, &case.limits).expect("decode")
+                Packet::decode_framed(black_box(&framed), case.sender, &case.limits)
+                    .expect("decode")
             })
         });
     }
