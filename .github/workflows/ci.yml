@@ -114,10 +114,10 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             build/retail-target
-          key: retail-${{ runner.os }}-${{ hashFiles('differential/retail/corpus.json', 'differential/retail/runner/Cargo.toml') }}
+          key: retail-${{ runner.os }}-${{ hashFiles('differential/retail/corpus.json', 'differential/retail/runner/Cargo.toml', 'differential/retail/bench/Cargo.toml') }}
           restore-keys: retail-${{ runner.os }}-
 
-      - name: Compare retail fixtures across Valentine, generated Rust, generated Go and gophertunnel
+      - name: Compare retail and synthetic fixtures across Valentine, generated Rust, generated Go and gophertunnel
         run: make retail GO_CACHE="$RUNNER_TEMP/protocolgen-go-cache"
 
       - name: Preserve verdicts
@@ -128,6 +128,7 @@ jobs:
           path: |
             build/retail/expected.tsv
             build/retail/verdicts/
+            build/retail/fields/
             build/retail/report.txt
           if-no-files-found: warn
 

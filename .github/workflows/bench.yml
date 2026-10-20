@@ -1,0 +1,78 @@
+name: Bench
+
+# Per-packet codec benches: gophertunnel (differential/retail/bench_test.go)
+# against the contract crate (differential/retail/bench), over the committed
+# testdata/bench corpus, on one runner. Not a required check: some Rust paths
+# are known to be slower than gophertunnel.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            differential/retail/go.sum
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            build/bench-target
+          key: bench-${{ runner.os }}-${{ hashFiles('differential/retail/bench/Cargo.toml', 'generated/1.26.51/rust-contract/Cargo.toml') }}
+          restore-keys: bench-${{ runner.os }}-
+
+      - name: Build the Rust benches
+        run: cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --no-run
+
+      - name: Go benches (gophertunnel)
+        run: |
+          mkdir -p build/bench
+          go -C differential/retail test -run '^$' -bench . -benchmem -count 5 . | tee build/bench/go.txt
+
+      - name: Rust benches (contract crate)
+        run: |
+          rm -rf build/bench-target/criterion
+          cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench codec -- --warm-up-time 1 --measurement-time 3
+
+      - name: Rust allocations per decode and encode
+        run: cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
+
+      - name: Compare
+        run: |
+          {
+            echo "## gophertunnel vs contract crate"
+            echo
+            go -C differential/retail tool bench-compare --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" | tee "$PWD/build/bench/compare.md"
+            status=${PIPESTATUS[0]}
+            echo
+            echo "## Rust allocations"
+            echo
+            cat build/bench/allocs.md
+            exit "$status"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Preserve results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench
+          path: |
+            build/bench/
+            build/bench-target/criterion/
+          if-no-files-found: warn

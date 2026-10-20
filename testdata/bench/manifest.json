@@ -1,0 +1,397 @@
+[
+  {
+    "name": "StartGame",
+    "file": "synthetic_start_game.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      11
+    ],
+    "sha256": "b6e886c6d70d429c2a3c7a36897b4044aee9d1ca405a9ea7a0970cad20503d14"
+  },
+  {
+    "name": "LevelChunk",
+    "file": "synthetic_level_chunk.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      58
+    ],
+    "sha256": "b6b4357615ade71e5f3c83b5de308813b8d4c8f8469de852fd81604489725afd"
+  },
+  {
+    "name": "SubChunk",
+    "file": "synthetic_sub_chunk.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      174
+    ],
+    "sha256": "0eba2c4b141d6e3dace41fc733e2c1dacf13602632235a24d1e604dab1719ac4"
+  },
+  {
+    "name": "CraftingData",
+    "file": "synthetic_crafting_data.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      52
+    ],
+    "sha256": "e94cda79f73ae0a79b1935944dc6373059f244718c259a74eaa71e7dd405ee3b"
+  },
+  {
+    "name": "AvailableCommands",
+    "file": "synthetic_available_commands.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      76
+    ],
+    "sha256": "16d588afebc51de3bd038b4de8d63c2d57dcf045e4c21a54129bb3b851f43bc8"
+  },
+  {
+    "name": "BiomeDefinitionList",
+    "file": "synthetic_biome_definition_list.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      122
+    ],
+    "sha256": "5cfaee74b38474f31d7121b77446431f5ce8802f477a6326842b978f0a629bce"
+  },
+  {
+    "name": "ItemRegistry",
+    "file": "synthetic_item_registry.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      162
+    ],
+    "sha256": "7264f09afcc4dd5ce73ec69451b0985254edf19ed96d0bb3f290e9abdebddaf1"
+  },
+  {
+    "name": "CreativeContent",
+    "file": "synthetic_creative_content.bin",
+    "sender": "server",
+    "set": "large",
+    "packets": [
+      145
+    ],
+    "sha256": "2313012d4e5cd199419fc50ea29d6ba07332e757c964fb9a787459b2615f2181"
+  },
+  {
+    "name": "PlayerAuthInput",
+    "file": "synthetic_player_auth_input.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      144
+    ],
+    "sha256": "7d0b5985a40ca0bc37765679e041ff49363228bd3d78c9f0f80a8f68f003ee06"
+  },
+  {
+    "name": "PlayerAuthInputInteract",
+    "file": "synthetic_player_auth_input_interact.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      144
+    ],
+    "sha256": "f7a9e397a064cc4259f7c733750e93158a7aa29cb511338a2feec62696801cdf"
+  },
+  {
+    "name": "InventoryTransactionUseItem",
+    "file": "synthetic_inventory_transaction_use_item.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      30
+    ],
+    "sha256": "d0981123148935af57dbceeb923b1025a27ad3e75fea942dbc2bc894079a11f2"
+  },
+  {
+    "name": "InventoryTransactionUseItemOnEntity",
+    "file": "synthetic_inventory_transaction_use_item_on_entity.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      30
+    ],
+    "sha256": "37f9db48a4d7199a0a5a6c0050ba630e5cb970c9c79f540c07786c4f7eec66d7"
+  },
+  {
+    "name": "InventoryTransactionNormal",
+    "file": "synthetic_inventory_transaction_normal.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      30
+    ],
+    "sha256": "690efa2782f3b7874a58137625401f95097ddb561c491faef7802574396a5f41"
+  },
+  {
+    "name": "ItemStackRequest",
+    "file": "synthetic_item_stack_request.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      147
+    ],
+    "sha256": "50f12c0a2a93661b60a053b3f19d0bad604b4c981c0dbe49ab7437ca033220f3"
+  },
+  {
+    "name": "MovePlayer",
+    "file": "synthetic_move_player.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      19
+    ],
+    "sha256": "e5fba41e593ebce30f0a961b1714acf16ea11a13369ea382b90a964d951efaf0"
+  },
+  {
+    "name": "MoveActorDelta",
+    "file": "synthetic_move_actor_delta.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      111
+    ],
+    "sha256": "0e86312c6e36709ffd9d071a50f35dac068247c7137f7c059503fb73252cbd95"
+  },
+  {
+    "name": "SetActorMotion",
+    "file": "synthetic_set_actor_motion.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      40
+    ],
+    "sha256": "9769531855dfeabbcb0c60931679045d96cfdab9a16b458fcdd507e47f6e22bd"
+  },
+  {
+    "name": "SetActorData",
+    "file": "synthetic_set_actor_data.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      39
+    ],
+    "sha256": "bbed478e8c36e6d149f4ad3d20614ca57b76c08ac2b7c39babfd4a2a50941aa1"
+  },
+  {
+    "name": "AddActor",
+    "file": "synthetic_add_actor.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      13
+    ],
+    "sha256": "1c9c701db3f81082aad03708fa5e01c1f2266f9550684538e23fc85d96ffcfb0"
+  },
+  {
+    "name": "UpdateBlock",
+    "file": "synthetic_update_block.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      21
+    ],
+    "sha256": "65e4b94e1a3bc5bccb15483c6606b6b1f8ac98a302eb8524bf6c9ea6d4766cf6"
+  },
+  {
+    "name": "UpdateAttributes",
+    "file": "synthetic_update_attributes.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      29
+    ],
+    "sha256": "5657bcb9c4eee7ec5f756ab44a1900b39f8a289ea8f18100771a62b21dd66593"
+  },
+  {
+    "name": "LevelSoundEvent",
+    "file": "synthetic_level_sound_event.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      123
+    ],
+    "sha256": "05f57e9bce0fa1d7e2dfdc9754016584d5e3cb7c0d164b6024ee764ceacdfef0"
+  },
+  {
+    "name": "Text",
+    "file": "synthetic_text.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      9
+    ],
+    "sha256": "ef1e389a512bb84019c11b805287e45ca52c00a3e3030e9295e1bec6d50541ef"
+  },
+  {
+    "name": "Animate",
+    "file": "synthetic_animate.bin",
+    "sender": "client",
+    "set": "hot",
+    "packets": [
+      44
+    ],
+    "sha256": "4422af805bbf2fe50807af301ae0ee6c067266ee1ea46ce941041200e9d05ce2"
+  },
+  {
+    "name": "NetworkStackLatency",
+    "file": "synthetic_network_stack_latency.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      115
+    ],
+    "sha256": "676efbce5ac5ccb14294445bdbcf35099d3901deb3c233c1858c2d5a58a3b68f"
+  },
+  {
+    "name": "MobEquipment",
+    "file": "synthetic_mob_equipment.bin",
+    "sender": "server",
+    "set": "hot",
+    "packets": [
+      31
+    ],
+    "sha256": "78878938cd7d271bc70f98547ce341944ee00736cf8da0da855dba3d361a364d"
+  },
+  {
+    "name": "ServerTick",
+    "file": "synthetic_batch_server_tick.bin",
+    "sender": "server",
+    "set": "batch",
+    "packets": [
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      111,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      40,
+      39,
+      21,
+      39,
+      21,
+      39,
+      21,
+      39,
+      21,
+      123,
+      123,
+      123,
+      29,
+      19,
+      9,
+      115
+    ],
+    "sha256": "a5ff553c158f618dc3b132e49dd3d1b7f8c6e48487ceb088619f1820b277ecaa"
+  },
+  {
+    "name": "ChunkRadius",
+    "file": "synthetic_batch_chunk_radius.bin",
+    "sender": "server",
+    "set": "batch",
+    "packets": [
+      121,
+      58,
+      58,
+      58,
+      58,
+      58,
+      58,
+      58,
+      58,
+      58
+    ],
+    "sha256": "522c58bb191b28371163112a558de996fd8117d8467fe7d287363b36a9b4e836"
+  },
+  {
+    "name": "Spawn",
+    "file": "synthetic_batch_spawn.bin",
+    "sender": "server",
+    "set": "batch",
+    "packets": [
+      10,
+      29,
+      39,
+      49,
+      31,
+      48,
+      114,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13
+    ],
+    "sha256": "41b8c2c093d95097381f886679712a06ca4825f53d17d9e158e05a1e7f594869"
+  },
+  {
+    "name": "ClientTick",
+    "file": "synthetic_batch_client_tick.bin",
+    "sender": "client",
+    "set": "batch",
+    "packets": [
+      144,
+      44,
+      30,
+      147,
+      115
+    ],
+    "sha256": "58eb806abf2d46ee0a7b60c73dc14b64b71bb211182aafbc42803266a6559914"
+  }
+]

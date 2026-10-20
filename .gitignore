@@ -12,3 +12,4 @@ generated/**/vanilla-data.previous/
 # Go fuzz crashers are reproduction artifacts, not corpus entries.
 differential/testdata/fuzz/
 /build/
+differential/retail/bench/Cargo.lock

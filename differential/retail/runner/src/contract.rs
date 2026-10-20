@@ -78,6 +78,7 @@ fn decode(frame: &RawFrame, sender: Peer, limits: &Limits, verdict: &mut Verdict
             verdict.outcome = OK;
             let fields = format!("{packet:?}");
             verdict.fields = Some(digest(fields.as_bytes()));
+            verdict.debug = Some(fields.clone());
             let header = frame.header();
             let mut out = Vec::new();
             if let Err(error) = packet.encode_frame(

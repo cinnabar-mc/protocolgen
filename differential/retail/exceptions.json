@@ -41,21 +41,6 @@
         "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/packet.go (packetData.decodePacket)",
         "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol.go (pool selection by peer)"
       ]
-    },
-    {
-      "decoder": "valentine",
-      "case": "crafting",
-      "fixtures": [
-        "crafting_shapeless_molang.bin"
-      ],
-      "kind": "decode",
-      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261019151115-85d4022854e1",
-      "reason": "The fixture is the oracle's encoding, not vanilla's. Vanilla serializes a recipe ingredient as a var_u32-counted string-to-string map, then the zigzag aux value and count, and a molang descriptor's map is the single entry tags=<expression>. The pinned gophertunnel writes the key molang and then an int16 molang version where the aux varint belongs, so a manifest-layout decoder reads the version's low byte as aux, its high byte as the count, and is misaligned from there. The manifest layout is correct; the oracle's molang writer is not.",
-      "evidence": [
-        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/writer.go#L285 (Writer.ItemDescriptorCount writes the \"molang\" name, then MoLangItemDescriptor.Marshal)",
-        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/item_descriptor.go#L58 (MoLangItemDescriptor.Marshal: expression string, then Int16 version)",
-        "Vanilla 1.26.50 molang ingredient map: one entry, key \"tags\", value the expression; no version"
-      ]
     }
   ]
 }

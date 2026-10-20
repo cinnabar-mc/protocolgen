@@ -15,6 +15,7 @@ import (
 
 const usage = `usage: retail <command> [flags]
 
+  synth    regenerate the committed synthetic corpus
   prepare  verify the pinned fixtures and write every input
   decode   run the generated Go codec and gophertunnel over the inputs
   compare  compare all four decoders' verdicts against the exceptions`
@@ -26,7 +27,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, usage)
 		os.Exit(2)
 	}
-	commands := map[string]func([]string) error{"prepare": prepare, "decode": decode, "compare": compare}
+	commands := map[string]func([]string) error{"synth": synth, "prepare": prepare, "decode": decode, "compare": compare}
 	command, ok := commands[os.Args[1]]
 	if !ok {
 		fmt.Fprintln(os.Stderr, usage)
@@ -40,10 +41,30 @@ func main() {
 	}
 }
 
+func synth(args []string) error {
+	flags := flag.NewFlagSet("synth", flag.ExitOnError)
+	out := flags.String("out", retail.SyntheticDir, "synthetic corpus directory")
+	encodeOut := flags.String("encode-out", retail.EncodeDir, "encode-from-struct entries directory")
+	flags.Parse(args)
+	files, err := retail.SyntheticCorpus()
+	if err != nil {
+		return err
+	}
+	if err := retail.WriteSyntheticCorpus(*out, files); err != nil {
+		return err
+	}
+	if err := retail.WriteEncodeCases(*encodeOut); err != nil {
+		return err
+	}
+	fmt.Printf("wrote %d synthetic files to %s\n", len(files), *out)
+	return nil
+}
+
 func prepare(args []string) error {
 	flags := flag.NewFlagSet("prepare", flag.ExitOnError)
 	corpusPath := flags.String("corpus", "corpus.json", "retail corpus")
 	cinnabar := flags.String("cinnabar", "", "Cinnabar checkout at the corpus commit")
+	synthetic := flags.String("synthetic", retail.SyntheticDir, "committed synthetic corpus")
 	out := flags.String("out", "", "output directory")
 	flags.Parse(args)
 	if *cinnabar == "" || *out == "" {
@@ -58,6 +79,10 @@ func prepare(args []string) error {
 	}
 	batches, err := corpus.ReadFixtures(*cinnabar)
 	if err != nil {
+		return err
+	}
+	retailFixtures := len(corpus.Fixtures)
+	if err := retail.AddSynthetic(&corpus, batches, *synthetic); err != nil {
 		return err
 	}
 	unknownID, err := retail.UnusedPacketID(retail.KnownPacket)
@@ -76,11 +101,16 @@ func prepare(args []string) error {
 	if err != nil {
 		return err
 	}
-	inputs = append(append(inputs, crafting...), large...)
+	oversized, err := retail.OversizedInputs()
+	if err != nil {
+		return err
+	}
+	inputs = append(append(append(inputs, crafting...), large...), oversized...)
 	if err := retail.WriteInputs(*out, inputs); err != nil {
 		return err
 	}
-	fmt.Printf("prepared %d inputs from %d fixtures; unknown-id uses packet id %d\n", len(inputs), len(corpus.Fixtures), unknownID)
+	fmt.Printf("prepared %d inputs from %d retail and %d synthetic fixtures; unknown-id uses packet id %d\n",
+		len(inputs), retailFixtures, len(corpus.Fixtures)-retailFixtures, unknownID)
 	return nil
 }
 
@@ -108,7 +138,8 @@ func compare(args []string) error {
 	corpusPath := flags.String("corpus", "corpus.json", "retail corpus")
 	exceptionsPath := flags.String("exceptions", "exceptions.json", "reviewed exceptions")
 	goMod := flags.String("gomod", "go.mod", "this module's go.mod, which pins the oracle")
-	out := flags.String("out", "", "directory holding expected.tsv and verdicts/")
+	out := flags.String("out", "", "directory holding expected.tsv, verdicts/ and fields/")
+	rustSource := flags.String("rust-source", "../../generated/1.26.51/rust-contract/src", "the contract crate's sources, for enum tables")
 	flags.Parse(args)
 	corpus, err := retail.LoadCorpus(*corpusPath)
 	if err != nil {
@@ -132,8 +163,23 @@ func compare(args []string) error {
 			return err
 		}
 	}
-	report := retail.Apply(retail.Compare(expected, verdicts), exceptions)
-	text := formatReport(retail.Summarize(verdicts), report)
+	inputs, err := retail.ReadInputs(*out)
+	if err != nil {
+		return err
+	}
+	enums, err := retail.LoadRustEnums(*rustSource)
+	if err != nil {
+		return err
+	}
+	checks, err := retail.CompareFields(*out, inputs, enums)
+	if err != nil {
+		return err
+	}
+	found := append(retail.Compare(expected, verdicts), retail.FieldDisagreements(checks)...)
+	report := retail.Apply(found, exceptions)
+	summary := retail.Summarize(verdicts) + fmt.Sprintf("rust fields agree with go on %d of %d decoded entries\n",
+		len(checks)-len(retail.FieldDisagreements(checks)), len(checks))
+	text := formatReport(summary, report)
 	fmt.Print(text)
 	if err := os.WriteFile(filepath.Join(*out, "report.txt"), []byte(text), 0o644); err != nil {
 		return err

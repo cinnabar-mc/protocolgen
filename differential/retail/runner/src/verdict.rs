@@ -17,6 +17,9 @@ pub const DIFFERS: &str = "differs";
 
 const MAX_DETAIL_CHARS: usize = 240;
 
+/// Cases whose decoded fields `compare` checks against the generated Go.
+const FIELD_CASES: [&str; 3] = ["retail", "crafting", "large"];
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Sender {
     Server,
@@ -83,6 +86,9 @@ pub struct Verdict {
     pub roundtrip: Option<&'static str>,
     pub encoded: Option<String>,
     pub detail: Option<String>,
+    /// The decoded packet's `Debug` rendering, which `compare` checks field
+    /// by field against the generated Go decoding of the same entry.
+    pub debug: Option<String>,
 }
 
 impl Verdict {
@@ -154,7 +160,23 @@ pub fn write(out: &Path, decoder: &str, verdicts: &[Verdict]) -> Result<(), Stri
         text.push('\n');
     }
     let path = dir.join(format!("{decoder}.tsv"));
-    std::fs::write(&path, text).map_err(|e| format!("{}: {e}", path.display()))
+    std::fs::write(&path, text).map_err(|e| format!("{}: {e}", path.display()))?;
+    let mut fields = String::new();
+    for verdict in verdicts {
+        let Some(debug) = verdict.debug.as_deref() else {
+            continue;
+        };
+        if FIELD_CASES.contains(&verdict.case.as_str()) {
+            fields.push_str(&format!(
+                "{}\t{}\t{}\t{debug}\n",
+                verdict.fixture, verdict.case, verdict.entry
+            ));
+        }
+    }
+    let dir = out.join("fields");
+    std::fs::create_dir_all(&dir).map_err(|e| format!("{}: {e}", dir.display()))?;
+    let path = dir.join(format!("{decoder}.tsv"));
+    std::fs::write(&path, fields).map_err(|e| format!("{}: {e}", path.display()))
 }
 
 /// The first eight bytes of SHA-256, in hex.

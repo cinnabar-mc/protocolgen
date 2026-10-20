@@ -20,6 +20,7 @@ const (
 	CaseTruncated   = "truncated"    // retail entries missing their last byte
 	CaseTrailing    = "trailing"     // retail entries with one extra byte
 	CaseLarge       = "large"        // a generated-Go-encoded packet with a large collection
+	CaseOversized   = "oversized"    // entries at and past decoder ceilings, and lengths past the input
 )
 
 // Probe cases, which runners derive from one input case.
