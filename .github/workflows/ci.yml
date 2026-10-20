@@ -9,7 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       rust: ${{ steps.matrix.outputs.rust }}
-      captures: ${{ steps.matrix.outputs.captures }}
     steps:
       - uses: actions/checkout@v4
       - name: Check release relationships and select supported builds
@@ -17,29 +16,6 @@ jobs:
         run: |
           python3 tools/releases.py
           echo "rust=$(jq -c '[.releases[].snapshot]' data/source/releases.json)" >> "$GITHUB_OUTPUT"
-          echo "captures=$(jq -c '[.releases[] | select(.capture != null) | .snapshot]' data/source/releases.json)" >> "$GITHUB_OUTPUT"
-
-  capture-contracts:
-    needs: releases
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version: ${{ fromJSON(needs.releases.outputs.captures) }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: stable
-          cache: false
-      - name: Validate committed capture contract without starting BDS
-        env:
-          VERSION: ${{ matrix.version }}
-        run: |
-          mapfile -t go_args < <(jq -r --arg version "$VERSION" '.releases[$version].capture.go_args[]' data/source/releases.json)
-          go -C vanilla-data run "${go_args[@]}" ./cmd/vanilla-data \
-            -manifest "../generated/$VERSION/manifest.json" \
-            -source "../generated/$VERSION/vanilla-source.json" -validate-only
-          go -C vanilla-data test "${go_args[@]}" ./...
 
   data:
     runs-on: ubuntu-latest
@@ -141,9 +117,7 @@ jobs:
         with:
           go-version: stable
           cache: true
-          cache-dependency-path: |
-            go.sum
-            vanilla-data/go.sum
+          cache-dependency-path: go.sum
 
       - uses: dtolnay/rust-toolchain@stable
         with:
@@ -203,19 +177,13 @@ jobs:
             ENDSTONE_DIR="$RUNNER_TEMP/protocolgen-endstone-2211"
 
       - name: Build
-        run: |
-          go build ./...
-          go -C vanilla-data build ./...
+        run: go build ./...
 
       - name: Test
-        run: |
-          go test ./...
-          go -C vanilla-data test ./...
+        run: go test ./...
 
       - name: Vet
-        run: |
-          go vet ./...
-          go -C vanilla-data vet ./...
+        run: go vet ./...
 
       - name: Check formatting
         run: |
