@@ -10,7 +10,7 @@ require (
 )
 
 require (
-	github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020105954-88ff04df79bc // indirect
+	github.com/cinnabar-mc/bedrock-net/tools/bench-compare v0.0.0-20261020125603-201e797a7d39 // indirect
 	github.com/klauspost/compress v1.18.1 // indirect
 	golang.org/x/exp v0.0.0-20260611194520-c48552f49976 // indirect
 	golang.org/x/image v0.21.0 // indirect

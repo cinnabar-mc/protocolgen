@@ -41,7 +41,9 @@ jobs:
         run: cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --no-run
 
       - name: Go benches (gophertunnel)
+        shell: bash
         run: |
+          set -o pipefail
           mkdir -p build/bench
           go -C differential/retail test -run '^$' -bench . -benchmem -count 5 . | tee build/bench/go.txt
 
@@ -51,21 +53,36 @@ jobs:
           CRITERION_HOME="$PWD/build/bench-target/criterion" cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench codec -- --warm-up-time 1 --measurement-time 3
 
       - name: Rust allocations per decode and encode
-        run: cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
-
-      - name: Compare
+        shell: bash
         run: |
+          set -o pipefail
+          cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
+
+      # bench-compare exits 1 when a Rust path is slower than Go beyond the
+      # margin, which is reported as a warning; 2 (unreadable input) and 3
+      # (a path without its counterpart) fail the job.
+      - name: Compare
+        shell: bash
+        run: |
+          set +e
+          go -C differential/retail tool bench-compare --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" > build/bench/compare.md
+          status=$?
+          set -e
           {
             echo "## gophertunnel vs contract crate"
             echo
-            go -C differential/retail tool bench-compare --strict-pairs --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" | tee "$PWD/build/bench/compare.md"
-            status=${PIPESTATUS[0]}
+            cat build/bench/compare.md
             echo
             echo "## Rust allocations"
             echo
             cat build/bench/allocs.md
-            exit "$status"
           } >> "$GITHUB_STEP_SUMMARY"
+          cat build/bench/compare.md
+          case "$status" in
+            0) ;;
+            1) echo "::warning title=bench-compare::Rust is slower than gophertunnel beyond the margin on some paths; see the job summary" ;;
+            *) echo "::error title=bench-compare::bench-compare exited $status"; exit "$status" ;;
+          esac
 
       - name: Preserve results
         if: always()

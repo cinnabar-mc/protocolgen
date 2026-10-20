@@ -279,7 +279,7 @@ bench:
 	rm -rf build/bench-target/criterion
 	CRITERION_HOME=$(CURDIR)/build/bench-target/criterion $(BENCH_CARGO) --bench codec -- --warm-up-time 1 --measurement-time 3
 	$(BENCH_CARGO) --bench allocs
-	$(GO) -C $(RETAIL) tool bench-compare --strict-pairs --go $(CURDIR)/$(BENCH_OUT)/go.txt --criterion $(CURDIR)/build/bench-target/criterion
+	$(GO) -C $(RETAIL) tool bench-compare --go $(CURDIR)/$(BENCH_OUT)/go.txt --criterion $(CURDIR)/build/bench-target/criterion
 
 # Emit the 1.26.51 tree laid out like the gophertunnel checkout in
 # LAYOUT_GOPHERTUNNEL_DIR (constants beside their packets under fork names, fork field
