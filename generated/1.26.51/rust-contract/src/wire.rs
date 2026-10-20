@@ -1441,6 +1441,14 @@ impl RawFrame {
         self.frame.slice(self.body_start..)
     }
 
+    /// Borrows the body while sharing the frame only when a decoded field needs ownership.
+    pub(crate) fn body_reader(&self) -> Reader<'_> {
+        Reader {
+            buf: &self.frame[self.body_start..],
+            ..Reader::from_shared(&self.frame)
+        }
+    }
+
     /// The complete entry, including its length prefix, for forwarding as is.
     pub fn frame(&self) -> &bytes::Bytes {
         &self.frame
@@ -2166,6 +2174,34 @@ mod runtime_tests {
         assert_eq!(frames[0].body().as_ref(), &[1, 2, 3]);
         assert_eq!(frames[1].id(), 9);
         assert!(frames[1].body().is_empty());
+    }
+
+    /// A body reader borrows its original frame and cannot consume the next entry.
+    #[test]
+    fn frame_body_reader_borrows_only_its_body() {
+        let mut batch = vec![BATCH_HEADER];
+        batch.extend(frame(1000, &[1, 2, 3]));
+        batch.extend(frame(9, &[4, 5]));
+        let batch = bytes::Bytes::from(batch);
+        let frame = Frames::from_batch(batch.clone(), 8)
+            .unwrap()
+            .next()
+            .unwrap()
+            .unwrap();
+        let mut reader = frame.body_reader();
+        assert!(std::ptr::eq(reader.shared.unwrap(), frame.frame()));
+        assert_eq!(reader.position(), 0);
+        assert_eq!(reader.remaining(), 3);
+        let body = reader.take_shared(3).unwrap();
+        assert_eq!(body.as_ptr(), batch[4..].as_ptr());
+        assert_eq!(&body[..], &[1, 2, 3]);
+        assert!(matches!(
+            reader.read_u8(),
+            Err(DecodeError::UnexpectedEof { .. })
+        ));
+        drop(frame);
+        drop(batch);
+        assert_eq!(&body[..], &[1, 2, 3]);
     }
 
     #[test]

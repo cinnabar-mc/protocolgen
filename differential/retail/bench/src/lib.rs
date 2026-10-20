@@ -71,10 +71,19 @@ pub fn load() -> Vec<Case> {
                 .collect();
             let packets = frames
                 .iter()
-                .map(|frame| match Packet::decode_frame(frame, sender, &limits) {
-                    Ok(Decoded::Known(packet)) => packet,
-                    Ok(Decoded::Unknown(_)) => panic!("{}: unknown packet", file.file),
-                    Err(error) => panic!("{}: {error}", file.file),
+                .map(|frame| {
+                    let decoded = Packet::decode_frame(frame, sender, &limits);
+                    assert_eq!(
+                        Packet::decode_framed(frame.frame(), sender, &limits),
+                        decoded,
+                        "{}: borrowed and owned frames differ",
+                        file.file
+                    );
+                    match decoded {
+                        Ok(Decoded::Known(packet)) => packet,
+                        Ok(Decoded::Unknown(_)) => panic!("{}: unknown packet", file.file),
+                        Err(error) => panic!("{}: {error}", file.file),
+                    }
                 })
                 .collect();
             Case {

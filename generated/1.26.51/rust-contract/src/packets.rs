@@ -14381,20 +14381,53 @@ impl Packet {
         sender: Peer,
         limits: &wire::Limits,
     ) -> wire::DecodeResult<Decoded> {
-        let header = frame.header();
-        let body = frame.body();
+        let mut reader = frame.body_reader().with_limits(limits);
+        Self::decode_entry(frame.header(), frame.frame(), &mut reader, sender)
+    }
+
+    /// Decodes exactly one length-prefixed entry, borrowing the input
+    /// until a decoded byte field or unknown packet needs shared ownership.
+    pub fn decode_framed(
+        frame: &bytes::Bytes,
+        sender: Peer,
+        limits: &wire::Limits,
+    ) -> wire::DecodeResult<Decoded> {
+        let mut reader = wire::Reader::from_shared(frame).with_limits(limits);
+        let declared = reader.read_var_u32()? as usize;
+        if declared > reader.remaining() {
+            return Err(wire::DecodeError::UnexpectedEof {
+                needed: declared,
+                remaining: reader.remaining(),
+            });
+        }
+        if declared < reader.remaining() {
+            return Err(wire::DecodeError::TrailingBytes(
+                reader.remaining() - declared,
+            ));
+        }
+        let header = wire::PacketHeader::from_raw(reader.read_var_u32()?);
+        Self::decode_entry(header, frame, &mut reader, sender)
+    }
+
+    /// Decodes a bounded entry body and preserves unknown entries exactly.
+    fn decode_entry(
+        header: wire::PacketHeader,
+        frame: &bytes::Bytes,
+        reader: &mut wire::Reader<'_>,
+        sender: Peer,
+    ) -> wire::DecodeResult<Decoded> {
         let Some(id) = PacketId::from_raw(header.id) else {
+            let body = reader.take_shared(reader.remaining())?;
             return Ok(Decoded::Unknown(UnknownPacket {
                 header,
                 body,
-                frame: frame.frame().clone(),
+                frame: frame.clone(),
             }));
         };
         if !id.direction().permits(sender) {
             return Err(wire::DecodeError::UnexpectedDirection(header.id));
         }
-        let mut reader = wire::Reader::from_shared(&body).with_limits(limits);
-        let packet = Self::decode_body(id, &mut reader)?;
+        let packet = Self::decode_body(id, reader)?;
         reader.expect_consumed()?;
         Ok(Decoded::Known(packet))
     }

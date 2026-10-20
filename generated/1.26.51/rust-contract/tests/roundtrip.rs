@@ -35,6 +35,22 @@ where
     assert_eq!(frames[0].header().sender_subclient, 1);
     assert_eq!(frames[0].header().target_subclient, 2);
     let decoded = Packet::decode_frame(&frames[0], sender, &wire::Limits::receiving_from(sender));
+    let direct = Packet::decode_framed(
+        frames[0].frame(),
+        sender,
+        &wire::Limits::receiving_from(sender),
+    );
+    assert_eq!(direct, decoded, "{name} borrowed and owned frames differ");
+    let wrong_sender = match sender {
+        Peer::Client => Peer::Server,
+        Peer::Server => Peer::Client,
+    };
+    if !packet.id().direction().permits(wrong_sender) {
+        assert_eq!(
+            Packet::decode_framed(frames[0].frame(), wrong_sender, &wire::Limits::unbounded()),
+            Err(wire::DecodeError::UnexpectedDirection(packet.id() as u32)),
+        );
+    }
     assert_eq!(
         decoded,
         Ok(Decoded::Known(packet)),
@@ -332,6 +348,28 @@ fn unknown_packets_keep_exact_boundaries() {
     assert!(matches!(&decoded[1], Decoded::Unknown(packet) if packet.body.is_empty()));
 }
 
+/// Borrowed single-entry decoding validates both prefixes and the exact entry boundary.
+#[test]
+fn framed_decode_rejects_bad_boundaries() {
+    let limits = wire::Limits::unbounded();
+    for bytes in [
+        &[0x80][..],
+        &[0x80, 0],
+        &[0xff, 0xff, 0xff, 0xff, 0x10],
+        &[0],
+        &[2, 1],
+        &[1, 1, 0],
+        &[2, 0x80, 0],
+        &[5, 0xff, 0xff, 0xff, 0xff, 0x10],
+    ] {
+        assert!(
+            Packet::decode_framed(&bytes::Bytes::copy_from_slice(bytes), Peer::Server, &limits)
+                .is_err(),
+            "{bytes:?}"
+        );
+    }
+}
+
 /// Header bits above the target subclient are ignored on decode but must
 /// survive forwarding an unknown entry.
 #[test]
@@ -353,6 +391,10 @@ fn unknown_packets_forward_byte_for_byte() {
         .unwrap()
         .unwrap();
     let decoded = Packet::decode_frame(&frame, Peer::Server, &wire::Limits::unbounded());
+    assert_eq!(
+        Packet::decode_framed(frame.frame(), Peer::Server, &wire::Limits::unbounded()),
+        decoded
+    );
     let Ok(Decoded::Unknown(packet)) = &decoded else {
         panic!("unknown id decoded as {decoded:?}");
     };
