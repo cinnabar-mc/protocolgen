@@ -87,6 +87,65 @@ func WriteInputs(out string, inputs []Input) error {
 	return os.WriteFile(filepath.Join(out, expectedFile), []byte(expected.String()), 0o644)
 }
 
+// ExpectedEntries frames every input as WriteInputs records it in
+// expected.tsv.
+func ExpectedEntries(inputs []Input) ([]Expected, error) {
+	var out []Expected
+	for _, input := range inputs {
+		entries, err := SplitBatch(input.Batch)
+		if err != nil {
+			return nil, fmt.Errorf("input %s/%s: %w", input.Case, input.Fixture, err)
+		}
+		for i, entry := range entries {
+			out = append(out, Expected{Fixture: input.Fixture, Case: input.Case, Entry: i, Header: HeaderText(entry.Header), Payload: Digest(entry.Payload)})
+		}
+	}
+	return out, nil
+}
+
+// Built is every input the harness runs, with counts for the summary.
+type Built struct {
+	Inputs            []Input
+	Retail, Synthetic int
+	UnknownID         uint32
+}
+
+// BuildAllInputs builds every input from the corpus, its pinned Cinnabar
+// checkout and the committed synthetic corpus. prepare writes them and
+// compare rebuilds them to check what was written and decoded.
+func BuildAllInputs(corpusPath, cinnabar, synthetic string) (Built, error) {
+	corpus, err := LoadCorpus(corpusPath)
+	if err != nil {
+		return Built{}, err
+	}
+	if err := CheckOraclePin(cinnabar); err != nil {
+		return Built{}, err
+	}
+	batches, err := corpus.ReadFixtures(cinnabar)
+	if err != nil {
+		return Built{}, err
+	}
+	built := Built{Retail: len(corpus.Fixtures)}
+	if err := AddSynthetic(&corpus, batches, synthetic); err != nil {
+		return Built{}, err
+	}
+	built.Synthetic = len(corpus.Fixtures) - built.Retail
+	if built.UnknownID, err = UnusedPacketID(KnownPacket); err != nil {
+		return Built{}, err
+	}
+	if built.Inputs, err = BuildInputs(corpus, batches, built.UnknownID); err != nil {
+		return Built{}, err
+	}
+	for _, more := range []func() ([]Input, error){CraftingInputs, LargeInputs, OversizedInputs} {
+		inputs, err := more()
+		if err != nil {
+			return Built{}, err
+		}
+		built.Inputs = append(built.Inputs, inputs...)
+	}
+	return built, nil
+}
+
 // ReadInputs reads the inputs WriteInputs wrote, checking each digest.
 func ReadInputs(out string) ([]Input, error) {
 	var inputs []Input

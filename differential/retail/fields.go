@@ -742,7 +742,8 @@ type FieldCheck struct {
 
 // CompareFields checks every entry the Rust runner rendered against the
 // generated Go decoding of the same input entry.
-func CompareFields(out string, inputs []Input, schema *Schema) ([]FieldCheck, error) {
+// The rendered rows must be exactly the field-case entries rust decoded.
+func CompareFields(out string, inputs []Input, rust []Verdict, schema *Schema) ([]FieldCheck, error) {
 	byKey := map[[2]string]Input{}
 	for _, in := range inputs {
 		byKey[[2]string{in.Case, in.Fixture}] = in
@@ -755,6 +756,7 @@ func CompareFields(out string, inputs []Input, schema *Schema) ([]FieldCheck, er
 	scanner := bufio.NewScanner(file)
 	scanner.Buffer(nil, 256<<20)
 	var checks []FieldCheck
+	var rows []string
 	for scanner.Scan() {
 		cols := strings.SplitN(scanner.Text(), "\t", 4)
 		if len(cols) != 4 {
@@ -764,11 +766,18 @@ func CompareFields(out string, inputs []Input, schema *Schema) ([]FieldCheck, er
 		if err != nil {
 			return nil, err
 		}
+		rows = append(rows, fmt.Sprintf("%s/%s/%d", cols[0], cols[1], entry))
 		check := FieldCheck{Fixture: cols[0], Case: cols[1], Entry: entry}
 		check.Diff = compareEntryFields(byKey[[2]string{cols[1], cols[0]}], entry, cols[3], schema)
 		checks = append(checks, check)
 	}
-	return checks, scanner.Err()
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+	if err := CheckKeys("field rows", FieldRowKeys(rust), rows); err != nil {
+		return nil, err
+	}
+	return checks, nil
 }
 
 func compareEntryFields(in Input, index int, debug string, schema *Schema) string {

@@ -13,6 +13,9 @@ import (
 // value built as gophertunnel structs, and as the committed entry the Rust
 // encode-from-struct test checks against.
 func TestGeneratedGoEncodesFromStructLikeGophertunnel(t *testing.T) {
+	if err := CheckEncodeDir(EncodeDir, EncodeCases()); err != nil {
+		t.Fatalf("%v; run go run ./cmd/retail synth", err)
+	}
 	entries, err := EncodeCaseEntries()
 	if err != nil {
 		t.Fatal(err)

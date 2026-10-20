@@ -263,7 +263,7 @@ retail:
 	$(GO) -C $(RETAIL) run ./cmd/retail decode -out $(CURDIR)/$(RETAIL_OUT)
 	$(RETAIL_RUNNER) rust $(RETAIL_OUT)
 	$(RETAIL_RUNNER) valentine $(RETAIL_OUT)
-	$(GO) -C $(RETAIL) run ./cmd/retail compare -out $(CURDIR)/$(RETAIL_OUT)
+	$(GO) -C $(RETAIL) run ./cmd/retail compare -cinnabar $(CURDIR)/$(RETAIL_CINNABAR) -out $(CURDIR)/$(RETAIL_OUT)
 	cargo test --manifest-path $(RETAIL)/bench/Cargo.toml --target-dir build/retail-target
 
 # Run gophertunnel's and the contract crate's codec benches over testdata/bench
@@ -280,6 +280,7 @@ bench:
 	rm -rf build/bench-target/criterion
 	CRITERION_HOME=$(CURDIR)/build/bench-target/criterion $(BENCH_CARGO) --bench codec -- --warm-up-time 1 --measurement-time 3
 	$(BENCH_CARGO) --bench allocs
+	$(GO) -C $(RETAIL) run ./cmd/retail bench-check -go $(CURDIR)/$(BENCH_OUT)/go.txt -count 5 -criterion $(CURDIR)/build/bench-target/criterion
 	$(GO) -C $(RETAIL) tool bench-compare --go-procs $(BENCH_GO_PROCS) --go $(CURDIR)/$(BENCH_OUT)/go.txt --criterion $(CURDIR)/build/bench-target/criterion
 
 # Emit the 1.26.51 tree laid out like the gophertunnel checkout in

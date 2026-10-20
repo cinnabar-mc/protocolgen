@@ -18,7 +18,8 @@ const usage = `usage: retail <command> [flags]
   synth    regenerate the committed synthetic corpus
   prepare  verify the pinned fixtures and write every input
   decode   run the generated Go codec and gophertunnel over the inputs
-  compare  compare all four decoders' verdicts against the exceptions`
+  compare  compare all four decoders' verdicts against the exceptions
+  bench-check  check both benches reported exactly the synthetic corpus's paths`
 
 var errFailed = errors.New("comparison failed")
 
@@ -27,7 +28,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, usage)
 		os.Exit(2)
 	}
-	commands := map[string]func([]string) error{"synth": synth, "prepare": prepare, "decode": decode, "compare": compare}
+	commands := map[string]func([]string) error{"synth": synth, "prepare": prepare, "bench-check": benchCheck, "decode": decode, "compare": compare}
 	command, ok := commands[os.Args[1]]
 	if !ok {
 		fmt.Fprintln(os.Stderr, usage)
@@ -60,6 +61,36 @@ func synth(args []string) error {
 	return nil
 }
 
+func benchCheck(args []string) error {
+	flags := flag.NewFlagSet("bench-check", flag.ExitOnError)
+	synthetic := flags.String("synthetic", retail.SyntheticDir, "committed synthetic corpus")
+	goOut := flags.String("go", "", "go test -bench output")
+	count := flags.Int("count", 1, "the -count the Go benches ran with")
+	criterion := flags.String("criterion", "", "criterion output directory")
+	flags.Parse(args)
+	files, err := retail.ReadSyntheticCorpus(*synthetic)
+	if err != nil {
+		return err
+	}
+	want := retail.BenchKeys(files)
+	goKeys, err := retail.GoBenchKeys(*goOut, *count)
+	if err != nil {
+		return err
+	}
+	if err := retail.CheckKeys("go benches", want, goKeys); err != nil {
+		return err
+	}
+	rustKeys, err := retail.CriterionKeys(*criterion)
+	if err != nil {
+		return err
+	}
+	if err := retail.CheckKeys("criterion benches", want, rustKeys); err != nil {
+		return err
+	}
+	fmt.Printf("both benches report the %d paths of the synthetic corpus\n", len(want))
+	return nil
+}
+
 func prepare(args []string) error {
 	flags := flag.NewFlagSet("prepare", flag.ExitOnError)
 	corpusPath := flags.String("corpus", "corpus.json", "retail corpus")
@@ -70,47 +101,15 @@ func prepare(args []string) error {
 	if *cinnabar == "" || *out == "" {
 		return errors.New("prepare needs -cinnabar and -out")
 	}
-	corpus, err := retail.LoadCorpus(*corpusPath)
+	built, err := retail.BuildAllInputs(*corpusPath, *cinnabar, *synthetic)
 	if err != nil {
 		return err
 	}
-	if err := retail.CheckOraclePin(*cinnabar); err != nil {
-		return err
-	}
-	batches, err := corpus.ReadFixtures(*cinnabar)
-	if err != nil {
-		return err
-	}
-	retailFixtures := len(corpus.Fixtures)
-	if err := retail.AddSynthetic(&corpus, batches, *synthetic); err != nil {
-		return err
-	}
-	unknownID, err := retail.UnusedPacketID(retail.KnownPacket)
-	if err != nil {
-		return err
-	}
-	inputs, err := retail.BuildInputs(corpus, batches, unknownID)
-	if err != nil {
-		return err
-	}
-	crafting, err := retail.CraftingInputs()
-	if err != nil {
-		return err
-	}
-	large, err := retail.LargeInputs()
-	if err != nil {
-		return err
-	}
-	oversized, err := retail.OversizedInputs()
-	if err != nil {
-		return err
-	}
-	inputs = append(append(append(inputs, crafting...), large...), oversized...)
-	if err := retail.WriteInputs(*out, inputs); err != nil {
+	if err := retail.WriteInputs(*out, built.Inputs); err != nil {
 		return err
 	}
 	fmt.Printf("prepared %d inputs from %d retail and %d synthetic fixtures; unknown-id uses packet id %d\n",
-		len(inputs), retailFixtures, len(corpus.Fixtures)-retailFixtures, unknownID)
+		len(built.Inputs), built.Retail, built.Synthetic, built.UnknownID)
 	return nil
 }
 
@@ -139,6 +138,8 @@ func compare(args []string) error {
 	exceptionsPath := flags.String("exceptions", "exceptions.json", "reviewed exceptions")
 	goMod := flags.String("gomod", "go.mod", "this module's go.mod, which pins the oracle")
 	out := flags.String("out", "", "directory holding expected.tsv, verdicts/ and fields/")
+	cinnabar := flags.String("cinnabar", "", "Cinnabar checkout at the corpus commit, to rebuild the expected inputs")
+	synthetic := flags.String("synthetic", retail.SyntheticDir, "committed synthetic corpus")
 	rustSource := flags.String("rust-source", "../../generated/1.26.51/rust-contract/src", "the contract crate's sources, for enum and union tables")
 	goSource := flags.String("go-source", "../../generated/1.26.51/go/protocol", "the generated Go protocol package, for union tables")
 	flags.Parse(args)
@@ -154,8 +155,29 @@ func compare(args []string) error {
 	if err != nil {
 		return err
 	}
+	if *cinnabar == "" {
+		return errors.New("compare needs -cinnabar")
+	}
+	built, err := retail.BuildAllInputs(*corpusPath, *cinnabar, *synthetic)
+	if err != nil {
+		return err
+	}
+	inputs, err := retail.ReadInputs(*out)
+	if err != nil {
+		return err
+	}
+	if err := retail.CheckKeys("inputs", retail.InputKeys(built.Inputs), retail.InputKeys(inputs)); err != nil {
+		return err
+	}
 	expected, err := retail.ReadExpected(*out)
 	if err != nil {
+		return err
+	}
+	wantExpected, err := retail.ExpectedEntries(built.Inputs)
+	if err != nil {
+		return err
+	}
+	if err := retail.CheckKeys("expected entries", retail.ExpectedKeys(wantExpected), retail.ExpectedKeys(expected)); err != nil {
 		return err
 	}
 	verdicts := map[string][]retail.Verdict{}
@@ -164,15 +186,11 @@ func compare(args []string) error {
 			return err
 		}
 	}
-	inputs, err := retail.ReadInputs(*out)
-	if err != nil {
-		return err
-	}
 	schema, err := retail.LoadSchema(*rustSource, *goSource)
 	if err != nil {
 		return err
 	}
-	checks, err := retail.CompareFields(*out, inputs, schema)
+	checks, err := retail.CompareFields(*out, inputs, verdicts[retail.DecoderRust], schema)
 	if err != nil {
 		return err
 	}

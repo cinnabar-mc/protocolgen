@@ -144,6 +144,9 @@ func ReadSyntheticCorpus(dir string) ([]SyntheticFile, error) {
 	if err := decoder.Decode(&files); err != nil {
 		return nil, fmt.Errorf("%s: %w", syntheticManifest, err)
 	}
+	if err := CheckSyntheticDir(dir, files); err != nil {
+		return nil, err
+	}
 	for i, f := range files {
 		batch, err := os.ReadFile(filepath.Join(dir, f.File))
 		if err != nil {

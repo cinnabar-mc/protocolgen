@@ -103,6 +103,29 @@ fn cases() -> Vec<(&'static str, Peer, Packet)> {
 #[test]
 fn rust_structs_encode_like_gophertunnel() {
     let dir = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../../testdata/encode");
+    // The committed entries are the independent key set: one case per file,
+    // none repeated or missing.
+    let mut names: Vec<String> = cases()
+        .iter()
+        .map(|(name, _, _)| format!("{name}.bin"))
+        .collect();
+    names.sort();
+    let unique = names.len();
+    names.dedup();
+    assert_eq!(names.len(), unique, "a case name is repeated");
+    let mut files: Vec<String> = std::fs::read_dir(&dir)
+        .expect("read testdata/encode")
+        .map(|entry| {
+            entry
+                .expect("dir entry")
+                .file_name()
+                .to_string_lossy()
+                .into_owned()
+        })
+        .filter(|name| name.ends_with(".bin"))
+        .collect();
+    files.sort();
+    assert_eq!(names, files, "Rust cases and testdata/encode differ");
     for (name, sender, packet) in cases() {
         let want = std::fs::read(dir.join(format!("{name}.bin")))
             .expect("read the committed gophertunnel entry");

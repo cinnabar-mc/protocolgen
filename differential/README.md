@@ -87,6 +87,20 @@ byte.
 | `zero-copy` | `unknown-id`, Rust | frame and unknown bodies share the batch; `compact` copies |
 | `oversized` | entries at and past client collection, string and byte-slice ceilings, huge server packets, declared lengths past the input | accepted or rejected as gophertunnel decides |
 
+Every stage checks its rows against a key set derived independently of
+them, exactly and once each (`retail/integrity.go`):
+- `compare` rebuilds the inputs and their expected entries;
+- verdicts must match the expected entries;
+- the Rust field rows must match the field-case entries Rust decoded;
+- the synthetic manifest must match the committed files;
+- the encode-from-struct cases must match `testdata/encode`, in Go and in Rust;
+- `retail bench-check` checks that both benches report every corpus path.
+
+gophertunnel writes decoded NBT compounds back in Go map order, so an entry
+with a multi-key compound (`inventory_slot_live_zeqa`) re-encodes differently
+from run to run; its decoder tries up to 64 encodings and records a retry in
+the verdict detail.
+
 A panic is its own outcome and always fails the comparison, even on
 malformed input. Startup cancellation is session behavior and is not exercised
 here.

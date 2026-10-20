@@ -60,6 +60,9 @@ jobs:
           set -o pipefail
           cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
 
+      - name: Check both benches cover the synthetic corpus
+        run: go -C differential/retail run ./cmd/retail bench-check -go "$PWD/build/bench/go.txt" -count 5 -criterion "$PWD/build/bench-target/criterion"
+
       # bench-compare validates its inputs first, exiting 2 on malformed input
       # and 3 on a missing or stale one-sided path, which fail the job; it
       # then exits 1 when a Rust path is slower than Go beyond the margin,
