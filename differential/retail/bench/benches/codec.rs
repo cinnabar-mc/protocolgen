@@ -41,8 +41,8 @@ fn benches(c: &mut Criterion) {
             .encode_frame(case.sender, 0, 0, &mut out)
             .expect("encode");
         assert_eq!(
-            out,
-            case.frames[0].frame(),
+            out.as_slice(),
+            &case.frames[0].frame()[..],
             "{} does not re-encode byte for byte",
             case.file.file
         );
@@ -81,7 +81,8 @@ fn benches(c: &mut Criterion) {
         let mut out = Vec::new();
         encode_batch(case, &mut out);
         assert_eq!(
-            out, case.batch,
+            out.as_slice(),
+            &case.batch[..],
             "{} does not re-encode byte for byte",
             case.file.file
         );
