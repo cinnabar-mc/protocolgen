@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"regexp"
+	"slices"
 	"strconv"
 	"strings"
 	"unicode/utf8"
@@ -19,10 +20,14 @@ import (
 
 // The Rust and Go codecs come from one manifest, so a decoded entry must hold
 // the same values in both. Neither renders the other's syntax, so both sides
-// become a value tree: type names, newtype wrappers, boxes and pointers drop
-// out, an absent optional is none, and leaves keep the text or value each
-// language printed. Rust enum variants resolve through the generated crate's
-// own From<raw> tables.
+// become a value tree that keeps every identity the values depend on: struct
+// field names, union variants (as wire discriminants, read from each crate's
+// own tables), enum values (through the Rust From<raw> tables) and the type
+// names around Rust newtypes. Boxes, pointers and Some carry no identity and
+// drop out; an absent optional is none. Rust's Debug cannot show NaN payloads
+// or invalid string bytes (Str renders lossily); both decoders' byte-exact
+// re-encode of the same entry covers those, since each such value is the
+// input's bytes at a position the compared fields before it fix.
 
 type nodeKind int
 
@@ -36,12 +41,15 @@ const (
 )
 
 type node struct {
-	kind   nodeKind
-	names  []string // struct field names
-	items  []*node  // struct fields or list elements
-	text   string   // leaf token, string or bytes
-	goVal  reflect.Value
-	goEnum string // Go named integer type, for resolving Rust variants
+	kind    nodeKind
+	names   []string // struct field names
+	items   []*node  // struct fields or list elements
+	text    string   // leaf token, string or bytes; a Go struct's type name
+	tags    []string // Rust type or variant names printed around the value, outermost first
+	goVal   reflect.Value
+	goEnum  string // Go named integer type, for resolving Rust variants
+	union   string // Go union interface the value was held in
+	variant string // Go concrete type of that union value
 }
 
 // ParseRustDebug parses the compact `{:?}` rendering of a generated Rust
@@ -117,7 +125,11 @@ func (p *debugParser) value() (*node, error) {
 			return tuple(token, items), err
 		case strings.HasPrefix(p.s[p.i:], " {"):
 			p.i += 2
-			return p.structure()
+			n, err := p.structure()
+			if n != nil {
+				n.tags = []string{token}
+			}
+			return n, err
 		case token == "None":
 			// Also an enum variant name; diffTrees resolves it against Go.
 			return &node{kind: nodeNone, text: token}, nil
@@ -128,13 +140,24 @@ func (p *debugParser) value() (*node, error) {
 	}
 }
 
-// tuple unwraps Some, newtypes and one-field tuple variants, and keeps other
-// tuples, such as glam vectors, as lists.
-func tuple(_ string, items []*node) *node {
-	if len(items) == 1 {
-		return items[0]
+// tuple unwraps Some, newtypes and one-field tuple variants, recording the
+// name around them, and keeps other tuples, such as glam vectors, as lists.
+func tuple(name string, items []*node) *node {
+	if len(items) != 1 {
+		return &node{kind: nodeList, items: items, tags: tagged(name, nil)}
 	}
-	return &node{kind: nodeList, items: items}
+	n := *items[0]
+	if name != "Some" {
+		n.tags = tagged(name, n.tags)
+	}
+	return &n
+}
+
+func tagged(name string, inner []string) []string {
+	if name == "" {
+		return inner
+	}
+	return append([]string{name}, inner...)
 }
 
 func (p *debugParser) sequence(end byte) ([]*node, error) {
@@ -255,11 +278,25 @@ func goTree(v reflect.Value) (*node, error) {
 	switch v.Kind() {
 	case reflect.Invalid:
 		return &node{kind: nodeNone}, nil
-	case reflect.Pointer, reflect.Interface:
+	case reflect.Pointer:
 		if v.IsNil() {
 			return &node{kind: nodeNone}, nil
 		}
 		return goTree(v.Elem())
+	case reflect.Interface:
+		if v.IsNil() {
+			return &node{kind: nodeNone}, nil
+		}
+		n, err := goTree(v.Elem())
+		if err != nil {
+			return nil, err
+		}
+		concrete := v.Elem().Type()
+		if concrete.Kind() == reflect.Pointer {
+			concrete = concrete.Elem()
+		}
+		n.union, n.variant = v.Type().Name(), concrete.Name()
+		return n, nil
 	case reflect.Struct:
 		t := v.Type()
 		if t == uuidType {
@@ -343,22 +380,171 @@ func LoadRustEnums(srcDir string) (RustEnums, error) {
 	return enums, nil
 }
 
-// diffTrees returns the first difference between a Rust and a Go tree, or "".
-func diffTrees(r, g *node, path string, enums RustEnums) string {
-	// A one-field Go struct can hold what Rust prints as its bare value, and
-	// a field-less one what Rust prints as a unit variant.
-	if g.kind == nodeStruct && r.kind != nodeStruct {
-		switch {
-		case len(g.items) == 1:
-			return diffTrees(r, g.items[0], path+"."+g.names[0], enums)
-		case len(g.items) == 0 && r.kind == nodeLeaf && r.text != "" && strings.HasSuffix(g.text, r.text):
-			// A unit variant: Go names its type after the variant, prefixed
-			// with the union's name when the variant name is a placeholder.
-			return ""
+// Schema holds what the comparison needs from both generated codecs' sources:
+// Rust enum values and both sides' union discriminants, each keyed by type
+// and variant name, plus the field names that differ only by naming profile.
+type Schema struct {
+	Enums      RustEnums
+	RustUnions map[string]map[string]string // union, variant → discriminant
+	GoUnions   map[string]map[string]string // interface, concrete type → discriminant
+	Aliases    map[[2]string]bool           // normalized go, rust field names that name one field
+	used       map[[2]string]bool
+}
+
+var (
+	rustDiscriminant = regexp.MustCompile(`(?s)impl (\w+) \{\s*pub fn discriminant\(&self\) -> u32 \{\s*match self \{(.*?)\n\s*\}\n\s*\}`)
+	rustUnionArm     = regexp.MustCompile(`Self::(\w+)[^=\n]*=> (\d+),`)
+	goUnionTag       = regexp.MustCompile(`func \(\*(\w+)\) tag(\w+)\(\) uint32 \{\s*return (\d+)\s*\}`)
+)
+
+// LoadSchema reads the tables from the generated Rust crate's sources and the
+// generated Go protocol package.
+func LoadSchema(rustSrc, goSrc string) (*Schema, error) {
+	enums, err := LoadRustEnums(rustSrc)
+	if err != nil {
+		return nil, err
+	}
+	s := &Schema{Enums: enums, RustUnions: map[string]map[string]string{}, GoUnions: map[string]map[string]string{},
+		Aliases: map[[2]string]bool{}, used: map[[2]string]bool{}}
+	for _, alias := range fieldAliases {
+		s.Aliases[alias] = true
+	}
+	read := func(pattern string, each func(string)) error {
+		files, err := filepath.Glob(pattern)
+		if err != nil || len(files) == 0 {
+			return fmt.Errorf("no sources match %s: %v", pattern, err)
+		}
+		for _, file := range files {
+			data, err := os.ReadFile(file)
+			if err != nil {
+				return err
+			}
+			each(string(data))
+		}
+		return nil
+	}
+	if err := read(filepath.Join(rustSrc, "*.rs"), func(text string) {
+		for _, m := range rustDiscriminant.FindAllStringSubmatch(text, -1) {
+			arms := map[string]string{}
+			for _, arm := range rustUnionArm.FindAllStringSubmatch(m[2], -1) {
+				arms[arm[1]] = arm[2]
+			}
+			s.RustUnions[m[1]] = arms
+		}
+	}); err != nil {
+		return nil, err
+	}
+	for _, pattern := range []string{filepath.Join(goSrc, "*.go"), filepath.Join(goSrc, "packet", "*.go")} {
+		if err := read(pattern, func(text string) {
+			for _, m := range goUnionTag.FindAllStringSubmatch(text, -1) {
+				if s.GoUnions[m[2]] == nil {
+					s.GoUnions[m[2]] = map[string]string{}
+				}
+				s.GoUnions[m[2]][m[1]] = m[3]
+			}
+		}); err != nil {
+			return nil, err
 		}
 	}
+	if len(s.RustUnions) == 0 || len(s.GoUnions) == 0 {
+		return nil, errors.New("no union tables in the generated sources")
+	}
+	return s, nil
+}
+
+// fieldAliases pairs normalized Go and Rust field names that differ only by
+// naming profile; UnusedAliases reports entries no comparison needed.
+var fieldAliases = [][2]string{
+	{"sendersxuid", "senderxuid"}, // Text: the Go naming overlay keeps gophertunnel's spelling
+}
+
+// UnusedAliases lists field aliases no comparison has used.
+func (s *Schema) UnusedAliases() [][2]string {
+	var out [][2]string
+	for _, alias := range fieldAliases {
+		if !s.used[alias] {
+			out = append(out, alias)
+		}
+	}
+	return out
+}
+
+func normalizeField(name string) string {
+	return strings.ToLower(strings.ReplaceAll(name, "_", ""))
+}
+
+func (s *Schema) sameField(goName, rustName string) bool {
+	g, r := normalizeField(goName), normalizeField(rustName)
+	if g == r {
+		return true
+	}
+	if s.Aliases[[2]string{g, r}] {
+		s.used[[2]string{g, r}] = true
+		return true
+	}
+	return false
+}
+
+// unionIdentity checks that the Rust value names the variant of g's union
+// with the same wire discriminant as g's concrete Go type.
+func (s *Schema) unionIdentity(r, g *node, path string) (*node, string) {
+	goTag, ok := s.GoUnions[g.union][g.variant]
+	if !ok {
+		return nil, fmt.Sprintf("%s: go %s holds %s, which has no discriminant", path, g.union, g.variant)
+	}
+	variants, ok := s.RustUnions[g.union]
+	if !ok {
+		return nil, fmt.Sprintf("%s: the Rust crate has no union %s", path, g.union)
+	}
+	names := r.tags
+	if r.kind == nodeLeaf || r.kind == nodeNone && r.text != "" {
+		names = append(append([]string(nil), names...), r.text)
+	}
+	for i, name := range names {
+		if tag, ok := variants[name]; ok {
+			if tag != goTag {
+				return nil, fmt.Sprintf("%s: go %s.%s (discriminant %s), rust %s (discriminant %s)", path, g.union, g.variant, goTag, name, tag)
+			}
+			// The variant name is consumed; what remains names the payload.
+			inner := *r
+			inner.tags = r.tags[min(i+1, len(r.tags)):]
+			return &inner, ""
+		}
+	}
+	return nil, fmt.Sprintf("%s: rust %s names no variant of %s", path, describeNode(r), g.union)
+}
+
+// diffTrees returns the first difference between a Rust and a Go tree, or "".
+func diffTrees(r, g *node, path string, s *Schema) string {
+	identified := false
+	if g.union != "" {
+		identified = true
+		payload, d := s.unionIdentity(r, g, path)
+		if d != "" {
+			return d
+		}
+		r = payload
+		// The variant is identified, so a field-less Go variant is the Rust
+		// unit variant it names.
+		if g.kind == nodeStruct && len(g.items) == 0 && (r.kind == nodeLeaf || r.kind == nodeNone && r.text != "") {
+			return ""
+		}
+		inner := *g
+		inner.union, inner.variant = "", ""
+		g = &inner
+	}
+	// A one-field Go struct is the newtype Rust prints as its bare value; when
+	// Rust names the newtype, it must be the same type. A union variant's Go
+	// struct was identified by its discriminant instead.
+	if g.kind == nodeStruct && r.kind != nodeStruct && len(g.items) == 1 {
+		if !identified && len(r.tags) != 0 && !slices.Contains(r.tags, g.text) {
+			return fmt.Sprintf("%s: go %s, rust %s", path, g.text, strings.Join(r.tags, "/"))
+		}
+		return diffTrees(r, g.items[0], path+"."+g.names[0], s)
+	}
+	// A one-field Rust struct wraps what Go flattens into its parent.
 	if r.kind == nodeStruct && len(r.items) == 1 && (g.kind != nodeStruct || len(g.items) != 1) {
-		return diffTrees(r.items[0], g, path+"."+r.names[0], enums)
+		return diffTrees(r.items[0], g, path+"."+r.names[0], s)
 	}
 	if r.kind == nodeNone && r.text != "" && g.kind == nodeLeaf {
 		r = &node{kind: nodeLeaf, text: r.text}
@@ -366,7 +552,7 @@ func diffTrees(r, g *node, path string, enums RustEnums) string {
 	// Rust prints map entries as (key, value) tuples, Go holds them as
 	// two-field structs.
 	if g.kind == nodeStruct && r.kind == nodeList && len(r.items) == len(g.items) {
-		r = &node{kind: nodeStruct, names: g.names, items: r.items}
+		r = &node{kind: nodeStruct, names: g.names, items: r.items, tags: r.tags}
 	}
 	// Rust prints a uuid as its hyphenated text, Go holds the sixteen bytes.
 	if g.kind == nodeList && len(g.items) == 16 && r.kind == nodeLeaf {
@@ -386,7 +572,10 @@ func diffTrees(r, g *node, path string, enums RustEnums) string {
 			return fmt.Sprintf("%s: go struct with %d fields, rust %s", path, len(g.items), describeNode(r))
 		}
 		for i := range g.items {
-			if d := diffTrees(r.items[i], g.items[i], path+"."+g.names[i], enums); d != "" {
+			if !s.sameField(g.names[i], r.names[i]) {
+				return fmt.Sprintf("%s: go field %d is %s, rust %s", path, i, g.names[i], r.names[i])
+			}
+			if d := diffTrees(r.items[i], g.items[i], path+"."+g.names[i], s); d != "" {
 				return d
 			}
 		}
@@ -398,7 +587,7 @@ func diffTrees(r, g *node, path string, enums RustEnums) string {
 			return fmt.Sprintf("%s: go list of %d, rust %s", path, len(g.items), describeNode(r))
 		}
 		for i := range g.items {
-			if d := diffTrees(r.items[i], g.items[i], fmt.Sprintf("%s[%d]", path, i), enums); d != "" {
+			if d := diffTrees(r.items[i], g.items[i], fmt.Sprintf("%s[%d]", path, i), s); d != "" {
 				return d
 			}
 		}
@@ -419,7 +608,7 @@ func diffTrees(r, g *node, path string, enums RustEnums) string {
 			return fmt.Sprintf("%s: go %q, rust %s", path, g.text, describeNode(r))
 		}
 	case nodeLeaf:
-		if r.kind != nodeLeaf || !leafEqual(r.text, g, enums) {
+		if r.kind != nodeLeaf || !leafEqual(r.text, g, s.Enums) {
 			return fmt.Sprintf("%s: go %v, rust %s", path, g.goVal, describeNode(r))
 		}
 	}
@@ -553,7 +742,7 @@ type FieldCheck struct {
 
 // CompareFields checks every entry the Rust runner rendered against the
 // generated Go decoding of the same input entry.
-func CompareFields(out string, inputs []Input, enums RustEnums) ([]FieldCheck, error) {
+func CompareFields(out string, inputs []Input, schema *Schema) ([]FieldCheck, error) {
 	byKey := map[[2]string]Input{}
 	for _, in := range inputs {
 		byKey[[2]string{in.Case, in.Fixture}] = in
@@ -576,13 +765,13 @@ func CompareFields(out string, inputs []Input, enums RustEnums) ([]FieldCheck, e
 			return nil, err
 		}
 		check := FieldCheck{Fixture: cols[0], Case: cols[1], Entry: entry}
-		check.Diff = compareEntryFields(byKey[[2]string{cols[1], cols[0]}], entry, cols[3], enums)
+		check.Diff = compareEntryFields(byKey[[2]string{cols[1], cols[0]}], entry, cols[3], schema)
 		checks = append(checks, check)
 	}
 	return checks, scanner.Err()
 }
 
-func compareEntryFields(in Input, index int, debug string, enums RustEnums) string {
+func compareEntryFields(in Input, index int, debug string, schema *Schema) string {
 	entries, _ := SplitBatch(in.Batch)
 	if index >= len(entries) {
 		return "no such input entry"
@@ -603,6 +792,11 @@ func compareEntryFields(in Input, index int, debug string, enums RustEnums) stri
 	if err != nil {
 		return err.Error()
 	}
-	// Rust renders the packet enum's variant around the packet struct.
-	return diffTrees(rust, g, reflect.TypeOf(pk).Elem().Name(), enums)
+	// Rust renders the packet enum's variant around the packet struct, and
+	// both must be the packet Go decoded.
+	name := reflect.TypeOf(pk).Elem().Name()
+	if !slices.Contains(rust.tags, name) {
+		return fmt.Sprintf("go decoded %s, rust %s", name, strings.Join(rust.tags, "/"))
+	}
+	return diffTrees(rust, g, name, schema)
 }

@@ -57,7 +57,11 @@ decoder, so they are compared only across that round trip. Across decoders,
 `compare` checks the Rust runner's `Debug` rendering of each `retail`,
 `crafting` and `large` entry (`build/retail/fields/rust.tsv`) field by field
 against the generated Go decoding of the same entry; both come from one
-manifest, so any difference is a `fields` disagreement.
+manifest, so any difference is a `fields` disagreement. Field names, the
+packet type, union variants (by each codec's discriminant table) and enum
+values (by the Rust `From<raw>` tables) must match; `retail/fields.go` lists
+the two things Rust's `Debug` cannot show, NaN payloads and invalid string
+bytes, which the byte-exact re-encode of both decoders covers instead.
 
 The synthetic batches are gophertunnel encodings of packets built as a
 Dragonfly-style server builds them: the large packets (StartGame, LevelChunk,

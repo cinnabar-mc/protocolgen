@@ -139,7 +139,8 @@ func compare(args []string) error {
 	exceptionsPath := flags.String("exceptions", "exceptions.json", "reviewed exceptions")
 	goMod := flags.String("gomod", "go.mod", "this module's go.mod, which pins the oracle")
 	out := flags.String("out", "", "directory holding expected.tsv, verdicts/ and fields/")
-	rustSource := flags.String("rust-source", "../../generated/1.26.51/rust-contract/src", "the contract crate's sources, for enum tables")
+	rustSource := flags.String("rust-source", "../../generated/1.26.51/rust-contract/src", "the contract crate's sources, for enum and union tables")
+	goSource := flags.String("go-source", "../../generated/1.26.51/go/protocol", "the generated Go protocol package, for union tables")
 	flags.Parse(args)
 	corpus, err := retail.LoadCorpus(*corpusPath)
 	if err != nil {
@@ -167,13 +168,16 @@ func compare(args []string) error {
 	if err != nil {
 		return err
 	}
-	enums, err := retail.LoadRustEnums(*rustSource)
+	schema, err := retail.LoadSchema(*rustSource, *goSource)
 	if err != nil {
 		return err
 	}
-	checks, err := retail.CompareFields(*out, inputs, enums)
+	checks, err := retail.CompareFields(*out, inputs, schema)
 	if err != nil {
 		return err
+	}
+	if unused := schema.UnusedAliases(); len(unused) != 0 {
+		return fmt.Errorf("field aliases no entry needed: %v", unused)
 	}
 	found := append(retail.Compare(expected, verdicts), retail.FieldDisagreements(checks)...)
 	report := retail.Apply(found, exceptions)
