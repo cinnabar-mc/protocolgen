@@ -41,6 +41,108 @@
         "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/packet.go (packetData.decodePacket)",
         "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol.go (pool selection by peer)"
       ]
+    },
+    {
+      "decoder": "rust",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_item_stack_request_101.bin",
+        "oversized_item_stack_request_4096.bin",
+        "oversized_player_auth_input_block_actions_101.bin",
+        "oversized_player_auth_input_block_actions_4096.bin"
+      ],
+      "kind": "decision",
+      "reason": "The manifest bounds PlayerAuthInput's block actions and ItemStackRequest's requests at 100 elements, and both generated codecs enforce that schema constraint. gophertunnel applies only its generic 4096-element client slice limit, so it accepts 101 to 4096.",
+      "evidence": [
+        "generated/1.26.51/manifest.json (PlayerAuthInputPacket Player Block Actions and ItemStackRequestPacket Requests: max_items 100)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/io.go (maxSliceLength = 4096, the only bound Slice applies)"
+      ]
+    },
+    {
+      "decoder": "go",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_item_stack_request_101.bin",
+        "oversized_item_stack_request_4096.bin",
+        "oversized_player_auth_input_block_actions_101.bin",
+        "oversized_player_auth_input_block_actions_4096.bin"
+      ],
+      "kind": "decision",
+      "reason": "The manifest bounds PlayerAuthInput's block actions and ItemStackRequest's requests at 100 elements, and both generated codecs enforce that schema constraint. gophertunnel applies only its generic 4096-element client slice limit, so it accepts 101 to 4096.",
+      "evidence": [
+        "generated/1.26.51/manifest.json (PlayerAuthInputPacket Player Block Actions and ItemStackRequestPacket Requests: max_items 100)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/io.go (maxSliceLength = 4096, the only bound Slice applies)"
+      ]
+    },
+    {
+      "decoder": "rust",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_login_request_16mib_plus_1.bin"
+      ],
+      "kind": "decision",
+      "reason": "The entry is a valid 16 MiB + 1 byte Login, but its batch is past gophertunnel's packet.Decoder ceiling (DefaultMaxDecompressedLen, 16 MiB), so gophertunnel rejects the whole batch. The batch ceiling belongs to the transport (bedrock-net's decoded-batch limit), not to the codecs, which bound only fields; gophertunnel's own 16 MiB byte-slice limit cannot be reached through a batch.",
+      "evidence": [
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/packet/decoder.go (readBatch: decompressed size exceeds limit)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/reader.go (maxByteSliceLength = 16 MiB)"
+      ]
+    },
+    {
+      "decoder": "go",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_login_request_16mib_plus_1.bin"
+      ],
+      "kind": "decision",
+      "reason": "The entry is a valid 16 MiB + 1 byte Login, but its batch is past gophertunnel's packet.Decoder ceiling (DefaultMaxDecompressedLen, 16 MiB), so gophertunnel rejects the whole batch. The batch ceiling belongs to the transport (bedrock-net's decoded-batch limit), not to the codecs, which bound only fields; gophertunnel's own 16 MiB byte-slice limit cannot be reached through a batch.",
+      "evidence": [
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/packet/decoder.go (readBatch: decompressed size exceeds limit)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/reader.go (maxByteSliceLength = 16 MiB)"
+      ]
+    },
+    {
+      "decoder": "valentine",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_login_request_16mib_plus_1.bin"
+      ],
+      "kind": "decision",
+      "reason": "The entry is a valid 16 MiB + 1 byte Login, but its batch is past gophertunnel's packet.Decoder ceiling (DefaultMaxDecompressedLen, 16 MiB), so gophertunnel rejects the whole batch. The batch ceiling belongs to the transport (bedrock-net's decoded-batch limit), not to the codecs, which bound only fields; gophertunnel's own 16 MiB byte-slice limit cannot be reached through a batch.",
+      "evidence": [
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/packet/decoder.go (readBatch: decompressed size exceeds limit)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/reader.go (maxByteSliceLength = 16 MiB)"
+      ]
+    },
+    {
+      "decoder": "gophertunnel",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_login_request_16mib_plus_1.bin"
+      ],
+      "kind": "frame",
+      "reason": "The entry is a valid 16 MiB + 1 byte Login, but its batch is past gophertunnel's packet.Decoder ceiling (DefaultMaxDecompressedLen, 16 MiB), so gophertunnel rejects the whole batch. The batch ceiling belongs to the transport (bedrock-net's decoded-batch limit), not to the codecs, which bound only fields; gophertunnel's own 16 MiB byte-slice limit cannot be reached through a batch.",
+      "evidence": [
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/packet/decoder.go (readBatch: decompressed size exceeds limit)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/reader.go (maxByteSliceLength = 16 MiB)"
+      ],
+      "oracle": "github.com/hashimthearab/gophertunnel v1.25.3-0.20261019151115-85d4022854e1"
+    },
+    {
+      "decoder": "valentine",
+      "case": "oversized",
+      "fixtures": [
+        "oversized_item_stack_request_4097.bin",
+        "oversized_player_auth_input_block_actions_4097.bin",
+        "oversized_text_message_65537.bin",
+        "oversized_text_parameters_4097.bin",
+        "oversized_text_parameters_5.bin"
+      ],
+      "kind": "decision",
+      "reason": "Valentine decodes without the generated contract's client limits or the manifest's schema constraints, so it accepts client collections past 4096 elements, more than four translation parameters and messages past 65536 bytes, which gophertunnel rejects.",
+      "evidence": [
+        "differential/retail/runner/src/valentine.rs (McpePacketData::decode_inner, no Limits)",
+        "https://github.com/hashimthearab/gophertunnel/blob/85d4022854e1bb56878829a5a4eff43e76fe596e/minecraft/protocol/packet/text.go (Text.Marshal: too many parameters)"
+      ]
     }
   ]
 }

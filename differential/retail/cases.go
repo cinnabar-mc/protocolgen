@@ -121,8 +121,12 @@ func OversizedInputs() ([]Input, error) {
 		sender string
 		pk     gtpacket.Packet
 	}{
+		{"player_auth_input_block_actions_100", SenderClient, blockActions(100)},
+		{"player_auth_input_block_actions_101", SenderClient, blockActions(101)},
 		{"player_auth_input_block_actions_4096", SenderClient, blockActions(4096)},
 		{"player_auth_input_block_actions_4097", SenderClient, blockActions(4097)},
+		{"item_stack_request_100", SenderClient, requests(100)},
+		{"item_stack_request_101", SenderClient, requests(101)},
 		{"item_stack_request_4096", SenderClient, requests(4096)},
 		{"item_stack_request_4097", SenderClient, requests(4097)},
 		{"login_request_16mib_minus_64", SenderClient, &gtpacket.Login{ClientProtocol: 2193, ConnectionRequest: make([]byte, byteSliceCeiling-64)}},
