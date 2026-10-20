@@ -271,7 +271,7 @@ func goTree(v reflect.Value) (*node, error) {
 			}
 			return goTree(v.FieldByName("val"))
 		}
-		n := &node{kind: nodeStruct}
+		n := &node{kind: nodeStruct, text: t.Name()}
 		for i := 0; i < v.NumField(); i++ {
 			child, err := goTree(v.Field(i))
 			if err != nil {
@@ -351,7 +351,9 @@ func diffTrees(r, g *node, path string, enums RustEnums) string {
 		switch {
 		case len(g.items) == 1:
 			return diffTrees(r, g.items[0], path+"."+g.names[0], enums)
-		case len(g.items) == 0 && r.kind == nodeLeaf:
+		case len(g.items) == 0 && r.kind == nodeLeaf && r.text != "" && strings.HasSuffix(g.text, r.text):
+			// A unit variant: Go names its type after the variant, prefixed
+			// with the union's name when the variant name is a placeholder.
 			return ""
 		}
 	}
@@ -473,11 +475,57 @@ func leafEqual(token string, g *node, enums RustEnums) bool {
 	return false
 }
 
+// lossy replaces invalid UTF-8 as Rust's String::from_utf8_lossy does: one
+// U+FFFD per maximal subpart of an ill-formed sequence (Unicode 3.9, U+FFFD
+// substitution of maximal subparts), not one per run.
 func lossy(s string) string {
 	if utf8.ValidString(s) {
 		return s
 	}
-	return strings.ToValidUTF8(s, "�")
+	var b strings.Builder
+	for i := 0; i < len(s); {
+		if r, n := utf8.DecodeRuneInString(s[i:]); r != utf8.RuneError || n != 1 {
+			b.WriteString(s[i : i+n])
+			i += n
+			continue
+		}
+		b.WriteRune(utf8.RuneError)
+		i += invalidPrefix(s[i:])
+	}
+	return b.String()
+}
+
+// invalidPrefix returns the length of the maximal subpart at the start of s,
+// which does not begin a valid sequence: the lead byte plus every following
+// byte that a well-formed sequence starting with it could still contain.
+func invalidPrefix(s string) int {
+	lo, hi, need := byte(0x80), byte(0xbf), 0
+	switch c := s[0]; {
+	case c >= 0xc2 && c <= 0xdf:
+		need = 1
+	case c == 0xe0:
+		lo, need = 0xa0, 2
+	case c == 0xed:
+		hi, need = 0x9f, 2
+	case c >= 0xe1 && c <= 0xef:
+		need = 2
+	case c == 0xf0:
+		lo, need = 0x90, 3
+	case c == 0xf4:
+		hi, need = 0x8f, 3
+	case c >= 0xf1 && c <= 0xf3:
+		need = 3
+	default:
+		return 1
+	}
+	n := 1
+	for ; n <= need && n < len(s); n++ {
+		if s[n] < lo || s[n] > hi {
+			break
+		}
+		lo, hi = 0x80, 0xbf
+	}
+	return n
 }
 
 func describeNode(n *node) string {

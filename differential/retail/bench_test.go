@@ -11,8 +11,15 @@ import (
 // The gophertunnel half of the codec benches. Each case reads the same
 // committed testdata/bench file, under the same Group/Name, as the criterion
 // benches in bench/benches/codec.rs, so bench-compare can join the two.
+//
+// Both sides time the same boundaries. Decode reads one length-prefixed
+// entry: the length prefix, the header varint and the body, rejecting unread
+// bytes. Encode writes one length-prefixed entry into a reused buffer from a
+// packet decoded before timing. The batch benches go through each library's
+// batch API: the 0xfe marker, every length prefix and every entry.
 
 type benchEntry struct {
+	framed  []byte // length prefix, header varint and body
 	payload []byte // header varint and body
 	header  gtpacket.Header
 	body    []byte
@@ -39,7 +46,8 @@ func benchEntries(b *testing.B, f SyntheticFile) []benchEntry {
 		if err := header.Read(buf); err != nil {
 			b.Fatal(err)
 		}
-		be := benchEntry{payload: e.Payload, header: header, body: buf.Bytes()}
+		framed := appendVaruint32(nil, uint32(len(e.Payload)))
+		be := benchEntry{framed: append(framed, e.Payload...), payload: e.Payload, header: header, body: buf.Bytes()}
 		be.pk, _ = newGophertunnelPacket(f.Sender, header.PacketID)
 		if err := decodeGophertunnel(be.pk, be.body, f.Sender == SenderClient); err != nil {
 			b.Fatalf("%s: %v", f.File, err)
@@ -49,9 +57,23 @@ func benchEntries(b *testing.B, f SyntheticFile) []benchEntry {
 	return out
 }
 
-// decodeEntry decodes one entry as a gophertunnel connection does.
+// decodeFramed decodes one length-prefixed entry.
+func decodeFramed(pool gtpacket.Pool, framed []byte, limits bool) {
+	buf := bytes.NewBuffer(framed)
+	var length uint32
+	if err := gtprotocol.Varuint32(buf, &length); err != nil || int(length) != buf.Len() {
+		panic("bad length prefix")
+	}
+	decodeBuffer(pool, buf, limits)
+}
+
+// decodeEntry decodes one entry, header varint and body, as a gophertunnel
+// connection does with each entry of a batch.
 func decodeEntry(pool gtpacket.Pool, payload []byte, limits bool) {
-	buf := bytes.NewBuffer(payload)
+	decodeBuffer(pool, bytes.NewBuffer(payload), limits)
+}
+
+func decodeBuffer(pool gtpacket.Pool, buf *bytes.Buffer, limits bool) {
 	var header gtpacket.Header
 	if err := header.Read(buf); err != nil {
 		panic(err)
@@ -68,6 +90,18 @@ func encodeEntry(out *bytes.Buffer, e benchEntry) {
 		panic(err)
 	}
 	e.pk.Marshal(gtprotocol.NewWriter(out, 0))
+}
+
+// encodeFramed writes one length-prefixed entry into out, through scratch as
+// gophertunnel's encoder does: the entry is marshalled, then framed.
+func encodeFramed(out, scratch *bytes.Buffer, e benchEntry) {
+	scratch.Reset()
+	encodeEntry(scratch, e)
+	out.Reset()
+	if err := gtprotocol.WriteVaruint32(out, uint32(scratch.Len())); err != nil {
+		panic(err)
+	}
+	out.Write(scratch.Bytes())
 }
 
 func pool(sender string) gtpacket.Pool {
@@ -88,7 +122,7 @@ func BenchmarkDecode(b *testing.B) {
 			b.SetBytes(int64(len(e.payload)))
 			b.ReportAllocs()
 			for b.Loop() {
-				decodeEntry(p, e.payload, limits)
+				decodeFramed(p, e.framed, limits)
 			}
 		})
 	}
@@ -101,16 +135,15 @@ func BenchmarkEncode(b *testing.B) {
 		}
 		e := benchEntries(b, f)[0]
 		b.Run(f.Name, func(b *testing.B) {
-			var out bytes.Buffer
-			encodeEntry(&out, e)
-			if !bytes.Equal(out.Bytes(), e.payload) {
+			var out, scratch bytes.Buffer
+			encodeFramed(&out, &scratch, e)
+			if !bytes.Equal(out.Bytes(), e.framed) {
 				b.Fatalf("%s does not re-encode byte for byte", f.File)
 			}
 			b.SetBytes(int64(len(e.payload)))
 			b.ReportAllocs()
 			for b.Loop() {
-				out.Reset()
-				encodeEntry(&out, e)
+				encodeFramed(&out, &scratch, e)
 			}
 		})
 	}

@@ -1,6 +1,9 @@
 //! Criterion benches of the contract crate over the committed synthetic
 //! corpus. Groups and case names match `differential/retail/bench_test.go`
-//! (`Decode/StartGame` here is `BenchmarkDecode/StartGame` there).
+//! (`Decode/StartGame` here is `BenchmarkDecode/StartGame` there), and both
+//! time the same boundaries: Decode frames one length-prefixed entry (length
+//! prefix and header) and decodes it, Encode writes one length-prefixed entry
+//! into a reused buffer, and the batch benches go through the batch API.
 
 use std::hint::black_box;
 
@@ -24,11 +27,15 @@ fn benches(c: &mut Criterion) {
 
     let mut group = c.benchmark_group("Decode");
     for case in &singles {
+        let framed = case.frames[0].frame().clone();
         group.throughput(Throughput::Bytes(case.entry_len(0) as u64));
         group.bench_function(case.file.name.as_str(), |b| {
             b.iter(|| {
-                Packet::decode_frame(black_box(&case.frames[0]), case.sender, &case.limits)
-                    .expect("decode")
+                let frame = Frames::new(black_box(framed.clone()), 1)
+                    .next()
+                    .expect("one entry")
+                    .expect("frame");
+                Packet::decode_frame(&frame, case.sender, &case.limits).expect("decode")
             })
         });
     }

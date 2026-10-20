@@ -80,3 +80,22 @@ func TestRustDebugStringsAndBytesUnescape(t *testing.T) {
 		t.Fatalf("parsed %+v", n.items)
 	}
 }
+
+// Each maximal ill-formed subpart becomes one U+FFFD, as from_utf8_lossy
+// renders it: two for ff ff, one for a truncated three-byte sequence.
+func TestLossyMatchesRustReplacement(t *testing.T) {
+	for _, tc := range []struct{ in, want string }{
+		{"\xff\xff", "\uFFFD\uFFFD"},
+		{"a\xe2\x82b", "a\uFFFDb"},
+		{"\xe2\x82\xac\xe2", "\u20ac\uFFFD"},
+		{"\xf0\x80\x80", "\uFFFD\uFFFD\uFFFD"},
+		{"\xed\xa0\x80", "\uFFFD\uFFFD\uFFFD"},
+		{"\xf4\x8f\xbf", "\uFFFD"},
+		{"\xc0\xaf", "\uFFFD\uFFFD"},
+		{"ok", "ok"},
+	} {
+		if got := lossy(tc.in); got != tc.want {
+			t.Errorf("lossy(%q) = %q, want %q", tc.in, got, tc.want)
+		}
+	}
+}
