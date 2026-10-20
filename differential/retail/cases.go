@@ -111,7 +111,12 @@ func OversizedInputs() ([]Input, error) {
 		return pk
 	}
 	requests := func(n int) *gtpacket.ItemStackRequest {
-		return &gtpacket.ItemStackRequest{Requests: make([]gtprotocol.ItemStackRequest, n)}
+		// One action each: the manifest also requires at least one.
+		pk := &gtpacket.ItemStackRequest{Requests: make([]gtprotocol.ItemStackRequest, n)}
+		for i := range pk.Requests {
+			pk.Requests[i].Actions = []gtprotocol.StackRequestAction{&gtprotocol.DropStackRequestAction{Count: 1}}
+		}
+		return pk
 	}
 	// gophertunnel's maxByteSliceLength, which is also its batch ceiling, so a
 	// slice past it is rejected with the whole batch.
