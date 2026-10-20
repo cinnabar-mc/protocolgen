@@ -206,6 +206,28 @@ mod runtime_tests {
         assert_eq!(encoded.len(), 2 + 1 + 300);
     }
 
+    /// Capacity guesses may grow or shrink the prefix without changing bytes or limits.
+    #[test]
+    fn frame_encoding_is_independent_of_reused_capacity() {
+        for capacity in [0, 1, 127, 128, 16_383, 16_384] {
+            for body_len in [0, 125, 126, 127, 300, 16_382, 16_383] {
+                let body = vec![7; body_len];
+                let mut expected = vec![0xaa];
+                let mut writer = Writer::new(&mut expected);
+                writer.write_var_u32(body_len as u32 + 2).unwrap();
+                writer.write_var_u32(1000).unwrap();
+                writer.write_all(&body).unwrap();
+
+                let mut out = Vec::with_capacity(capacity);
+                out.push(0xaa);
+                encode_frame_with(&mut out, PacketHeader::new(1000), body_len + 2, |writer| writer.write_all(&body)).unwrap();
+                assert_eq!(out, expected, "capacity {capacity}, body {body_len}");
+                assert!(encode_frame_with(&mut out, PacketHeader::new(1000), body_len + 1, |writer| writer.write_all(&body)).is_err());
+                assert_eq!(out, expected, "limit failure changed prior output");
+            }
+        }
+    }
+
     #[test]
     fn truncated_frames_and_frame_floods_fail() {
         let truncated = bytes::Bytes::from_static(&[0x05, 0x01]);
