@@ -117,6 +117,13 @@ type sliceReader interface {
 	SliceLength(length uint64) bool
 }
 
+// boundedSliceReader exposes the input budget and terminal decode error so
+// collections reserve only available input and stop at the first failed element.
+type boundedSliceReader interface {
+	Remaining() int
+	Err() error
+}
+
 const maxSliceLength = 4096
 
 // Slice marshals a varuint32-prefixed slice whose element pointer marshals itself.
@@ -136,12 +143,27 @@ func FuncSlice[T any, C integer](io IO, x *[]T, count func(*C), f func(*T)) {
 }
 
 // FuncSliceLimits is FuncSlice with schema-published element-count bounds.
-func FuncSliceLimits[T any, C integer](io IO, x *[]T, count func(*C), min, max uint64, f func(*T)) {
-	length, ok := collectionLength(io, count, len(*x), min, max)
+func FuncSliceLimits[T any, C integer](io IO, x *[]T, count func(*C), minimum, maximum uint64, f func(*T)) {
+	length, ok := collectionLength(io, count, len(*x), minimum, maximum)
 	if !ok {
 		return
 	}
 	if io.Reading() {
+		if reader, ok := io.(boundedSliceReader); ok {
+			*x = make([]T, min(length, reader.Remaining()))
+			var zero T
+			for i := 0; i < length && reader.Err() == nil; i++ {
+				if i == len(*x) {
+					*x = append(*x, zero)
+				}
+				f(&(*x)[i])
+				if reader.Err() != nil {
+					*x = (*x)[:i]
+					return
+				}
+			}
+			return
+		}
 		*x = make([]T, length)
 	}
 	for i := range *x {
