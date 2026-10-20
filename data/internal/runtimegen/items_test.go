@@ -19,16 +19,19 @@ import (
 
 // runtimeFixture supplies independent registry, property and supplemental-tag inputs.
 func runtimeFixture() (map[string]RegistryEntry, map[string]Properties, map[string][]string, Corrections) {
-	return map[string]RegistryEntry{
-			"minecraft:apple": {RuntimeID: 1, Version: 2},
-			"minecraft:new":   {RuntimeID: 2, ComponentBased: true},
-		}, map[string]Properties{
-			"minecraft:apple": {MaxStackSize: 64},
-			"minecraft:new":   {Tags: []string{"minecraft:harness"}},
-		}, map[string][]string{
-			"minecraft:allow_offhand": {"minecraft:apple"},
-			"minecraft:head":          {"minecraft:apple"},
-		}, Corrections{StackSizes: map[string]int{"minecraft:new": 16}, Offhand: []string{"minecraft:new"}, Evidence: map[string]string{"fixture": "synthetic"}}
+	registry := map[string]RegistryEntry{
+		"minecraft:apple": {RuntimeID: 1, Version: 2},
+		"minecraft:new":   {RuntimeID: 2, ComponentBased: true},
+	}
+	properties := map[string]Properties{
+		"minecraft:apple": {MaxStackSize: 64},
+		"minecraft:new":   {Tags: []string{"minecraft:harness"}},
+	}
+	tags := map[string][]string{
+		"minecraft:allow_offhand": {"minecraft:apple"},
+		"minecraft:head":          {"minecraft:apple"},
+	}
+	return registry, properties, tags, Corrections{StackSizes: map[string]int{"minecraft:new": 16}, Offhand: []string{"minecraft:new"}, Evidence: map[string]string{"fixture": "synthetic"}}
 }
 
 func TestRuntimeCatalogCombinesSourcesDeterministically(t *testing.T) {
