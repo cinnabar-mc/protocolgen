@@ -192,6 +192,7 @@ pub fn encode_frame_with(
     result
 }
 
+/// Writes one entry, adjusting its reserved prefix when the capacity hint was wrong.
 fn write_frame(
     out: &mut Vec<u8>,
     header: PacketHeader,
@@ -200,20 +201,34 @@ fn write_frame(
 ) -> EncodeResult<()> {
     header.validate()?;
     let start = out.len();
+    let mut prefix = [0u8; MAX_VAR_U32_LEN];
+    let available = out.capacity() - start;
+    // Reused capacity predicts the next prefix width, usually avoiding a body move.
+    // A cold buffer reserves the widest prefix so its first growth has enough room.
+    let reserved = if available == 0 {
+        MAX_VAR_U32_LEN
+    } else {
+        put_var_uint(&mut prefix, available.min(u32::MAX as usize) as u64)
+    };
     {
-        // The length is unknown until the body is written, so reserve the
-        // widest prefix and close the gap afterwards.
-        let mut writer = Writer::with_limit(out, limit.saturating_add(MAX_VAR_U32_LEN));
-        writer.write_all(&[0; MAX_VAR_U32_LEN])?;
+        let mut writer = Writer::with_limit(out, limit.saturating_add(reserved));
+        writer.write_all(&[0; MAX_VAR_U32_LEN][..reserved])?;
         writer.write_var_u32(header.to_raw())?;
         body(&mut writer)?;
     }
-    let declared = out.len() - start - MAX_VAR_U32_LEN;
+    let end = out.len();
+    let declared = end - start - reserved;
     let length = u32::try_from(declared).map_err(|_| EncodeError::LengthOverflow(declared))?;
-    let mut prefix = [0u8; MAX_VAR_U32_LEN];
     let prefix_len = put_var_uint(&mut prefix, u64::from(length));
-    out.copy_within(start + MAX_VAR_U32_LEN.., start + prefix_len);
-    out.truncate(start + prefix_len + declared);
+    if prefix_len != reserved {
+        if prefix_len > reserved {
+            let extra = prefix_len - reserved;
+            out.try_reserve(extra).map_err(|_| EncodeError::AllocationFailed { requested: extra })?;
+            out.resize(end + extra, 0);
+        }
+        out.copy_within(start + reserved..end, start + prefix_len);
+        out.truncate(start + prefix_len + declared);
+    }
     out[start..start + prefix_len].copy_from_slice(&prefix[..prefix_len]);
     Ok(())
 }
