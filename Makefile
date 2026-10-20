@@ -242,18 +242,20 @@ rust-contract:
 	cargo clippy --manifest-path $(CONTRACT_TARGET)/rust-contract/Cargo.toml -- -D warnings
 	cargo test --manifest-path $(CONTRACT_TARGET)/rust-contract/Cargo.toml
 
-# Run Cinnabar's pinned retail fixtures through Valentine, the codec-contract
-# crate, the generated Go and gophertunnel, and fail on any disagreement that
+# Run Cinnabar's pinned retail fixtures and the committed synthetic corpus
+# through Valentine, the codec-contract crate, the generated Go and
+# gophertunnel, and fail on any disagreement that
 # differential/retail/exceptions.json does not accept (see differential/README.md).
 RETAIL := differential/retail
 RETAIL_OUT := build/retail
 RETAIL_CINNABAR := build/cinnabar
+RETAIL_VALENTINE := build/valentine
 RETAIL_RUNNER = cargo run --manifest-path $(RETAIL)/runner/Cargo.toml --target-dir build/retail-target --
 
 .PHONY: retail
 
 retail:
-	scripts/fetch-cinnabar.sh $(RETAIL)/corpus.json $(RETAIL_CINNABAR)
+	scripts/fetch-cinnabar.sh $(RETAIL)/corpus.json $(RETAIL_CINNABAR) $(RETAIL_VALENTINE)
 	rm -rf $(RETAIL_OUT)
 	$(GO) -C $(RETAIL) vet ./...
 	$(GO) -C $(RETAIL) test ./...
@@ -261,7 +263,25 @@ retail:
 	$(GO) -C $(RETAIL) run ./cmd/retail decode -out $(CURDIR)/$(RETAIL_OUT)
 	$(RETAIL_RUNNER) rust $(RETAIL_OUT)
 	$(RETAIL_RUNNER) valentine $(RETAIL_OUT)
-	$(GO) -C $(RETAIL) run ./cmd/retail compare -out $(CURDIR)/$(RETAIL_OUT)
+	$(GO) -C $(RETAIL) run ./cmd/retail compare -cinnabar $(CURDIR)/$(RETAIL_CINNABAR) -out $(CURDIR)/$(RETAIL_OUT)
+	cargo test --manifest-path $(RETAIL)/bench/Cargo.toml --target-dir build/retail-target
+
+# Run gophertunnel's and the contract crate's codec benches over testdata/bench
+# and print bench-compare's table (see .github/workflows/bench.yml).
+BENCH_OUT := build/bench
+BENCH_GO_PROCS ?= 4
+BENCH_CARGO = cargo bench --manifest-path $(RETAIL)/bench/Cargo.toml --target-dir build/bench-target
+
+.PHONY: bench
+
+bench:
+	mkdir -p $(BENCH_OUT)
+	$(GO) -C $(RETAIL) test -run '^$$' -bench . -benchmem -count 5 -cpu $(BENCH_GO_PROCS) . > $(BENCH_OUT)/go.txt
+	rm -rf build/bench-target/criterion
+	CRITERION_HOME=$(CURDIR)/build/bench-target/criterion $(BENCH_CARGO) --bench codec -- --warm-up-time 1 --measurement-time 3
+	$(BENCH_CARGO) --bench allocs
+	$(GO) -C $(RETAIL) run ./cmd/retail bench-check -go $(CURDIR)/$(BENCH_OUT)/go.txt -count 5 -criterion $(CURDIR)/build/bench-target/criterion
+	$(GO) -C $(RETAIL) tool bench-compare --go-procs $(BENCH_GO_PROCS) --go $(CURDIR)/$(BENCH_OUT)/go.txt --criterion $(CURDIR)/build/bench-target/criterion
 
 # Emit the 1.26.51 tree laid out like the gophertunnel checkout in
 # LAYOUT_GOPHERTUNNEL_DIR (constants beside their packets under fork names, fork field

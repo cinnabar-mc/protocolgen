@@ -175,10 +175,12 @@ cases and reviewed exception list.
   Education Edition names.
 - **Crafting ingredient descriptors:** the manifest models the ingredient as
   vanilla sends it, a string-to-string map, so it decodes molang (`tags`) and
-  item-tag (`item_tag`) maps. Oracle divergence 52 comes from gophertunnel's
-  molang writer, which sends a `molang` key and an int16 version instead (see
-  `differential/retail/exceptions.json`). Typed descriptor variants would be
-  an API addition, not a wire fix.
+  item-tag (`item_tag`) maps. Oracle divergence 52 comes from the molang
+  writer at the commit `tools/gophertunnel-oracle/lock.json` pins, which sends
+  a `molang` key and an int16 version instead; the fork commit the
+  differential suites pin writes the `tags` map, and the retail `crafting`
+  case decodes it. Typed descriptor variants would be an API addition, not a
+  wire fix.
 - **Exact encoded size:** `encode_frame` writes the body and then moves it to
   close up the length prefix. There is no `encoded_size` yet, which Valentine
   had.

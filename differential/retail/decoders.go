@@ -131,11 +131,19 @@ func generatedClass(err error) string {
 	}
 }
 
+// batchSource hands packet.Decoder one whole batch per read, as a RakNet or
+// NetherNet connection does; a plain io.Reader would cap batches at the
+// decoder's 3 MiB read buffer.
+type batchSource struct{ batch []byte }
+
+func (s *batchSource) Read(p []byte) (int, error)  { return copy(p, s.batch), nil }
+func (s *batchSource) ReadPacket() ([]byte, error) { return s.batch, nil }
+
 // DecodeGophertunnel runs the pinned gophertunnel as its connections do:
 // batch framing by packet.Decoder, the sender's pool with packet.Unknown for
 // absent ids, and reader limits only for client packets.
 func DecodeGophertunnel(in Input) []Verdict {
-	payloads, err := gtpacket.NewDecoder(bytes.NewReader(in.Batch)).Decode()
+	payloads, err := gtpacket.NewDecoder(&batchSource{in.Batch}).Decode()
 	if err != nil {
 		return []Verdict{{Fixture: in.Fixture, Case: in.Case, Outcome: OutcomeFrameError, Detail: err.Error()}}
 	}
@@ -172,6 +180,17 @@ func decodeGophertunnelEntry(sender string, payload []byte, v *Verdict) {
 		v.encodeFailed(err)
 		return
 	}
+	// gophertunnel decodes NBT compounds into Go maps and writes them back in
+	// map iteration order, so an entry with a multi-key compound re-encodes
+	// differently from run to run. A later encoding that reproduces the entry
+	// shows the bytes are reachable; the detail records that it took retries.
+	for attempt := 1; attempt < nbtOrderAttempts && !bytes.Equal(encoded, payload); attempt++ {
+		again, err := encodeGophertunnel(header, pk)
+		if err == nil && bytes.Equal(again, payload) {
+			encoded = again
+			v.Detail = fmt.Sprintf("re-encoded byte for byte after %d map-ordered encodings", attempt+1)
+		}
+	}
 	v.Encoded = Digest(encoded)
 	v.RoundTrip = RoundTripDiffers
 	again, _ := newGophertunnelPacket(sender, header.PacketID)
@@ -181,6 +200,10 @@ func decodeGophertunnelEntry(sender string, payload []byte, v *Verdict) {
 		v.RoundTrip = RoundTripSame
 	}
 }
+
+// nbtOrderAttempts bounds the encodings tried for an entry whose NBT map
+// order gophertunnel randomises.
+const nbtOrderAttempts = 64
 
 func newGophertunnelPacket(sender string, id uint32) (gtpacket.Packet, bool) {
 	pool := gophertunnelServerPool

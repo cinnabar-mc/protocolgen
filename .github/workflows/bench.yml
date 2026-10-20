@@ -1,0 +1,101 @@
+name: Bench
+
+# Per-packet codec benches: gophertunnel (differential/retail/bench_test.go)
+# against the contract crate (differential/retail/bench), over the committed
+# testdata/bench corpus, on one runner. Not a required check: some Rust paths
+# are known to be slower than gophertunnel.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    env:
+      BENCH_GO_PROCS: 4 # the Go benches' -cpu, which bench-compare must be told
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+          cache: true
+          cache-dependency-path: |
+            go.sum
+            differential/retail/go.sum
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Cargo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            build/bench-target
+          key: bench-${{ runner.os }}-${{ hashFiles('differential/retail/bench/Cargo.toml', 'generated/1.26.51/rust-contract/Cargo.toml') }}
+          restore-keys: bench-${{ runner.os }}-
+
+      - name: Build the Rust benches
+        run: cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --no-run
+
+      - name: Go benches (gophertunnel)
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p build/bench
+          go -C differential/retail test -run '^$' -bench . -benchmem -count 5 -cpu "$BENCH_GO_PROCS" . | tee build/bench/go.txt
+
+      - name: Rust benches (contract crate)
+        run: |
+          rm -rf build/bench-target/criterion
+          CRITERION_HOME="$PWD/build/bench-target/criterion" cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench codec -- --warm-up-time 1 --measurement-time 3
+
+      - name: Rust allocations per decode and encode
+        shell: bash
+        run: |
+          set -o pipefail
+          cargo bench --manifest-path differential/retail/bench/Cargo.toml --target-dir build/bench-target --bench allocs | tee build/bench/allocs.md
+
+      - name: Check both benches cover the synthetic corpus
+        run: go -C differential/retail run ./cmd/retail bench-check -go "$PWD/build/bench/go.txt" -count 5 -criterion "$PWD/build/bench-target/criterion"
+
+      # bench-compare validates its inputs first, exiting 2 on malformed input
+      # and 3 on a missing or stale one-sided path, which fail the job; it
+      # then exits 1 when a Rust path is slower than Go beyond the margin,
+      # which is reported as a warning.
+      - name: Compare
+        shell: bash
+        run: |
+          set +e
+          go -C differential/retail tool bench-compare --go-procs "$BENCH_GO_PROCS" --go "$PWD/build/bench/go.txt" --criterion "$PWD/build/bench-target/criterion" > build/bench/compare.md
+          status=$?
+          set -e
+          {
+            echo "## gophertunnel vs contract crate"
+            echo
+            cat build/bench/compare.md
+            echo
+            echo "## Rust allocations"
+            echo
+            cat build/bench/allocs.md
+          } >> "$GITHUB_STEP_SUMMARY"
+          cat build/bench/compare.md
+          case "$status" in
+            0) ;;
+            1) echo "::warning title=bench-compare::Rust is slower than gophertunnel beyond the margin on some paths; see the job summary" ;;
+            *) echo "::error title=bench-compare::bench-compare exited $status"; exit "$status" ;;
+          esac
+
+      - name: Preserve results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench
+          path: |
+            build/bench/
+            build/bench-target/criterion/
+          if-no-files-found: warn

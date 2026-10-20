@@ -1,9 +1,8 @@
 # Differential codec harness
 
-This module compares protocol 2168 payloads between the generated Go codec and the pinned gophertunnel fork at `be6713da4dc051a4197f897d04835e89e9c54321`.
+This module compares protocol 2193 payloads between the generated 1.26.51 Go codec and the gophertunnel fork commit that `gophertunnel.json` pins. That lock is the one gophertunnel pin for every module here: `scripts/pin-gophertunnel.sh [VERSION]` rewrites their `go.mod` files from it, and `TestGophertunnelPinsMatchTheLock` fails when one disagrees.
 
-Pool parity accepts five deprecated oracle-only IDs that are still registered by gophertunnel but absent from the manifest: 55 `AdventureSettings`, 117 `ScriptCustomEvent`, 163 `FilterText`, 173 `PhotoInfoRequest`, and 197 `ClientCheatAbility`. The canonical manifest also contains server-only ID 16 `ServerPlayerPostMovePosition`, which the pinned oracle reserves and does not register.
-
+Pool parity accepts five deprecated oracle-only IDs that are still registered by gophertunnel but absent from the manifest: 55 `AdventureSettings`, 117 `ScriptCustomEvent`, 163 `FilterText`, 173 `PhotoInfoRequest`, and 197 `ClientCheatAbility`.
 Run `go test ./...` for the committed corpus. Run `go test -fuzz=FuzzDifferential -fuzztime=10m -promote` to fuzz and promote successful cases.
 
 ## Comparison rules
@@ -28,10 +27,12 @@ each verified against oracle source:
 ## Retail 2193
 
 `make retail` (CI job `retail`) runs the 53 batches pinned in
-`retail/corpus.json` through four decoders and fails on any disagreement that
+`retail/corpus.json`, and the 30 synthetic batches in `testdata/bench`, through
+four decoders and fails on any disagreement that
 `retail/exceptions.json` does not accept, or on an exception that accepts
 nothing. `scripts/fetch-cinnabar.sh` checks out the pinned Cinnabar commit,
-sparsely, into `build/cinnabar`.
+sparsely, into `build/cinnabar`, and Valentine from the last Cinnabar commit
+that vendored it into `build/valentine`.
 
 - **valentine:** Cinnabar's vendored crate, framed as `codec.rs`'s
   `decode_batch` frames, without Cinnabar's UI and audio policy checks.
@@ -41,8 +42,9 @@ sparsely, into `build/cinnabar`.
 - **go:** the generated Go, with the reader's limits for client packets only.
   An id outside the manifest is forwarded as unknown; a manifest id from the
   wrong sender is a direction error.
-- **gophertunnel:** the fork commit Cinnabar's fixturegen pins, which encoded
-  the fixtures (`prepare` checks they match), used as its connections use it:
+- **gophertunnel:** the fork commit `gophertunnel.json` pins, which is also
+  the one Cinnabar's fixturegen pins at the corpus commit (`prepare` checks
+  they match), used as its connections use it:
   `packet.Decoder` framing, the sender's pool, `packet.Unknown` for absent
   ids, limits for client packets.
 
@@ -50,8 +52,27 @@ Each decoder writes `build/retail/verdicts/<decoder>.tsv`, one line per entry:
 fixture, case, entry, header (`id:sender:target`), outcome, error class, then
 digests (8 bytes of SHA-256) of the received entry, of the decoder's own
 rendering of the decoded value and of the re-encoded entry, whether decoding
-the re-encoding renders the same, and a detail. Field renderings are per
-decoder, so they are compared only across that round trip.
+the re-encoding renders the same, and a detail. Field digests are per
+decoder, so they are compared only across that round trip. Across decoders,
+`compare` checks the Rust runner's `Debug` rendering of each `retail`,
+`crafting` and `large` entry (`build/retail/fields/rust.tsv`) field by field
+against the generated Go decoding of the same entry; both come from one
+manifest, so any difference is a `fields` disagreement. Field names, the
+packet type, union variants (by each codec's discriminant table) and enum
+values (by the Rust `From<raw>` tables) must match; `retail/fields.go` lists
+the two things Rust's `Debug` cannot show, NaN payloads and invalid string
+bytes, which the byte-exact re-encode of both decoders covers instead.
+
+The synthetic batches are gophertunnel encodings of packets built as a
+Dragonfly-style server builds them: the large packets (StartGame, LevelChunk,
+SubChunk, CraftingData, AvailableCommands, BiomeDefinitionList, ItemRegistry,
+CreativeContent), client input and inventory packets, a hot-packet set and
+four multi-packet batches. `go -C differential/retail run ./cmd/retail synth`
+regenerates them and the encode-from-struct entries in `testdata/encode`;
+`TestSyntheticCorpusIsCurrent` fails when they drift. Those entries are also
+built as generated-Go structs (`encode_test.go`) and Rust structs
+(`retail/bench/tests/encode_from_struct.rs`), which must encode them byte for
+byte.
 
 | Case | Input | Expected |
 | --- | --- | --- |
@@ -64,6 +85,21 @@ decoder, so they are compared only across that round trip.
 | `element-limit` | retail, Rust and Go with a zero element limit | the two agree; errors are limit errors |
 | `alloc-failure` | `large`, Rust with allocations over 64 KiB refused | `AllocationFailed`, no abort |
 | `zero-copy` | `unknown-id`, Rust | frame and unknown bodies share the batch; `compact` copies |
+| `oversized` | entries at and past client collection, string and byte-slice ceilings, huge server packets, declared lengths past the input | accepted or rejected as gophertunnel decides |
+
+Every stage checks its rows against a key set derived independently of
+them, exactly and once each (`retail/integrity.go`):
+- `compare` rebuilds the inputs and their expected entries;
+- verdicts must match the expected entries;
+- the Rust field rows must match the field-case entries Rust decoded;
+- the synthetic manifest must match the committed files;
+- the encode-from-struct cases must match `testdata/encode`, in Go and in Rust;
+- `retail bench-check` checks that both benches report every corpus path.
+
+gophertunnel writes decoded NBT compounds back in Go map order, so an entry
+with a multi-key compound (`inventory_slot_live_zeqa`) re-encodes differently
+from run to run; its decoder tries up to 64 encodings and records a retry in
+the verdict detail.
 
 A panic is its own outcome and always fails the comparison, even on
 malformed input. Startup cancellation is session behavior and is not exercised
@@ -73,3 +109,12 @@ An exception names a decoder, case, kind and the fixtures (or `*`) that share
 one cause, with a reason and evidence; each listed fixture must still disagree.
 Exceptions about gophertunnel carry `oracle`, the module version in
 `retail/go.mod`, and stop loading when that pin moves.
+
+## Benches
+
+`make bench` (workflow `Bench`, not a required check) runs gophertunnel's
+`testing.B` benches in `retail/bench_test.go` and the contract crate's
+criterion benches in `retail/bench` over the same `testdata/bench` files under
+the same names (`Decode`, `Encode`, `DecodeBatch`, `EncodeBatch` / case), then
+joins them with `bench-compare`, which `retail/go.mod` pins as a tool. The
+`allocs` bench prints the contract crate's allocations per decode and encode.

@@ -1,0 +1,27 @@
+[package]
+name = "retail-bench"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+# Standalone, like the runner: criterion benches of the contract crate over the
+# committed testdata/bench corpus, which retail/bench_test.go also reads.
+[workspace]
+
+[dependencies]
+bedrock-protocol-1-26-51 = { path = "../../../generated/1.26.51/rust-contract" }
+bytes = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+[dev-dependencies]
+glam = "0.33"
+criterion = { version = "0.8", default-features = false, features = ["cargo_bench_support"] }
+
+[[bench]]
+name = "codec"
+harness = false
+
+[[bench]]
+name = "allocs"
+harness = false

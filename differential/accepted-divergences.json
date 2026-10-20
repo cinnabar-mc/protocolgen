@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "minecraft_version": "1.26.40",
-  "protocol_version": 2168,
+  "minecraft_version": "1.26.51",
+  "protocol_version": 2193,
   "entries": [
     {
       "packet": 8,
@@ -268,6 +268,13 @@
       "input_hex": "",
       "kind": "re-encoded-bytes",
       "rationale": "Oracle re-encodes absent network NBT payload as an explicit empty compound; generated preserves wire bytes."
+    },
+    {
+      "packet": 325,
+      "direction": "server",
+      "input_hex": "",
+      "kind": "re-encoded-bytes",
+      "rationale": "Oracle derives the override type name string from Type on encode (player_update_entity_overrides.go Marshal: names[pk.Type]), discarding the wire string; generated preserves it."
     },
     {
       "packet": 326,

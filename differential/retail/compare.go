@@ -22,11 +22,24 @@ const (
 	KindLimitMismatch = "limit-mismatch" // Rust and Go disagree on which entries exceed a zero element limit
 	KindZeroCopy      = "zero-copy"      // a frame or unknown body copied the batch, or compaction kept it
 	KindUnexercised   = "unexercised"    // decoded although its large reservation was refused
+	KindDecision      = "decision"       // accepted what gophertunnel rejects, or rejected what it accepts
+	KindFields        = "fields"         // Rust decoded different field values than the generated Go
 )
 
 var kinds = []string{
 	KindMissing, KindExtra, KindFrame, KindPanic, KindHeader, KindPayload, KindDecode, KindReencode, KindRoundTrip,
-	KindAccepted, KindClass, KindLimitMismatch, KindZeroCopy, KindUnexercised,
+	KindAccepted, KindClass, KindLimitMismatch, KindZeroCopy, KindUnexercised, KindDecision, KindFields,
+}
+
+// FieldDisagreements turns failed field checks into Rust disagreements.
+func FieldDisagreements(checks []FieldCheck) []Disagreement {
+	var out []Disagreement
+	for _, c := range checks {
+		if c.Diff != "" {
+			out = append(out, Disagreement{DecoderRust, c.Case, c.Fixture, c.Entry, KindFields, c.Diff})
+		}
+	}
+	return out
 }
 
 // Disagreement is one departure from a case's expectation.
@@ -49,6 +62,7 @@ const (
 	expectLimit                        // decodes, or fails on the element limit
 	expectAlloc                        // fails on the refused allocation
 	expectShared                       // frame and unknown bodies share the batch
+	expectDecision                     // accepts or rejects as gophertunnel does
 )
 
 type rule struct {
@@ -65,6 +79,7 @@ var rules = map[string]rule{
 	CaseTruncated:     {CaseTruncated, Decoders, expectReject},
 	CaseTrailing:      {CaseTrailing, Decoders, expectReject},
 	CaseLarge:         {CaseLarge, Decoders, expectRoundTrip},
+	CaseOversized:     {CaseOversized, Decoders, expectDecision},
 	ProbeElementLimit: {CaseRetail, []string{DecoderRust, DecoderGo}, expectLimit},
 	ProbeAllocFailure: {CaseLarge, []string{DecoderRust}, expectAlloc},
 	ProbeZeroCopy:     {CaseUnknownID, []string{DecoderRust}, expectShared},
@@ -146,6 +161,7 @@ func Compare(expected []Expected, verdicts map[string][]Verdict) []Disagreement 
 		}
 	}
 	out = append(out, compareLimits(bySource[CaseRetail], index, baseHolds)...)
+	out = append(out, compareDecisions(bySource[CaseOversized], index)...)
 	sort.Slice(out, func(i, j int) bool {
 		a, b := out[i], out[j]
 		if a.Decoder != b.Decoder {
@@ -234,6 +250,30 @@ func compareLimits(retail []Expected, index map[verdictKey]Verdict, baseHolds fu
 		if (rust.Outcome == OutcomeOK) != (goV.Outcome == OutcomeOK) {
 			out = append(out, Disagreement{DecoderRust, ProbeElementLimit, want.Fixture, want.Entry, KindLimitMismatch,
 				fmt.Sprintf("rust %s; go %s", describe(rust), describe(goV))})
+		}
+	}
+	return out
+}
+
+// compareDecisions checks that every decoder accepts exactly the oversized
+// entries gophertunnel accepts; the reason for a rejection may differ.
+func compareDecisions(oversized []Expected, index map[verdictKey]Verdict) []Disagreement {
+	var out []Disagreement
+	accepts := func(v Verdict) bool { return v.Outcome == OutcomeOK || v.Outcome == OutcomeUnknown }
+	for _, want := range oversized {
+		oracle, ok := index[verdictKey{DecoderGophertunnel, CaseOversized, want.Fixture, want.Entry}]
+		if !ok || oracle.Outcome == OutcomePanic {
+			continue
+		}
+		for _, decoder := range rules[CaseOversized].decoders {
+			if decoder == DecoderGophertunnel {
+				continue
+			}
+			v, ok := index[verdictKey{decoder, CaseOversized, want.Fixture, want.Entry}]
+			if ok && v.Outcome != OutcomePanic && accepts(v) != accepts(oracle) {
+				out = append(out, Disagreement{decoder, CaseOversized, want.Fixture, want.Entry, KindDecision,
+					fmt.Sprintf("%s; gophertunnel %s", describe(v), describe(oracle))})
+			}
 		}
 	}
 	return out

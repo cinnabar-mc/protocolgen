@@ -29,6 +29,7 @@ type Corpus struct {
 	MinecraftVersion string    `json:"minecraft_version"`
 	ProtocolVersion  int       `json:"protocol_version"`
 	Source           Source    `json:"source"`
+	Valentine        Pin       `json:"valentine"`
 	Format           string    `json:"format"`
 	Fixtures         []Fixture `json:"fixtures"`
 }
@@ -38,6 +39,12 @@ type Source struct {
 	Repository string `json:"repository"`
 	Commit     string `json:"commit"`
 	Directory  string `json:"directory"`
+}
+
+// Pin is a directory at another commit of the source repository.
+type Pin struct {
+	Commit    string `json:"commit"`
+	Directory string `json:"directory"`
 }
 
 // Fixture is one hash-pinned batch. File names are unique and key every
@@ -64,7 +71,7 @@ func LoadCorpus(path string) (Corpus, error) {
 	if err := decoder.Decode(&corpus); err != nil {
 		return Corpus{}, fmt.Errorf("%s: %w", path, err)
 	}
-	if corpus.SchemaVersion != 1 || corpus.Source.Commit == "" || corpus.Source.Directory == "" || len(corpus.Fixtures) == 0 {
+	if corpus.SchemaVersion != 1 || corpus.Source.Commit == "" || corpus.Source.Directory == "" || corpus.Valentine.Commit == "" || corpus.Valentine.Directory == "" || len(corpus.Fixtures) == 0 {
 		return Corpus{}, fmt.Errorf("%s: incomplete corpus", path)
 	}
 	files := map[string]bool{}
