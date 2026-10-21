@@ -151,8 +151,6 @@ Affected IDs: 8, 9, 11, 12, 15, 30, 31, 32, 49, 50, 52, 56, 65, 80, 81, 86, 93, 
 
 5. Complete downstream integration: Go already emits concrete Reader/Writer implementations and packet pools. The remaining integration work is adopting generated packet APIs in consumers and validating their actual network behavior, not writing a byte runtime from scratch. The update guide is transcription assistance. Rust borrowed views are optional ergonomics, not a wire automation blocker.
 
-6. Capture BDS data after corrections with exact binary/codec pins; the capture workflow requires explicit EULA acceptance and does not automatically commit captures. New versions need a matching generated-codec binding: the current build tags select `.40` or `.44`, not `.50`. Matching Endstone/BDS pins are required for registry export; .44 has no matching Endstone pin. PMMP creative/recipe outputs still lack canonical block-item/legacy mapping; runtime registry cannot invent it. New versions require generated decoder binding and gophertunnel pin updates.
-
-7. CI now regenerates `.40`, its `.44` hotfix, `.50` and `.51`, checks both languages, and uploads the protocol 2193 oracle report. The remaining release-orchestration work is a generic version matrix, per-version independent-oracle/differential coverage, and an evidence gate for automatic promotion.
+6. CI now regenerates `.40`, its `.44` hotfix, `.50` and `.51`, checks both languages, and uploads the protocol 2193 oracle report. The remaining release-orchestration work is a generic version matrix, per-version independent-oracle/differential coverage, and an evidence gate for automatic promotion.
 
 A realistically fully automated flow can prepare, regenerate, compare and validate an update; it should stop for human evidence only on genuinely new ambiguities. Removing that stop without new evidence would make the generator less trustworthy.

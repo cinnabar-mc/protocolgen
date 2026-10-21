@@ -6,11 +6,6 @@ import (
 	"slices"
 )
 
-// Capture describes the build arguments for an available capture adapter.
-type Capture struct {
-	GoArgs []string `json:"go_args"`
-}
-
 // Release connects a catalog label to its channel, wire protocol and codec snapshot.
 type Release struct {
 	MinecraftVersion string   `json:"minecraft_version"`
@@ -18,14 +13,12 @@ type Release struct {
 	Channel          string   `json:"channel"`
 	Aliases          []string `json:"aliases"`
 	Snapshot         string   `json:"snapshot"`
-	Capture          *Capture `json:"capture,omitempty"`
 }
 
 // ReleaseIndex declares supported snapshots and the defaults used by tooling.
 type ReleaseIndex struct {
 	SchemaVersion   int                `json:"schema_version"`
 	DefaultProtocol string             `json:"default_protocol"`
-	DefaultCapture  string             `json:"default_capture"`
 	Releases        map[string]Release `json:"releases"`
 }
 
@@ -49,9 +42,6 @@ func Releases() (ReleaseIndex, error) {
 	}
 	if _, ok := index.Releases[index.DefaultProtocol]; !ok {
 		return index, fmt.Errorf("unknown default protocol snapshot")
-	}
-	if index.Releases[index.DefaultCapture].Capture == nil {
-		return index, fmt.Errorf("default capture has no adapter")
 	}
 	return index, nil
 }

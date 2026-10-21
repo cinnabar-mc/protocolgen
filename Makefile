@@ -17,14 +17,6 @@ RELEASE_INDEX := data/source/releases.json
 ORACLE_REPORT ?= /tmp/protocolgen-gophertunnel-report.json
 GOPHER_ARGS = $(if $(GOPHERTUNNEL_DIR),-gophertunnel $(GOPHERTUNNEL_DIR))
 
-VANILLA_VERSION ?= $(shell jq -er .default_capture $(RELEASE_INDEX))
-VANILLA_MANIFEST := ../generated/$(VANILLA_VERSION)/manifest.json
-VANILLA_SOURCE := ../generated/$(VANILLA_VERSION)/vanilla-source.json
-VANILLA_OUT := ../generated/$(VANILLA_VERSION)/vanilla-data
-VANILLA_GO_ARGS = $(shell jq -er --arg version "$(VANILLA_VERSION)" '.releases[$$version].capture.go_args | join(" ")' $(RELEASE_INDEX))
-BDS_ADDRESS ?= 127.0.0.1:19132
-BDS_BINARY ?=
-
 HOTFIX_MANIFEST := generated/1.26.44/manifest.json
 HOTFIX_SPEC := generated/1.26.44/hotfix.json
 HOTFIX_NAMING := generated/1.26.44/naming.json
@@ -43,7 +35,7 @@ CANDIDATE_12660 := candidates/1.26.60-preview.25
 CLAIMS_12660_MOJANG ?= /tmp/protocolgen-1.26.60-preview.25-mojang-claims.json
 CLAIMS_12660_ENDSTONE ?= /tmp/protocolgen-1.26.60-preview.25-endstone-claims.json
 
-.PHONY: regen regen-1.26.50 regen-1.26.51 ingest-1.26.60 hotfix vanilla-data differential verify verify-1.26.50 verify-1.26.51 rust-contract emit-rust regen-rust verify-rust
+.PHONY: regen regen-1.26.50 regen-1.26.51 ingest-1.26.60 hotfix differential verify verify-1.26.50 verify-1.26.51 rust-contract emit-rust regen-rust verify-rust
 
 differential:
 	$(GO) -C differential test ./...
@@ -169,16 +161,6 @@ hotfix:
 		-out generated/1.26.44/go \
 		-protocol-import protocolgen/generated/1.26.44/go/protocol
 	$(call emit-rust,$(HOTFIX_MANIFEST),generated/1.26.44/rust,-naming $(HOTFIX_NAMING) -domains $(HOTFIX_DOMAINS) -docs $(HOTFIX_DOCS))
-
-vanilla-data:
-	@jq -e --arg version "$(VANILLA_VERSION)" '.releases[$$version].capture != null' $(RELEASE_INDEX) >/dev/null || (echo "No capture adapter for $(VANILLA_VERSION)" >&2; exit 2)
-	@test -n "$(BDS_BINARY)" || (echo "BDS_BINARY is required" >&2; exit 2)
-	$(GO) -C vanilla-data run $(VANILLA_GO_ARGS) ./cmd/vanilla-data \
-		-manifest $(VANILLA_MANIFEST) \
-		-source $(VANILLA_SOURCE) \
-		-out $(VANILLA_OUT) \
-		-bds-binary $(BDS_BINARY) \
-		-address $(BDS_ADDRESS)
 
 verify: regen hotfix differential
 	@test -z "$$(git status --porcelain -- generated)" || (echo "regeneration produced drift:" >&2; git status --short -- generated >&2; exit 1)

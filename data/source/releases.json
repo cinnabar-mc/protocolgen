@@ -1,7 +1,6 @@
 {
   "schema_version": 1,
   "default_protocol": "1.26.51",
-  "default_capture": "1.26.44",
   "releases": {
     "1.26.40": {
       "minecraft_version": "1.26.40",
@@ -10,15 +9,7 @@
       "aliases": [
         "1.26.40"
       ],
-      "snapshot": "1.26.40",
-      "capture": {
-        "go_args": [
-          "-modfile",
-          "go-1.26.40.mod",
-          "-tags",
-          "protocolgen_12640"
-        ]
-      }
+      "snapshot": "1.26.40"
     },
     "1.26.44": {
       "minecraft_version": "1.26.44",
@@ -27,10 +18,7 @@
       "aliases": [
         "1.26.44"
       ],
-      "snapshot": "1.26.44",
-      "capture": {
-        "go_args": []
-      }
+      "snapshot": "1.26.44"
     },
     "1.26.50": {
       "minecraft_version": "1.26.50",
