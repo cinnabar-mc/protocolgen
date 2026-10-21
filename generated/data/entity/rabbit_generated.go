@@ -24,4 +24,5 @@ var Rabbit = Entity{
 	PushableByPiston:  Bool{Value: true, Present: true},
 	HasPhysics:        true,
 	Families:          []string{"mob", "rabbit"},
+	Breeding:          &Breeding{Foods: []string{"minecraft:carrot", "minecraft:dandelion", "minecraft:golden_carrot"}, RequiresAdult: true, RequiresTamed: false, RequiresFullHealth: false},
 }

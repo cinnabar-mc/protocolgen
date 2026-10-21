@@ -20,6 +20,13 @@ The semantic values are derived from:
   [AllayMC/Allay](https://github.com/AllayMC/Allay), plus the documented corrections
   in the source inputs
 - Resource inputs from [Mojang/bedrock-samples](https://github.com/Mojang/bedrock-samples)
+- Conservative entity breeding foods and prerequisites from the locked official
+  [Mojang entity definitions](https://github.com/Mojang/bedrock-samples/tree/847bd28a260da9369f0dfd4fded1893ccf5aed86/behavior_pack/entities).
+  Copyright Mojang AB. All rights reserved. The sample repository's
+  [licence notice](https://github.com/Mojang/bedrock-samples/blob/847bd28a260da9369f0dfd4fded1893ccf5aed86/LICENSE.md)
+  subjects those materials to the Minecraft EULA. Only projected values, not
+  source packs, are included. `entity/breeding_sources.json` records the separate
+  sample provenance without changing the BDS base-component attribution.
 - Provisional sword/shears speed classifications from
   [PrismarineJS/minecraft-data](https://github.com/PrismarineJS/minecraft-data),
   pinned to Bedrock 1.26.30 `blocks.json`. Its README declares MIT. Native

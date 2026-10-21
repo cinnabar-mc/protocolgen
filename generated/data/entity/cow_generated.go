@@ -24,4 +24,5 @@ var Cow = Entity{
 	PushableByPiston:  Bool{Value: true, Present: true},
 	HasPhysics:        true,
 	Families:          []string{"cow", "mob"},
+	Breeding:          &Breeding{Foods: []string{"minecraft:wheat"}, RequiresAdult: true, RequiresTamed: false, RequiresFullHealth: false},
 }

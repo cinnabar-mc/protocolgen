@@ -24,4 +24,5 @@ var Mooshroom = Entity{
 	PushableByPiston:  Bool{Value: true, Present: true},
 	HasPhysics:        true,
 	Families:          []string{"mob", "mushroomcow"},
+	Breeding:          &Breeding{Foods: []string{"minecraft:wheat"}, RequiresAdult: true, RequiresTamed: false, RequiresFullHealth: false},
 }

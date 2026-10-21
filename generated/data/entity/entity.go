@@ -1,6 +1,6 @@
 // Package entity provides generated values extracted from vanilla Bedrock entity
-// definitions. It intentionally does not model events, filters, goals, or
-// component-group transitions.
+// definitions. Breeding is a conservative projection of reviewed lifecycle
+// transitions, rather than a general model of events, filters, or goals.
 package entity
 
 import "sort"
@@ -41,7 +41,29 @@ type Health struct {
 	Present bool
 }
 
-// Entity contains stable values from an entity's base component set.
+// Breeding describes supported vanilla breeding foods and observable prerequisites.
+// Foods contains sorted, namespaced item identifiers. The descriptor and its slice
+// must be treated as immutable. A descriptor does not establish readiness: the
+// server owns breeding cooldowns and may reject a feeding attempt. Consumers must
+// also exclude dead animals and animals already in love using current server facts.
+type Breeding struct {
+	Foods              []string
+	RequiresAdult      bool
+	RequiresTamed      bool
+	RequiresFullHealth bool
+}
+
+// AcceptsFood reports whether name is an exact, namespaced breeding food.
+// A nil descriptor accepts nothing; unqualified names and item aliases are not matched.
+func (b *Breeding) AcceptsFood(name string) bool {
+	if b == nil {
+		return false
+	}
+	index := sort.SearchStrings(b.Foods, name)
+	return index < len(b.Foods) && b.Foods[index] == name
+}
+
+// Entity contains stable base-component values and optional breeding metadata.
 type Entity struct {
 	Name              string
 	SpawnCategory     string
@@ -59,6 +81,8 @@ type Entity struct {
 	PushableByPiston  Bool
 	HasPhysics        bool
 	Families          []string
+	// Breeding is nil when applicability or additional conditions are unsupported.
+	Breeding *Breeding
 }
 
 // All returns every entity specification in name order. The returned data must

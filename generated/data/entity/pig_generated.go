@@ -24,4 +24,5 @@ var Pig = Entity{
 	PushableByPiston:  Bool{Value: true, Present: true},
 	HasPhysics:        true,
 	Families:          []string{"mob", "pig"},
+	Breeding:          &Breeding{Foods: []string{"minecraft:beetroot", "minecraft:carrot", "minecraft:potato"}, RequiresAdult: true, RequiresTamed: false, RequiresFullHealth: false},
 }

@@ -24,4 +24,5 @@ var Chicken = Entity{
 	PushableByPiston:  Bool{Value: true, Present: true},
 	HasPhysics:        true,
 	Families:          []string{"chicken", "mob"},
+	Breeding:          &Breeding{Foods: []string{"minecraft:beetroot_seeds", "minecraft:melon_seeds", "minecraft:pitcher_pod", "minecraft:pumpkin_seeds", "minecraft:torchflower_seeds", "minecraft:wheat_seeds"}, RequiresAdult: true, RequiresTamed: false, RequiresFullHealth: false},
 }

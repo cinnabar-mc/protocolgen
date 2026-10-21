@@ -30,13 +30,24 @@ if ok {
 | `data` | Target release, independent source versions and generated counts |
 | `block` | State hashes, physical properties, light, tint, shapes and mining-tool facts with explicit evidence status |
 | `biome` | Climate, terrain values, water color, rain and tags |
-| `entity` | Base collision, health, movement, scale, projectile and family values |
+| `entity` | Base collision, health, movement, scale, projectile and family values; optional conservative breeding foods and prerequisites |
 | `item` | Runtime registry, stack limits, native tags, equipment flags and food values |
 | `voxelshape` | Named shapes in block-local coordinates |
 
 Named values include `block.Stone`, `biome.Plains`, `entity.Arrow`, `item.Apple`
 and `voxelshape.Anvil`. Each package also exposes lookups and iteration.
 Treat returned slices and definitions as immutable.
+
+`Entity.Breeding` is available on supported entity definitions.
+Check the `entity.Lookup` result first, then use `Breeding.AcceptsFood` with a namespaced
+runtime item identifier. A nil descriptor means unsupported or unproven
+eligibility. Read current baby, love, death, tame and health facts from the
+server; the descriptor does not establish breeding cooldown readiness.
+The current projection supports cow, mooshroom, sheep, pig, chicken and rabbit.
+Definitions with unrepresented standing prerequisites, including fox, remain
+unavailable.
+The independent locked sample provenance is in
+[entity/breeding_sources.json](entity/breeding_sources.json).
 
 ## Independent source versions
 

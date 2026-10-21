@@ -32,6 +32,7 @@ type Config struct {
 	SourceLockSHA256    string
 	NativeBlocks        *nativeblock.Catalog
 	NativeRef           string
+	EntityBreeding      *EntityBreedingInputs
 }
 
 // Stats reports the number of records generated from each source.
@@ -100,6 +101,12 @@ func Generate(cfg Config) (map[string][]byte, Stats, error) {
 	))
 	if err != nil {
 		return nil, stats, fmt.Errorf("generate entities: %w", err)
+	}
+	if cfg.EntityBreeding != nil {
+		entityFiles, _, err = GenerateEntityBreeding(entityFiles, *cfg.EntityBreeding)
+		if err != nil {
+			return nil, stats, fmt.Errorf("generate entity breeding: %w", err)
+		}
 	}
 	if err := mergeFiles(files, entityFiles); err != nil {
 		return nil, stats, err
@@ -583,7 +590,9 @@ type rawEntity struct {
 			Spawnable    bool   `json:"is_spawnable"`
 			Category     string `json:"spawn_category"`
 		} `json:"description"`
-		Components map[string]json.RawMessage `json:"components"`
+		Components map[string]json.RawMessage            `json:"components"`
+		Groups     map[string]map[string]json.RawMessage `json:"component_groups"`
+		Events     map[string]json.RawMessage            `json:"events"`
 	} `json:"minecraft:entity"`
 }
 

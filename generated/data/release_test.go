@@ -10,8 +10,35 @@ import (
 
 	"github.com/cinnabar-mc/protocolgen/generated/data"
 	"github.com/cinnabar-mc/protocolgen/generated/data/block"
+	"github.com/cinnabar-mc/protocolgen/generated/data/entity"
 	"github.com/cinnabar-mc/protocolgen/generated/data/registry"
 )
+
+func TestEntityBreedingProvenanceMatchesCatalog(t *testing.T) {
+	encoded, err := os.ReadFile("entity/breeding_sources.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	var manifest struct {
+		SourceLockSHA256 string `json:"source_lock_sha256"`
+		Supported        int    `json:"supported"`
+	}
+	if err := json.Unmarshal(encoded, &manifest); err != nil {
+		t.Fatal(err)
+	}
+	if manifest.SourceLockSHA256 != data.SourceLockSHA256 {
+		t.Fatal("breeding metadata uses another source lock")
+	}
+	count := 0
+	for _, value := range entity.All() {
+		if value.Breeding != nil {
+			count++
+		}
+	}
+	if count != manifest.Supported {
+		t.Fatalf("compiled breeding count %d, provenance count %d", count, manifest.Supported)
+	}
+}
 
 // TestReleaseMetadata verifies that both projections used the same complete lock.
 func TestReleaseMetadata(t *testing.T) {

@@ -70,8 +70,9 @@ jobs:
           go -C data vet ./...
           go -C generated/data test ./...
           go -C generated/data vet ./...
-      - name: Verify runtime item, mining and registry generation
+      - name: Verify entity breeding, runtime item, mining and registry generation
         run: |
+          go -C data run ./cmd/entitybreedinggen -check
           go -C data run ./cmd/runtimegen
           go -C data run ./cmd/mininggen
           go -C data run ./cmd/registrygen

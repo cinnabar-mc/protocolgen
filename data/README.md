@@ -109,6 +109,36 @@ payloads and metadata. To run the Cloudburst check locally, set
 `PROTOCOLGEN_CLOUDBURST_DIR` when running `make test-data`. Full semantic
 regeneration additionally requires the local BDS inputs.
 
+Breeding metadata has an independent projection command, so it can be verified
+without the older BDS base inputs:
+
+```sh
+go run ./cmd/entitybreedinggen
+go run ./cmd/entitybreedinggen -check
+```
+
+This reads entity definitions from the existing authenticated official sample
+archive and checks every food against the locked runtime item registry. Full
+semantic generation applies the same projection. It writes `Entity.Breeding`
+into the existing entity literals and records the separate sample revision,
+document digests, component owners and unsupported cases in
+`entity/breeding_sources.json`. It preserves the base catalog's entity domain
+and BDS provenance; sample-only species such as goat are not added by this pass.
+The lock digest is unchanged because both inputs were already pinned.
+
+The projection proves baby/adult ownership through spawn, birth and growth,
+then checks all declared events for loss of that eligibility. Ambiguous owners,
+unknown constraints, environment/love filters, pregnancy workflows, item-result
+objects and unresolved legacy food names remain unavailable. It currently
+exposes six species: cow, mooshroom, sheep, pig, chicken and rabbit. Tame/full-health
+requirements are represented when supported; sitting requirements are not.
+Sitting components and goals are checked in the base definition and every
+component group. Sitting-capable definitions such as fox remain unavailable
+unless breeding explicitly permits sitting; this applies even without a tame
+requirement.
+Consumers must use current server facts for baby, love, death, tame and health
+state. Adult status and absence of love do not establish cooldown readiness.
+
 ## Shared input access
 
 `source.Open("")` loads the embedded lock. `Sources.Read` authenticates each

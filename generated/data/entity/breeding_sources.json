@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "source_lock_sha256": "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4",
+  "repository": "Mojang/bedrock-samples",
+  "revision": "847bd28a260da9369f0dfd4fded1893ccf5aed86",
+  "archive_input": "resource_pack",
+  "archive_sha256": "48374e11c5696adc8f4b3b39b0837192917e07179e671297e23c382de5a343d7",
+  "supported": 6,
+  "entities": {
+    "minecraft:agent": {
+      "unavailable": "base entity has no locked sample definition"
+    },
+    "minecraft:cat": {
+      "file": "behavior_pack/entities/cat.json",
+      "sha256": "478a7c8376910c4a9d3be2c10e82e4768d703c5bbb8c49a0d6e4311389f29f4e",
+      "component_group": "minecraft:cat_adult",
+      "unavailable": "breeding item is not a canonical runtime item: minecraft:fish"
+    },
+    "minecraft:chicken": {
+      "file": "behavior_pack/entities/chicken.json",
+      "sha256": "0c451859206ed919f5fdd7da625a0b0cb5272de1b410defce45afe34dbdbf25a",
+      "component_group": "minecraft:chicken_adult",
+      "breeding": {
+        "foods": [
+          "minecraft:beetroot_seeds",
+          "minecraft:melon_seeds",
+          "minecraft:pitcher_pod",
+          "minecraft:pumpkin_seeds",
+          "minecraft:torchflower_seeds",
+          "minecraft:wheat_seeds"
+        ],
+        "requires_adult": true,
+        "requires_tamed": false,
+        "requires_full_health": false
+      }
+    },
+    "minecraft:cow": {
+      "file": "behavior_pack/entities/cow.json",
+      "sha256": "df6fbc9859fb810a7a534251bf05b09f6624629b2a8da56eaaca4bef859290cd",
+      "component_group": "minecraft:cow_adult",
+      "breeding": {
+        "foods": [
+          "minecraft:wheat"
+        ],
+        "requires_adult": true,
+        "requires_tamed": false,
+        "requires_full_health": false
+      }
+    },
+    "minecraft:donkey": {
+      "file": "behavior_pack/entities/donkey.json",
+      "sha256": "6d2013164da953035e1bfc553efecbeae6b31edcb026d61491fa7bf98d4779b7",
+      "component_group": "minecraft:donkey_tamed",
+      "unavailable": "unrepresented sitting prerequisite"
+    },
+    "minecraft:fox": {
+      "file": "behavior_pack/entities/fox.json",
+      "sha256": "445568fefe87593872d196d59968846cd443c73508f137c557ae34f580443e15",
+      "component_group": "minecraft:fox_adult",
+      "unavailable": "unrepresented sitting prerequisite"
+    },
+    "minecraft:horse": {
+      "file": "behavior_pack/entities/horse.json",
+      "sha256": "06491c7b6a9c3e98c9382e3705d05c7b0103c4c076a356282afca2e674569a59",
+      "component_group": "minecraft:horse_tamed",
+      "unavailable": "unrepresented sitting prerequisite"
+    },
+    "minecraft:llama": {
+      "file": "behavior_pack/entities/llama.json",
+      "sha256": "65dfb6df1c51ba61a8931c7881da5e95f3140c2362684baf96d6430a224fe4f4",
+      "component_group": "minecraft:llama_adult",
+      "unavailable": "unrepresented sitting prerequisite"
+    },
+    "minecraft:mooshroom": {
+      "file": "behavior_pack/entities/mooshroom.json",
+      "sha256": "b1f2b45edae6dbc4297feccbc5ba4bb33b308927b8243d53679d140512d1f4ca",
+      "component_group": "minecraft:cow_adult",
+      "breeding": {
+        "foods": [
+          "minecraft:wheat"
+        ],
+        "requires_adult": true,
+        "requires_tamed": false,
+        "requires_full_health": false
+      }
+    },
+    "minecraft:ocelot": {
+      "file": "behavior_pack/entities/ocelot.json",
+      "sha256": "557ea1ef71294437cd3854022e4796a03ab141dd5a06a6f906ce4178acc601f9",
+      "component_group": "minecraft:ocelot_trusting",
+      "unavailable": "unrepresented sitting prerequisite"
+    },
+    "minecraft:panda": {
+      "file": "behavior_pack/entities/panda.json",
+      "sha256": "307985f5570a64e38e2dbda3f72daceb455a3dfbcdac17559fe6c425eb4b31cb",
+      "component_group": "minecraft:panda_adult",
+      "unavailable": "unsupported breedable constraint: environment_requirements"
+    },
+    "minecraft:pig": {
+      "file": "behavior_pack/entities/pig.json",
+      "sha256": "cc4c5cb3f2efb0defebf397c3aaa3a830446c1b9a608fb66e164b2c527886ee0",
+      "component_group": "minecraft:pig_adult",
+      "breeding": {
+        "foods": [
+          "minecraft:beetroot",
+          "minecraft:carrot",
+          "minecraft:potato"
+        ],
+        "requires_adult": true,
+        "requires_tamed": false,
+        "requires_full_health": false
+      }
+    },
+    "minecraft:rabbit": {
+      "file": "behavior_pack/entities/rabbit.json",
+      "sha256": "b233e2b5b76702b83478c37e0802632503af7578f1d36e9f3dc54336fd378cbc",
+      "component_group": "adult",
+      "breeding": {
+        "foods": [
+          "minecraft:carrot",
+          "minecraft:dandelion",
+          "minecraft:golden_carrot"
+        ],
+        "requires_adult": true,
+        "requires_tamed": false,
+        "requires_full_health": false
+      }
+    },
+    "minecraft:sheep": {
+      "file": "behavior_pack/entities/sheep.json",
+      "sha256": "cf889c9ed1f421360504ab14cfdd98b6c4b3b894b3998273f7f8a42e77764cac",
+      "component_group": "minecraft:sheep_adult",
+      "breeding": {
+        "foods": [
+          "minecraft:wheat"
+        ],
+        "requires_adult": true,
+        "requires_tamed": false,
+        "requires_full_health": false
+      }
+    },
+    "minecraft:turtle": {
+      "file": "behavior_pack/entities/turtle.json",
+      "sha256": "3ed8660b75fdc6e7ed0e4656ff4702433c4a3149c2abe58770dce6643dc2e121",
+      "component_group": "minecraft:adult",
+      "unavailable": "unsupported breedable constraint: causes_pregnancy"
+    },
+    "minecraft:wolf": {
+      "file": "behavior_pack/entities/wolf.json",
+      "sha256": "f5698390df1d656b005f434ce40d12743f42de6d9dce430c7afd3094f689792f",
+      "component_group": "minecraft:wolf_adult",
+      "unavailable": "unrepresented sitting prerequisite"
+    }
+  }
+}

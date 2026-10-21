@@ -82,6 +82,10 @@ func run(lockPath, cache, cloudburstDir, bdsDir, outputDir string) (generator.St
 	if err != nil {
 		return generator.Stats{}, err
 	}
+	breeding, err := generator.ReadEntityBreedingInputs(context.Background(), sources, cache)
+	if err != nil {
+		return generator.Stats{}, err
+	}
 	files, stats, err := generator.Generate(generator.Config{
 		CloudburstDir:       cloudburstDir,
 		BDSDir:              bdsDir,
@@ -93,6 +97,7 @@ func run(lockPath, cache, cloudburstDir, bdsDir, outputDir string) (generator.St
 		SourceLockSHA256:    digest,
 		NativeBlocks:        &native,
 		NativeRef:           sources.Revision("native_block_states"),
+		EntityBreeding:      &breeding,
 	})
 	if err != nil {
 		return generator.Stats{}, err

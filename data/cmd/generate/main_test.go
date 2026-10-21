@@ -1,6 +1,9 @@
 package main
 
 import (
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
@@ -60,6 +63,33 @@ func TestRunRejectsChangedInputsBeforeWriting(t *testing.T) {
 	}
 	if _, err := os.Stat(output); !os.IsNotExist(err) {
 		t.Fatalf("invalid inputs created an output directory: %v", err)
+	}
+}
+
+func TestRunRequiresBreedingArchiveBeforeWriting(t *testing.T) {
+	lockPath, cloudburst, bds := lockedFixture(t)
+	encoded, err := os.ReadFile(lockPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var lock source.Lock
+	if err := json.Unmarshal(encoded, &lock); err != nil {
+		t.Fatal(err)
+	}
+	delete(lock.Inputs, "resource_pack")
+	encoded, err = json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(lockPath, encoded, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	output := filepath.Join(t.TempDir(), "output")
+	if _, err := run(lockPath, "", cloudburst, bds, output); err == nil || !strings.Contains(err.Error(), "no sample archive") {
+		t.Fatalf("run = %v, want required breeding source", err)
+	}
+	if _, err := os.Stat(output); !os.IsNotExist(err) {
+		t.Fatalf("missing source wrote output: %v", err)
 	}
 }
 
@@ -134,6 +164,36 @@ func lockedFixture(t *testing.T) (lockPath, cloudburst, bds string) {
 			t.Fatal(err)
 		}
 		lock.Inputs[key] = source.Input{Path: filename, Revision: strings.Repeat("2", 40), SHA256: fmt.Sprintf("%x", sha256.Sum256(data))}
+	}
+	var archive bytes.Buffer
+	gz := gzip.NewWriter(&archive)
+	tarWriter := tar.NewWriter(gz)
+	document := []byte(`{"minecraft:entity":{"description":{"identifier":"minecraft:donkey"}}}`)
+	if err := tarWriter.WriteHeader(&tar.Header{Name: "samples/behavior_pack/entities/donkey.json", Typeflag: tar.TypeReg, Mode: 0o644, Size: int64(len(document))}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := tarWriter.Write(document); err != nil {
+		t.Fatal(err)
+	}
+	if err := tarWriter.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := gz.Close(); err != nil {
+		t.Fatal(err)
+	}
+	lock.Upstreams["samples"] = source.Upstream{Repository: "Mojang/bedrock-samples", Revision: strings.Repeat("3", 40)}
+	for name, fixture := range map[string]struct {
+		data     []byte
+		upstream string
+	}{
+		"resource_pack": {archive.Bytes(), "samples"},
+		"item_registry": {[]byte(`[{"name":"minecraft:wheat","id":1,"componentBased":false,"version":1}]`), "cloudburst"},
+	} {
+		filename := name + ".input"
+		if err := os.WriteFile(filepath.Join(dir, filename), fixture.data, 0o644); err != nil {
+			t.Fatal(err)
+		}
+		lock.Inputs[name] = source.Input{Path: filename, Upstream: fixture.upstream, SHA256: fmt.Sprintf("%x", sha256.Sum256(fixture.data))}
 	}
 	data, err := json.Marshal(lock)
 	if err != nil {

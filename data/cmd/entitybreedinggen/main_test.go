@@ -1,0 +1,149 @@
+package main
+
+import (
+	"archive/tar"
+	"bytes"
+	"compress/gzip"
+	"crypto/sha256"
+	"encoding/json"
+	"fmt"
+	"os"
+	"path/filepath"
+	"strings"
+	"testing"
+
+	"github.com/bedrock-mc/protocolgen/data/internal/generator"
+	"github.com/bedrock-mc/protocolgen/data/source"
+)
+
+func TestRun_ProjectsWithoutBDSAndPreservesOtherOutputs(t *testing.T) {
+	lock, cache, output := projectionFixture(t)
+	if err := run(lock, cache, output, false); err != nil {
+		t.Fatal(err)
+	}
+	if err := run(lock, cache, output, true); err != nil {
+		t.Fatal(err)
+	}
+	for _, name := range []string{"version_generated.go", "item/test_generated.go", "entity/runtime_generated.go"} {
+		got, err := os.ReadFile(filepath.Join(output, name))
+		if err != nil || !bytes.Contains(got, []byte("keep this output")) {
+			t.Fatalf("unrelated output %s changed: %s, %v", name, got, err)
+		}
+	}
+	path := filepath.Join(output, "entity", "test_animal_generated.go")
+	content, err := os.ReadFile(path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !bytes.Contains(content, []byte("RequiresAdult: true")) {
+		t.Fatalf("missing descriptor: %s", content)
+	}
+	if err := os.WriteFile(path, bytes.ReplaceAll(content, []byte("minecraft:wheat"), []byte("minecraft:carrot")), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := run(lock, cache, output, true); err == nil {
+		t.Fatal("check accepted changed generated food")
+	}
+}
+
+func TestRun_RejectsMismatchedBaseLockBeforeWriting(t *testing.T) {
+	lock, cache, output := projectionFixture(t)
+	if err := os.WriteFile(filepath.Join(output, "semantic_sources.json"), []byte(`{"source_lock_sha256":"changed"}`), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := run(lock, cache, output, false); err == nil || !strings.Contains(err.Error(), "different source locks") {
+		t.Fatalf("run = %v, want mismatched base lock", err)
+	}
+	if _, err := os.Stat(filepath.Join(output, "entity", "breeding_sources.json")); !os.IsNotExist(err) {
+		t.Fatalf("rejected input wrote a projection: %v", err)
+	}
+}
+
+// projectionFixture builds authenticated, authored inputs without network calls.
+func projectionFixture(t *testing.T) (lockPath, cache, output string) {
+	t.Helper()
+	cache, output = t.TempDir(), t.TempDir()
+	document := []byte(`{"minecraft:entity": {
+		"description":{"identifier":"minecraft:test_animal"},
+		"component_groups":{
+			"baby":{"minecraft:is_baby":{},"minecraft:ageable":{"grow_up":{"event":"grow","target":"self"}}},
+			"adult":{"minecraft:breedable":{"require_tame":false,"breed_items":["wheat"],"breeds_with":{"minecraft:test_animal":{}}}}
+		},
+		"events":{
+			"minecraft:entity_spawned":{"add":{"component_groups":["adult"]}},
+			"minecraft:entity_born":{"add":{"component_groups":["baby"]}},
+			"grow":{"remove":{"component_groups":["baby"]},"add":{"component_groups":["adult"]}}
+		}
+	}}`)
+	var archive bytes.Buffer
+	gz := gzip.NewWriter(&archive)
+	tarWriter := tar.NewWriter(gz)
+	if err := tarWriter.WriteHeader(&tar.Header{Name: "samples/behavior_pack/entities/test_animal.json", Mode: 0o644, Typeflag: tar.TypeReg, Size: int64(len(document))}); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := tarWriter.Write(document); err != nil {
+		t.Fatal(err)
+	}
+	if err := tarWriter.Close(); err != nil {
+		t.Fatal(err)
+	}
+	if err := gz.Close(); err != nil {
+		t.Fatal(err)
+	}
+	registry := []byte(`[{"name":"minecraft:wheat","id":1,"componentBased":false,"version":1}]`)
+	inputs := map[string]source.Input{}
+	for name, payload := range map[string][]byte{"resource_pack": archive.Bytes(), "item_registry": registry} {
+		digest := fmt.Sprintf("%x", sha256.Sum256(payload))
+		if err := os.WriteFile(filepath.Join(cache, digest), payload, 0o600); err != nil {
+			t.Fatal(err)
+		}
+		inputs[name] = source.Input{Upstream: "cloudburst", File: "registry.json", SHA256: digest}
+	}
+	pack := inputs["resource_pack"]
+	pack.Upstream = "samples"
+	pack.Archive = true
+	pack.File = ""
+	inputs["resource_pack"] = pack
+	lock := source.Lock{
+		SchemaVersion: 2, Release: "1.26.51", Inputs: inputs,
+		Upstreams: map[string]source.Upstream{
+			"cloudburst": {Repository: "example/registry", Revision: strings.Repeat("1", 40)},
+			"samples":    {Repository: "Mojang/bedrock-samples", Revision: strings.Repeat("2", 40)},
+		},
+		Semantic: source.SemanticInputs{Cloudburst: "cloudburst"},
+	}
+	encoded, err := json.Marshal(lock)
+	if err != nil {
+		t.Fatal(err)
+	}
+	lockPath = filepath.Join(t.TempDir(), "lock.json")
+	if err := os.WriteFile(lockPath, encoded, 0o644); err != nil {
+		t.Fatal(err)
+	}
+	sources, err := source.Open(lockPath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	digest, err := sources.Lock.SHA256()
+	if err != nil {
+		t.Fatal(err)
+	}
+	files := map[string]string{
+		"semantic_sources.json":           fmt.Sprintf(`{"source_lock_sha256":%q}`, digest),
+		"version_generated.go":            generator.GeneratedMarker + "\n// keep this output\n",
+		"item/test_generated.go":          generator.GeneratedMarker + "\n// keep this output\n",
+		"entity/runtime_generated.go":     "// Code generated by another generator; DO NOT EDIT.\n// keep this output\n",
+		"entity/test_animal_generated.go": generator.GeneratedMarker + "\npackage entity\nvar TestAnimal = Entity{Name: \"minecraft:test_animal\", HasPhysics:true}\n",
+		"entity/index_generated.go":       generator.GeneratedMarker + "\npackage entity\nvar all = []Entity{TestAnimal}\n",
+	}
+	for name, content := range files {
+		path := filepath.Join(output, name)
+		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+			t.Fatal(err)
+		}
+		if err := os.WriteFile(path, []byte(content), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	return lockPath, cache, output
+}
