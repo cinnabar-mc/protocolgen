@@ -5,6 +5,7 @@ Endstone DevTools vanilla-data exporter:
   https://github.com/EndstoneMC/endstone
 
 The adapter is distributed under the Apache License, Version 2.0. A copy of
-that license is available at https://www.apache.org/licenses/LICENSE-2.0.
+that license is included in LICENSE in this directory and is also available at
+https://www.apache.org/licenses/LICENSE-2.0.
 The upstream source revision and the SHA-256 of the adapter patch are pinned
 in each generated vanilla-source.json that enables this exporter.

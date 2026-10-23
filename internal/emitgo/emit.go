@@ -18,6 +18,7 @@ import (
 	"protocolgen/internal/domains"
 	"protocolgen/internal/flatten"
 	"protocolgen/internal/layout"
+	"protocolgen/internal/licensing"
 	"protocolgen/internal/manifest"
 	"protocolgen/internal/naming"
 	"protocolgen/internal/semantics"
@@ -667,6 +668,8 @@ func (g *generator) emitFiles(m manifest.Manifest, packets []manifest.Packet, pa
 	if err != nil {
 		return nil, err
 	}
+	files["LICENSE-MIT"] = licensing.MIT
+	files["NOTICE"] = licensing.Notice
 	files["protocol/version.go"] = emitVersion(m)
 	usedFiles := map[string]bool{
 		"types.go": true, "codec.go": true, "helpers.go": true, "reader.go": true, "writer.go": true, "version.go": true,

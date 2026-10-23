@@ -10,6 +10,7 @@ import (
 
 	"protocolgen/internal/docs"
 	"protocolgen/internal/domains"
+	"protocolgen/internal/licensing"
 	"protocolgen/internal/manifest"
 	"protocolgen/internal/naming"
 )
@@ -262,6 +263,8 @@ func GenerateFilesWithOptions(m manifest.Manifest, options Options) (map[string]
 		return nil, err
 	}
 	files := map[string]string{
+		"LICENSE-MIT":    licensing.MIT,
+		"NOTICE":         licensing.Notice,
 		"Cargo.toml":     emitCargo(m, g),
 		"src/enums.rs":   enums,
 		"src/types.rs":   types,
@@ -479,7 +482,7 @@ func emitCargo(m manifest.Manifest, g *generator) string {
 	var b strings.Builder
 	b.WriteString("# Code generated from canonical protocol manifest v2. DO NOT EDIT.\n\n")
 	crateName := "bedrock-protocol-" + strings.NewReplacer(".", "-", "_", "-").Replace(m.Target.MinecraftVersion)
-	fmt.Fprintf(&b, "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2024\"\npublish = false\n", crateName)
+	fmt.Fprintf(&b, "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2024\"\nlicense = %q\npublish = false\n", crateName, licensing.SPDX)
 	// bytes is unconditional: the wire runtime's shared-buffer path is part of
 	// the reader contract, not a per-manifest feature.
 	b.WriteString("\n[dependencies]\nbytes = \"1\"\n")

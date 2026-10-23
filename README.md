@@ -31,6 +31,14 @@ Check out both doc sources at the revisions in the release's
 `go run ./cmd/protocolgen <command> -h` documents each CLI step; with no
 arguments it lists the commands.
 
-## Notices
+## License
 
-Game-data sources and their licences are listed in [data/NOTICE.md](data/NOTICE.md).
+Cinnabar's authored generator, runtime and generated implementation code is
+available under [MIT](LICENSE-MIT). This grant covers only our copyrightable
+contributions; imported code, source documentation, schemas and game-data
+materials retain their own terms. See [NOTICE](NOTICE) for the scope and
+Gophertunnel attribution, and [data/NOTICE.md](data/NOTICE.md) for data sources.
+
+Both codec emitters include the same license and notice in their output.
+Their canonical copies live in `internal/licensing/`; the emitter tests check
+that these root copies stay identical.
