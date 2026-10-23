@@ -9,6 +9,7 @@ import (
 
 	"protocolgen/internal/docs"
 	"protocolgen/internal/domains"
+	"protocolgen/internal/licensing"
 	"protocolgen/internal/manifest"
 )
 
@@ -18,7 +19,10 @@ func generatedRustSource(m manifest.Manifest) (string, error) {
 		return "", err
 	}
 	var source strings.Builder
-	for _, contents := range files {
+	for name, contents := range files {
+		if !strings.HasSuffix(name, ".rs") {
+			continue
+		}
 		source.WriteString(contents)
 	}
 	return source.String(), nil
@@ -43,6 +47,30 @@ func TestGenerateRustConsumesCanonicalManifest(t *testing.T) {
 	}
 	if strings.Contains(source, "gophertunnel") || strings.Contains(source, "bedrock-protocol-docs") {
 		t.Fatalf("generated Rust contains source/profile lookup text")
+	}
+}
+
+func TestGenerateRustDistributesContributionNotices(t *testing.T) {
+	for _, contract := range []int{0, CodecContractVersion} {
+		files, err := GenerateFilesWithOptions(contractFixture(), Options{CodecContract: contract})
+		if err != nil {
+			t.Fatal(err)
+		}
+		for name, want := range map[string]string{"LICENSE-MIT": licensing.MIT, "NOTICE": licensing.Notice} {
+			if files[name] != want {
+				t.Errorf("contract %d: %s differs from the canonical notice", contract, name)
+			}
+			root, err := os.ReadFile(filepath.Join("..", "..", name))
+			if err != nil {
+				t.Fatal(err)
+			}
+			if string(root) != want {
+				t.Errorf("root %s differs from internal/licensing/%s", name, name)
+			}
+		}
+		if !strings.Contains(files["Cargo.toml"], `license = "`+licensing.SPDX+`"`) {
+			t.Errorf("contract %d: Cargo metadata omits the authored implementation license", contract)
+		}
 	}
 }
 

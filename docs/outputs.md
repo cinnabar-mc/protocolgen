@@ -24,6 +24,11 @@ The other files in a snapshot directory are reviewed inputs: `source-lock.json`,
 `docs.json`, `hotfix.json`, `vanilla-source.json`, `lens-claims.json` and
 `evidence/`.
 
+Each Go and Rust codec output includes `LICENSE-MIT` and `NOTICE`, emitted from
+`internal/licensing/`. The MIT grant covers Cinnabar's authored implementation;
+the notice retains the separate rights and attribution for imported comments
+and inputs. It does not relicense the source documents or game-data catalog.
+
 ## Not committed
 
 | Path | Contents | Produced by |

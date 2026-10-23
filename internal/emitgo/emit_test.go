@@ -11,6 +11,7 @@ import (
 	"protocolgen/internal/docs"
 	"protocolgen/internal/domains"
 	"protocolgen/internal/layout"
+	"protocolgen/internal/licensing"
 	"protocolgen/internal/manifest"
 	"protocolgen/internal/naming"
 	"protocolgen/internal/semantics"
@@ -47,11 +48,19 @@ func TestGenerateConsumesOnlyCanonicalManifest(t *testing.T) {
 		t.Fatalf("Generate: %v", err)
 	}
 	for name, source := range files {
+		if !strings.HasSuffix(name, ".go") {
+			continue
+		}
 		if _, err := format.Source([]byte(source)); err != nil {
 			t.Fatalf("%s is not valid Go: %v\n%s", name, err, source)
 		}
 		if strings.Contains(source, "gophertunnel") || strings.Contains(source, "bedrock-protocol-docs") {
 			t.Errorf("%s contains source/profile lookup text", name)
+		}
+	}
+	for name, want := range map[string]string{"LICENSE-MIT": licensing.MIT, "NOTICE": licensing.Notice} {
+		if files[name] != want {
+			t.Errorf("%s differs from the canonical contribution notice", name)
 		}
 	}
 	packet := files["protocol/packet/vocabulary.go"]
@@ -425,7 +434,10 @@ func TestGenerateSplitsPacketsAndSharedDefinitions(t *testing.T) {
 
 func generatedSource(files map[string]string) string {
 	var b strings.Builder
-	for _, source := range files {
+	for name, source := range files {
+		if !strings.HasSuffix(name, ".go") {
+			continue
+		}
 		b.WriteString(source)
 	}
 	return b.String()
