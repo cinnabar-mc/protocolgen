@@ -8,7 +8,8 @@ type Box [6]float32
 
 // Block identifies a vanilla block type shared by one or more states.
 type Block struct {
-	Name           string
+	Name string
+	// TranslationKey is empty when the supplemental source omits this block.
 	TranslationKey string
 }
 
@@ -39,6 +40,10 @@ type Properties struct {
 	Solid                       bool
 	RequiresCorrectToolForDrops bool
 	CanContainLiquidSource      bool
+	// SupplementalPropertiesAvailable covers TintMethod, LiquidReactionOnTouch
+	// and CanContainLiquidSource. When false, these fields have no measured value.
+	// Shapes report availability separately through Shape.
+	SupplementalPropertiesAvailable bool
 }
 
 // State identifies one state in the source Bedrock block palette.

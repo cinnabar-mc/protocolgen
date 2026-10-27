@@ -9,16 +9,16 @@ var Dispenser = Block{
 }
 
 var dispenserStates = [...]State{
-	{Hash: 1592040637, Block: 1422, Properties: 921},
-	{Hash: 2835567842, Block: 1422, Properties: 921},
-	{Hash: 3674078331, Block: 1422, Properties: 921},
-	{Hash: 1036524128, Block: 1422, Properties: 921},
-	{Hash: 429011097, Block: 1422, Properties: 921},
-	{Hash: 2210236398, Block: 1422, Properties: 921},
-	{Hash: 536734066, Block: 1422, Properties: 921},
-	{Hash: 3890874413, Block: 1422, Properties: 921},
-	{Hash: 2618771760, Block: 1422, Properties: 921},
-	{Hash: 2091830699, Block: 1422, Properties: 921},
-	{Hash: 3668671822, Block: 1422, Properties: 921},
-	{Hash: 3265542969, Block: 1422, Properties: 921},
+	{Hash: 1592040637, Block: 1425, Properties: 921},
+	{Hash: 2835567842, Block: 1425, Properties: 921},
+	{Hash: 3674078331, Block: 1425, Properties: 921},
+	{Hash: 1036524128, Block: 1425, Properties: 921},
+	{Hash: 429011097, Block: 1425, Properties: 921},
+	{Hash: 2210236398, Block: 1425, Properties: 921},
+	{Hash: 536734066, Block: 1425, Properties: 921},
+	{Hash: 3890874413, Block: 1425, Properties: 921},
+	{Hash: 2618771760, Block: 1425, Properties: 921},
+	{Hash: 2091830699, Block: 1425, Properties: 921},
+	{Hash: 3668671822, Block: 1425, Properties: 921},
+	{Hash: 3265542969, Block: 1425, Properties: 921},
 }

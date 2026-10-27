@@ -9,7 +9,7 @@ var StrippedAcaciaLog = Block{
 }
 
 var strippedAcaciaLogStates = [...]State{
-	{Hash: 1367858272, Block: 819, Properties: 1732},
-	{Hash: 2423164843, Block: 819, Properties: 1732},
-	{Hash: 238810689, Block: 819, Properties: 1732},
+	{Hash: 1367858272, Block: 821, Properties: 1734},
+	{Hash: 2423164843, Block: 821, Properties: 1734},
+	{Hash: 238810689, Block: 821, Properties: 1734},
 }

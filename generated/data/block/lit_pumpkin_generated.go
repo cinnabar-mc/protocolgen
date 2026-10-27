@@ -9,8 +9,8 @@ var LitPumpkin = Block{
 }
 
 var litPumpkinStates = [...]State{
-	{Hash: 3759459211, Block: 1034, Properties: 2949},
-	{Hash: 2460675104, Block: 1034, Properties: 2949},
-	{Hash: 909155985, Block: 1034, Properties: 2949},
-	{Hash: 107637426, Block: 1034, Properties: 2949},
+	{Hash: 3759459211, Block: 1037, Properties: 2952},
+	{Hash: 2460675104, Block: 1037, Properties: 2952},
+	{Hash: 909155985, Block: 1037, Properties: 2952},
+	{Hash: 107637426, Block: 1037, Properties: 2952},
 }

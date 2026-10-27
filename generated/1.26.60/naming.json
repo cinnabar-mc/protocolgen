@@ -1,0 +1,709 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.60",
+    "protocol_version": 2225
+  },
+  "entries": [
+    {
+      "type_id": "ActorLink",
+      "name": "EntityLink",
+      "rationale": "Matches gophertunnel EntityLink."
+    },
+    {
+      "type_id": "ActorUniqueID.json#",
+      "name": "ActorUniqueIdentifier",
+      "rationale": "Uses the expanded identifier name to distinguish the source identity."
+    },
+    {
+      "type_id": "AnimatedImageData.json#",
+      "name": "SkinAnimatedImage",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "AnimationMode.json#",
+      "name": "SkinAnimationMode",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData",
+      "name": "AttributeLayerSyncData",
+      "rationale": "Removes packet transport scaffolding; the concise payload name is an uncertain correspondence to gophertunnel's ClientBoundAttributeLayerSync."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::RemoveEnvironmentAttributesData",
+      "name": "RemoveEnvironmentAttributes",
+      "rationale": "Names the remove-environment operation directly; no standalone gophertunnel type exists."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::UpdateAttributeLayerSettingsData",
+      "name": "AttributeLayerSettings",
+      "rationale": "Matches gophertunnel AttributeLayerSettings."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::UpdateAttributeLayersData",
+      "name": "AttributeLayerData",
+      "rationale": "Matches gophertunnel AttributeLayerData."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::UpdateEnvironmentAttributesData",
+      "name": "EnvironmentAttributeData",
+      "rationale": "Matches gophertunnel EnvironmentAttributeData."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ChainedSubcommandData",
+      "name": "ChainedSubcommand",
+      "rationale": "Matches gophertunnel ChainedSubcommand."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ChainedSubcommandRelationship",
+      "name": "ChainedSubcommandValue",
+      "rationale": "Matches gophertunnel ChainedSubcommandValue for a relationship entry."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ConstrainedValueData",
+      "name": "CommandEnumConstraint",
+      "rationale": "Matches gophertunnel CommandEnumConstraint."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::EnumData",
+      "name": "CommandEnum",
+      "rationale": "Matches gophertunnel CommandEnum."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::OverloadData",
+      "name": "CommandOverload",
+      "rationale": "Matches gophertunnel CommandOverload."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ParamData",
+      "name": "CommandParameter",
+      "rationale": "Matches gophertunnel CommandParameter."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::SoftEnumData",
+      "name": "DynamicEnum",
+      "rationale": "Matches gophertunnel DynamicEnum."
+    },
+    {
+      "type_id": "BlockPos.json#",
+      "name": "BlockPosition",
+      "rationale": "Uses the expanded name for this source identity beside the existing BlockPos type."
+    },
+    {
+      "type_id": "CameraInstruction",
+      "name": "CameraInstructionData",
+      "rationale": "The shared camera instruction shape collides with the CameraInstruction packet; Data is an uncertain namespace distinction."
+    },
+    {
+      "type_id": "CameraInstructionOptions::AttachToEntityInstruction",
+      "name": "CameraInstructionTarget",
+      "rationale": "Matches gophertunnel CameraInstructionTarget; the source uses an attach-to-entity spelling."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FadeInstruction",
+      "name": "CameraInstructionFade",
+      "rationale": "Matches gophertunnel CameraInstructionFade."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FadeInstruction::ColorOption",
+      "name": "CameraFadeColor",
+      "rationale": "Names the fade color option directly; the exact gophertunnel field is embedded in CameraInstructionFade."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FadeInstruction::TimeOption",
+      "name": "CameraFadeTimeData",
+      "rationale": "Matches gophertunnel CameraFadeTimeData."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FovInstruction",
+      "name": "CameraInstructionFieldOfView",
+      "rationale": "Matches gophertunnel CameraInstructionFieldOfView."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction",
+      "name": "CameraInstructionSet",
+      "rationale": "Matches gophertunnel CameraInstructionSet."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::EaseOption",
+      "name": "CameraEase",
+      "rationale": "Matches gophertunnel CameraEase."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::EntityOffsetOption",
+      "name": "CameraEntityOffset",
+      "rationale": "Names the entity-offset option directly; no standalone gophertunnel type exists."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::FacingOption",
+      "name": "CameraFacing",
+      "rationale": "Names the facing option directly; no standalone gophertunnel type exists."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::PosOption",
+      "name": "CameraPosition",
+      "rationale": "Names the position option directly; no standalone gophertunnel type exists."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::RotOption",
+      "name": "CameraRotation",
+      "rationale": "Names the rotation option directly; no standalone gophertunnel type exists."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::ViewOffsetOption",
+      "name": "CameraViewOffset",
+      "rationale": "Names the view-offset option directly; no standalone gophertunnel type exists."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SplineInstruction",
+      "name": "CameraSplineInstruction",
+      "rationale": "Matches gophertunnel CameraSplineInstruction."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SplineInstruction::SplineProgressOption",
+      "name": "CameraProgressOption",
+      "rationale": "Matches gophertunnel CameraProgressOption."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SplineInstruction::SplineRotationOption",
+      "name": "CameraRotationOption",
+      "rationale": "Matches gophertunnel CameraRotationOption."
+    },
+    {
+      "type_id": "CameraInstructionOptions::TargetInstruction",
+      "name": "CameraInstructionTargetData",
+      "rationale": "The source target instruction overlaps the attach-to-entity concept; Data is an uncertain disambiguation."
+    },
+    {
+      "type_id": "CameraPresets",
+      "name": "CameraPresetList",
+      "rationale": "The shared camera preset collection collides with the CameraPresets packet; the list suffix is an uncertain but descriptive distinction."
+    },
+    {
+      "type_id": "CommandBlockUpdatePacketPayload",
+      "name": "CommandBlockUpdateData",
+      "rationale": "The inferred target union collides with the CommandBlockUpdate packet; Data preserves the payload role."
+    },
+    {
+      "type_id": "CommandOutput.json#",
+      "name": "CommandOutputData",
+      "rationale": "The shared command-output union collides with the CommandOutput packet; Data preserves the payload role."
+    },
+    {
+      "type_id": "DisconnectPacketMessages",
+      "name": "DisconnectMessagesData",
+      "rationale": "Separates the packet-shaped disconnect message payload from the existing DisconnectMessages concept; the Data suffix is an uncertain distinction."
+    },
+    {
+      "type_id": "EAS::BoolAttributeData",
+      "name": "BooleanAttributeValue",
+      "rationale": "Names the payload by its attribute role and gives its union a distinct common suffix."
+    },
+    {
+      "type_id": "EAS::ColorAttributeData",
+      "name": "ColourAttributeValue",
+      "rationale": "Names the payload by its attribute role and gives its union a distinct common suffix."
+    },
+    {
+      "type_id": "EAS::ConstantAttributeData",
+      "name": "ConstantEnvironmentAttribute",
+      "rationale": "Names the payload by its attribute role and gives its union a distinct common suffix."
+    },
+    {
+      "type_id": "EAS::FloatAttributeData",
+      "name": "FloatAttributeValue",
+      "rationale": "Names the payload by its attribute role and gives its union a distinct common suffix."
+    },
+    {
+      "type_id": "EAS::NoiseTransitionAttributeData",
+      "name": "NoiseTransitionEnvironmentAttribute",
+      "rationale": "Names the payload by its attribute role and gives its union a distinct common suffix."
+    },
+    {
+      "type_id": "EAS::TransitionAttributeData",
+      "name": "TransitionEnvironmentAttribute",
+      "rationale": "Names the payload by its attribute role and gives its union a distinct common suffix."
+    },
+    {
+      "type_id": "EduSharedUriResource.json#",
+      "name": "EducationSharedResourceUri",
+      "rationale": "Uses the expanded name to distinguish this source identity."
+    },
+    {
+      "type_id": "ExperimentToggle.json#",
+      "name": "LevelExperimentToggle",
+      "rationale": "Distinguishes this source type from the other shared record with the same short name."
+    },
+    {
+      "type_id": "Experiments.json#",
+      "name": "LevelExperiments",
+      "rationale": "Distinguishes the level-settings experiment record from the shared experiments record."
+    },
+    {
+      "type_id": "GameRule",
+      "name": "GameRule",
+      "rationale": "Matches gophertunnel GameRule and reviews the source placeholder variant in its value union."
+    },
+    {
+      "type_id": "GameRule.json#",
+      "name": "LevelGameRule",
+      "rationale": "Distinguishes the source identity from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "GameRulesChangedPacketData",
+      "name": "GameRulesChangedData",
+      "rationale": "Names the plural rules container concisely; the corresponding gophertunnel packet is GameRulesChanged."
+    },
+    {
+      "type_id": "GameRulesChangedPacketData.json#",
+      "name": "GameRuleData",
+      "rationale": "Names the individual rule-data payload; the plural packet data container is reviewed separately."
+    },
+    {
+      "type_id": "GameType.json#",
+      "name": "LevelGameType",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "GeneratorType.json#",
+      "name": "LevelGeneratorType",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "InventoryTransaction",
+      "name": "InventoryTransactionData",
+      "rationale": "Matches gophertunnel InventoryTransactionData and avoids the InventoryTransaction packet collision."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::BeaconPaymentActionData",
+      "name": "BeaconPaymentStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::ConsumeActionData",
+      "name": "ConsumeStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftCreativeActionData",
+      "name": "CraftCreativeStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftLoomActionData",
+      "name": "CraftLoomStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftNonImplementedActionData",
+      "name": "CraftNonImplementedStackRequestAction",
+      "rationale": "Matches gophertunnel's deprecated StackRequestAction family member."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRecipeActionData",
+      "name": "CraftRecipeStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRecipeAutoActionData",
+      "name": "AutoCraftRecipeStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRecipeOptionalActionData",
+      "name": "CraftRecipeOptionalStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRepairAndDisenchantActionData",
+      "name": "CraftRepairAndDisenchantStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftResultsActionData",
+      "name": "CraftResultsDeprecatedStackRequestAction",
+      "rationale": "Matches gophertunnel's deprecated StackRequestAction family member."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CreateActionData",
+      "name": "CreateStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::DestroyActionData",
+      "name": "DestroyStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::DropActionData",
+      "name": "DropStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::EmptyItemDescriptorData",
+      "name": "InvalidItemDescriptor",
+      "rationale": "Matches gophertunnel's invalid descriptor used for an empty item slot."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::ItemNameDescriptorData",
+      "name": "DefaultItemDescriptor",
+      "rationale": "Matches gophertunnel's default item descriptor."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::ItemTagDescriptorData",
+      "name": "ItemTagItemDescriptor",
+      "rationale": "Matches gophertunnel's item-tag descriptor."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::LabTableCombineActionData",
+      "name": "LabTableCombineStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::MineBlockActionData",
+      "name": "MineBlockStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::MolangItemDescriptorData",
+      "name": "MoLangItemDescriptor",
+      "rationale": "Matches gophertunnel's MoLang item descriptor."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::NetworkItemInstanceDescriptorData",
+      "name": "ItemInstance",
+      "rationale": "Uses gophertunnel ItemInstance for the network item instance descriptor concept."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::PlaceActionData",
+      "name": "PlaceStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::RecipeIngredientData",
+      "name": "RecipeIngredient",
+      "rationale": "Uses the concise recipe ingredient concept; no standalone gophertunnel type is exported."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::RequestData",
+      "name": "ItemStackRequestData",
+      "rationale": "Uses the gophertunnel ItemStackRequest concept while separating the shared request payload from the packet wrapper."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::SlotInfoData",
+      "name": "StackRequestSlotInfo",
+      "rationale": "Matches gophertunnel StackRequestSlotInfo."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::SwapActionData",
+      "name": "SwapStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::TakeActionData",
+      "name": "TakeStackRequestAction",
+      "rationale": "Matches gophertunnel's StackRequestAction family."
+    },
+    {
+      "type_id": "ItemStackRequestPacketData::RequestData",
+      "name": "ItemStackRequestPacketData",
+      "rationale": "Removes the repeated PacketData/RequestData scaffolding while distinguishing this packet-contained request from shared ItemStackRequestData; the suffix is an uncertain namespace distinction."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload",
+      "name": "EventData",
+      "rationale": "Matches gophertunnel protocol.EventData; bare Event is too generic."
+    },
+    {
+      "type_id": "MapInfoRequestPacketAnon::ClientPixelsProxy",
+      "name": "PixelRequest",
+      "rationale": "Matches gophertunnel PixelRequest for a map client-pixel update."
+    },
+    {
+      "type_id": "Mirror.json#",
+      "name": "StructureMirror",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "PackIdVersion",
+      "name": "PackIDVersionData",
+      "rationale": "Separates the Endstone-shaped duplicate from the filename-derived PackIDVersion; the Data suffix is an uncertain compatibility distinction."
+    },
+    {
+      "type_id": "PlaySoundPacketPayload.json#",
+      "name": "AudioSound",
+      "rationale": "Names the nested sound payload without a packet transport suffix."
+    },
+    {
+      "type_id": "PlayerListPacketPayload",
+      "name": "PlayerListData",
+      "rationale": "The inferred entry union collides with the PlayerList packet; PlayerListData is a concise payload name."
+    },
+    {
+      "type_id": "PlayerLocationPacketPayload",
+      "name": "PlayerLocationData",
+      "rationale": "The inferred location union collides with the PlayerLocation packet; Data preserves the payload role."
+    },
+    {
+      "type_id": "PlayerPermissionLevel.json#",
+      "name": "PlayerPermission",
+      "rationale": "Distinguishes the source identity from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "PlayerUpdateEntityOverridesPacketPayload",
+      "name": "PlayerUpdateEntityOverridesData",
+      "rationale": "The inferred override union collides with the PlayerUpdateEntityOverrides packet; Data preserves the payload role."
+    },
+    {
+      "type_id": "PlayerVideoCapturePacketPayload",
+      "name": "PlayerVideoCaptureData",
+      "rationale": "The inferred action union collides with the PlayerVideoCapture packet; Data preserves the payload role."
+    },
+    {
+      "type_id": "PrimitiveShapeDataPayload",
+      "name": "PrimitiveShape",
+      "rationale": "Matches gophertunnel PrimitiveShape and reviews the source placeholder variant in the shape payload."
+    },
+    {
+      "type_id": "ResourcePackClientResponsePacketPayload",
+      "name": "ResourcePackClientResponseData",
+      "rationale": "The inferred union identity collides with the packet; Data preserves the payload role used by the generated API."
+    },
+    {
+      "type_id": "Rotation.json#",
+      "name": "StructureRotation",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "SemVersion",
+      "name": "SemVersionData",
+      "rationale": "Separates the Endstone-shaped duplicate from the filename-derived SemVersion; the Data suffix is an uncertain compatibility distinction."
+    },
+    {
+      "type_id": "SerializedPersonaPieceHandle.json#",
+      "name": "SkinPersonaPiece",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "ServerSoundHandle.json#",
+      "name": "AudioSoundHandle",
+      "rationale": "Distinguishes the nested audio sound handle from the existing shared source identity."
+    },
+    {
+      "type_id": "SkinImage.json#",
+      "name": "SerializedSkinImage",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "StructureSettings.json#",
+      "name": "StructurePlacementSettings",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "SubChunkPacketPayload::SubChunkPacketData",
+      "name": "SubChunkData",
+      "rationale": "Removes nested packet scaffolding from the sub-chunk payload; no exact gophertunnel shared type exists."
+    },
+    {
+      "type_id": "SyncWorldClocksPacketPayload",
+      "name": "SyncWorldClocksData",
+      "rationale": "The inferred clock update union collides with the SyncWorldClocks packet; Data is an uncertain but descriptive distinction."
+    },
+    {
+      "type_id": "TextDataPayload",
+      "name": "TextShape",
+      "rationale": "Matches gophertunnel TextShape and avoids the TextData union collision."
+    },
+    {
+      "type_id": "TextPacketPayload",
+      "name": "TextData",
+      "rationale": "The inferred text-body union collides with the Text packet; TextData is a concise payload name with no direct gophertunnel equivalent."
+    },
+    {
+      "type_id": "TintMapColor.json#",
+      "name": "SkinTintColor",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "TypedClientNetId<struct ItemStackLegacyRequestIdTag, int32_t, 0>",
+      "name": "ItemStackLegacyRequestID",
+      "rationale": "The template instance is the legacy item-stack request identifier; no direct gophertunnel type is exposed."
+    },
+    {
+      "type_id": "TypedClientNetId<struct ItemStackRequestIdTag, int32_t, 0>",
+      "name": "ItemStackRequestID",
+      "rationale": "Names the request identifier represented by the template instance; no direct gophertunnel type is exposed."
+    },
+    {
+      "type_id": "TypedServerNetId<struct CreativeItemNetIdTag>",
+      "name": "CreativeItemNetID",
+      "rationale": "Names the creative-item network identifier using Go's ID initialism; no direct gophertunnel type is exposed."
+    },
+    {
+      "type_id": "TypedServerNetId<struct ItemStackNetIdTag, int32_t, 0>",
+      "name": "ItemStackNetID",
+      "rationale": "Names the item-stack network identifier using the corresponding gophertunnel concept."
+    },
+    {
+      "type_id": "TypedServerNetId<struct RecipeNetIdTag>",
+      "name": "RecipeNetID",
+      "rationale": "Names the recipe network identifier using Go's ID initialism; no direct gophertunnel type is exposed."
+    },
+    {
+      "type_id": "WebSocketPacketData",
+      "name": "WebSocketData",
+      "rationale": "Removes packet transport scaffolding from the websocket connection payload; no exact gophertunnel equivalent exists."
+    },
+    {
+      "type_id": "cereal::DynamicValue",
+      "name": "DynamicValue",
+      "rationale": "Drops the cereal serializer namespace artifact from the public name."
+    },
+    {
+      "type_id": "cerealizer<NetworkItemInstanceDescriptor>::SerializedData",
+      "name": "NetworkItemInstanceDescriptorSerializedData",
+      "rationale": "Removes cerealizer template syntax while retaining the serialized descriptor concept."
+    },
+    {
+      "type_id": "cerealizer<NetworkItemStackDescriptor>::SerializedData",
+      "name": "NetworkItemStackDescriptorSerializedData",
+      "rationale": "Removes cerealizer template syntax while retaining the serialized descriptor concept."
+    },
+    {
+      "type_id": "cerealizer<RecipeIngredient>::SerializedData",
+      "name": "RecipeIngredientSerializedData",
+      "rationale": "Removes cerealizer template syntax and names the serialized recipe ingredient."
+    },
+    {
+      "type_id": "cerealizer<RecipeUnlockingRequirement>::SerializedData",
+      "name": "RecipeUnlockRequirementSerializedData",
+      "rationale": "Uses gophertunnel's RecipeUnlockRequirement concept after removing cerealizer syntax."
+    },
+    {
+      "type_id": "cerealizer_ExperimentsAnon::ExperimentToggle",
+      "name": "ExperimentToggle",
+      "rationale": "Removes anonymous cerealizer scaffolding; no direct gophertunnel type is exposed."
+    },
+    {
+      "type_id": "enums/ActorEvent",
+      "name": "ActorEventType",
+      "rationale": "Avoids colliding with the ActorEvent packet while preserving the enum concept."
+    },
+    {
+      "type_id": "enums/AgentAnimation",
+      "name": "AgentAnimationType",
+      "rationale": "Avoids colliding with the AgentAnimation packet while preserving the enum concept."
+    },
+    {
+      "type_id": "enums/AnimatePacketPayload::Action",
+      "name": "AnimateAction",
+      "rationale": "Retains the packet context removed by the qualified-name heuristic; matches gophertunnel Animate action terminology."
+    },
+    {
+      "type_id": "enums/CameraAimAssistPacketPayload::Action",
+      "name": "CameraAimAssistAction",
+      "rationale": "Retains the camera aim-assist packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/CameraAimAssistPresetsPacketOperation",
+      "name": "CameraAimAssistPresetOperation",
+      "rationale": "Removes packet scaffolding from the camera aim-assist preset operation enum; no exact gophertunnel type exists."
+    },
+    {
+      "type_id": "enums/ClientCameraAimAssistPacketAction",
+      "name": "ClientCameraAimAssistAction",
+      "rationale": "Removes packet scaffolding from the client camera aim-assist action enum."
+    },
+    {
+      "type_id": "enums/ClientboundTextureShiftPacketPayload::Action",
+      "name": "ClientboundTextureShiftAction",
+      "rationale": "Retains the texture-shift packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/InteractPacketPayload::Action",
+      "name": "InteractAction",
+      "rationale": "Retains the packet context removed by the qualified-name heuristic; matches gophertunnel interaction action terminology."
+    },
+    {
+      "type_id": "enums/ItemStackRequestCereal::ItemDescriptorType",
+      "name": "ItemDescriptorType",
+      "rationale": "Removes Cereal scaffolding from the item descriptor discriminator; gophertunnel exposes the corresponding descriptor constants."
+    },
+    {
+      "type_id": "enums/LabTablePacketPayload::Type",
+      "name": "LabTableType",
+      "rationale": "Retains the LabTable packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/LegacyTelemetryEventPacketPayload::Type",
+      "name": "LegacyTelemetryType",
+      "rationale": "Retains the legacy telemetry packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/MobEffectPacketPayload::Event",
+      "name": "MobEffectEvent",
+      "rationale": "Retains the packet context removed by qualified-name normalization and avoids the shared Event collision."
+    },
+    {
+      "type_id": "enums/MultiplayerSettingsPacketType",
+      "name": "MultiplayerSettingsType",
+      "rationale": "Removes packet scaffolding from the multiplayer-settings discriminator; the suffix is an uncertain distinction because gophertunnel keeps this as packet-local state."
+    },
+    {
+      "type_id": "enums/PlayStatus",
+      "name": "PlayStatusType",
+      "rationale": "Avoids colliding with the PlayStatus packet while preserving the enum concept."
+    },
+    {
+      "type_id": "enums/PlayerLocationPacketPayload::Type",
+      "name": "PlayerLocationType",
+      "rationale": "Retains the PlayerLocation packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/PositionTrackingDBClientRequestPacketPayload::Action",
+      "name": "PositionTrackingDBClientRequestAction",
+      "rationale": "Retains the position-tracking packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/PositionTrackingDBServerBroadcastPacketPayload::Action",
+      "name": "PositionTrackingDBServerBroadcastAction",
+      "rationale": "Retains the position-tracking packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/RequestAbilityPacketPayload::Type",
+      "name": "RequestAbilityType",
+      "rationale": "Retains the RequestAbility packet context removed by qualified-name normalization."
+    },
+    {
+      "type_id": "enums/ServerboundLoadingScreenPacketType",
+      "name": "ServerboundLoadingScreenType",
+      "rationale": "Removes packet scaffolding from the loading-screen discriminator; no exact gophertunnel shared type exists."
+    },
+    {
+      "type_id": "enums/SimulationType",
+      "name": "SimulationTypeEnum",
+      "rationale": "Avoids colliding with the SimulationType packet while preserving the enum concept."
+    },
+    {
+      "type_id": "persona__AnimatedTextureType.json#",
+      "name": "SkinAnimatedTextureType",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "persona__AnimationExpression.json#",
+      "name": "SkinAnimationExpression",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "persona__ArmSize__Type.json#",
+      "name": "SkinArmSize",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "persona__PieceType.json#",
+      "name": "SkinPieceType",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    }
+  ]
+}

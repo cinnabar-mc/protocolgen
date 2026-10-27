@@ -39,11 +39,15 @@ TARGET_12651 := generated/1.26.51
 CLAIMS_12651_MOJANG ?= /tmp/protocolgen-1.26.51-mojang-claims.json
 CLAIMS_12651_ENDSTONE ?= /tmp/protocolgen-1.26.51-endstone-claims.json
 
+TARGET_12660 := generated/1.26.60
+CLAIMS_STABLE_12660_MOJANG ?= /tmp/protocolgen-1.26.60-mojang-claims.json
+CLAIMS_STABLE_12660_ENDSTONE ?= /tmp/protocolgen-1.26.60-endstone-claims.json
+
 CANDIDATE_12660 := candidates/1.26.60-preview.25
 CLAIMS_12660_MOJANG ?= /tmp/protocolgen-1.26.60-preview.25-mojang-claims.json
 CLAIMS_12660_ENDSTONE ?= /tmp/protocolgen-1.26.60-preview.25-endstone-claims.json
 
-.PHONY: regen regen-1.26.50 regen-1.26.51 ingest-1.26.60 hotfix vanilla-data differential verify verify-1.26.50 verify-1.26.51 rust-contract emit-rust regen-rust verify-rust
+.PHONY: regen regen-1.26.50 regen-1.26.51 regen-1.26.60 verify-1.26.60 ingest-1.26.60 hotfix vanilla-data differential verify verify-1.26.50 verify-1.26.51 rust-contract emit-rust regen-rust verify-rust
 
 differential:
 	$(GO) -C differential test ./...
@@ -155,6 +159,38 @@ regen-1.26.51:
 	$(GO) test ./generated/1.26.51/go/... -count=1
 	cargo test --manifest-path $(TARGET_12651)/rust/Cargo.toml
 
+regen-1.26.60:
+	@test -n "$(MOJANG_DIR)" || (echo "MOJANG_DIR is required" >&2; exit 2)
+	@test -n "$(ENDSTONE_DIR)" || (echo "ENDSTONE_DIR is required" >&2; exit 2)
+	$(PROTOCOLGEN) ingest \
+		-lock $(TARGET_12660)/source-lock.json -kind mojang -id mojang \
+		-root $(MOJANG_DIR) -corrections $(TARGET_12660)/corrections/mojang \
+		-out $(CLAIMS_STABLE_12660_MOJANG)
+	$(PROTOCOLGEN) ingest \
+		-lock $(TARGET_12660)/source-lock.json -kind endstone -id endstone \
+		-root $(ENDSTONE_DIR) -corrections $(TARGET_12660)/corrections/endstone \
+		-out $(CLAIMS_STABLE_12660_ENDSTONE)
+	$(PROTOCOLGEN) reconcile-claims \
+		-lock $(TARGET_12660)/source-lock.json \
+		-claims $(CLAIMS_STABLE_12660_MOJANG) \
+		-claims $(CLAIMS_STABLE_12660_ENDSTONE) \
+		-adjudications $(TARGET_12660)/adjudications.json \
+		-directions $(TARGET_12660)/directions.json \
+		-nbt-encodings $(TARGET_12660)/nbt-encodings.json \
+		-out $(TARGET_12660)/manifest.json
+	$(PROTOCOLGEN) validate -manifest $(TARGET_12660)/manifest.json
+	$(PROTOCOLGEN) emit-go \
+		-manifest $(TARGET_12660)/manifest.json \
+		-naming $(TARGET_12660)/naming.json \
+		-domains $(TARGET_12660)/domains.json \
+		-docs $(TARGET_12660)/docs.json \
+		-out $(TARGET_12660)/go \
+		-protocol-import protocolgen/generated/1.26.60/go/protocol
+	$(call emit-rust-snapshot,$(TARGET_12660),rust)
+	$(call emit-rust-contract,$(TARGET_12660))
+	$(GO) test ./generated/1.26.60/go/... -count=1
+	cargo test --manifest-path $(TARGET_12660)/rust/Cargo.toml
+
 hotfix:
 	$(PROTOCOLGEN) hotfix \
 		-base $(MANIFEST) \
@@ -188,6 +224,10 @@ verify-1.26.50: regen-1.26.50
 
 verify-1.26.51: regen-1.26.51
 	@test -z "$$(git status --porcelain -- $(TARGET_12651))" || (echo "1.26.51 regeneration produced drift" >&2; exit 1)
+
+verify-1.26.60: regen-1.26.60
+	git diff --exit-code -- $(TARGET_12660)
+	@test -z "$$(git ls-files --others --exclude-standard -- $(TARGET_12660))" || (echo "1.26.60 regeneration added untracked files" >&2; exit 1)
 
 # Emit manifest $(1) to $(2), passing optional profile/overlay flags $(3), then
 # normalize every Rust source and integration test to its checked-in representation.

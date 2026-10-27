@@ -9,7 +9,7 @@ var ExposedCopperChain = Block{
 }
 
 var exposedCopperChainStates = [...]State{
-	{Hash: 1618350242, Block: 729, Properties: 19},
-	{Hash: 2673656813, Block: 729, Properties: 20},
-	{Hash: 563043671, Block: 729, Properties: 21},
+	{Hash: 1618350242, Block: 731, Properties: 19},
+	{Hash: 2673656813, Block: 731, Properties: 20},
+	{Hash: 563043671, Block: 731, Properties: 21},
 }

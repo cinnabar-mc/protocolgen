@@ -3,10 +3,10 @@
 package block
 
 // MiningEvidenceVersion identifies the native block-tag snapshot.
-const MiningEvidenceVersion = "1.26.51"
+const MiningEvidenceVersion = "1.26.60"
 
 // MiningEvidenceRevision pins the native measurements.
-const MiningEvidenceRevision = "bb896a46ba856c58383e3cfb962a38c45a0dea78"
+const MiningEvidenceRevision = "1e041bf547b7c12e94d2b998f68d5ed146975742"
 
 // MiningSpecialRevision pins the retained special-tool speed evidence.
 const MiningSpecialRevision = "6ec59288287e4045331eaa47ee8fb104278f6b98"
@@ -15,7 +15,7 @@ const MiningSpecialRevision = "6ec59288287e4045331eaa47ee8fb104278f6b98"
 const MiningSpecialSHA256 = "12ff90b5094006b42d87ca7c296ed1bef0e1c2d6d67498aea85b6ece9408b494"
 
 // MiningSourceLockSHA256 identifies every input used for these facts.
-const MiningSourceLockSHA256 = "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4"
+const MiningSourceLockSHA256 = "a1c1c5faa367c92257dd19aa4521033e707f93868035cec568a6cc70a82dd953"
 
 var miningRows = [...]miningRow{
 	{Name: "minecraft:acacia_button", Facts: MiningFacts{EffectiveTools: ToolAxe, HarvestTools: 0, HarvestLevel: -1}},
@@ -422,6 +422,7 @@ var miningRows = [...]miningRow{
 	{Name: "minecraft:diorite_wall", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: ToolPickaxe, HarvestLevel: 0}},
 	{Name: "minecraft:dirt", Facts: MiningFacts{EffectiveTools: ToolShovel, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:dirt_with_roots", Facts: MiningFacts{EffectiveTools: ToolShovel, HarvestTools: 0, HarvestLevel: -1}},
+	{Name: "minecraft:disc_press", Facts: MiningFacts{EffectiveTools: 0, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:dispenser", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: ToolPickaxe, HarvestLevel: 0}},
 	{Name: "minecraft:double_cut_copper_slab", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: ToolPickaxe, HarvestLevel: 1}},
 	{Name: "minecraft:dragon_egg", Facts: MiningFacts{EffectiveTools: 0, HarvestTools: 0, HarvestLevel: -1}},
@@ -699,6 +700,8 @@ var miningRows = [...]miningRow{
 	{Name: "minecraft:horn_coral_fan", Facts: MiningFacts{EffectiveTools: 0, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:horn_coral_wall_fan", Facts: MiningFacts{EffectiveTools: 0, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:ice", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: 0, HarvestLevel: -1}},
+	{Name: "minecraft:ice_crystal", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: 0, HarvestLevel: -1}},
+	{Name: "minecraft:icicle", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:infested_chiseled_stone_bricks", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:infested_cobblestone", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: 0, HarvestLevel: -1}},
 	{Name: "minecraft:infested_cracked_stone_bricks", Facts: MiningFacts{EffectiveTools: ToolPickaxe, HarvestTools: 0, HarvestLevel: -1}},

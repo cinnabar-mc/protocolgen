@@ -9,5 +9,5 @@ var DarkPrismarine = Block{
 }
 
 var darkPrismarineStates = [...]State{
-	{Hash: 2379235463, Block: 541, Properties: 538},
+	{Hash: 2379235463, Block: 543, Properties: 538},
 }

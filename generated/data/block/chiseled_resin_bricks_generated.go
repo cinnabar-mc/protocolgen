@@ -9,5 +9,5 @@ var ChiseledResinBricks = Block{
 }
 
 var chiseledResinBricksStates = [...]State{
-	{Hash: 383663638, Block: 926, Properties: 1311},
+	{Hash: 383663638, Block: 928, Properties: 1311},
 }

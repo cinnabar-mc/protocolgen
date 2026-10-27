@@ -9,7 +9,7 @@ var SpruceLog = Block{
 }
 
 var spruceLogStates = [...]State{
-	{Hash: 507450469, Block: 484, Properties: 432},
-	{Hash: 3747111194, Block: 484, Properties: 10},
-	{Hash: 1636498052, Block: 484, Properties: 10},
+	{Hash: 507450469, Block: 485, Properties: 432},
+	{Hash: 3747111194, Block: 485, Properties: 10},
+	{Hash: 1636498052, Block: 485, Properties: 10},
 }

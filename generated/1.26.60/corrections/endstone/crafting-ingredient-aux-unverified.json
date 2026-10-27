@@ -1,0 +1,21 @@
+{
+  "operations": [
+    {
+      "id": "endstone-crafting-ingredient-aux-unbounded",
+      "file": "types/cerealizer_RecipeIngredient___SerializedData.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:310a997694e81215269e1dce408d741a8c5abea33541fd8c2c113696d30475fc",
+      "replace": {
+        "name": "Aux Value",
+        "type": "varint32"
+      },
+      "why": "Only this dump bounds a crafting-recipe ingredient's aux value to 0..32767, and client behaviour has not confirmed that the client rejects values outside it, so decoding does not reject them until it does.",
+      "evidence": [
+        {
+          "locator": "types/cerealizer_RecipeIngredient___SerializedData.json#/fields/1",
+          "summary": "The bound has no corroborating source: the pinned Mojang docs give no range for this field, unlike the item-stack-request name descriptor, whose 0..32767 bound matches client behaviour and stays."
+        }
+      ]
+    }
+  ]
+}

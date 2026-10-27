@@ -3,17 +3,17 @@
 package data
 
 // MinecraftVersion is the target release of the active catalog.
-const MinecraftVersion = "1.26.50"
+const MinecraftVersion = "1.26.60"
 
 // ProtocolVersion is the protocol used by the target release.
-const ProtocolVersion = 2193
+const ProtocolVersion = 2225
 
 // ProtocolSnapshot identifies the compatible generated codec directory.
-const ProtocolSnapshot = "1.26.51"
+const ProtocolSnapshot = "1.26.60"
 
 // ReleaseChannel distinguishes retail labels from preview labels.
 const ReleaseChannel = "retail"
 
 // SourceLockSHA256 identifies every pinned input in the source lock.
 // It includes the resolved release record as well as every input identity.
-const SourceLockSHA256 = "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4"
+const SourceLockSHA256 = "a1c1c5faa367c92257dd19aa4521033e707f93868035cec568a6cc70a82dd953"

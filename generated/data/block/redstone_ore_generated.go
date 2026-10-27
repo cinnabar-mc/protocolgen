@@ -9,5 +9,5 @@ var RedstoneOre = Block{
 }
 
 var redstoneOreStates = [...]State{
-	{Hash: 180213920, Block: 492, Properties: 1085},
+	{Hash: 180213920, Block: 493, Properties: 1085},
 }

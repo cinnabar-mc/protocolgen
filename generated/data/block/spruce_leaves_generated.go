@@ -9,8 +9,8 @@ var SpruceLeaves = Block{
 }
 
 var spruceLeavesStates = [...]State{
-	{Hash: 1404704691, Block: 553, Properties: 1800},
-	{Hash: 349398120, Block: 553, Properties: 1800},
-	{Hash: 4132709088, Block: 553, Properties: 1800},
-	{Hash: 893048363, Block: 553, Properties: 1800},
+	{Hash: 1404704691, Block: 555, Properties: 1802},
+	{Hash: 349398120, Block: 555, Properties: 1802},
+	{Hash: 4132709088, Block: 555, Properties: 1802},
+	{Hash: 893048363, Block: 555, Properties: 1802},
 }

@@ -9,8 +9,8 @@ var DarkOakLeaves = Block{
 }
 
 var darkOakLeavesStates = [...]State{
-	{Hash: 3062988957, Block: 886, Properties: 986},
-	{Hash: 2007682386, Block: 886, Properties: 986},
-	{Hash: 2409944514, Block: 886, Properties: 986},
-	{Hash: 3465251085, Block: 886, Properties: 986},
+	{Hash: 3062988957, Block: 888, Properties: 986},
+	{Hash: 2007682386, Block: 888, Properties: 986},
+	{Hash: 2409944514, Block: 888, Properties: 986},
+	{Hash: 3465251085, Block: 888, Properties: 986},
 }

@@ -9,5 +9,5 @@ var HardGlass = Block{
 }
 
 var hardGlassStates = [...]State{
-	{Hash: 3520074809, Block: 643, Properties: 2003},
+	{Hash: 3520074809, Block: 645, Properties: 2005},
 }

@@ -9,5 +9,5 @@ var EndPortal = Block{
 }
 
 var endPortalStates = [...]State{
-	{Hash: 3750952799, Block: 1268, Properties: 3441},
+	{Hash: 3750952799, Block: 1271, Properties: 3444},
 }

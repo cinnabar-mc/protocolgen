@@ -9,5 +9,5 @@ var Camera = Block{
 }
 
 var cameraStates = [...]State{
-	{Hash: 2407351418, Block: 1181, Properties: 3312},
+	{Hash: 2407351418, Block: 1184, Properties: 3315},
 }

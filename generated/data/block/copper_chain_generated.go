@@ -9,7 +9,7 @@ var CopperChain = Block{
 }
 
 var copperChainStates = [...]State{
-	{Hash: 1502169779, Block: 392, Properties: 19},
-	{Hash: 446863208, Block: 392, Properties: 20},
-	{Hash: 2557476350, Block: 392, Properties: 21},
+	{Hash: 1502169779, Block: 393, Properties: 19},
+	{Hash: 446863208, Block: 393, Properties: 20},
+	{Hash: 2557476350, Block: 393, Properties: 21},
 }

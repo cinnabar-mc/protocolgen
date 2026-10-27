@@ -9,7 +9,7 @@ var PaleOakLog = Block{
 }
 
 var paleOakLogStates = [...]State{
-	{Hash: 1544644811, Block: 879, Properties: 925},
-	{Hash: 489338240, Block: 879, Properties: 1733},
-	{Hash: 2599951382, Block: 879, Properties: 1733},
+	{Hash: 1544644811, Block: 881, Properties: 925},
+	{Hash: 489338240, Block: 881, Properties: 1735},
+	{Hash: 2599951382, Block: 881, Properties: 1735},
 }

@@ -9,5 +9,5 @@ var RedStainedGlass = Block{
 }
 
 var redStainedGlassStates = [...]State{
-	{Hash: 1491455451, Block: 687, Properties: 2141},
+	{Hash: 1491455451, Block: 689, Properties: 2143},
 }

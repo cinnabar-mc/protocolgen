@@ -9,8 +9,8 @@ var WaxedWeatheredCopperBulb = Block{
 }
 
 var waxedWeatheredCopperBulbStates = [...]State{
-	{Hash: 3131191370, Block: 813, Properties: 603},
-	{Hash: 787413515, Block: 813, Properties: 2460},
-	{Hash: 4186497941, Block: 813, Properties: 603},
-	{Hash: 4027074240, Block: 813, Properties: 2460},
+	{Hash: 3131191370, Block: 815, Properties: 603},
+	{Hash: 787413515, Block: 815, Properties: 2462},
+	{Hash: 4186497941, Block: 815, Properties: 603},
+	{Hash: 4027074240, Block: 815, Properties: 2462},
 }

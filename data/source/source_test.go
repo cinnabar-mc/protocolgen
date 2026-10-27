@@ -48,7 +48,7 @@ func TestBundledSourceInputsAndTarget(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if sources.Lock.Target.MinecraftVersion != "1.26.50" || sources.Lock.Target.ProtocolVersion != 2193 {
+	if sources.Lock.Target.MinecraftVersion != "1.26.60" || sources.Lock.Target.ProtocolVersion != 2225 {
 		t.Fatalf("unexpected migrated target: %+v", sources.Lock)
 	}
 	for name, input := range sources.Lock.Inputs {

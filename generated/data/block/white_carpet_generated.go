@@ -9,5 +9,5 @@ var WhiteCarpet = Block{
 }
 
 var whiteCarpetStates = [...]State{
-	{Hash: 1460445510, Block: 1162, Properties: 3303},
+	{Hash: 1460445510, Block: 1165, Properties: 3306},
 }

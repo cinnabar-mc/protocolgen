@@ -9,5 +9,5 @@ var CrimsonFungus = Block{
 }
 
 var crimsonFungusStates = [...]State{
-	{Hash: 3511509775, Block: 1389, Properties: 3507},
+	{Hash: 3511509775, Block: 1392, Properties: 3510},
 }

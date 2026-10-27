@@ -9,5 +9,5 @@ var StructureVoid = Block{
 }
 
 var structureVoidStates = [...]State{
-	{Hash: 1150271535, Block: 463, Properties: 1584},
+	{Hash: 1150271535, Block: 464, Properties: 1585},
 }

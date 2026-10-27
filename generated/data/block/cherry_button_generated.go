@@ -9,16 +9,16 @@ var CherryButton = Block{
 }
 
 var cherryButtonStates = [...]State{
-	{Hash: 3492468297, Block: 608, Properties: 94},
-	{Hash: 3553943120, Block: 608, Properties: 95},
-	{Hash: 3369518651, Block: 608, Properties: 96},
-	{Hash: 3430993474, Block: 608, Properties: 97},
-	{Hash: 3246569005, Block: 608, Properties: 98},
-	{Hash: 3308043828, Block: 608, Properties: 99},
-	{Hash: 2586072892, Block: 608, Properties: 100},
-	{Hash: 2524598069, Block: 608, Properties: 101},
-	{Hash: 2463123246, Block: 608, Properties: 102},
-	{Hash: 2401648423, Block: 608, Properties: 103},
-	{Hash: 2831972184, Block: 608, Properties: 104},
-	{Hash: 2770497361, Block: 608, Properties: 105},
+	{Hash: 3492468297, Block: 610, Properties: 94},
+	{Hash: 3553943120, Block: 610, Properties: 95},
+	{Hash: 3369518651, Block: 610, Properties: 96},
+	{Hash: 3430993474, Block: 610, Properties: 97},
+	{Hash: 3246569005, Block: 610, Properties: 98},
+	{Hash: 3308043828, Block: 610, Properties: 99},
+	{Hash: 2586072892, Block: 610, Properties: 100},
+	{Hash: 2524598069, Block: 610, Properties: 101},
+	{Hash: 2463123246, Block: 610, Properties: 102},
+	{Hash: 2401648423, Block: 610, Properties: 103},
+	{Hash: 2831972184, Block: 610, Properties: 104},
+	{Hash: 2770497361, Block: 610, Properties: 105},
 }

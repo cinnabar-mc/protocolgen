@@ -1,0 +1,50 @@
+{
+  "operations": [
+    {
+      "id": "editor-network-is-nbt-mojang",
+      "file": "EditorNetworkPacketVariantPayload.json",
+      "pointer": "/properties",
+      "pre_patch_sha256": "sha256:c32b7b49b3fc55b21a569eb10f87a08391e9dc5d3d8bc1e0636cc1da3752af2d",
+      "replace": {
+        "Route To Manager": {
+          "type": "boolean",
+          "x-underlying-type": "boolean",
+          "x-ordinal-index": 0
+        },
+        "Payload": {
+          "type": "object",
+          "x-wire-kind": "nbt",
+          "x-ordinal-index": 1
+        }
+      },
+      "why": "EditorNetwork's protocol 2168 payload is a NetworkLittleEndian NBT value after the route flag; the documented raw variant name/data strings are stale.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v712/serializer/EditorNetworkSerializer_v712.java",
+          "summary": "The inherited serializer writes the route flag and delegates the remaining payload to the inherited NBT serializer; v2168 does not replace it."
+        },
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v534/serializer/EditorNetworkSerializer_v534.java",
+          "summary": "The inherited serializer encodes EditorNetwork payload with writeTag/readTag."
+        }
+      ]
+    },
+    {
+      "id": "editor-network-payload-is-required",
+      "file": "EditorNetworkPacketVariantPayload.json",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:c8c9590259358d282305e02ea16b6aa7182fc6740db730116696d9045eedbda8",
+      "replace": [
+        "Route To Manager",
+        "Payload"
+      ],
+      "why": "The corrected EditorNetwork payload is a required NBT field following the required route flag.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v712/serializer/EditorNetworkSerializer_v712.java",
+          "summary": "The inherited serializer always writes the route flag and NBT payload; neither field is optional."
+        }
+      ]
+    }
+  ]
+}

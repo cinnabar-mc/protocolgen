@@ -9,12 +9,12 @@ one.
 | Path | Contents | Consumed by |
 | --- | --- | --- |
 | `generated/<version>/manifest.json` | Canonical packet and type layouts, with source pins, corrections and adjudications | Every emitter, `verify-gophertunnel`, the BDS capture. Its SHA-256 is `MANIFEST_SHA256` in the contract crate and is pinned by Cinnabar's `assets/bedrock-target.json` |
-| `generated/<version>/go/protocol` | Go codec: shared types grouped by domain, one file per packet under `packet/`, direction-aware packet pools | `differential/` harnesses (1.26.51); `internal/roundtrip` tests (1.26.40) |
+| `generated/<version>/go/protocol` | Go codec: shared types grouped by domain, one file per packet under `packet/`, direction-aware packet pools | `differential/` harnesses (1.26.51); `internal/roundtrip` tests (1.26.40 and 1.26.60) |
 | `generated/<version>/rust` | Rust crate `bedrock-protocol-<version>` with round-trip tests | CI only (check, clippy, test) |
-| `generated/<default>/rust-contract` | The same crate under the [Rust codec contract](rust-codec-contract.md) | Vendored by Cinnabar as `crates/protocol/vendor/bedrock-protocol-1-26-51`; `differential/retail` runner and bench |
+| `generated/1.26.51/rust-contract`, `generated/<default>/rust-contract` | The same crate under the [Rust codec contract](rust-codec-contract.md) | Vendored by Cinnabar as `crates/protocol/vendor/bedrock-protocol-1-26-51`; `differential/retail` runner and bench |
 | `generated/<version>/vanilla-data` | Raw packet payloads and NBT registries captured from a pinned BDS, indexed by `capture.json` (1.26.40 and 1.26.44 only) | No current consumer here or in Cinnabar |
 | `generated/1.26.50/changelog.md`, `gophertunnel.md` | Packet changes from 2168 to 2187, and the gophertunnel edits they need | Whoever updates gophertunnel |
-| `generated/<default>/gophertunnel-layout.json`, `semantics.json` | Gophertunnel file layout and field names; actor-ID field markings | `emit-go -layout`; `emit-go` reads `semantics.json` by default |
+| `generated/1.26.51/gophertunnel-layout.json`, `semantics.json` | Gophertunnel file layout and field names; actor-ID field markings | `emit-go -layout`; `emit-go` reads `semantics.json` by default |
 | `docs/gophertunnel-gap-1.26.51.md` | Remaining differences from gophertunnel | Reference |
 | `generated/data` | Go module `github.com/cinnabar-mc/protocolgen/generated/data`: block, biome, entity, item and voxel-shape facts plus NBT registry payloads; standard library only. See its [README](../generated/data/README.md) | Cinnabar's `tools/registrygen` (block and biome registries, item tags, block-destroy table) |
 
@@ -41,13 +41,15 @@ and inputs. It does not relicense the source documents or game-data catalog.
 ## Regenerating and checking
 
 Every `verify` target regenerates and fails if the committed output changes.
-CI runs all of them except `verify-data`.
+CI checks every Rust snapshot from the committed manifests. The source-based
+1.26.60 check is `make verify-1.26.60`; `verify-data` also requires local BDS inputs.
 
 | Output | Regenerate | Check |
 | --- | --- | --- |
 | 1.26.40 and the 1.26.44 hotfix | `make regen hotfix` | `make verify` (also runs `differential`) |
 | 1.26.50 | `make regen-1.26.50` | `make verify-1.26.50` |
 | 1.26.51, including `rust-contract` | `make regen-1.26.51` | `make verify-1.26.51` |
+| 1.26.60, including `rust-contract` | `make regen-1.26.60` | `make verify-1.26.60` |
 | All Rust crates, without doc checkouts | `make regen-rust` | `make verify-rust` |
 | `rust-contract` only | `make rust-contract` | Same target; also runs clippy and tests |
 | `generated/data` | `make generate-data CLOUDBURST_DIR=… BDS_DIR=…` | `make verify-data` |

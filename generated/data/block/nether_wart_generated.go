@@ -9,8 +9,8 @@ var NetherWart = Block{
 }
 
 var netherWartStates = [...]State{
-	{Hash: 2265171062, Block: 1384, Properties: 3500},
-	{Hash: 2203696239, Block: 1384, Properties: 3501},
-	{Hash: 2388120708, Block: 1384, Properties: 3502},
-	{Hash: 2326645885, Block: 1384, Properties: 3503},
+	{Hash: 2265171062, Block: 1387, Properties: 3503},
+	{Hash: 2203696239, Block: 1387, Properties: 3504},
+	{Hash: 2388120708, Block: 1387, Properties: 3505},
+	{Hash: 2326645885, Block: 1387, Properties: 3506},
 }

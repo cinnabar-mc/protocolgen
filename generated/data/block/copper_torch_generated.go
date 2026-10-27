@@ -9,10 +9,10 @@ var CopperTorch = Block{
 }
 
 var copperTorchStates = [...]State{
-	{Hash: 192591789, Block: 481, Properties: 1026},
-	{Hash: 3850779857, Block: 481, Properties: 1027},
-	{Hash: 1577683875, Block: 481, Properties: 1028},
-	{Hash: 529097594, Block: 481, Properties: 1029},
-	{Hash: 2486952284, Block: 481, Properties: 1030},
-	{Hash: 3879763396, Block: 481, Properties: 1026},
+	{Hash: 192591789, Block: 482, Properties: 1026},
+	{Hash: 3850779857, Block: 482, Properties: 1027},
+	{Hash: 1577683875, Block: 482, Properties: 1028},
+	{Hash: 529097594, Block: 482, Properties: 1029},
+	{Hash: 2486952284, Block: 482, Properties: 1030},
+	{Hash: 3879763396, Block: 482, Properties: 1026},
 }

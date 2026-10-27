@@ -9,6 +9,6 @@ var MagentaCandleCake = Block{
 }
 
 var magentaCandleCakeStates = [...]State{
-	{Hash: 4186653009, Block: 900, Properties: 201},
-	{Hash: 3131346438, Block: 900, Properties: 202},
+	{Hash: 4186653009, Block: 902, Properties: 201},
+	{Hash: 3131346438, Block: 902, Properties: 202},
 }

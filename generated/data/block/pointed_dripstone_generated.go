@@ -9,14 +9,14 @@ var PointedDripstone = Block{
 }
 
 var pointedDripstoneStates = [...]State{
-	{Hash: 604419874, Block: 1217, Properties: 573},
-	{Hash: 3995324587, Block: 1217, Properties: 574},
-	{Hash: 575507503, Block: 1217, Properties: 575},
-	{Hash: 3693325889, Block: 1217, Properties: 576},
-	{Hash: 3023418371, Block: 1217, Properties: 577},
-	{Hash: 1659726445, Block: 1217, Properties: 578},
-	{Hash: 2940018016, Block: 1217, Properties: 574},
-	{Hash: 3815168228, Block: 1217, Properties: 575},
-	{Hash: 2638019318, Block: 1217, Properties: 576},
-	{Hash: 1968111800, Block: 1217, Properties: 577},
+	{Hash: 604419874, Block: 1220, Properties: 573},
+	{Hash: 3995324587, Block: 1220, Properties: 574},
+	{Hash: 575507503, Block: 1220, Properties: 575},
+	{Hash: 3693325889, Block: 1220, Properties: 576},
+	{Hash: 3023418371, Block: 1220, Properties: 577},
+	{Hash: 1659726445, Block: 1220, Properties: 578},
+	{Hash: 2940018016, Block: 1220, Properties: 574},
+	{Hash: 3815168228, Block: 1220, Properties: 575},
+	{Hash: 2638019318, Block: 1220, Properties: 576},
+	{Hash: 1968111800, Block: 1220, Properties: 577},
 }

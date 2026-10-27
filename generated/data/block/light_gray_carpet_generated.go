@@ -9,5 +9,5 @@ var LightGrayCarpet = Block{
 }
 
 var lightGrayCarpetStates = [...]State{
-	{Hash: 1344176194, Block: 1464, Properties: 3693},
+	{Hash: 1344176194, Block: 1467, Properties: 3696},
 }

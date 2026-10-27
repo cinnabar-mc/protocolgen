@@ -9,6 +9,6 @@ var JungleSlab = Block{
 }
 
 var jungleSlabStates = [...]State{
-	{Hash: 2206898405, Block: 422, Properties: 1521},
-	{Hash: 2626457906, Block: 422, Properties: 1522},
+	{Hash: 2206898405, Block: 423, Properties: 1522},
+	{Hash: 2626457906, Block: 423, Properties: 1523},
 }

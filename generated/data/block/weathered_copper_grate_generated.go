@@ -9,5 +9,5 @@ var WeatheredCopperGrate = Block{
 }
 
 var weatheredCopperGrateStates = [...]State{
-	{Hash: 1315604322, Block: 387, Properties: 1476},
+	{Hash: 1315604322, Block: 388, Properties: 1477},
 }

@@ -9,6 +9,6 @@ var DarkPrismarineSlab = Block{
 }
 
 var darkPrismarineSlabStates = [...]State{
-	{Hash: 1463596084, Block: 817, Properties: 1482},
-	{Hash: 822899273, Block: 817, Properties: 1483},
+	{Hash: 1463596084, Block: 819, Properties: 1483},
+	{Hash: 822899273, Block: 819, Properties: 1484},
 }

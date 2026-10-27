@@ -9,5 +9,5 @@ var DiamondOre = Block{
 }
 
 var diamondOreStates = [...]State{
-	{Hash: 1419890941, Block: 538, Properties: 1085},
+	{Hash: 1419890941, Block: 540, Properties: 1085},
 }

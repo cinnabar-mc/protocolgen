@@ -9,6 +9,6 @@ var NetherBrickSlab = Block{
 }
 
 var netherBrickSlabStates = [...]State{
-	{Hash: 3587304362, Block: 887, Properties: 2600},
-	{Hash: 513175867, Block: 887, Properties: 2601},
+	{Hash: 3587304362, Block: 889, Properties: 2602},
+	{Hash: 513175867, Block: 889, Properties: 2603},
 }

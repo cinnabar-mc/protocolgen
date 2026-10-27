@@ -9,5 +9,5 @@ var CyanShulkerBox = Block{
 }
 
 var cyanShulkerBoxStates = [...]State{
-	{Hash: 2220391111, Block: 1099, Properties: 3169},
+	{Hash: 2220391111, Block: 1102, Properties: 3172},
 }

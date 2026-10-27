@@ -9,6 +9,6 @@ var WhiteConcreteSlab = Block{
 }
 
 var whiteConcreteSlabStates = [...]State{
-	{Hash: 3095111337, Block: 614, Properties: 307},
-	{Hash: 4141976654, Block: 614, Properties: 308},
+	{Hash: 3095111337, Block: 616, Properties: 307},
+	{Hash: 4141976654, Block: 616, Properties: 308},
 }

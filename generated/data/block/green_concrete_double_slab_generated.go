@@ -9,6 +9,6 @@ var GreenConcreteDoubleSlab = Block{
 }
 
 var greenConcreteDoubleSlabStates = [...]State{
-	{Hash: 60226230, Block: 624, Properties: 477},
-	{Hash: 3629858911, Block: 624, Properties: 477},
+	{Hash: 60226230, Block: 626, Properties: 477},
+	{Hash: 3629858911, Block: 626, Properties: 477},
 }

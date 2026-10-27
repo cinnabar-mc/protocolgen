@@ -9,6 +9,6 @@ var WarpedDoubleSlab = Block{
 }
 
 var warpedDoubleSlabStates = [...]State{
-	{Hash: 2139529366, Block: 546, Properties: 1756},
-	{Hash: 1318646463, Block: 546, Properties: 1756},
+	{Hash: 2139529366, Block: 548, Properties: 1758},
+	{Hash: 1318646463, Block: 548, Properties: 1758},
 }

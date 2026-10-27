@@ -9,5 +9,5 @@ var JunglePlanks = Block{
 }
 
 var junglePlanksStates = [...]State{
-	{Hash: 1113608855, Block: 1019, Properties: 2922},
+	{Hash: 1113608855, Block: 1022, Properties: 2925},
 }

@@ -9,5 +9,5 @@ var PinkTulip = Block{
 }
 
 var pinkTulipStates = [...]State{
-	{Hash: 2503948770, Block: 503, Properties: 219},
+	{Hash: 2503948770, Block: 504, Properties: 219},
 }

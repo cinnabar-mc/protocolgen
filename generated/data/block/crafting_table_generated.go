@@ -9,5 +9,5 @@ var CraftingTable = Block{
 }
 
 var craftingTableStates = [...]State{
-	{Hash: 1752181952, Block: 823, Properties: 1475},
+	{Hash: 1752181952, Block: 825, Properties: 1476},
 }

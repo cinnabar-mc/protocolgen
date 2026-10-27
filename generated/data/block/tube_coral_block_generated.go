@@ -9,5 +9,5 @@ var TubeCoralBlock = Block{
 }
 
 var tubeCoralBlockStates = [...]State{
-	{Hash: 2896049167, Block: 1238, Properties: 3418},
+	{Hash: 2896049167, Block: 1241, Properties: 3421},
 }

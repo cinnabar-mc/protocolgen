@@ -9,6 +9,6 @@ var ExposedCopperLantern = Block{
 }
 
 var exposedCopperLanternStates = [...]State{
-	{Hash: 2162624154, Block: 431, Properties: 1560},
-	{Hash: 3217930725, Block: 431, Properties: 1561},
+	{Hash: 2162624154, Block: 432, Properties: 1561},
+	{Hash: 3217930725, Block: 432, Properties: 1562},
 }

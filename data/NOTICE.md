@@ -10,7 +10,10 @@ The semantic values are derived from:
   biome scalar values and numeric IDs from the CC0-1.0
   [didntpot/bedrock-data](https://github.com/didntpot/bedrock-data) snapshot.
   Selected original files and its licence are retained in
-  [source/inputs/1.26.51/native](source/inputs/1.26.51/native/README.md).
+  [source/inputs/1.26.60/native](source/inputs/1.26.60/native/README.md).
+  The active snapshot is `release/1.26.60` at commit
+  `1e041bf547b7c12e94d2b998f68d5ed146975742`, with upstream file hashes
+  verified against `versions.json`.
 - Block geometry and rendering fields, named voxel shapes, biome tag memberships,
   data-driven block components and complete item registry identities/components
   from [CloudburstMC/Data](https://github.com/CloudburstMC/Data)

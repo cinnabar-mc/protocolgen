@@ -9,6 +9,6 @@ var BambooSapling = Block{
 }
 
 var bambooSaplingStates = [...]State{
-	{Hash: 2908798879, Block: 1254, Properties: 3430},
-	{Hash: 1853492308, Block: 1254, Properties: 3430},
+	{Hash: 2908798879, Block: 1257, Properties: 3433},
+	{Hash: 1853492308, Block: 1257, Properties: 3433},
 }

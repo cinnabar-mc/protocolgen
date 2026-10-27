@@ -9,6 +9,6 @@ var WaxedWeatheredCutCopperSlab = Block{
 }
 
 var waxedWeatheredCutCopperSlabStates = [...]State{
-	{Hash: 2535400864, Block: 1008, Properties: 2910},
-	{Hash: 2004286621, Block: 1008, Properties: 2911},
+	{Hash: 2535400864, Block: 1011, Properties: 2913},
+	{Hash: 2004286621, Block: 1011, Properties: 2914},
 }

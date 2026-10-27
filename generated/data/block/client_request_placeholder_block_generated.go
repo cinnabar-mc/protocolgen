@@ -9,5 +9,5 @@ var ClientRequestPlaceholderBlock = Block{
 }
 
 var clientRequestPlaceholderBlockStates = [...]State{
-	{Hash: 2337069118, Block: 490, Properties: 1629},
+	{Hash: 2337069118, Block: 491, Properties: 1630},
 }

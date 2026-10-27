@@ -9,5 +9,5 @@ var AncientDebris = Block{
 }
 
 var ancientDebrisStates = [...]State{
-	{Hash: 274932653, Block: 907, Properties: 2685},
+	{Hash: 274932653, Block: 909, Properties: 2687},
 }

@@ -9,5 +9,5 @@ var GildedBlackstone = Block{
 }
 
 var gildedBlackstoneStates = [...]State{
-	{Hash: 1394655156, Block: 597, Properties: 1906},
+	{Hash: 1394655156, Block: 599, Properties: 1908},
 }

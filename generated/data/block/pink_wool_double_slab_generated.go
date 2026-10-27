@@ -9,6 +9,6 @@ var PinkWoolDoubleSlab = Block{
 }
 
 var pinkWoolDoubleSlabStates = [...]State{
-	{Hash: 1745715234, Block: 434, Properties: 68},
-	{Hash: 1346907939, Block: 434, Properties: 68},
+	{Hash: 1745715234, Block: 435, Properties: 68},
+	{Hash: 1346907939, Block: 435, Properties: 68},
 }

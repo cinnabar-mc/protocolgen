@@ -9,16 +9,16 @@ var Dropper = Block{
 }
 
 var dropperStates = [...]State{
-	{Hash: 894753366, Block: 1209, Properties: 921},
-	{Hash: 9946113, Block: 1209, Properties: 921},
-	{Hash: 3700894404, Block: 1209, Properties: 921},
-	{Hash: 3017687071, Block: 1209, Properties: 921},
-	{Hash: 2995873834, Block: 1209, Properties: 921},
-	{Hash: 1843022821, Block: 1209, Properties: 921},
-	{Hash: 1950059937, Block: 1209, Properties: 921},
-	{Hash: 3249606838, Block: 1209, Properties: 921},
-	{Hash: 461233679, Block: 1209, Properties: 921},
-	{Hash: 1962380500, Block: 1209, Properties: 921},
-	{Hash: 4051180405, Block: 1209, Properties: 921},
-	{Hash: 787716250, Block: 1209, Properties: 921},
+	{Hash: 894753366, Block: 1212, Properties: 921},
+	{Hash: 9946113, Block: 1212, Properties: 921},
+	{Hash: 3700894404, Block: 1212, Properties: 921},
+	{Hash: 3017687071, Block: 1212, Properties: 921},
+	{Hash: 2995873834, Block: 1212, Properties: 921},
+	{Hash: 1843022821, Block: 1212, Properties: 921},
+	{Hash: 1950059937, Block: 1212, Properties: 921},
+	{Hash: 3249606838, Block: 1212, Properties: 921},
+	{Hash: 461233679, Block: 1212, Properties: 921},
+	{Hash: 1962380500, Block: 1212, Properties: 921},
+	{Hash: 4051180405, Block: 1212, Properties: 921},
+	{Hash: 787716250, Block: 1212, Properties: 921},
 }

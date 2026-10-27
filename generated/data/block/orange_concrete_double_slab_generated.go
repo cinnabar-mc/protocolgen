@@ -9,6 +9,6 @@ var OrangeConcreteDoubleSlab = Block{
 }
 
 var orangeConcreteDoubleSlabStates = [...]State{
-	{Hash: 1144327432, Block: 1049, Properties: 477},
-	{Hash: 2180181973, Block: 1049, Properties: 477},
+	{Hash: 1144327432, Block: 1052, Properties: 477},
+	{Hash: 2180181973, Block: 1052, Properties: 477},
 }

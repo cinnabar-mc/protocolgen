@@ -9,5 +9,5 @@ var MossBlock = Block{
 }
 
 var mossBlockStates = [...]State{
-	{Hash: 3743819255, Block: 1004, Properties: 2907},
+	{Hash: 3743819255, Block: 1007, Properties: 2910},
 }

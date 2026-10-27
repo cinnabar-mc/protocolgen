@@ -9,5 +9,5 @@ var Shroomlight = Block{
 }
 
 var shroomlightStates = [...]State{
-	{Hash: 2341039404, Block: 676, Properties: 2104},
+	{Hash: 2341039404, Block: 678, Properties: 2106},
 }

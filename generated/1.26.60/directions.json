@@ -1,0 +1,2166 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.60",
+    "protocol_version": 2225
+  },
+  "source": {
+    "repository": "https://github.com/HashimTheArab/gophertunnel",
+    "revision": "8c30047d86617a56e1f1871e3a1d47ec4f670d99",
+    "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+    "sha256": "sha256:5dfbc24afcabf05c94ded80221054d6bae01cc53270faf21105e3ba89af81edd"
+  },
+  "packets": [
+    {
+      "id": 1,
+      "name": "LoginPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 1 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 2,
+      "name": "PlayStatusPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 2 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 3,
+      "name": "ServerToClientHandshakePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 3 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 4,
+      "name": "ClientToServerHandshakePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 4 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 5,
+      "name": "DisconnectPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 5 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 6,
+      "name": "ResourcePacksInfoPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 6 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 7,
+      "name": "ResourcePackStackPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 7 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 8,
+      "name": "ResourcePackClientResponsePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 8 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 9,
+      "name": "TextPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 9 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 10,
+      "name": "SetTimePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 10 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 11,
+      "name": "StartGamePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 11 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 12,
+      "name": "AddPlayerPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 12 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 13,
+      "name": "AddActorPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 13 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 14,
+      "name": "RemoveActorPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 14 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 15,
+      "name": "AddItemActorPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 15 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 16,
+      "name": "ServerPlayerPostMovePositionPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 16 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 17,
+      "name": "TakeItemActorPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 17 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 18,
+      "name": "MoveActorAbsolutePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 18 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 19,
+      "name": "MovePlayerPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 19 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 21,
+      "name": "UpdateBlockPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 21 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 22,
+      "name": "AddPaintingPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 22 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 25,
+      "name": "LevelEventPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 25 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 26,
+      "name": "BlockEventPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 26 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 27,
+      "name": "ActorEventPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 27 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 28,
+      "name": "MobEffectPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 28 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 29,
+      "name": "UpdateAttributesPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 29 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 30,
+      "name": "InventoryTransactionPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 30 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 31,
+      "name": "MobEquipmentPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 31 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 32,
+      "name": "MobArmorEquipmentPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 32 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 33,
+      "name": "InteractPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 33 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 34,
+      "name": "BlockPickRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 34 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 35,
+      "name": "ActorPickRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 35 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 36,
+      "name": "PlayerActionPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 36 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 38,
+      "name": "HurtArmorPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 38 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 39,
+      "name": "SetActorDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 39 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 40,
+      "name": "SetActorMotionPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 40 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 41,
+      "name": "SetActorLinkPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 41 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 42,
+      "name": "SetHealthPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 42 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 43,
+      "name": "SetSpawnPositionPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 43 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 44,
+      "name": "AnimatePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 44 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 45,
+      "name": "RespawnPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 45 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 46,
+      "name": "ContainerOpenPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 46 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 47,
+      "name": "ContainerClosePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 47 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 48,
+      "name": "PlayerHotbarPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 48 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 49,
+      "name": "InventoryContentPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 49 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 50,
+      "name": "InventorySlotPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 50 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 51,
+      "name": "ContainerSetDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 51 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 52,
+      "name": "CraftingDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 52 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 54,
+      "name": "GuiDataPickItemPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 54 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 56,
+      "name": "BlockActorDataPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 56 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 58,
+      "name": "LevelChunkPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 58 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 59,
+      "name": "SetCommandsEnabledPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 59 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 60,
+      "name": "SetDifficultyPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 60 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 61,
+      "name": "ChangeDimensionPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 61 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 62,
+      "name": "SetPlayerGameTypePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 62 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 63,
+      "name": "PlayerListPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 63 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 64,
+      "name": "SimpleEventPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 64 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 65,
+      "name": "LegacyTelemetryEventPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 65 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 66,
+      "name": "SpawnExperienceOrbPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 66 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 67,
+      "name": "ClientboundMapItemDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 67 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 68,
+      "name": "MapInfoRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 68 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 69,
+      "name": "RequestChunkRadiusPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 69 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 70,
+      "name": "ChunkRadiusUpdatedPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 70 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 72,
+      "name": "GameRulesChangedPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 72 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 73,
+      "name": "CameraPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 73 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 74,
+      "name": "BossEventPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 74 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 75,
+      "name": "ShowCreditsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 75 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 76,
+      "name": "AvailableCommandsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 76 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 77,
+      "name": "CommandRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 77 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 78,
+      "name": "CommandBlockUpdatePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 78 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 79,
+      "name": "CommandOutputPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 79 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 80,
+      "name": "UpdateTradePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 80 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 81,
+      "name": "UpdateEquipPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 81 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 82,
+      "name": "ResourcePackDataInfoPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 82 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 83,
+      "name": "ResourcePackChunkDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 83 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 84,
+      "name": "ResourcePackChunkRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 84 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 85,
+      "name": "TransferPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 85 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 86,
+      "name": "PlaySoundPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 86 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 87,
+      "name": "StopSoundPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 87 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 88,
+      "name": "SetTitlePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 88 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 89,
+      "name": "AddBehaviorTreePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 89 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 90,
+      "name": "StructureBlockUpdatePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 90 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 91,
+      "name": "ShowStoreOfferPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 91 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 92,
+      "name": "PurchaseReceiptPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 92 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 93,
+      "name": "PlayerSkinPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 93 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 94,
+      "name": "SubClientLoginPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 94 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 95,
+      "name": "AutomationClientConnectPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 95 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 96,
+      "name": "SetLastHurtByPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 96 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 97,
+      "name": "BookEditPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 97 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 98,
+      "name": "NpcRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 98 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 99,
+      "name": "PhotoTransferPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 99 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 100,
+      "name": "ModalFormRequestPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 100 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 101,
+      "name": "ModalFormResponsePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 101 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 102,
+      "name": "ServerSettingsRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 102 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 103,
+      "name": "ServerSettingsResponsePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 103 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 104,
+      "name": "ShowProfilePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 104 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 105,
+      "name": "SetDefaultGameTypePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 105 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 106,
+      "name": "RemoveObjectivePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 106 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 107,
+      "name": "SetDisplayObjectivePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 107 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 108,
+      "name": "SetScorePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 108 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 109,
+      "name": "LabTablePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 109 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 110,
+      "name": "UpdateBlockSyncedPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 110 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 111,
+      "name": "MoveActorDeltaPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 111 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 112,
+      "name": "SetScoreboardIdentityPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 112 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 113,
+      "name": "SetLocalPlayerAsInitializedPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 113 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 114,
+      "name": "UpdateSoftEnumPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 114 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 115,
+      "name": "NetworkStackLatencyPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 115 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 118,
+      "name": "SpawnParticleEffectPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 118 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 119,
+      "name": "AvailableActorIdentifiersPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 119 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 121,
+      "name": "NetworkChunkPublisherUpdatePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 121 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 122,
+      "name": "BiomeDefinitionListPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 122 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 123,
+      "name": "LevelSoundEventPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 123 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 124,
+      "name": "LevelEventGenericPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 124 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 125,
+      "name": "LecternUpdatePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 125 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 129,
+      "name": "ClientCacheStatusPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 129 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 130,
+      "name": "OnScreenTextureAnimationPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 130 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 131,
+      "name": "MapCreateLockedCopyPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 131 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 132,
+      "name": "StructureTemplateDataRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 132 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 133,
+      "name": "StructureTemplateDataResponsePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 133 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 135,
+      "name": "ClientCacheBlobStatusPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 135 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 136,
+      "name": "ClientCacheMissResponsePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 136 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 137,
+      "name": "EducationSettingsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 137 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 138,
+      "name": "EmotePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 138 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 139,
+      "name": "MultiplayerSettingsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 139 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 140,
+      "name": "SettingsCommandPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 140 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 141,
+      "name": "AnvilDamagePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 141 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 142,
+      "name": "CompletedUsingItemPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 142 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 143,
+      "name": "NetworkSettingsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 143 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 144,
+      "name": "PlayerAuthInputPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 144 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 145,
+      "name": "CreativeContentPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 145 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 146,
+      "name": "PlayerEnchantOptionsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 146 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 147,
+      "name": "ItemStackRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 147 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 148,
+      "name": "ItemStackResponsePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 148 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 149,
+      "name": "PlayerArmorDamagePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 149 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 150,
+      "name": "CodeBuilderPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 150 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 151,
+      "name": "UpdatePlayerGameTypePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 151 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 152,
+      "name": "EmoteListPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 152 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 153,
+      "name": "PositionTrackingDBServerBroadcastPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 153 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 154,
+      "name": "PositionTrackingDBClientRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 154 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 155,
+      "name": "DebugInfoPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 155 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 156,
+      "name": "PacketViolationWarningPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 156 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 157,
+      "name": "MotionPredictionHintsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 157 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 158,
+      "name": "AnimateEntityPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 158 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 159,
+      "name": "CameraShakePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 159 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 160,
+      "name": "PlayerFogPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 160 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 161,
+      "name": "CorrectPlayerMovePredictionPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 161 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 162,
+      "name": "ItemRegistryPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 162 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 164,
+      "name": "ClientboundDebugRendererPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 164 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 165,
+      "name": "SyncActorPropertyPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 165 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 166,
+      "name": "AddVolumeEntityPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 166 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 167,
+      "name": "RemoveVolumeEntityPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 167 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 168,
+      "name": "SimulationTypePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 168 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 169,
+      "name": "NpcDialoguePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 169 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 170,
+      "name": "EduUriResourcePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 170 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 171,
+      "name": "CreatePhotoPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 171 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 172,
+      "name": "UpdateSubChunkBlocksPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 172 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 174,
+      "name": "SubChunkPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 174 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 175,
+      "name": "SubChunkRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 175 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 176,
+      "name": "PlayerStartItemCooldownPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 176 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 177,
+      "name": "ScriptMessagePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 177 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 178,
+      "name": "CodeBuilderSourcePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 178 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 179,
+      "name": "TickingAreasLoadStatusPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 179 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 180,
+      "name": "DimensionDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 180 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 181,
+      "name": "AgentActionEventPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 181 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 182,
+      "name": "ChangeMobPropertyPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 182 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 183,
+      "name": "LessonProgressPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 183 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 184,
+      "name": "RequestAbilityPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 184 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 185,
+      "name": "RequestPermissionsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 185 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 186,
+      "name": "ToastRequestPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 186 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 187,
+      "name": "UpdateAbilitiesPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 187 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 188,
+      "name": "UpdateAdventureSettingsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 188 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 189,
+      "name": "DeathInfoPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 189 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 190,
+      "name": "EditorNetworkPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 190 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 191,
+      "name": "FeatureRegistryPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 191 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 192,
+      "name": "ServerStatsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 192 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 193,
+      "name": "RequestNetworkSettingsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 193 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 194,
+      "name": "GameTestRequestPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 194 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 195,
+      "name": "GameTestResultsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 195 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 196,
+      "name": "UpdateClientInputLocksPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 196 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 198,
+      "name": "CameraPresetsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 198 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 199,
+      "name": "UnlockedRecipesPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 199 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 300,
+      "name": "CameraInstructionPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 300 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 302,
+      "name": "TrimDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 302 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 303,
+      "name": "OpenSignPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 303 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 304,
+      "name": "AgentAnimationPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 304 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 305,
+      "name": "RefreshEntitlementsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 305 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 306,
+      "name": "PlayerToggleCrafterSlotRequestPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 306 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 307,
+      "name": "SetPlayerInventoryOptionsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 307 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 308,
+      "name": "SetHudPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 308 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 309,
+      "name": "AwardAchievementPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 309 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 310,
+      "name": "ClientboundCloseFormPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 310 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 312,
+      "name": "ServerboundLoadingScreenPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 312 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 313,
+      "name": "JigsawStructureDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 313 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 314,
+      "name": "CurrentStructureFeaturePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 314 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 315,
+      "name": "ServerboundDiagnosticsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 315 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 316,
+      "name": "CameraAimAssistPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 316 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 317,
+      "name": "ContainerRegistryCleanupPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 317 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 318,
+      "name": "MovementEffectPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 318 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 320,
+      "name": "CameraAimAssistPresetsPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 320 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 321,
+      "name": "ClientCameraAimAssistPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 321 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 322,
+      "name": "ClientMovementPredictionSyncPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 322 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 323,
+      "name": "UpdateClientOptionsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 323 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 324,
+      "name": "PlayerVideoCapturePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 324 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 325,
+      "name": "PlayerUpdateEntityOverridesPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 325 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 326,
+      "name": "PlayerLocationPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 326 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 327,
+      "name": "ClientboundControlSchemeSetPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 327 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 328,
+      "name": "PrimitiveShapesPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 328 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 329,
+      "name": "ServerboundPackSettingChangePacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 329 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 330,
+      "name": "ClientboundDataStorePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 330 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 331,
+      "name": "GraphicsOverrideParameterPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 331 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 332,
+      "name": "ServerboundDataStorePacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 332 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 333,
+      "name": "ClientboundDataDrivenUIShowScreenPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 333 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 334,
+      "name": "ClientboundDataDrivenUICloseScreenPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 334 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 335,
+      "name": "ClientboundDataDrivenUIReloadPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 335 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 336,
+      "name": "ClientboundTextureShiftPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 336 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 337,
+      "name": "VoxelShapesPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 337 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 338,
+      "name": "CameraSplinePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 338 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 339,
+      "name": "CameraAimAssistActorPriorityPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 339 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 340,
+      "name": "ResourcePacksReadyForValidationPacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 340 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 341,
+      "name": "LocatorBarPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 341 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 342,
+      "name": "PartyChangedPacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 342 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 343,
+      "name": "ServerboundDataDrivenScreenClosedPacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 343 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 344,
+      "name": "SyncWorldClocksPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 344 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 345,
+      "name": "ClientboundAttributeLayerSyncPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 345 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 346,
+      "name": "ServerStoreInfoPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 346 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 347,
+      "name": "ServerPresenceInfoPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 347 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 348,
+      "name": "ClientboundUpdateSoundDataPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 348 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 349,
+      "name": "SendPartyDestinationCookiePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 349 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 350,
+      "name": "PartyDestinationCookieResponsePacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 350 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 351,
+      "name": "SetPlayerFurnaceOptionsPacket",
+      "direction": "both",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 351 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 352,
+      "name": "RecordStartedPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 352 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 353,
+      "name": "ClientboundMatchmakingStatePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 353 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 354,
+      "name": "ServerboundStonecutterSetRecipePacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 354 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 355,
+      "name": "ClientboundStonecutterSetRecipePacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 355 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 356,
+      "name": "ServerboundMatchmakingCancelPacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 356 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 357,
+      "name": "SetPassengerOfBlockPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 357 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 358,
+      "name": "ServerboundCursorItemDragPacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 358 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 359,
+      "name": "ClientboundPlayAudioContentPacket",
+      "direction": "server",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 359 is registered in the protocol-2225 direction pool(s)."
+      }
+    },
+    {
+      "id": 360,
+      "name": "ServerboundRegisterAudioContentPacket",
+      "direction": "client",
+      "evidence": {
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 360 is registered in the protocol-2225 direction pool(s)."
+      }
+    }
+  ]
+}

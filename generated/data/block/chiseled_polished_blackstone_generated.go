@@ -9,5 +9,5 @@ var ChiseledPolishedBlackstone = Block{
 }
 
 var chiseledPolishedBlackstoneStates = [...]State{
-	{Hash: 4136973430, Block: 679, Properties: 1906},
+	{Hash: 4136973430, Block: 681, Properties: 1908},
 }

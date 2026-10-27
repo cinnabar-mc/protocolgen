@@ -9,8 +9,8 @@ var BirchLeaves = Block{
 }
 
 var birchLeavesStates = [...]State{
-	{Hash: 1740500456, Block: 445, Properties: 1569},
-	{Hash: 2795807027, Block: 445, Properties: 1569},
-	{Hash: 3798111803, Block: 445, Properties: 1569},
-	{Hash: 2742805232, Block: 445, Properties: 1569},
+	{Hash: 1740500456, Block: 446, Properties: 1570},
+	{Hash: 2795807027, Block: 446, Properties: 1570},
+	{Hash: 3798111803, Block: 446, Properties: 1570},
+	{Hash: 2742805232, Block: 446, Properties: 1570},
 }

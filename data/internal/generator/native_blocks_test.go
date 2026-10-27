@@ -51,3 +51,60 @@ func TestNativePropertyJoinRejectsIdentityDrift(t *testing.T) {
 		}
 	}
 }
+
+// TestNativePaletteJoinPreservesUnknownGeometry covers reordered and new states.
+func TestNativePaletteJoinPreservesUnknownGeometry(t *testing.T) {
+	native := nativeFixture(t)
+	thickness, translucency, color := float32(0), float32(0.5), "#11223380"
+	properties := native.Properties["minecraft:bed"]
+	properties.Thickness, properties.Translucency, properties.MapColor = &thickness, &translucency, &color
+	native.Properties["minecraft:bed"] = properties
+	native.Names = []string{"minecraft:bed", "minecraft:bed"}
+	newState := native.States[0]
+	hash := uint32(8)
+	newState.Hash = &hash
+	native.States = append(native.States, newState)
+	shape := json.RawMessage(`[[0,0,0,1,0.5625,1]]`)
+	rows := []rawBlockState{{Name: "minecraft:bed", Hash: 7, MapColor: "#ffffffff", CollisionShape: shape}}
+	got, err := alignNativeBlocks(rows, native)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(got) != 2 || got[0].Hash != 7 || got[1].Hash != 8 || string(got[0].CollisionShape) != string(shape) {
+		t.Fatal("palette identities or measured supplemental shape changed")
+	}
+	if !got[1].supplementalUnavailable || got[1].CollisionShape != nil || got[1].OutlineShape != nil || got[1].MapColor != "#11223380" || got[1].Hardness != 0.2 {
+		t.Fatal("new state lost native scalars or guessed supplemental properties")
+	}
+	native.Names[0] = "minecraft:other"
+	if _, err := alignNativeBlocks(rows, native); err == nil {
+		t.Fatal("same-hash different-name join accepted")
+	}
+}
+
+// TestNativeBlockMapColorsPreserveRGBA catches channel and alpha rotation in fallback states.
+func TestNativeBlockMapColorsPreserveRGBA(t *testing.T) {
+	for _, tc := range []struct {
+		color string
+		want  uint32
+	}{
+		{"#ff0000ff", 0xff0000ff},
+		{"#995acdff", 0x995acdff},
+		{"#11223380", 0x11223380},
+	} {
+		native := nativeFixture(t)
+		native.Names = []string{"minecraft:bed"}
+		zero := float32(0)
+		properties := native.Properties["minecraft:bed"]
+		properties.Thickness, properties.Translucency, properties.MapColor = &zero, &zero, &tc.color
+		native.Properties["minecraft:bed"] = properties
+		rows, err := alignNativeBlocks(nil, native)
+		if err != nil {
+			t.Fatal(err)
+		}
+		color, err := parseRGBA(rows[0].MapColor)
+		if err != nil || color != tc.want {
+			t.Fatalf("native colour %s became %#08x: %v", tc.color, color, err)
+		}
+	}
+}

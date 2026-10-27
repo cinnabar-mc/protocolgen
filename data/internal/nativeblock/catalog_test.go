@@ -116,6 +116,7 @@ func TestReadRejectsNullTags(t *testing.T) {
 				t.Fatal(err)
 			}
 			cache := t.TempDir()
+			delete(inputs.Lock.Inputs, "block_palette")
 			for name, data := range map[string][]byte{
 				"native_block_properties": propertyData,
 				"native_block_states":     stateData,

@@ -9,5 +9,5 @@ var ChiseledNetherBricks = Block{
 }
 
 var chiseledNetherBricksStates = [...]State{
-	{Hash: 2476690620, Block: 1153, Properties: 221},
+	{Hash: 2476690620, Block: 1156, Properties: 221},
 }

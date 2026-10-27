@@ -9,7 +9,7 @@ var InfestedDeepslate = Block{
 }
 
 var infestedDeepslateStates = [...]State{
-	{Hash: 1860943670, Block: 616, Properties: 1955},
-	{Hash: 2916250241, Block: 616, Properties: 1955},
-	{Hash: 805637099, Block: 616, Properties: 1955},
+	{Hash: 1860943670, Block: 618, Properties: 1957},
+	{Hash: 2916250241, Block: 618, Properties: 1957},
+	{Hash: 805637099, Block: 618, Properties: 1957},
 }

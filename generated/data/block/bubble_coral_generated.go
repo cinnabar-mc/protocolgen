@@ -9,5 +9,5 @@ var BubbleCoral = Block{
 }
 
 var bubbleCoralStates = [...]State{
-	{Hash: 760973449, Block: 927, Properties: 923},
+	{Hash: 760973449, Block: 929, Properties: 923},
 }

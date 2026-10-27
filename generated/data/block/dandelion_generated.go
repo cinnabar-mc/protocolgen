@@ -9,5 +9,5 @@ var Dandelion = Block{
 }
 
 var dandelionStates = [...]State{
-	{Hash: 2383143704, Block: 1476, Properties: 219},
+	{Hash: 2383143704, Block: 1479, Properties: 219},
 }

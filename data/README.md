@@ -38,7 +38,7 @@ go run ./cmd/registrygen
 go run ./cmd/mininggen
 ```
 
-The runtime catalog targets Minecraft 1.26.50, protocol 2193, with 2,076 items.
+The runtime catalog targets Minecraft 1.26.60, protocol 2225, with 2,080 items.
 Sources include the locked Cloudburst registry, native item properties and tags,
 two supplemental Allay inventory-capability tags, and measured corrections. Generation rejects missing values and stale corrections.
 It writes `item/runtime_generated.go`, `release_generated.go` and `release.json`
@@ -59,28 +59,36 @@ semantic generator verifies all three Cloudburst semantic files and every
 consumed BDS JSON file before writing. Added, missing or changed input files fail validation.
 The independent BDS 1.26.32.2 semantic provenance is preserved; it is not a
 claim that all inputs were captured from the target runtime release.
-The vendored CC0-1.0 [didntpot snapshot](source/inputs/1.26.51/native/README.md)
+The vendored CC0-1.0 [didntpot snapshot](source/inputs/1.26.60/native/README.md)
 supplies the block palette, scalar block properties, tool requirements and tags,
 item stack fields and tags, and biome scalar values and numeric IDs. It covers
-22,091 states, 1,477 block identifiers, 2,076 items and 89 biomes. State ordinals,
-hashes and identifier domains must match the independent registries; absent
-required fields, mismatched IDs and inconsistent tag memberships fail generation.
-The snapshot is release 1.26.51, protocol 2193; the runtime target retains its
-1.26.50 protocol label. The unknown-block hash keeps the catalog's reserved value.
+23,960 states, 1,480 block identifiers, 2,080 items and 89 biomes. The native
+palette defines state ordinals and the full block domain. Supplemental
+block fields join by state hash and block name. Missing required native values,
+mismatched item IDs and inconsistent inline tag memberships fail generation.
+The snapshot and runtime target both use release 1.26.60, protocol 2225. The
+unknown-block hash keeps the catalog's reserved value.
 
 Cloudburst `blocks.json` remains the source for collision, outline and rendering
 fields. Cloudburst also supplies biome tag memberships, named voxel shapes,
 item identities and component payloads, all from the revision in the lock.
 Native biome IDs replace the previous Cinnabar registry snapshot. Native scalars
-replace the corresponding Cloudburst fields, with exact-domain validation.
+replace the corresponding Cloudburst fields. The 1.26.60 item snapshot supplies
+tags through its separate table; older snapshots with inline tags still require
+the two views to agree.
 Named shapes are decoded from occupied grid cells into block-local boxes.
 
 Thirty liquid-clip boxes in this extract have reversed bounds. The reviewed
 `liquid_clip_omissions` input identifies each exact name, hash and source box.
 Generation marks those fields unavailable and records them in
 `semantic_sources.json`; it never clamps them or declares them empty. New,
-changed and obsolete exceptions fail generation. Required collision and outline
-shapes remain strictly validated. Zero-volume outlines remain known-empty.
+changed and obsolete exceptions fail generation. The supplemental input still
+requires valid collision and outline shapes.
+The native palette has 1,902 states absent from that input. These states retain
+native scalar properties and use unavailable collision, outline, UI and liquid-clip
+shapes. `SupplementalPropertiesAvailable` is false for their tint and liquid
+behavior fields. Native per-block visual bounds remain available when supplied.
+Zero-volume outlines remain known-empty.
 
 All commands accept `-cache /path/to/cache` and `-lock /path/to/lock.json`.
 Use a reviewed alternate lock to change a release; there are no independent

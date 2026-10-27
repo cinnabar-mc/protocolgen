@@ -9,8 +9,8 @@ var ExposedCopperChest = Block{
 }
 
 var exposedCopperChestStates = [...]State{
-	{Hash: 2899136942, Block: 728, Properties: 394},
-	{Hash: 2615587839, Block: 728, Properties: 394},
-	{Hash: 987437688, Block: 728, Properties: 394},
-	{Hash: 526176197, Block: 728, Properties: 394},
+	{Hash: 2899136942, Block: 730, Properties: 394},
+	{Hash: 2615587839, Block: 730, Properties: 394},
+	{Hash: 987437688, Block: 730, Properties: 394},
+	{Hash: 526176197, Block: 730, Properties: 394},
 }

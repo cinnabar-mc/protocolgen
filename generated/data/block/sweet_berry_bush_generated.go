@@ -9,12 +9,12 @@ var SweetBerryBush = Block{
 }
 
 var sweetBerryBushStates = [...]State{
-	{Hash: 1760306289, Block: 868, Properties: 2585},
-	{Hash: 1821781112, Block: 868, Properties: 2586},
-	{Hash: 1637356643, Block: 868, Properties: 2586},
-	{Hash: 1698831466, Block: 868, Properties: 2586},
-	{Hash: 1514406997, Block: 868, Properties: 2586},
-	{Hash: 1575881820, Block: 868, Properties: 2586},
-	{Hash: 1391457351, Block: 868, Properties: 2586},
-	{Hash: 1452932174, Block: 868, Properties: 2586},
+	{Hash: 1760306289, Block: 870, Properties: 2587},
+	{Hash: 1821781112, Block: 870, Properties: 2588},
+	{Hash: 1637356643, Block: 870, Properties: 2588},
+	{Hash: 1698831466, Block: 870, Properties: 2588},
+	{Hash: 1514406997, Block: 870, Properties: 2588},
+	{Hash: 1575881820, Block: 870, Properties: 2588},
+	{Hash: 1391457351, Block: 870, Properties: 2588},
+	{Hash: 1452932174, Block: 870, Properties: 2588},
 }

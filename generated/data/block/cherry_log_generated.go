@@ -9,7 +9,7 @@ var CherryLog = Block{
 }
 
 var cherryLogStates = [...]State{
-	{Hash: 3302338998, Block: 1160, Properties: 1807},
-	{Hash: 62678273, Block: 1160, Properties: 3213},
-	{Hash: 2247032427, Block: 1160, Properties: 3213},
+	{Hash: 3302338998, Block: 1163, Properties: 1809},
+	{Hash: 62678273, Block: 1163, Properties: 3216},
+	{Hash: 2247032427, Block: 1163, Properties: 3216},
 }

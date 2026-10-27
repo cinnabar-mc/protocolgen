@@ -9,7 +9,7 @@ var ChiseledQuartzBlock = Block{
 }
 
 var chiseledQuartzBlockStates = [...]State{
-	{Hash: 3453104732, Block: 1191, Properties: 1405},
-	{Hash: 213444007, Block: 1191, Properties: 1405},
-	{Hash: 2324057149, Block: 1191, Properties: 1405},
+	{Hash: 3453104732, Block: 1194, Properties: 1406},
+	{Hash: 213444007, Block: 1194, Properties: 1406},
+	{Hash: 2324057149, Block: 1194, Properties: 1406},
 }

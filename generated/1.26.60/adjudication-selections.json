@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.60",
+    "protocol_version": 2225
+  },
+  "selections": [
+    {
+      "id": "protocol-2225-reviewed-002",
+      "target": "LevelEventGenericPacket.__[[CTD]]__",
+      "selected_source": "endstone",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/LevelEventGenericPacketPayload.json",
+          "summary": "The target documents the special compound field after Event Id but does not supply a complete serializable type."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/LevelEventGenericPacket.json",
+          "summary": "The target dump declares the field as CompoundTag, matching the prior canonical representation."
+        }
+      ],
+      "reason": "Mojang leaves its special compound payload without a lowerable type. Retain the complete target Endstone CompoundTag claim and the existing network-NBT encoding overlay. The special compound root framing remains unverified by these documents; this selection establishes the available schema representation rather than new live parity evidence."
+    },
+    {
+      "id": "protocol-2225-reviewed-004",
+      "target": "ClientboundPlayAudioContentPacket.Play Sound",
+      "selected_source": "mojang",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundPlayAudioContentPacketPayload.json",
+          "summary": "Play Sound references PlaySoundPacketPayload after the signed audio strings and playback type."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/PlaySoundPacketPayload.json",
+          "summary": "The referenced payload supplies all sound fields and both optional values."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/PlaySoundPacket.json",
+          "summary": "The standalone target packet corroborates the nested sound field order and primitive types."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/clientbound_play_audio_content.go",
+          "summary": "The audio packet writes its Sound member with PlaySound.Marshal."
+        }
+      ],
+      "reason": "The target Endstone field references PlaySoundPacketPayload but omits that type from its dump. Select the complete Mojang referenced payload; the same target Endstone PlaySound packet independently lists its ordered fields and the protocol-2225 audio marshal delegates to PlaySound.Marshal."
+    },
+    {
+      "id": "protocol-2225-reviewed-005",
+      "target": "ClientboundUpdateSoundDataPacket.Event",
+      "selected_source": "endstone",
+      "reason": "Both dumps repeat each event Type inside an outer positional union. The target Mojang field description identifies that leading Type as the discriminator, and the pinned protocol-2225 hand-written marshal writes a single uint8 Type. Select the corrected complete Endstone tagged-switch claim; its payload variants omit the consumed discriminator.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload.",
+          "source_id": "endstone"
+        }
+      ]
+    }
+  ]
+}

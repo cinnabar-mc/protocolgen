@@ -253,11 +253,15 @@ func correctedTag(registry map[string]RegistryEntry, members, corrections []stri
 	return result, nil
 }
 
-// validateNativeTags requires the per-item and per-tag dumps to describe the same memberships.
+// validateNativeTags checks inline tags when present and otherwise fills them
+// from the separately authenticated native tag table used by newer snapshots.
 func validateNativeTags(properties map[string]Properties, data []byte) error {
 	var declared map[string][]string
 	if err := json.Unmarshal(data, &declared); err != nil {
 		return fmt.Errorf("decode native item tags: %w", err)
+	}
+	if declared == nil {
+		return fmt.Errorf("native item tags must be a non-null object")
 	}
 	actual := make(map[string][]string)
 	for name, item := range properties {
@@ -269,6 +273,28 @@ func validateNativeTags(properties map[string]Properties, data []byte) error {
 			seen[tag] = true
 			actual[tag] = append(actual[tag], name)
 		}
+	}
+	if len(actual) == 0 {
+		for tag, members := range declared {
+			if tag == "" || len(members) == 0 {
+				return fmt.Errorf("native item tag %q has no members", tag)
+			}
+			seen := make(map[string]bool)
+			for _, name := range members {
+				item, ok := properties[name]
+				if !ok || seen[name] {
+					return fmt.Errorf("native item tag %s has an unknown or duplicate member %q", tag, name)
+				}
+				seen[name] = true
+				item.Tags = append(item.Tags, tag)
+				properties[name] = item
+			}
+		}
+		for name, item := range properties {
+			slices.Sort(item.Tags)
+			properties[name] = item
+		}
+		return nil
 	}
 	if len(actual) != len(declared) {
 		return fmt.Errorf("native item tag domains differ: %d versus %d", len(actual), len(declared))

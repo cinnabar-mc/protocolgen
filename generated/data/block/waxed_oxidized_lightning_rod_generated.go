@@ -9,16 +9,16 @@ var WaxedOxidizedLightningRod = Block{
 }
 
 var waxedOxidizedLightningRodStates = [...]State{
-	{Hash: 2951774681, Block: 1117, Properties: 585},
-	{Hash: 2100470830, Block: 1117, Properties: 585},
-	{Hash: 732756523, Block: 1117, Properties: 586},
-	{Hash: 1249123144, Block: 1117, Properties: 586},
-	{Hash: 1961910173, Block: 1117, Properties: 587},
-	{Hash: 1297453794, Block: 1117, Properties: 587},
-	{Hash: 1896468110, Block: 1117, Properties: 585},
-	{Hash: 3155777401, Block: 1117, Properties: 585},
-	{Hash: 3972417248, Block: 1117, Properties: 586},
-	{Hash: 2304429715, Block: 1117, Properties: 586},
-	{Hash: 906603602, Block: 1117, Properties: 587},
-	{Hash: 2352760365, Block: 1117, Properties: 587},
+	{Hash: 2951774681, Block: 1120, Properties: 585},
+	{Hash: 2100470830, Block: 1120, Properties: 585},
+	{Hash: 732756523, Block: 1120, Properties: 586},
+	{Hash: 1249123144, Block: 1120, Properties: 586},
+	{Hash: 1961910173, Block: 1120, Properties: 587},
+	{Hash: 1297453794, Block: 1120, Properties: 587},
+	{Hash: 1896468110, Block: 1120, Properties: 585},
+	{Hash: 3155777401, Block: 1120, Properties: 585},
+	{Hash: 3972417248, Block: 1120, Properties: 586},
+	{Hash: 2304429715, Block: 1120, Properties: 586},
+	{Hash: 906603602, Block: 1120, Properties: 587},
+	{Hash: 2352760365, Block: 1120, Properties: 587},
 }

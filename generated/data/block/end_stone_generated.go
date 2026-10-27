@@ -9,5 +9,5 @@ var EndStone = Block{
 }
 
 var endStoneStates = [...]State{
-	{Hash: 3041101143, Block: 417, Properties: 579},
+	{Hash: 3041101143, Block: 418, Properties: 579},
 }

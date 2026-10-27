@@ -9,5 +9,5 @@ var Cobblestone = Block{
 }
 
 var cobblestoneStates = [...]State{
-	{Hash: 1741778478, Block: 350, Properties: 483},
+	{Hash: 1741778478, Block: 351, Properties: 483},
 }

@@ -9,5 +9,5 @@ var Fern = Block{
 }
 
 var fernStates = [...]State{
-	{Hash: 3148548874, Block: 890, Properties: 2603},
+	{Hash: 3148548874, Block: 892, Properties: 2605},
 }

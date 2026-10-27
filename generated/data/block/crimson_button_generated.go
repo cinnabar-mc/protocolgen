@@ -9,16 +9,16 @@ var CrimsonButton = Block{
 }
 
 var crimsonButtonStates = [...]State{
-	{Hash: 3379527162, Block: 559, Properties: 94},
-	{Hash: 3318052339, Block: 559, Properties: 95},
-	{Hash: 3502476808, Block: 559, Properties: 96},
-	{Hash: 3441001985, Block: 559, Properties: 97},
-	{Hash: 3133627870, Block: 559, Properties: 98},
-	{Hash: 3072153047, Block: 559, Properties: 99},
-	{Hash: 3901996071, Block: 559, Properties: 100},
-	{Hash: 3963470894, Block: 559, Properties: 101},
-	{Hash: 4024945717, Block: 559, Properties: 102},
-	{Hash: 4086420540, Block: 559, Properties: 103},
-	{Hash: 4147895363, Block: 559, Properties: 104},
-	{Hash: 4209370186, Block: 559, Properties: 105},
+	{Hash: 3379527162, Block: 561, Properties: 94},
+	{Hash: 3318052339, Block: 561, Properties: 95},
+	{Hash: 3502476808, Block: 561, Properties: 96},
+	{Hash: 3441001985, Block: 561, Properties: 97},
+	{Hash: 3133627870, Block: 561, Properties: 98},
+	{Hash: 3072153047, Block: 561, Properties: 99},
+	{Hash: 3901996071, Block: 561, Properties: 100},
+	{Hash: 3963470894, Block: 561, Properties: 101},
+	{Hash: 4024945717, Block: 561, Properties: 102},
+	{Hash: 4086420540, Block: 561, Properties: 103},
+	{Hash: 4147895363, Block: 561, Properties: 104},
+	{Hash: 4209370186, Block: 561, Properties: 105},
 }

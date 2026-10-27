@@ -9,5 +9,5 @@ var CrimsonRoots = Block{
 }
 
 var crimsonRootsStates = [...]State{
-	{Hash: 3616573259, Block: 1258, Properties: 3431},
+	{Hash: 3616573259, Block: 1261, Properties: 3434},
 }

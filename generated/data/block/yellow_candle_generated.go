@@ -9,12 +9,12 @@ var YellowCandle = Block{
 }
 
 var yellowCandleStates = [...]State{
-	{Hash: 2839096701, Block: 921, Properties: 2697},
-	{Hash: 2835686754, Block: 921, Properties: 2698},
-	{Hash: 9737371, Block: 921, Properties: 2699},
-	{Hash: 3002949544, Block: 921, Properties: 2700},
-	{Hash: 1783790130, Block: 921, Properties: 2701},
-	{Hash: 3890993325, Block: 921, Properties: 2702},
-	{Hash: 3249398096, Block: 921, Properties: 2703},
-	{Hash: 4058256115, Block: 921, Properties: 2704},
+	{Hash: 2839096701, Block: 923, Properties: 2699},
+	{Hash: 2835686754, Block: 923, Properties: 2700},
+	{Hash: 9737371, Block: 923, Properties: 2701},
+	{Hash: 3002949544, Block: 923, Properties: 2702},
+	{Hash: 1783790130, Block: 923, Properties: 2703},
+	{Hash: 3890993325, Block: 923, Properties: 2704},
+	{Hash: 3249398096, Block: 923, Properties: 2705},
+	{Hash: 4058256115, Block: 923, Properties: 2706},
 }

@@ -9,10 +9,10 @@ var PlayerHead = Block{
 }
 
 var playerHeadStates = [...]State{
-	{Hash: 2820137061, Block: 386, Properties: 14},
-	{Hash: 2881611884, Block: 386, Properties: 14},
-	{Hash: 2697187415, Block: 386, Properties: 15},
-	{Hash: 2758662238, Block: 386, Properties: 16},
-	{Hash: 3066036353, Block: 386, Properties: 17},
-	{Hash: 3127511176, Block: 386, Properties: 18},
+	{Hash: 2820137061, Block: 387, Properties: 14},
+	{Hash: 2881611884, Block: 387, Properties: 14},
+	{Hash: 2697187415, Block: 387, Properties: 15},
+	{Hash: 2758662238, Block: 387, Properties: 16},
+	{Hash: 3066036353, Block: 387, Properties: 17},
+	{Hash: 3127511176, Block: 387, Properties: 18},
 }

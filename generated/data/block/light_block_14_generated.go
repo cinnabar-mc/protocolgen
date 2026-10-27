@@ -9,5 +9,5 @@ var LightBlock14 = Block{
 }
 
 var lightBlock14States = [...]State{
-	{Hash: 1738610365, Block: 981, Properties: 2847},
+	{Hash: 1738610365, Block: 983, Properties: 2849},
 }

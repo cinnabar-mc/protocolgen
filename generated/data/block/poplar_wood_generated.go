@@ -9,7 +9,7 @@ var PoplarWood = Block{
 }
 
 var poplarWoodStates = [...]State{
-	{Hash: 1689899121, Block: 1463, Properties: 432},
-	{Hash: 634592550, Block: 1463, Properties: 432},
-	{Hash: 2818946704, Block: 1463, Properties: 432},
+	{Hash: 1689899121, Block: 1466, Properties: 432},
+	{Hash: 634592550, Block: 1466, Properties: 432},
+	{Hash: 2818946704, Block: 1466, Properties: 432},
 }

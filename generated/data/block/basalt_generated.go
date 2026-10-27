@@ -9,7 +9,7 @@ var Basalt = Block{
 }
 
 var basaltStates = [...]State{
-	{Hash: 1581894931, Block: 526, Properties: 12},
-	{Hash: 526588360, Block: 526, Properties: 12},
-	{Hash: 2637201502, Block: 526, Properties: 12},
+	{Hash: 1581894931, Block: 528, Properties: 12},
+	{Hash: 526588360, Block: 528, Properties: 12},
+	{Hash: 2637201502, Block: 528, Properties: 12},
 }

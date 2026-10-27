@@ -9,7 +9,7 @@ var CrimsonStem = Block{
 }
 
 var crimsonStemStates = [...]State{
-	{Hash: 1025569707, Block: 836, Properties: 2504},
-	{Hash: 4265230432, Block: 836, Properties: 2504},
-	{Hash: 2080876278, Block: 836, Properties: 2504},
+	{Hash: 1025569707, Block: 838, Properties: 2506},
+	{Hash: 4265230432, Block: 838, Properties: 2506},
+	{Hash: 2080876278, Block: 838, Properties: 2506},
 }

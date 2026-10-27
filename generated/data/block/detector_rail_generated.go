@@ -9,16 +9,16 @@ var DetectorRail = Block{
 }
 
 var detectorRailStates = [...]State{
-	{Hash: 2297846613, Block: 441, Properties: 610},
-	{Hash: 2359321436, Block: 441, Properties: 610},
-	{Hash: 2174896967, Block: 441, Properties: 611},
-	{Hash: 2236371790, Block: 441, Properties: 611},
-	{Hash: 2543745905, Block: 441, Properties: 611},
-	{Hash: 2605220728, Block: 441, Properties: 611},
-	{Hash: 3070142316, Block: 441, Properties: 610},
-	{Hash: 3008667493, Block: 441, Properties: 610},
-	{Hash: 2947192670, Block: 441, Properties: 611},
-	{Hash: 2885717847, Block: 441, Properties: 611},
-	{Hash: 3316041608, Block: 441, Properties: 611},
-	{Hash: 3254566785, Block: 441, Properties: 611},
+	{Hash: 2297846613, Block: 442, Properties: 610},
+	{Hash: 2359321436, Block: 442, Properties: 610},
+	{Hash: 2174896967, Block: 442, Properties: 611},
+	{Hash: 2236371790, Block: 442, Properties: 611},
+	{Hash: 2543745905, Block: 442, Properties: 611},
+	{Hash: 2605220728, Block: 442, Properties: 611},
+	{Hash: 3070142316, Block: 442, Properties: 610},
+	{Hash: 3008667493, Block: 442, Properties: 610},
+	{Hash: 2947192670, Block: 442, Properties: 611},
+	{Hash: 2885717847, Block: 442, Properties: 611},
+	{Hash: 3316041608, Block: 442, Properties: 611},
+	{Hash: 3254566785, Block: 442, Properties: 611},
 }

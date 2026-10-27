@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.60",
+    "protocol_version": 2225
+  },
+  "source": {
+    "repository": "https://github.com/hashimthearab/gophertunnel.git",
+    "revision": "8d903c5192f794ca33fea2d84f7afec3e3393bc5",
+    "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/nbt/encoding.go",
+    "sha256": "sha256:df41e6365367c374666ea25f6fa4ca4385cd6c4e37cc9cb3d9a8bb701e331177"
+  },
+  "fields": [
+    {
+      "packet_id": 11,
+      "packet_name": "StartGamePacket",
+      "field_ordinal": 13,
+      "field_name": "Block Properties",
+      "path": "encode.element.fields[1].encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/block.go#L18",
+        "summary": "BlockEntry marshals Properties with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 11,
+      "packet_name": "StartGamePacket",
+      "field_ordinal": 17,
+      "field_name": "Player Property Data",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/start_game.go#L352",
+        "summary": "StartGamePacket marshals PropertyData with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 12,
+      "packet_name": "AddPlayerPacket",
+      "field_ordinal": 10,
+      "field_name": "Entity Data",
+      "path": "encode.fields[0].encode.element.fields[1].encode.variants[5].encode.fields[1].encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/writer.go#L268",
+        "summary": "The entity metadata compound writer encodes compound-tag values with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 13,
+      "packet_name": "AddActorPacket",
+      "field_ordinal": 9,
+      "field_name": "Actor Data",
+      "path": "encode.fields[0].encode.element.fields[1].encode.variants[5].encode.fields[1].encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/writer.go#L268",
+        "summary": "The entity metadata compound writer encodes compound-tag values with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 15,
+      "packet_name": "AddItemActorPacket",
+      "field_ordinal": 5,
+      "field_name": "Entity Data",
+      "path": "encode.fields[0].encode.element.fields[1].encode.variants[5].encode.fields[1].encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/writer.go#L268",
+        "summary": "The entity metadata compound writer encodes compound-tag values with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 39,
+      "packet_name": "SetActorDataPacket",
+      "field_ordinal": 1,
+      "field_name": "Actor Data",
+      "path": "encode.fields[0].encode.element.fields[1].encode.variants[5].encode.fields[1].encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/writer.go#L268",
+        "summary": "The entity metadata compound writer encodes compound-tag values with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 56,
+      "packet_name": "BlockActorDataPacket",
+      "field_ordinal": 1,
+      "field_name": "Actor Data Tags",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/block_actor_data.go#L83",
+        "summary": "BlockActorDataPacket marshals ActorData with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 80,
+      "packet_name": "UpdateTradePacket",
+      "field_ordinal": 9,
+      "field_name": "Data",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/update_trade.go#L56",
+        "summary": "UpdateTradePacket carries the documented network NBT bytes through io.Bytes; the packet has no format-specific io.NBT call."
+      }
+    },
+    {
+      "packet_id": 81,
+      "packet_name": "UpdateEquipPacket",
+      "field_ordinal": 4,
+      "field_name": "Data",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/update_equip.go#L39",
+        "summary": "UpdateEquipPacket carries the documented network NBT bytes through io.Bytes; the packet has no format-specific io.NBT call."
+      }
+    },
+    {
+      "packet_id": 119,
+      "packet_name": "AvailableActorIdentifiersPacket",
+      "field_ordinal": 0,
+      "field_name": "Identifier List",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/available_actor_identifiers.go#L24",
+        "summary": "AvailableActorIdentifiersPacket carries the documented network NBT bytes through io.Bytes; the packet has no format-specific io.NBT call."
+      }
+    },
+    {
+      "packet_id": 124,
+      "packet_name": "LevelEventGenericPacket",
+      "field_ordinal": 1,
+      "field_name": "__[[CTD]]__",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/level_event_generic.go#L93",
+        "summary": "LevelEventGenericPacket carries the documented network NBT bytes through io.Bytes; the packet has no format-specific io.NBT call."
+      }
+    },
+    {
+      "packet_id": 133,
+      "packet_name": "StructureTemplateDataResponsePacket",
+      "field_ordinal": 1,
+      "field_name": "Structure's NBT",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_template_data_response.go#L38",
+        "summary": "StructureTemplateDataResponsePacket marshals Structure's NBT with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 153,
+      "packet_name": "PositionTrackingDBServerBroadcastPacket",
+      "field_ordinal": 2,
+      "field_name": "Position tracking data",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/position_tracking_db_server_broadcast.go#L55",
+        "summary": "PositionTrackingDBServerBroadcastPacket marshals position tracking data with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 162,
+      "packet_name": "ItemRegistryPacket",
+      "field_ordinal": 0,
+      "field_name": "Item Data",
+      "path": "encode.element.fields[4].encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/item.go#L199",
+        "summary": "Item component data marshals Data with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 165,
+      "packet_name": "SyncActorPropertyPacket",
+      "field_ordinal": 0,
+      "field_name": "Property Data",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/sync_actor_property.go#L20",
+        "summary": "SyncActorPropertyPacket marshals PropertyData with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 166,
+      "packet_name": "AddVolumeEntityPacket",
+      "field_ordinal": 1,
+      "field_name": "Components",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/add_volume_entity.go#L37",
+        "summary": "AddVolumeEntityPacket marshals Components (gophertunnel EntityMetadata) with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 190,
+      "packet_name": "EditorNetworkPacket",
+      "field_ordinal": 1,
+      "field_name": "Payload",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/editor_network.go#L24",
+        "summary": "EditorNetworkPacket marshals Payload with nbt.NetworkLittleEndian."
+      }
+    },
+    {
+      "packet_id": 313,
+      "packet_name": "JigsawStructureDataPacket",
+      "field_ordinal": 0,
+      "field_name": "Jigsaw Structure Data Tag",
+      "path": "encode",
+      "encoding": "network",
+      "evidence": {
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/jigsaw_structure_data.go#L21",
+        "summary": "JigsawStructureDataPacket marshals the structure data tag with nbt.NetworkLittleEndian."
+      }
+    }
+  ]
+}

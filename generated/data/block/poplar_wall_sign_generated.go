@@ -9,10 +9,10 @@ var PoplarWallSign = Block{
 }
 
 var poplarWallSignStates = [...]State{
-	{Hash: 4168389203, Block: 1261, Properties: 3435},
-	{Hash: 4229864026, Block: 1261, Properties: 3435},
-	{Hash: 4291338849, Block: 1261, Properties: 3436},
-	{Hash: 57846376, Block: 1261, Properties: 3437},
-	{Hash: 3922489911, Block: 1261, Properties: 3438},
-	{Hash: 3983964734, Block: 1261, Properties: 3439},
+	{Hash: 4168389203, Block: 1264, Properties: 3438},
+	{Hash: 4229864026, Block: 1264, Properties: 3438},
+	{Hash: 4291338849, Block: 1264, Properties: 3439},
+	{Hash: 57846376, Block: 1264, Properties: 3440},
+	{Hash: 3922489911, Block: 1264, Properties: 3441},
+	{Hash: 3983964734, Block: 1264, Properties: 3442},
 }

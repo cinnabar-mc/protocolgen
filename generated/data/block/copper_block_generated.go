@@ -9,5 +9,5 @@ var CopperBlock = Block{
 }
 
 var copperBlockStates = [...]State{
-	{Hash: 3701576840, Block: 619, Properties: 847},
+	{Hash: 3701576840, Block: 621, Properties: 847},
 }

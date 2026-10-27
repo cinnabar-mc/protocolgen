@@ -9,8 +9,8 @@ var JungleLeaves = Block{
 }
 
 var jungleLeavesStates = [...]State{
-	{Hash: 4104512640, Block: 711, Properties: 986},
-	{Hash: 864851915, Block: 711, Properties: 986},
-	{Hash: 1367212627, Block: 711, Properties: 986},
-	{Hash: 311906056, Block: 711, Properties: 986},
+	{Hash: 4104512640, Block: 713, Properties: 986},
+	{Hash: 864851915, Block: 713, Properties: 986},
+	{Hash: 1367212627, Block: 713, Properties: 986},
+	{Hash: 311906056, Block: 713, Properties: 986},
 }

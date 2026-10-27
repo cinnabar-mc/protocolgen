@@ -9,5 +9,5 @@ var InfoUpdate2 = Block{
 }
 
 var infoUpdate2States = [...]State{
-	{Hash: 1681030335, Block: 1407, Properties: 478},
+	{Hash: 1681030335, Block: 1410, Properties: 478},
 }

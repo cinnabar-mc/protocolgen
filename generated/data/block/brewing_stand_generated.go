@@ -9,12 +9,12 @@ var BrewingStand = Block{
 }
 
 var brewingStandStates = [...]State{
-	{Hash: 1742101107, Block: 1253, Properties: 3429},
-	{Hash: 2192686908, Block: 1253, Properties: 3429},
-	{Hash: 289017916, Block: 1253, Properties: 3429},
-	{Hash: 3645770099, Block: 1253, Properties: 3429},
-	{Hash: 686794536, Block: 1253, Properties: 3429},
-	{Hash: 3247993479, Block: 1253, Properties: 3429},
-	{Hash: 1344324487, Block: 1253, Properties: 3429},
-	{Hash: 2590463528, Block: 1253, Properties: 3429},
+	{Hash: 1742101107, Block: 1256, Properties: 3432},
+	{Hash: 2192686908, Block: 1256, Properties: 3432},
+	{Hash: 289017916, Block: 1256, Properties: 3432},
+	{Hash: 3645770099, Block: 1256, Properties: 3432},
+	{Hash: 686794536, Block: 1256, Properties: 3432},
+	{Hash: 3247993479, Block: 1256, Properties: 3432},
+	{Hash: 1344324487, Block: 1256, Properties: 3432},
+	{Hash: 2590463528, Block: 1256, Properties: 3432},
 }

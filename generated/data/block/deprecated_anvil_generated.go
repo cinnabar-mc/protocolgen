@@ -9,8 +9,8 @@ var DeprecatedAnvil = Block{
 }
 
 var deprecatedAnvilStates = [...]State{
-	{Hash: 2526434488, Block: 708, Properties: 1982},
-	{Hash: 1525764421, Block: 708, Properties: 1983},
-	{Hash: 609415606, Block: 708, Properties: 1982},
-	{Hash: 3502816351, Block: 708, Properties: 1983},
+	{Hash: 2526434488, Block: 710, Properties: 1984},
+	{Hash: 1525764421, Block: 710, Properties: 1985},
+	{Hash: 609415606, Block: 710, Properties: 1984},
+	{Hash: 3502816351, Block: 710, Properties: 1985},
 }

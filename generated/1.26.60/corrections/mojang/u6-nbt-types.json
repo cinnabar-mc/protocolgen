@@ -1,0 +1,225 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-nbt-type-1",
+      "file": "ServerBlockProperty.json",
+      "pointer": "#/properties/Block Definition",
+      "pre_patch_sha256": "sha256:a7486226029691be1d1b173181c3040ca6d701cf11011677852cb0b663feaead",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/StartGamePacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-2",
+      "file": "StartGamePacketPayload.json",
+      "pointer": "#/properties/Player Property Data",
+      "pre_patch_sha256": "sha256:8eb4154b5e279029ab6a64f9bd809b663806f1ff4f54f460dd88bef6628bff81",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/StartGamePacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-3",
+      "file": "DataItemCompoundTagPayload.json",
+      "pointer": "#/properties/Value",
+      "pre_patch_sha256": "sha256:2c9a4b1e03d4868d3e4f777a29516343f7cd0a26681d7159cec0751ff3d09dd3",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/AddPlayerPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-4",
+      "file": "BlockActorDataPacketPayload.json",
+      "pointer": "#/properties/Actor Data Tags",
+      "pre_patch_sha256": "sha256:2c9a4b1e03d4868d3e4f777a29516343f7cd0a26681d7159cec0751ff3d09dd3",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/BlockActorDataPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-5",
+      "file": "UpdateTradePacketPayload.json",
+      "pointer": "#/properties/Data",
+      "pre_patch_sha256": "sha256:3d945cb585d4e748ba7997f1d89b4b1be12006be8cbe342385e60813da9ea7e2",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/UpdateTradePacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-6",
+      "file": "UpdateEquipPacketPayload.json",
+      "pointer": "#/properties/Data",
+      "pre_patch_sha256": "sha256:4fac19d77c9cc9f9e909d860e4a3b3ac628a84c174ee3786f681312cb5e3cc04",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/UpdateEquipPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-7",
+      "file": "AvailableActorIdentifiersPacketPayload.json",
+      "pointer": "#/properties/Identifier List",
+      "pre_patch_sha256": "sha256:13b0313f22ea19106badad752ceaad08011ebe9334bef92b28a5c9610b982195",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/AvailableActorIdentifiersPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-8",
+      "file": "StructureTemplateDataResponsePacketPayload.json",
+      "pointer": "#/properties/Structure's NBT",
+      "pre_patch_sha256": "sha256:2c9a4b1e03d4868d3e4f777a29516343f7cd0a26681d7159cec0751ff3d09dd3",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/StructureTemplateDataResponsePacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-9",
+      "file": "PositionTrackingDBServerBroadcastPacketPayload.json",
+      "pointer": "#/properties/Position tracking data",
+      "pre_patch_sha256": "sha256:afa127d8d85312b4d136f5b217692c01d3cf21f8f0570e3b6f4b6579571a9e71",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/PositionTrackingDBServerBroadcastPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-10",
+      "file": "ItemData.json",
+      "pointer": "#/properties/Item Component Data",
+      "pre_patch_sha256": "sha256:4fac19d77c9cc9f9e909d860e4a3b3ac628a84c174ee3786f681312cb5e3cc04",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/ItemRegistryPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-11",
+      "file": "SyncActorPropertyPacketPayload.json",
+      "pointer": "#/properties/Property Data",
+      "pre_patch_sha256": "sha256:d013961de86b149141a400c9510912ea8c0a7b0034696982c3bf5aa86a5ae737",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/SyncActorPropertyPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-12",
+      "file": "AddVolumeEntityPacketPayload.json",
+      "pointer": "#/properties/Components",
+      "pre_patch_sha256": "sha256:2c9a4b1e03d4868d3e4f777a29516343f7cd0a26681d7159cec0751ff3d09dd3",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/AddVolumeEntityPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-nbt-type-13",
+      "file": "JigsawStructureDataPacketPayload.json",
+      "pointer": "#/properties/Jigsaw Structure Data Tag",
+      "pre_patch_sha256": "sha256:2c13986346d16fe924cd7d951192329be6468208217cccb099e3ec468ece0a98",
+      "merge": {
+        "x-wire-kind": "nbt"
+      },
+      "why": "Restore the missing CompoundTag type annotation. The exact NBT encoding must still be selected by a reviewed encoding overlay.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/JigsawStructureDataPacket.json",
+          "summary": "The pinned protocol-2225 dump identifies this payload as CompoundTag. This correction restores its type only; it does not assert network versus persistent encoding or root framing."
+        }
+      ]
+    }
+  ]
+}

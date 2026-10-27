@@ -9,12 +9,12 @@ var Farmland = Block{
 }
 
 var farmlandStates = [...]State{
-	{Hash: 360492383, Block: 432, Properties: 1562},
-	{Hash: 421967206, Block: 432, Properties: 1562},
-	{Hash: 483442029, Block: 432, Properties: 1562},
-	{Hash: 544916852, Block: 432, Properties: 1562},
-	{Hash: 606391675, Block: 432, Properties: 1562},
-	{Hash: 667866498, Block: 432, Properties: 1562},
-	{Hash: 729341321, Block: 432, Properties: 1562},
-	{Hash: 790816144, Block: 432, Properties: 1562},
+	{Hash: 360492383, Block: 433, Properties: 1563},
+	{Hash: 421967206, Block: 433, Properties: 1563},
+	{Hash: 483442029, Block: 433, Properties: 1563},
+	{Hash: 544916852, Block: 433, Properties: 1563},
+	{Hash: 606391675, Block: 433, Properties: 1563},
+	{Hash: 667866498, Block: 433, Properties: 1563},
+	{Hash: 729341321, Block: 433, Properties: 1563},
+	{Hash: 790816144, Block: 433, Properties: 1563},
 }

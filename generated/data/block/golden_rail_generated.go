@@ -9,16 +9,16 @@ var GoldenRail = Block{
 }
 
 var goldenRailStates = [...]State{
-	{Hash: 791742332, Block: 705, Properties: 610},
-	{Hash: 730267509, Block: 705, Properties: 610},
-	{Hash: 668792686, Block: 705, Properties: 611},
-	{Hash: 607317863, Block: 705, Properties: 611},
-	{Hash: 1037641624, Block: 705, Properties: 611},
-	{Hash: 976166801, Block: 705, Properties: 611},
-	{Hash: 1877080997, Block: 705, Properties: 610},
-	{Hash: 1938555820, Block: 705, Properties: 610},
-	{Hash: 1754131351, Block: 705, Properties: 611},
-	{Hash: 1815606174, Block: 705, Properties: 611},
-	{Hash: 2122980289, Block: 705, Properties: 611},
-	{Hash: 2184455112, Block: 705, Properties: 611},
+	{Hash: 791742332, Block: 707, Properties: 610},
+	{Hash: 730267509, Block: 707, Properties: 610},
+	{Hash: 668792686, Block: 707, Properties: 611},
+	{Hash: 607317863, Block: 707, Properties: 611},
+	{Hash: 1037641624, Block: 707, Properties: 611},
+	{Hash: 976166801, Block: 707, Properties: 611},
+	{Hash: 1877080997, Block: 707, Properties: 610},
+	{Hash: 1938555820, Block: 707, Properties: 610},
+	{Hash: 1754131351, Block: 707, Properties: 611},
+	{Hash: 1815606174, Block: 707, Properties: 611},
+	{Hash: 2122980289, Block: 707, Properties: 611},
+	{Hash: 2184455112, Block: 707, Properties: 611},
 }

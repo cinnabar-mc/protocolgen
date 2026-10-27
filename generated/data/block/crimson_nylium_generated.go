@@ -9,5 +9,5 @@ var CrimsonNylium = Block{
 }
 
 var crimsonNyliumStates = [...]State{
-	{Hash: 240216761, Block: 462, Properties: 1583},
+	{Hash: 240216761, Block: 463, Properties: 1584},
 }

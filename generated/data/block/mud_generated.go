@@ -9,5 +9,5 @@ var Mud = Block{
 }
 
 var mudStates = [...]State{
-	{Hash: 1234506994, Block: 1033, Properties: 2948},
+	{Hash: 1234506994, Block: 1036, Properties: 2951},
 }

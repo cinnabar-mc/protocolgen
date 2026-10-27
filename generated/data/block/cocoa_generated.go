@@ -9,16 +9,16 @@ var Cocoa = Block{
 }
 
 var cocoaStates = [...]State{
-	{Hash: 3691586283, Block: 995, Properties: 2856},
-	{Hash: 3753061106, Block: 995, Properties: 2857},
-	{Hash: 3814535929, Block: 995, Properties: 2858},
-	{Hash: 3876010752, Block: 995, Properties: 2859},
-	{Hash: 4012506762, Block: 995, Properties: 2860},
-	{Hash: 3951031939, Block: 995, Properties: 2861},
-	{Hash: 4135456408, Block: 995, Properties: 2862},
-	{Hash: 4073981585, Block: 995, Properties: 2863},
-	{Hash: 1338622589, Block: 995, Properties: 2864},
-	{Hash: 1400097412, Block: 995, Properties: 2865},
-	{Hash: 1215672943, Block: 995, Properties: 2866},
-	{Hash: 1277147766, Block: 995, Properties: 2867},
+	{Hash: 3691586283, Block: 998, Properties: 2859},
+	{Hash: 3753061106, Block: 998, Properties: 2860},
+	{Hash: 3814535929, Block: 998, Properties: 2861},
+	{Hash: 3876010752, Block: 998, Properties: 2862},
+	{Hash: 4012506762, Block: 998, Properties: 2863},
+	{Hash: 3951031939, Block: 998, Properties: 2864},
+	{Hash: 4135456408, Block: 998, Properties: 2865},
+	{Hash: 4073981585, Block: 998, Properties: 2866},
+	{Hash: 1338622589, Block: 998, Properties: 2867},
+	{Hash: 1400097412, Block: 998, Properties: 2868},
+	{Hash: 1215672943, Block: 998, Properties: 2869},
+	{Hash: 1277147766, Block: 998, Properties: 2870},
 }

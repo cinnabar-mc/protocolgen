@@ -1,0 +1,918 @@
+[
+  {
+    "id": "protocol-2225-binary-packet-1-field-1",
+    "target": "LoginPacket.Connection Request",
+    "pre_patch_context_sha256": "sha256:7c4504290752d87aa647c8b559a212b8a09eff1fb3b50499864cae7a6e429cda",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:a71d50118aa32a7d63ad0380dd280edd1890b574c42c2675f569dedbae9b7237"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:f2362df862a9bc017d3cb6e01aadcfab199413776bd2bab81aab864f5f849051"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/login.go",
+        "summary": "The pinned hand-written serializer writes this value as a length-prefixed arbitrary byte buffer rather than UTF-8 text."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/LoginPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:a71d50118aa32a7d63ad0380dd280edd1890b574c42c2675f569dedbae9b7237",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/LoginPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:a71d50118aa32a7d63ad0380dd280edd1890b574c42c2675f569dedbae9b7237",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/LoginPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:a71d50118aa32a7d63ad0380dd280edd1890b574c42c2675f569dedbae9b7237",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The protocol framing is byte-equivalent, but the binary payload must retain arbitrary bytes losslessly; select the corrected Endstone byte-buffer claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-binary-packet-155-field-1",
+    "target": "DebugInfoPacket.Data",
+    "pre_patch_context_sha256": "sha256:314d8e8bb47322b13de8471bbc52522df31528cbc1cadc211947b11eb3aa8dac",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:74e79d4443237662711271e703e1bd99790961ace4e7330ca0daefa069132b48"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:787a14ffab7293cdb785085d225cb3db159e604091b4d18a9b280fa31e8a3643"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/debug_info.go",
+        "summary": "The pinned hand-written serializer writes this value as a length-prefixed arbitrary byte buffer rather than UTF-8 text."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/DebugInfoPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:74e79d4443237662711271e703e1bd99790961ace4e7330ca0daefa069132b48",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/DebugInfoPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:74e79d4443237662711271e703e1bd99790961ace4e7330ca0daefa069132b48",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/DebugInfoPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:74e79d4443237662711271e703e1bd99790961ace4e7330ca0daefa069132b48",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The protocol framing is byte-equivalent, but the binary payload must retain arbitrary bytes losslessly; select the corrected Endstone byte-buffer claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-binary-packet-177-field-1",
+    "target": "ScriptMessagePacket.Message Value",
+    "pre_patch_context_sha256": "sha256:5e3a04ac2042c4972467cc17d64b9097bff947e9398333fc749d815dd41db0d0",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:65d91135688e56a5c8d9aac3cfa1d6e6bdf3651c97cfbdd268071e4429d5c6ec"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:3c342226d7e98650141b86617eb5896d92f487e3c33e900db0724e1bbe26183b"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/script_message.go",
+        "summary": "The pinned hand-written serializer writes this value as a length-prefixed arbitrary byte buffer rather than UTF-8 text."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ScriptMessagePacket.json#/fields/1",
+        "claim_fingerprint": "sha256:65d91135688e56a5c8d9aac3cfa1d6e6bdf3651c97cfbdd268071e4429d5c6ec",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ScriptMessagePacket.json#/fields/1",
+        "claim_fingerprint": "sha256:65d91135688e56a5c8d9aac3cfa1d6e6bdf3651c97cfbdd268071e4429d5c6ec",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ScriptMessagePacket.json#/fields/1",
+        "claim_fingerprint": "sha256:65d91135688e56a5c8d9aac3cfa1d6e6bdf3651c97cfbdd268071e4429d5c6ec",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The protocol framing is byte-equivalent, but the binary payload must retain arbitrary bytes losslessly; select the corrected Endstone byte-buffer claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-binary-packet-191-field-0",
+    "target": "FeatureRegistryPacket.FeaturesDataList",
+    "pre_patch_context_sha256": "sha256:9e5523c0ba003c91a51d0826365b386f5904086c9eb467723ad750e65a0891c1",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:7c8f1a134d0e9ced7786a63a5ba3b13f0e2b8a07be7189409e62ade8c93bc0c2"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:75b71cff11dc1449c1652608f3c9a0acdf79516e4813d0ad622cbd72157c8322"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/world.go",
+        "summary": "The pinned hand-written serializer writes this value as a length-prefixed arbitrary byte buffer rather than UTF-8 text."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/FeatureRegistryPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:7c8f1a134d0e9ced7786a63a5ba3b13f0e2b8a07be7189409e62ade8c93bc0c2",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/FeatureRegistryPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:7c8f1a134d0e9ced7786a63a5ba3b13f0e2b8a07be7189409e62ade8c93bc0c2",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/FeatureRegistryPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:7c8f1a134d0e9ced7786a63a5ba3b13f0e2b8a07be7189409e62ade8c93bc0c2",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The protocol framing is byte-equivalent, but the binary payload must retain arbitrary bytes losslessly; select the corrected Endstone byte-buffer claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-binary-packet-82-field-4",
+    "target": "ResourcePackDataInfoPacket.File Hash",
+    "pre_patch_context_sha256": "sha256:588639b40e09b4e3f3b9395a072e53fe1df415d77eff7cf8b681252810b6cbf3",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:6c0c956c74e7758b07739f66326553084679313851af49b2939b2ed181e07de4"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:6769f82be39ae961bee0ea237d280a7a8f1fea6d2c0ec417911f61352fcd526c"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/resource_pack_data_info.go",
+        "summary": "The pinned hand-written serializer writes this value as a length-prefixed arbitrary byte buffer rather than UTF-8 text."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ResourcePackDataInfoPacket.json#/fields/4",
+        "claim_fingerprint": "sha256:6c0c956c74e7758b07739f66326553084679313851af49b2939b2ed181e07de4",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ResourcePackDataInfoPacket.json#/fields/4",
+        "claim_fingerprint": "sha256:6c0c956c74e7758b07739f66326553084679313851af49b2939b2ed181e07de4",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ResourcePackDataInfoPacket.json#/fields/4",
+        "claim_fingerprint": "sha256:6c0c956c74e7758b07739f66326553084679313851af49b2939b2ed181e07de4",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The protocol framing is byte-equivalent, but the binary payload must retain arbitrary bytes losslessly; select the corrected Endstone byte-buffer claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-binary-packet-94-field-0",
+    "target": "SubClientLoginPacket.Sub Client Connection Request",
+    "pre_patch_context_sha256": "sha256:bca929dce1c6655174682a5957ce152ba84b4769cd2c059497e84c4a59750367",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:c1b54cc28732e1909dce1ad185e880952bea6e3ca43c491ba6a21ee9cb863524"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:4997ae43b9dd2a03f79d1cec11c3bbb03fd71dcb87a2184caa68f30e22aa5d44"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/sub_client_login.go",
+        "summary": "The pinned hand-written serializer writes this value as a length-prefixed arbitrary byte buffer rather than UTF-8 text."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SubClientLoginPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:c1b54cc28732e1909dce1ad185e880952bea6e3ca43c491ba6a21ee9cb863524",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SubClientLoginPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:c1b54cc28732e1909dce1ad185e880952bea6e3ca43c491ba6a21ee9cb863524",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SubClientLoginPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:c1b54cc28732e1909dce1ad185e880952bea6e3ca43c491ba6a21ee9cb863524",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The protocol framing is byte-equivalent, but the binary payload must retain arbitrary bytes losslessly; select the corrected Endstone byte-buffer claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-gophertunnel-packet-3-field-0",
+    "target": "ServerToClientHandshakePacket.Handshake WebToken",
+    "pre_patch_context_sha256": "sha256:4ddcfda09723c13c993a1f98623ff9d2645fc4f3d148d607ac93e55dc9294c66",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:80430be535e7e69f6f33cc9f60c0b6a003b3894f62c821e0ec3360b6835c8aa3"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:6e07fb64bd0e10d75be0650e00274bdb37199a851be3243f5d889cb02e99661a"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/server_to_client_handshake.go#L21",
+        "summary": "The pinned hand-written Marshal implementation agrees byte-for-byte with the complete Endstone packet layout in protocolgen's Gophertunnel oracle."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ServerToClientHandshakePacket.json#/fields/0",
+        "claim_fingerprint": "sha256:80430be535e7e69f6f33cc9f60c0b6a003b3894f62c821e0ec3360b6835c8aa3",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ServerToClientHandshakePacket.json#/fields/0",
+        "claim_fingerprint": "sha256:80430be535e7e69f6f33cc9f60c0b6a003b3894f62c821e0ec3360b6835c8aa3",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ServerToClientHandshakePacket.json#/fields/0",
+        "claim_fingerprint": "sha256:80430be535e7e69f6f33cc9f60c0b6a003b3894f62c821e0ec3360b6835c8aa3",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The pinned Gophertunnel serializer independently agrees with the complete Endstone claim for this field. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-gophertunnel-packet-308-field-0",
+    "target": "SetHudPacket.Hud Element",
+    "pre_patch_context_sha256": "sha256:6beb16ebc0549f60725092e70a0e1b6f57be2e19525cd51f313a3fd786f16d09",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:e03e35dd8d5135ac676eec3ac98baa1c9005837ddd37d96716614ffe9338a696"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:a0182f210a25f51d742271e2f775ee0ee4dc65d23483e66d0c7d8bf421333ddc"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/set_hud.go#L43",
+        "summary": "The pinned hand-written Marshal implementation agrees byte-for-byte with the complete Endstone packet layout in protocolgen's Gophertunnel oracle."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SetHudPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:66a375a2fcd57de1c9cfcd874f9182233549b56e30774a39f2794d811cd56b03",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SetHudPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:e03e35dd8d5135ac676eec3ac98baa1c9005837ddd37d96716614ffe9338a696",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SetHudPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:e03e35dd8d5135ac676eec3ac98baa1c9005837ddd37d96716614ffe9338a696",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The pinned Gophertunnel serializer independently agrees with the complete Endstone claim for this field. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-gophertunnel-packet-330-field-0",
+    "target": "ClientboundDataStorePacket.Updates",
+    "pre_patch_context_sha256": "sha256:128f8bcc37ebe4080941a70d72c130c7f03a637c234c3fc471a511444f9aa096",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:256cf2c1906cd741c3f13a4a01127509c4c9f4ad9a04961d5b9e9736155f78fd"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:d8ea19df725b57db5cf5b9402b28cc23a838e5fe0d5219e6b4fd66498187e74a"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/clientbound_data_store.go#L18",
+        "summary": "The pinned hand-written Marshal implementation and its helper or conditional chain are the independent serializer witness; the AST oracle marks the packet unresolved rather than contradictory because it cannot flatten that control flow."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientboundDataStorePacket.json#/fields/0",
+        "claim_fingerprint": "sha256:256cf2c1906cd741c3f13a4a01127509c4c9f4ad9a04961d5b9e9736155f78fd",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientboundDataStorePacket.json#/fields/0",
+        "claim_fingerprint": "sha256:256cf2c1906cd741c3f13a4a01127509c4c9f4ad9a04961d5b9e9736155f78fd",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientboundDataStorePacket.json#/fields/0",
+        "claim_fingerprint": "sha256:256cf2c1906cd741c3f13a4a01127509c4c9f4ad9a04961d5b9e9736155f78fd",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "Direct inspection of the pinned Gophertunnel serializer supports the complete Endstone claim; the automated oracle is unresolved only at a helper or runtime-control boundary. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-gophertunnel-packet-344-field-0",
+    "target": "SyncWorldClocksPacket.Data",
+    "pre_patch_context_sha256": "sha256:b29c180d5d56ca582967361a1d0a39ec361a3939e90f1f4683ea282e86c10da9",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:0495f90d919ac8c9f0ba7dd675d34fd1f25462506e805b862d223a98c296bb54"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:c331fdc2bdc42250778a9b6e22bdaab6b20cf16b5a432b2f367e2cfe224cef66"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/sync_world_clocks.go#L30",
+        "summary": "The pinned hand-written Marshal implementation and its helper or conditional chain are the independent serializer witness; the AST oracle marks the packet unresolved rather than contradictory because it cannot flatten that control flow."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SyncWorldClocksPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:0495f90d919ac8c9f0ba7dd675d34fd1f25462506e805b862d223a98c296bb54",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SyncWorldClocksPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:0495f90d919ac8c9f0ba7dd675d34fd1f25462506e805b862d223a98c296bb54",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SyncWorldClocksPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:0495f90d919ac8c9f0ba7dd675d34fd1f25462506e805b862d223a98c296bb54",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "Direct inspection of the pinned Gophertunnel serializer supports the complete Endstone claim; the automated oracle is unresolved only at a helper or runtime-control boundary. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-packet-137-field-0",
+    "target": "EducationSettingsPacket.Education Level Settings",
+    "pre_patch_context_sha256": "sha256:fc6e36c32eced32e143bfad319d5a08fad26dbb464465840ebb30947884e4d1f",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:2b0337fb399007b0b3478b338b425f31c25e96367eacd9ff2e02e6069cfcf1e3"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v465/serializer/EducationSettingsSerializer_v465.java",
+        "summary": "The inherited codec writes Agent Capabilities as one optional boolean and External Link Settings as a separate optional boolean; it does not add a nested presence marker."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/EducationSettingsPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/EducationSettingsPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/EducationSettingsPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The exact Cloudburst 1.26.40 serializer agrees with the Endstone claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-packet-322-field-0",
+    "target": "ClientMovementPredictionSyncPacket.Actor Data Flag",
+    "pre_patch_context_sha256": "sha256:c9de3a0b3b2172a6e6f13b1f6f946ca1d2b3ae3afca7cfacfd13a9c834fb8383",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:28c62b5dbaacdc0f7a8024dd4984278cf99d6a3a7d335d241b3027cebd2a68c8"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:b8eaf718ff0d63a888e16fd9e6a0fc630abbbb6f94276349e98f39194467a507"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v776/serializer/MovementPredictionSyncSerializer_v776.java",
+        "summary": "The inherited codec serializes entity flags with the large-varint bitset representation."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientMovementPredictionSyncPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:28c62b5dbaacdc0f7a8024dd4984278cf99d6a3a7d335d241b3027cebd2a68c8",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientMovementPredictionSyncPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:28c62b5dbaacdc0f7a8024dd4984278cf99d6a3a7d335d241b3027cebd2a68c8",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientMovementPredictionSyncPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:28c62b5dbaacdc0f7a8024dd4984278cf99d6a3a7d335d241b3027cebd2a68c8",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      }
+    ],
+    "reason": "The exact Cloudburst 1.26.40 serializer agrees with the Endstone claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-retarget-035",
+    "target": "SubChunkPacket.SubChunk Data",
+    "pre_patch_context_sha256": "sha256:4b6dbccc563342910603d562df9125cc04f4d1eb783ddf21e18174209fd24cf5",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:999a1358840a9a804cff8a058949c1ef2888cf05b9a13d21c72532e508a89269"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:d162aece5f5057bc38384d6451a8a494b618852b28284b309b6634a93ea45946"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/sub_chunk.go#L73",
+        "summary": "The protocol 2193 gophertunnel marshal writes this wire shape."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SubChunkPacket.json#/fields/3",
+        "claim_fingerprint": "sha256:77407083a29986db6f0adade8704aa719a01f04e21c7a5cfd98d5442d968c74b",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/SubChunkPacket.json#/fields/3",
+        "claim_fingerprint": "sha256:999a1358840a9a804cff8a058949c1ef2888cf05b9a13d21c72532e508a89269",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/8667debe0adad27de6c692c88942c489a1193206/json",
+        "summary": "The exact 1.26.51 Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Protocol 2193 writes each 16-entry sub-chunk height map row with an unsigned varint length prefix; the 1.26.51.1 Endstone dump and the protocol 2193 gophertunnel HeightMap marshal agree. Select the complete Endstone claim. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-retarget-040",
+    "target": "StructureBlockUpdatePacket.Structure Data",
+    "pre_patch_context_sha256": "sha256:673924adbeff04e876047186fe41bd8b61f14cee2b981d6c50cd0a4b061b5df6",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:f915ea77f6e353cd186c9898b73082c451c5c6b10eca2eecbcea9270a28a7907"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:ae73e878c1e9f34661fb6d2e95306aa05999d8171aed980e6e4b244b1f2f90d2"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_block_update.go#L69",
+        "summary": "The protocol 2193 gophertunnel marshal writes the structure name and filtered structure name as two plain strings."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/StructureBlockUpdatePacket.json#/fields/1",
+        "claim_fingerprint": "sha256:f480ef342e127f0fcbb870022471ff8dddc7fe4539191c83cb8ab62cc1293aa3",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/StructureBlockUpdatePacket.json#/fields/1",
+        "claim_fingerprint": "sha256:f915ea77f6e353cd186c9898b73082c451c5c6b10eca2eecbcea9270a28a7907",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/8667debe0adad27de6c692c88942c489a1193206/json",
+        "summary": "The exact 1.26.51 Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Select the complete Endstone claim with the StructureBlockUpdate-scoped correction: the structure name and its filtered form are two always-present strings at this site. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-reviewed-002",
+    "target": "LevelEventGenericPacket.__[[CTD]]__",
+    "pre_patch_context_sha256": "sha256:1409b2ebbd5281e12e8a4ad7ee9c218de4b0af68b9741782b4dae8dc49e92116",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:a51103bad76aa01a64387a36b34906854f5a5a689241c89a9997462e2b0967b1"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:67d17770347648e011cff604b8a88bccdf4d16e15a7c454cd5223b645d4588c1"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/LevelEventGenericPacketPayload.json",
+        "summary": "The target documents the special compound field after Event Id but does not supply a complete serializable type."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/LevelEventGenericPacket.json",
+        "summary": "The target dump declares the field as CompoundTag, matching the prior canonical representation."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/LevelEventGenericPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:a51103bad76aa01a64387a36b34906854f5a5a689241c89a9997462e2b0967b1",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      }
+    ],
+    "reason": "Mojang leaves its special compound payload without a lowerable type. Retain the complete target Endstone CompoundTag claim and the existing network-NBT encoding overlay. The special compound root framing remains unverified by these documents; this selection establishes the available schema representation rather than new live parity evidence."
+  },
+  {
+    "id": "protocol-2225-reviewed-004",
+    "target": "ClientboundPlayAudioContentPacket.Play Sound",
+    "pre_patch_context_sha256": "sha256:08c3b7dba8784c723534e7321a651b8a9c860d6e29d2f812010ef48676c0aadc",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:97215561f09bd2aaa6a3480d6b58542ba30be9453805e2ea916169c4e7d82c01"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:fd9dcaf748aa573b2806ed237d54faeb0089ff4c05914b021325153d863962ef"
+      }
+    ],
+    "selected_source": "mojang",
+    "evidence": [
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundPlayAudioContentPacketPayload.json",
+        "summary": "Play Sound references PlaySoundPacketPayload after the signed audio strings and playback type."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/PlaySoundPacketPayload.json",
+        "summary": "The referenced payload supplies all sound fields and both optional values."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/PlaySoundPacket.json",
+        "summary": "The standalone target packet corroborates the nested sound field order and primitive types."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/clientbound_play_audio_content.go",
+        "summary": "The audio packet writes its Sound member with PlaySound.Marshal."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "ClientboundPlayAudioContentPacketPayload.json#/properties/Play Sound",
+        "claim_fingerprint": "sha256:fd9dcaf748aa573b2806ed237d54faeb0089ff4c05914b021325153d863962ef",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      }
+    ],
+    "reason": "The target Endstone field references PlaySoundPacketPayload but omits that type from its dump. Select the complete Mojang referenced payload; the same target Endstone PlaySound packet independently lists its ordered fields and the protocol-2225 audio marshal delegates to PlaySound.Marshal."
+  },
+  {
+    "id": "protocol-2225-reviewed-005",
+    "target": "ClientboundUpdateSoundDataPacket.Event",
+    "pre_patch_context_sha256": "sha256:79b40bf4d228588993b2e33758c9c0ad9a7c632184009bd2ce77fa6ffbc3e3fe",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:5ef3e262263f31b2e79b2714238af2c293d789a992f76b8590a88918b2c236ba"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:4930ef6787f20b68cd6d58e2bbd90a4b0c7cae09a620033ae1191ddc442200af"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+        "summary": "The target explicitly says the leading Type tag selects the alternative."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+        "summary": "Each target alternative already starts with its fixed uint8 Type value."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+        "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/ClientboundUpdateSoundDataPacket.json#/fields/1",
+        "claim_fingerprint": "sha256:5ef3e262263f31b2e79b2714238af2c293d789a992f76b8590a88918b2c236ba",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      }
+    ],
+    "reason": "Both dumps repeat each event Type inside an outer positional union. The target Mojang field description identifies that leading Type as the discriminator, and the pinned protocol-2225 hand-written marshal writes a single uint8 Type. Select the corrected complete Endstone tagged-switch claim; its payload variants omit the consumed discriminator."
+  },
+  {
+    "id": "protocol-2225-reviewed-024",
+    "target": "PlayerAuthInputPacket.Input Data",
+    "pre_patch_context_sha256": "sha256:9453e1f8cbea4086ea5ba5184381d149e3bcc4e6e89db35756cf4b0ded47d9d0",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:cb81f1eae9bc0d2169605adc83f2aa61772f84dee0cc93246c74f838c80c8c72"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:c56a2d02b312285c5b4a9cb381ce9ce73043255b73587e0f43ac4aae30454e44"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/4",
+        "claim_fingerprint": "sha256:34f49bd4115ce8d3dd6da19e93d60581b0d2a998f00a6ec44f5cd2b712893e43",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/4",
+        "claim_fingerprint": "sha256:cb81f1eae9bc0d2169605adc83f2aa61772f84dee0cc93246c74f838c80c8c72",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/4",
+        "claim_fingerprint": "sha256:cb81f1eae9bc0d2169605adc83f2aa61772f84dee0cc93246c74f838c80c8c72",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
+        "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-reviewed-027",
+    "target": "PlayerAuthInputPacket.Player Block Actions",
+    "pre_patch_context_sha256": "sha256:1640c7856816e417bbfe0faa9284cdefab01f13bb591d3c997bb0ec9dcadc8a3",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:5fcfeff87548d52ad02003820797f8ba513d920439ef4003abc274b0deb1db84"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:e8c467db10717f9d4cb3abab98c6c14a42a4934cf4c3dde3c5c3bacc825b303a"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/13",
+        "claim_fingerprint": "sha256:57184431b5ce43762d237b75f393edc623cf786d98c83f56e0b4573f6d9f57c9",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/13",
+        "claim_fingerprint": "sha256:5fcfeff87548d52ad02003820797f8ba513d920439ef4003abc274b0deb1db84",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/13",
+        "claim_fingerprint": "sha256:5fcfeff87548d52ad02003820797f8ba513d920439ef4003abc274b0deb1db84",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
+        "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-reviewed-028",
+    "target": "PlayerAuthInputPacket.Vehicle Rotation",
+    "pre_patch_context_sha256": "sha256:0ed74fdc94c9036ebdb20219672a3367d7c03ddd33e38334cbc69a24fe96c3a9",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:e4aa5f3f65ce8382999d0d24d97ed562757f3c3420b2919a3e4646975da25b2c"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:9331dff4553798e4ea5d3220c56e9c53459edbddf09c126cd2a7b8f5a129b601"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/14",
+        "claim_fingerprint": "sha256:e4aa5f3f65ce8382999d0d24d97ed562757f3c3420b2919a3e4646975da25b2c",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/14",
+        "claim_fingerprint": "sha256:e4aa5f3f65ce8382999d0d24d97ed562757f3c3420b2919a3e4646975da25b2c",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/14",
+        "claim_fingerprint": "sha256:e4aa5f3f65ce8382999d0d24d97ed562757f3c3420b2919a3e4646975da25b2c",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
+        "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-reviewed-029",
+    "target": "PlayerAuthInputPacket.Client Predicted Vehicle",
+    "pre_patch_context_sha256": "sha256:31da4eb822f41319f7936b2e9cabd60ca1eb24baa8091a888f36d3a031b27c1d",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:cdf39cdc523e639e34a3dc997203139ae5cad816129f4bec4ddb3106bc89b47b"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:5db74304861a734a062187f605e9028415149ac3222606b0652e0b2b9611e1d8"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/15",
+        "claim_fingerprint": "sha256:cdf39cdc523e639e34a3dc997203139ae5cad816129f4bec4ddb3106bc89b47b",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/15",
+        "claim_fingerprint": "sha256:cdf39cdc523e639e34a3dc997203139ae5cad816129f4bec4ddb3106bc89b47b",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/PlayerAuthInputPacket.json#/fields/15",
+        "claim_fingerprint": "sha256:cdf39cdc523e639e34a3dc997203139ae5cad816129f4bec4ddb3106bc89b47b",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
+        "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  },
+  {
+    "id": "protocol-2225-reviewed-037",
+    "target": "CameraPresetsPacket.Camera Presets",
+    "pre_patch_context_sha256": "sha256:92232da3d671272276d2ad32c861f8cfe07dd7a23ac3a4606696610c62ae1649",
+    "claims": [
+      {
+        "source_id": "endstone",
+        "digest": "sha256:8dfbd7c3bc2dc986c9442818cce04546774540271d884ebbbec96122387f7211"
+      },
+      {
+        "source_id": "mojang",
+        "digest": "sha256:66480b3c9f3219fe9c206d170b4b6eee1504782c59e96b18b0d82c5b49e09088"
+      }
+    ],
+    "selected_source": "endstone",
+    "evidence": [
+      {
+        "source_id": "endstone",
+        "locator": "packets/CameraPresetsPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:8dfbd7c3bc2dc986c9442818cce04546774540271d884ebbbec96122387f7211",
+        "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/CameraPresetsPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:8dfbd7c3bc2dc986c9442818cce04546774540271d884ebbbec96122387f7211",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "packets/CameraPresetsPacket.json#/fields/0",
+        "claim_fingerprint": "sha256:fb1d47164b3bc9e43ace8cb1b587990be72046dde749bdaabc3157eb6e1bcaf7",
+        "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "mojang",
+        "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
+        "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      }
+    ],
+    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+  }
+]

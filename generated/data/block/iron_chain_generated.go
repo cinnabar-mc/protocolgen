@@ -9,7 +9,7 @@ var IronChain = Block{
 }
 
 var ironChainStates = [...]State{
-	{Hash: 3830269682, Block: 1185, Properties: 19},
-	{Hash: 590608957, Block: 1185, Properties: 20},
-	{Hash: 2774963111, Block: 1185, Properties: 21},
+	{Hash: 3830269682, Block: 1188, Properties: 19},
+	{Hash: 590608957, Block: 1188, Properties: 20},
+	{Hash: 2774963111, Block: 1188, Properties: 21},
 }

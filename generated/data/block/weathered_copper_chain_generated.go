@@ -9,7 +9,7 @@ var WeatheredCopperChain = Block{
 }
 
 var weatheredCopperChainStates = [...]State{
-	{Hash: 2973627527, Block: 780, Properties: 19},
-	{Hash: 1918320956, Block: 780, Properties: 20},
-	{Hash: 4028934098, Block: 780, Properties: 21},
+	{Hash: 2973627527, Block: 782, Properties: 19},
+	{Hash: 1918320956, Block: 782, Properties: 20},
+	{Hash: 4028934098, Block: 782, Properties: 21},
 }

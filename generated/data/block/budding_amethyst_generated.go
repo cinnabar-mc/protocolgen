@@ -9,5 +9,5 @@ var BuddingAmethyst = Block{
 }
 
 var buddingAmethystStates = [...]State{
-	{Hash: 3232195280, Block: 1087, Properties: 594},
+	{Hash: 3232195280, Block: 1090, Properties: 594},
 }

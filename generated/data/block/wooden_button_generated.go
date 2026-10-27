@@ -9,16 +9,16 @@ var WoodenButton = Block{
 }
 
 var woodenButtonStates = [...]State{
-	{Hash: 414831508, Block: 966, Properties: 94},
-	{Hash: 353356685, Block: 966, Properties: 95},
-	{Hash: 291881862, Block: 966, Properties: 96},
-	{Hash: 230407039, Block: 966, Properties: 97},
-	{Hash: 660730800, Block: 966, Properties: 98},
-	{Hash: 599255977, Block: 966, Properties: 99},
-	{Hash: 1089791681, Block: 966, Properties: 100},
-	{Hash: 1151266504, Block: 966, Properties: 101},
-	{Hash: 966842035, Block: 966, Properties: 102},
-	{Hash: 1028316858, Block: 966, Properties: 103},
-	{Hash: 843892389, Block: 966, Properties: 104},
-	{Hash: 905367212, Block: 966, Properties: 105},
+	{Hash: 414831508, Block: 968, Properties: 94},
+	{Hash: 353356685, Block: 968, Properties: 95},
+	{Hash: 291881862, Block: 968, Properties: 96},
+	{Hash: 230407039, Block: 968, Properties: 97},
+	{Hash: 660730800, Block: 968, Properties: 98},
+	{Hash: 599255977, Block: 968, Properties: 99},
+	{Hash: 1089791681, Block: 968, Properties: 100},
+	{Hash: 1151266504, Block: 968, Properties: 101},
+	{Hash: 966842035, Block: 968, Properties: 102},
+	{Hash: 1028316858, Block: 968, Properties: 103},
+	{Hash: 843892389, Block: 968, Properties: 104},
+	{Hash: 905367212, Block: 968, Properties: 105},
 }

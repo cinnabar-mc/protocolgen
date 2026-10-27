@@ -9,6 +9,6 @@ var LightGrayWoolSlab = Block{
 }
 
 var lightGrayWoolSlabStates = [...]State{
-	{Hash: 1380068187, Block: 530, Properties: 963},
-	{Hash: 160262916, Block: 530, Properties: 964},
+	{Hash: 1380068187, Block: 532, Properties: 963},
+	{Hash: 160262916, Block: 532, Properties: 964},
 }

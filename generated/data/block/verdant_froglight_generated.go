@@ -9,7 +9,7 @@ var VerdantFroglight = Block{
 }
 
 var verdantFroglightStates = [...]State{
-	{Hash: 2976351500, Block: 986, Properties: 2850},
-	{Hash: 4031658071, Block: 986, Properties: 2850},
-	{Hash: 1847303917, Block: 986, Properties: 2850},
+	{Hash: 2976351500, Block: 988, Properties: 2852},
+	{Hash: 4031658071, Block: 988, Properties: 2852},
+	{Hash: 1847303917, Block: 988, Properties: 2852},
 }

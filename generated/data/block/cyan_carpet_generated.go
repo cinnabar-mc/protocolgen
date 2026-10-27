@@ -9,5 +9,5 @@ var CyanCarpet = Block{
 }
 
 var cyanCarpetStates = [...]State{
-	{Hash: 778656297, Block: 355, Properties: 1351},
+	{Hash: 778656297, Block: 356, Properties: 1352},
 }

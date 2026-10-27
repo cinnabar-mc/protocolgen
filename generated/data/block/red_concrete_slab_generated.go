@@ -9,6 +9,6 @@ var RedConcreteSlab = Block{
 }
 
 var redConcreteSlabStates = [...]State{
-	{Hash: 1948266517, Block: 665, Properties: 307},
-	{Hash: 4175141058, Block: 665, Properties: 308},
+	{Hash: 1948266517, Block: 667, Properties: 307},
+	{Hash: 4175141058, Block: 667, Properties: 308},
 }

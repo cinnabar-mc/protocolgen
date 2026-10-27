@@ -9,7 +9,7 @@ var OakWood = Block{
 }
 
 var oakWoodStates = [...]State{
-	{Hash: 1622499771, Block: 662, Properties: 572},
-	{Hash: 567193200, Block: 662, Properties: 572},
-	{Hash: 2677806342, Block: 662, Properties: 572},
+	{Hash: 1622499771, Block: 664, Properties: 572},
+	{Hash: 567193200, Block: 664, Properties: 572},
+	{Hash: 2677806342, Block: 664, Properties: 572},
 }

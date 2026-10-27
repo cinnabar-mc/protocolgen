@@ -9,5 +9,5 @@ var PurpleCarpet = Block{
 }
 
 var purpleCarpetStates = [...]State{
-	{Hash: 1671964394, Block: 1386, Properties: 3505},
+	{Hash: 1671964394, Block: 1389, Properties: 3508},
 }

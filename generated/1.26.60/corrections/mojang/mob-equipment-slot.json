@@ -1,0 +1,58 @@
+{
+  "operations": [
+    {
+      "id": "mob-equipment-slot-is-fixed-u8",
+      "file": "MobEquipmentPacketPayload.json",
+      "pointer": "/properties/Slot/x-serialization-options",
+      "pre_patch_sha256": "sha256:3da781f5649d9b5cd5af8e188cb9685971100f724a26d6b95ccefd7d996dc6e8",
+      "replace": [],
+      "why": "The slot is one fixed unsigned byte; the published Compression marker is incorrect.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v291/serializer/MobEquipmentSerializer_v291.java",
+          "summary": "Cloudburst reads and writes the slot with ByteBuf readUnsignedByte/writeByte."
+        },
+        {
+          "locator": "https://github.com/Sandertv/gophertunnel/blob/1653b540/minecraft/protocol/packet/mob_equipment.go",
+          "summary": "gophertunnel uses IO.Uint8 for Slot."
+        }
+      ]
+    },
+    {
+      "id": "mob-equipment-selected-slot-is-fixed-u8",
+      "file": "MobEquipmentPacketPayload.json",
+      "pointer": "/properties/Selected Slot/x-serialization-options",
+      "pre_patch_sha256": "sha256:3da781f5649d9b5cd5af8e188cb9685971100f724a26d6b95ccefd7d996dc6e8",
+      "replace": [],
+      "why": "The selected hotbar slot is one fixed unsigned byte; the published Compression marker is incorrect.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v291/serializer/MobEquipmentSerializer_v291.java",
+          "summary": "Cloudburst reads and writes the selected slot with ByteBuf readUnsignedByte/writeByte."
+        },
+        {
+          "locator": "https://github.com/Sandertv/gophertunnel/blob/1653b540/minecraft/protocol/packet/mob_equipment.go",
+          "summary": "gophertunnel uses IO.Uint8 for SelectedSlot."
+        }
+      ]
+    },
+    {
+      "id": "mob-equipment-container-id-is-fixed-u8",
+      "file": "MobEquipmentPacketPayload.json",
+      "pointer": "/properties/Container ID/x-serialization-options",
+      "pre_patch_sha256": "sha256:3da781f5649d9b5cd5af8e188cb9685971100f724a26d6b95ccefd7d996dc6e8",
+      "replace": [],
+      "why": "The container ID is one fixed unsigned byte; the published Compression marker is incorrect.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v291/serializer/MobEquipmentSerializer_v291.java",
+          "summary": "Cloudburst reads and writes the container ID with ByteBuf readUnsignedByte/writeByte."
+        },
+        {
+          "locator": "https://github.com/Sandertv/gophertunnel/blob/1653b540/minecraft/protocol/packet/mob_equipment.go",
+          "summary": "gophertunnel uses IO.Uint8 for WindowID."
+        }
+      ]
+    }
+  ]
+}

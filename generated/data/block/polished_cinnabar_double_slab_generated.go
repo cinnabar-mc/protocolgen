@@ -9,6 +9,6 @@ var PolishedCinnabarDoubleSlab = Block{
 }
 
 var polishedCinnabarDoubleSlabStates = [...]State{
-	{Hash: 2192647885, Block: 576, Properties: 1628},
-	{Hash: 2676125450, Block: 576, Properties: 1628},
+	{Hash: 2192647885, Block: 578, Properties: 1629},
+	{Hash: 2676125450, Block: 578, Properties: 1629},
 }

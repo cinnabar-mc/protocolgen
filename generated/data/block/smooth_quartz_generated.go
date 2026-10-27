@@ -9,7 +9,7 @@ var SmoothQuartz = Block{
 }
 
 var smoothQuartzStates = [...]State{
-	{Hash: 906320597, Block: 570, Properties: 790},
-	{Hash: 4145981322, Block: 570, Properties: 790},
-	{Hash: 2035368180, Block: 570, Properties: 790},
+	{Hash: 906320597, Block: 572, Properties: 790},
+	{Hash: 4145981322, Block: 572, Properties: 790},
+	{Hash: 2035368180, Block: 572, Properties: 790},
 }

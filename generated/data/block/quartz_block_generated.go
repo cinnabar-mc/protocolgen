@@ -9,7 +9,7 @@ var QuartzBlock = Block{
 }
 
 var quartzBlockStates = [...]State{
-	{Hash: 1808046669, Block: 374, Properties: 1405},
-	{Hash: 752740098, Block: 374, Properties: 1405},
-	{Hash: 2937094252, Block: 374, Properties: 1405},
+	{Hash: 1808046669, Block: 375, Properties: 1406},
+	{Hash: 752740098, Block: 375, Properties: 1406},
+	{Hash: 2937094252, Block: 375, Properties: 1406},
 }

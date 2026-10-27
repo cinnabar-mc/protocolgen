@@ -9,5 +9,5 @@ var Slime = Block{
 }
 
 var slimeStates = [...]State{
-	{Hash: 3436513150, Block: 480, Properties: 1625},
+	{Hash: 3436513150, Block: 481, Properties: 1626},
 }

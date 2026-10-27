@@ -9,5 +9,5 @@ var Web = Block{
 }
 
 var webStates = [...]State{
-	{Hash: 955936010, Block: 1041, Properties: 2953},
+	{Hash: 955936010, Block: 1044, Properties: 2956},
 }

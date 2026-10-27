@@ -9,6 +9,6 @@ var NormalStoneDoubleSlab = Block{
 }
 
 var normalStoneDoubleSlabStates = [...]State{
-	{Hash: 138439774, Block: 529, Properties: 483},
-	{Hash: 1780417207, Block: 529, Properties: 483},
+	{Hash: 138439774, Block: 531, Properties: 483},
+	{Hash: 1780417207, Block: 531, Properties: 483},
 }

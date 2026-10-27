@@ -9,6 +9,6 @@ var RedWoolDoubleSlab = Block{
 }
 
 var redWoolDoubleSlabStates = [...]State{
-	{Hash: 317399106, Block: 633, Properties: 68},
-	{Hash: 4195605187, Block: 633, Properties: 68},
+	{Hash: 317399106, Block: 635, Properties: 68},
+	{Hash: 4195605187, Block: 635, Properties: 68},
 }

@@ -20,7 +20,7 @@ Requires Go 1.26, jq, and Rust (edition 2024) with rustfmt.
 make regen-rust
 
 # Full pipeline for the current release
-make regen-1.26.51 \
+make regen-1.26.60 \
   MOJANG_DIR=/path/to/bedrock-protocol-docs/json \
   ENDSTONE_DIR=/path/to/protocol-docs
 ```

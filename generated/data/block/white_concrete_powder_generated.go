@@ -9,5 +9,5 @@ var WhiteConcretePowder = Block{
 }
 
 var whiteConcretePowderStates = [...]State{
-	{Hash: 3227769235, Block: 655, Properties: 2044},
+	{Hash: 3227769235, Block: 657, Properties: 2046},
 }

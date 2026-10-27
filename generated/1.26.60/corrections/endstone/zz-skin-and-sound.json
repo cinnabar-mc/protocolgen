@@ -1,0 +1,283 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-endstone-skin-image-is-binary",
+      "file": "types/SkinImage.json",
+      "pointer": "/fields/2",
+      "pre_patch_sha256": "sha256:d9e468e685880fc17c0d99cc78839178390a2a53db34edc2ded6452ca1b04d69",
+      "replace": {
+        "name": "ImageBytes",
+        "type": "bytes",
+        "constraints": {
+          "max_length": 67108864
+        }
+      },
+      "why": "Skin pixels are a length-prefixed binary byte buffer. Preserve the 67108864-byte schema bound without applying an unrelated collection-element limit; this representation preserves the original byte order and length prefix.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/SkinImage.json",
+          "summary": "ImageBytes is a u8 array with a 67108864-byte maximum; Width and Height remain separate uint32 values."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SkinImage.json",
+          "summary": "The independent target dump has the same u8 payload and uvarint32 prefix."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/skin.go",
+          "summary": "The pinned protocol-2225 skin marshal reads/writes image data with ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-embedded-selector",
+      "file": "packets/ClientboundUpdateSoundDataPacket.json",
+      "pointer": "/fields/1/type",
+      "pre_patch_sha256": "sha256:032a3a7418e3441b15beb9a01e823fdf2485efb4bb7844590977831d18cb3555",
+      "replace": {
+        "switch": {
+          "type": "uint8",
+          "enum": "SoundDataEventType",
+          "name": "Type"
+        },
+        "cases": [
+          "SoundDataEvent::Stop",
+          "SoundDataEvent::SetVolume",
+          "SoundDataEvent::SetPitch",
+          "SoundDataEvent::Fade",
+          "SoundDataEvent::SeekTo",
+          "SoundDataEvent::Pause",
+          "SoundDataEvent::Resume"
+        ]
+      },
+      "why": "The leading uint8 Type in each alternative is the discriminator itself. Use an explicit tagged switch so the frontend consumes it once instead of adding a separate positional varuint32 selector.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-stop-tag",
+      "file": "types/SoundDataEvent__Stop.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:4e75f0d4b4f2b588448a5658113ca21247c7467c47c4b3423344cae335c51a90",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            0
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-setvolume-tag",
+      "file": "types/SoundDataEvent__SetVolume.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:db9e38bd5b222f2cdbc66c09df96a420e76c1189485aeb6be2de722a8829ab9f",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            1
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-setpitch-tag",
+      "file": "types/SoundDataEvent__SetPitch.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:bb567385532137bb5748c3b2c91eaa2d43daa45ce80cb6f2ba8d1fe915f54150",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            2
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-fade-tag",
+      "file": "types/SoundDataEvent__Fade.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:1c9462fcc876ddbc20d7560502c0a689239e37df1184df2d1fba2a811ec355dd",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            3
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-seekto-tag",
+      "file": "types/SoundDataEvent__SeekTo.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:dab5c99184d695a22775feb3226365477a3307dc04abe07e7ada9aed069a548a",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            4
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-pause-tag",
+      "file": "types/SoundDataEvent__Pause.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:fd2a98070f7745bddd499594606540833b9502bc76eb3a1e159ebdda839214f0",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            5
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-sound-event-resume-tag",
+      "file": "types/SoundDataEvent__Resume.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:70ac61177b7bc6f91c5b25d70883d33409f05e1afe96c13d2e566a4ecb26fd1b",
+      "merge": {
+        "constraints": {
+          "enum_values": [
+            6
+          ]
+        }
+      },
+      "why": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        }
+      ]
+    }
+  ]
+}

@@ -9,5 +9,5 @@ var CrackedNetherBricks = Block{
 }
 
 var crackedNetherBricksStates = [...]State{
-	{Hash: 1014633093, Block: 580, Properties: 221},
+	{Hash: 1014633093, Block: 582, Properties: 221},
 }

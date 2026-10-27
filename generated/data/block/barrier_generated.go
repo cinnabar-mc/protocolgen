@@ -9,5 +9,5 @@ var Barrier = Block{
 }
 
 var barrierStates = [...]State{
-	{Hash: 951810905, Block: 876, Properties: 2589},
+	{Hash: 951810905, Block: 878, Properties: 2591},
 }

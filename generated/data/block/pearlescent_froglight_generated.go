@@ -9,7 +9,7 @@ var PearlescentFroglight = Block{
 }
 
 var pearlescentFroglightStates = [...]State{
-	{Hash: 1080727706, Block: 973, Properties: 2840},
-	{Hash: 2136034277, Block: 973, Properties: 2840},
-	{Hash: 25421135, Block: 973, Properties: 2840},
+	{Hash: 1080727706, Block: 975, Properties: 2842},
+	{Hash: 2136034277, Block: 975, Properties: 2842},
+	{Hash: 25421135, Block: 975, Properties: 2842},
 }

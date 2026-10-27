@@ -9,12 +9,12 @@ var ShelfMushroom = Block{
 }
 
 var shelfMushroomStates = [...]State{
-	{Hash: 274999335, Block: 797, Properties: 2404},
-	{Hash: 997300324, Block: 797, Properties: 2405},
-	{Hash: 1593583661, Block: 797, Properties: 2406},
-	{Hash: 2854555902, Block: 797, Properties: 2407},
-	{Hash: 1620645878, Block: 797, Properties: 2408},
-	{Hash: 379914871, Block: 797, Properties: 2409},
-	{Hash: 1268718704, Block: 797, Properties: 2410},
-	{Hash: 1871968381, Block: 797, Properties: 2411},
+	{Hash: 274999335, Block: 799, Properties: 2406},
+	{Hash: 997300324, Block: 799, Properties: 2407},
+	{Hash: 1593583661, Block: 799, Properties: 2408},
+	{Hash: 2854555902, Block: 799, Properties: 2409},
+	{Hash: 1620645878, Block: 799, Properties: 2410},
+	{Hash: 379914871, Block: 799, Properties: 2411},
+	{Hash: 1268718704, Block: 799, Properties: 2412},
+	{Hash: 1871968381, Block: 799, Properties: 2413},
 }

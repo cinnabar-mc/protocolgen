@@ -9,6 +9,6 @@ var LimeConcreteDoubleSlab = Block{
 }
 
 var limeConcreteDoubleSlabStates = [...]State{
-	{Hash: 1353252849, Block: 1216, Properties: 477},
-	{Hash: 974373958, Block: 1216, Properties: 477},
+	{Hash: 1353252849, Block: 1219, Properties: 477},
+	{Hash: 974373958, Block: 1219, Properties: 477},
 }

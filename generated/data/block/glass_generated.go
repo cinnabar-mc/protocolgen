@@ -9,5 +9,5 @@ var Glass = Block{
 }
 
 var glassStates = [...]State{
-	{Hash: 927668178, Block: 913, Properties: 2695},
+	{Hash: 927668178, Block: 915, Properties: 2697},
 }

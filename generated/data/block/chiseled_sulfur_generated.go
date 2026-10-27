@@ -9,5 +9,5 @@ var ChiseledSulfur = Block{
 }
 
 var chiseledSulfurStates = [...]State{
-	{Hash: 2040895447, Block: 671, Properties: 256},
+	{Hash: 2040895447, Block: 673, Properties: 256},
 }

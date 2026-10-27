@@ -9,5 +9,5 @@ var PrismarineBricks = Block{
 }
 
 var prismarineBricksStates = [...]State{
-	{Hash: 2625763471, Block: 1430, Properties: 538},
+	{Hash: 2625763471, Block: 1433, Properties: 538},
 }

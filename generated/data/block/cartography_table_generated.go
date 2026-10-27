@@ -9,5 +9,5 @@ var CartographyTable = Block{
 }
 
 var cartographyTableStates = [...]State{
-	{Hash: 863215907, Block: 1473, Properties: 1475},
+	{Hash: 863215907, Block: 1476, Properties: 1476},
 }

@@ -9,5 +9,5 @@ var Azalea = Block{
 }
 
 var azaleaStates = [...]State{
-	{Hash: 3563509743, Block: 1064, Properties: 3029},
+	{Hash: 3563509743, Block: 1067, Properties: 3032},
 }

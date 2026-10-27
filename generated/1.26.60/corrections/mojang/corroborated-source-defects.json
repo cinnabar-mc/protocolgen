@@ -1,0 +1,308 @@
+{
+  "operations": [
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates AvailableCommandsPacketChainedSubcommandData.json /required."
+        }
+      ],
+      "file": "AvailableCommandsPacketChainedSubcommandData.json",
+      "id": "mojang-availablecommandspacketchainedsubcommanddata-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:df5c7dd13162a5f61c94695835cf460965bed88201b3bfe3c610471b2d79ab7b",
+      "replace": [
+        "Name",
+        "SubCommand values"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates CameraSplineDefinition.json /required."
+        }
+      ],
+      "file": "CameraSplineDefinition.json",
+      "id": "mojang-camerasplinedefinition-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:dfe1e73b2d01e906ef609de5d9e763b1d57cccefd6b58f3766906472cdce5bc5",
+      "replace": [
+        "control_points",
+        "loadFromJson",
+        "name",
+        "progress_key_frames",
+        "rotation_key_frames",
+        "splineIdentifier",
+        "spline_type",
+        "total_time"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates ClientCameraAimAssistPacketPayload.json /required."
+        }
+      ],
+      "file": "ClientCameraAimAssistPacketPayload.json",
+      "id": "mojang-clientcameraaimassistpacketpayload-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:63185ae253f9b20990000a81351bb24c05075353ec6cfe84cb4bfe5d698f903e",
+      "replace": [
+        "Action",
+        "Allow aim assist",
+        "Camera Preset Id"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates CommandOriginData.json /required."
+        }
+      ],
+      "file": "CommandOriginData.json",
+      "id": "mojang-commandorigindata-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:595912b33e561b580d00d1e6720685b2607298041e25f26e2b5707800913e106",
+      "replace": [
+        "PlayerId",
+        "RequestId",
+        "Type",
+        "UUID"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates Data_Store_Update.json /properties/Data."
+        }
+      ],
+      "file": "Data_Store_Update.json",
+      "id": "mojang-data-store-update-properties-data",
+      "merge": {
+        "x-serialization-options": [
+          "Compression"
+        ]
+      },
+      "pointer": "/properties/Data",
+      "pre_patch_sha256": "sha256:f63d6e76ae379a1f5fada41e6063c72201a45807a1d886cecabe88261dc20833",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates DisconnectPacketPayload.json /properties/Messages."
+        }
+      ],
+      "file": "DisconnectPacketPayload.json",
+      "id": "mojang-disconnectpacketpayload-properties-messages",
+      "merge": {
+        "x-serialization-options": [
+          "Compression"
+        ]
+      },
+      "pointer": "/properties/Messages",
+      "pre_patch_sha256": "sha256:b858aa8418438e011c586b202be7e3b65e3286d49278ebaa17731a0219bb59c8",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates GameRule.json /properties/Rule Value."
+        }
+      ],
+      "file": "GameRule.json",
+      "id": "mojang-gamerule-properties-rule-value",
+      "merge": {
+        "x-serialization-options": [
+          "Compression"
+        ]
+      },
+      "pointer": "/properties/Rule Value",
+      "pre_patch_sha256": "sha256:3ec146b427c7d7b2419fe74db8dbd5c7a48562aeb55309f2b054831e416ff896",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates PlayerAuthInputPacketPayload.json /properties/Client Predicted Vehicle."
+        }
+      ],
+      "file": "PlayerAuthInputPacketPayload.json",
+      "id": "mojang-playerauthinputpacketpayload-properties-client-predicted-vehicle",
+      "merge": {
+        "x-serialization-options": [
+          "+double-optional"
+        ]
+      },
+      "pointer": "/properties/Client Predicted Vehicle",
+      "pre_patch_sha256": "sha256:b09b7e9909414032858561822088d7ab2fe78dfd43b5a1d7f96083f318e308d9",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates PlayerAuthInputPacketPayload.json /properties/Player Block Actions."
+        }
+      ],
+      "file": "PlayerAuthInputPacketPayload.json",
+      "id": "mojang-playerauthinputpacketpayload-properties-player-block-actions",
+      "merge": {
+        "x-serialization-options": [
+          "+double-optional"
+        ]
+      },
+      "pointer": "/properties/Player Block Actions",
+      "pre_patch_sha256": "sha256:80097f290c8eac8159a098bdc93637415bb543fd4364edc86441b43169b36623",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates PlayerAuthInputPacketPayload.json /properties/Vehicle Rotation."
+        }
+      ],
+      "file": "PlayerAuthInputPacketPayload.json",
+      "id": "mojang-playerauthinputpacketpayload-properties-vehicle-rotation",
+      "merge": {
+        "x-serialization-options": [
+          "+double-optional"
+        ]
+      },
+      "pointer": "/properties/Vehicle Rotation",
+      "pre_patch_sha256": "sha256:6d4094ac41b2d14240473ff43311ebcfdf2f781bd53bccc4c510be3dccb1880e",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates PlayerAuthInputPacketPayload.json /required."
+        }
+      ],
+      "file": "PlayerAuthInputPacketPayload.json",
+      "id": "mojang-playerauthinputpacketpayload-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:ce1f63bb1dbe9646270a0fd650dc4670da99adb595e0c1dd0ada8da093b874ca",
+      "replace": [
+        "Analog Move Vector",
+        "Camera Orientation",
+        "Client Tick",
+        "Input Mode",
+        "Interact Rotation",
+        "Move Vector",
+        "New Interaction Model",
+        "Play Mode",
+        "Player Head Rotation",
+        "Player Rotation",
+        "Pos Delta",
+        "Position",
+        "Raw Move Vector"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates ServerboundDataDrivenScreenClosedPacketPayload.json /required."
+        }
+      ],
+      "file": "ServerboundDataDrivenScreenClosedPacketPayload.json",
+      "id": "mojang-serverbounddatadrivenscreenclosedpacketpayload-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:011904b96c7f23ff949e687942116c1f04f79e38d48a6296b2ca35d4b3cbee80",
+      "replace": [
+        "CloseReason",
+        "FormId"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates ServerboundPackSettingChangePacketPayload.json /properties/PackSettingValue."
+        }
+      ],
+      "file": "ServerboundPackSettingChangePacketPayload.json",
+      "id": "mojang-serverboundpacksettingchangepacketpayload-properties-packsettingvalue",
+      "merge": {
+        "x-serialization-options": [
+          "Compression"
+        ]
+      },
+      "pointer": "/properties/PackSettingValue",
+      "pre_patch_sha256": "sha256:7f725f928bc73bdd08e8c2a3079897d0a582519d1f15cae6829de21686f7a775",
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates TextPacketPayload.json /required."
+        }
+      ],
+      "file": "TextPacketPayload.json",
+      "id": "mojang-textpacketpayload-required",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:5bdc9f9a0e097cb38f1f4110ec5cae5af429597d509fc2802cb4a443b292ad02",
+      "replace": [
+        "Body",
+        "Localize?",
+        "Platform Id",
+        "Sender's XUID"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit."
+    },
+    {
+      "id": "mojang-cameraaimassistpresetdefinition-required",
+      "file": "CameraAimAssistPresetDefinition.json",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:60a091fb7d5d53d184529b8116391d32a9ea886b31a88090052d9b3ca1d184d9",
+      "replace": [
+        "exclusion_settings",
+        "identifier",
+        "item_settings",
+        "liquid_targeting_list"
+      ],
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit.",
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates CameraAimAssistPresetDefinition.json /required."
+        }
+      ]
+    },
+    {
+      "id": "mojang-primitiveshapedatapayload-properties-extra-shape-data",
+      "file": "PrimitiveShapeDataPayload.json",
+      "pointer": "/properties/Extra Shape Data",
+      "pre_patch_sha256": "sha256:94e60fda94c37a0c8aca4da1a17aff6d3e31f46ca7538085510ffd65f46e87e4",
+      "merge": {
+        "x-serialization-options": [
+          "Compression"
+        ]
+      },
+      "why": "The pinned raw Mojang schema disagrees with the independently extracted Endstone 1.26.40 wire shape; this correction makes that source defect explicit.",
+      "evidence": [
+        {
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/a25dea184832f8b0911d669bad400f43bedde1dd",
+          "summary": "The pinned Endstone 1.26.40 packet/type dump independently corroborates PrimitiveShapeDataPayload.json /properties/Extra Shape Data."
+        }
+      ]
+    }
+  ]
+}

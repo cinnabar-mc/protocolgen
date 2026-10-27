@@ -9,5 +9,5 @@ var DeadHornCoralBlock = Block{
 }
 
 var deadHornCoralBlockStates = [...]State{
-	{Hash: 3125021504, Block: 985, Properties: 1092},
+	{Hash: 3125021504, Block: 987, Properties: 1092},
 }

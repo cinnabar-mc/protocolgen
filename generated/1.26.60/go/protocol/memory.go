@@ -1,0 +1,122 @@
+// Code generated from canonical protocol manifest v2. DO NOT EDIT.
+
+package protocol
+
+type MemoryCategory uint8
+
+const (
+	MemoryCategoryUnknown                               MemoryCategory = 0
+	MemoryCategoryInvalidSizeUnknown                    MemoryCategory = 1
+	MemoryCategoryActor                                 MemoryCategory = 2
+	MemoryCategoryActorAnimation                        MemoryCategory = 3
+	MemoryCategoryActorRendering                        MemoryCategory = 4
+	MemoryCategoryBlockTickingQueues                    MemoryCategory = 5
+	MemoryCategoryBiomeStorage                          MemoryCategory = 6
+	MemoryCategoryBlobs                                 MemoryCategory = 7
+	MemoryCategoryCereal                                MemoryCategory = 8
+	MemoryCategoryCircuitSystem                         MemoryCategory = 9
+	MemoryCategoryClient                                MemoryCategory = 10
+	MemoryCategoryCommands                              MemoryCategory = 11
+	MemoryCategoryDBStorage                             MemoryCategory = 12
+	MemoryCategoryDebug                                 MemoryCategory = 13
+	MemoryCategoryDocumentation                         MemoryCategory = 14
+	MemoryCategoryECSSystems                            MemoryCategory = 15
+	MemoryCategoryFmod                                  MemoryCategory = 16
+	MemoryCategoryFonts                                 MemoryCategory = 17
+	MemoryCategoryImGui                                 MemoryCategory = 18
+	MemoryCategoryInput                                 MemoryCategory = 19
+	MemoryCategoryJSONUI                                MemoryCategory = 20
+	MemoryCategoryJSONUIControlFactoryJSON              MemoryCategory = 21
+	MemoryCategoryJSONUIControlTree                     MemoryCategory = 22
+	MemoryCategoryJSONUIControlTreeControlElement       MemoryCategory = 23
+	MemoryCategoryJSONUIControlTreePopulateDataBinding  MemoryCategory = 24
+	MemoryCategoryJSONUIControlTreePopulateFocus        MemoryCategory = 25
+	MemoryCategoryJSONUIControlTreePopulateLayout       MemoryCategory = 26
+	MemoryCategoryJSONUIControlTreePopulateOther        MemoryCategory = 27
+	MemoryCategoryJSONUIControlTreePopulateSprite       MemoryCategory = 28
+	MemoryCategoryJSONUIControlTreePopulateText         MemoryCategory = 29
+	MemoryCategoryJSONUIControlTreePopulateTTS          MemoryCategory = 30
+	MemoryCategoryJSONUIControlTreeVisibility           MemoryCategory = 31
+	MemoryCategoryJSONUICreateUI                        MemoryCategory = 32
+	MemoryCategoryJSONUIDefs                            MemoryCategory = 33
+	MemoryCategoryJSONUILayoutManager                   MemoryCategory = 34
+	MemoryCategoryJSONUILayoutManagerRemoveDependencies MemoryCategory = 35
+	MemoryCategoryJSONUILayoutManagerInitVariable       MemoryCategory = 36
+	MemoryCategoryLanguages                             MemoryCategory = 37
+	MemoryCategoryLevel                                 MemoryCategory = 38
+	MemoryCategoryLevelStructures                       MemoryCategory = 39
+	MemoryCategoryLevelChunk                            MemoryCategory = 40
+	MemoryCategoryLevelChunkGen                         MemoryCategory = 41
+	MemoryCategoryLevelChunkGenThreadLocal              MemoryCategory = 42
+	MemoryCategoryLightVolumeManager                    MemoryCategory = 43
+	MemoryCategoryNetwork                               MemoryCategory = 44
+	MemoryCategoryMarketplace                           MemoryCategory = 45
+	MemoryCategoryMaterialDragonCompiledDefinition      MemoryCategory = 46
+	MemoryCategoryMaterialDragonMaterial                MemoryCategory = 47
+	MemoryCategoryMaterialDragonResource                MemoryCategory = 48
+	MemoryCategoryMaterialDragonUniformMap              MemoryCategory = 49
+	MemoryCategoryMaterialRenderMaterial                MemoryCategory = 50
+	MemoryCategoryMaterialRenderMaterialGroup           MemoryCategory = 51
+	MemoryCategoryMaterialVariationManager              MemoryCategory = 52
+	MemoryCategoryMoLang                                MemoryCategory = 53
+	MemoryCategoryOreUI                                 MemoryCategory = 54
+	MemoryCategoryOreUIClient                           MemoryCategory = 55
+	MemoryCategoryPersonaPieces                         MemoryCategory = 56
+	MemoryCategoryPersonaAnimations                     MemoryCategory = 57
+	MemoryCategoryPersonaCharacters                     MemoryCategory = 58
+	MemoryCategoryPersonaSkinPacks                      MemoryCategory = 59
+	MemoryCategoryPersonaRepo                           MemoryCategory = 60
+	MemoryCategoryPlayer                                MemoryCategory = 61
+	MemoryCategoryRenderChunk                           MemoryCategory = 62
+	MemoryCategoryRenderChunkIndexBuffer                MemoryCategory = 63
+	MemoryCategoryRenderChunkVertexBuffer               MemoryCategory = 64
+	MemoryCategoryRendering                             MemoryCategory = 65
+	MemoryCategoryRenderingBgfxInit                     MemoryCategory = 66
+	MemoryCategoryRenderingBgfxStartFrame               MemoryCategory = 67
+	MemoryCategoryRenderingBlockTessellator             MemoryCategory = 68
+	MemoryCategoryRenderingEndFrame                     MemoryCategory = 69
+	MemoryCategoryRenderingGraphicsTasksInit            MemoryCategory = 70
+	MemoryCategoryRenderingLibrary                      MemoryCategory = 71
+	MemoryCategoryRenderingPolygonOperatorPool          MemoryCategory = 72
+	MemoryCategoryRenderingPBRTextureData               MemoryCategory = 73
+	MemoryCategoryRenderingRenderRegistry               MemoryCategory = 74
+	MemoryCategoryRenderingSetup                        MemoryCategory = 75
+	MemoryCategoryRenderingVertices                     MemoryCategory = 76
+	MemoryCategoryRequestLog                            MemoryCategory = 77
+	MemoryCategoryResourcePacks                         MemoryCategory = 78
+	MemoryCategorySound                                 MemoryCategory = 79
+	MemoryCategorySubChunkBiomeData                     MemoryCategory = 80
+	MemoryCategorySubChunkBlockData                     MemoryCategory = 81
+	MemoryCategorySubChunkLightData                     MemoryCategory = 82
+	MemoryCategoryTextures                              MemoryCategory = 83
+	MemoryCategoryWeatherRenderer                       MemoryCategory = 84
+	MemoryCategoryWorldGenerator                        MemoryCategory = 85
+	MemoryCategoryTasks                                 MemoryCategory = 86
+	MemoryCategoryTest                                  MemoryCategory = 87
+	MemoryCategoryTestLoadTestTags                      MemoryCategory = 88
+	MemoryCategoryScripting                             MemoryCategory = 89
+	MemoryCategoryScriptingRuntime                      MemoryCategory = 90
+	MemoryCategoryScriptingContext                      MemoryCategory = 91
+	MemoryCategoryScriptingContextBindingsMC            MemoryCategory = 92
+	MemoryCategoryScriptingContextBindingsGT            MemoryCategory = 93
+	MemoryCategoryScriptingContextRun                   MemoryCategory = 94
+	MemoryCategoryDataDrivenUI                          MemoryCategory = 95
+	MemoryCategoryDataDrivenUIDefs                      MemoryCategory = 96
+	MemoryCategoryGameface                              MemoryCategory = 97
+	MemoryCategoryGamefaceSystem                        MemoryCategory = 98
+	MemoryCategoryGamefaceDOM                           MemoryCategory = 99
+	MemoryCategoryGamefaceCSS                           MemoryCategory = 100
+	MemoryCategoryGamefaceDisplay                       MemoryCategory = 101
+	MemoryCategoryGamefaceTempAllocator                 MemoryCategory = 102
+	MemoryCategoryGamefacePoolAllocator                 MemoryCategory = 103
+	MemoryCategoryGamefaceDump                          MemoryCategory = 104
+	MemoryCategoryGamefaceMedia                         MemoryCategory = 105
+	MemoryCategoryGamefaceJSON                          MemoryCategory = 106
+	MemoryCategoryGamefaceScriptEngine                  MemoryCategory = 107
+	MemoryCategoryGamefaceScript                        MemoryCategory = 108
+	MemoryCategoryGamefaceLayout                        MemoryCategory = 109
+	MemoryCategoryExecutable                            MemoryCategory = 110
+)
+
+// Marshal reads or writes MemoryCategory through its uint8 wire encoding.
+func (x *MemoryCategory) Marshal(io IO) { io.Uint8((*uint8)(x)) }

@@ -9,5 +9,5 @@ var QuartzBricks = Block{
 }
 
 var quartzBricksStates = [...]State{
-	{Hash: 2333140892, Block: 957, Properties: 1405},
+	{Hash: 2333140892, Block: 959, Properties: 1406},
 }

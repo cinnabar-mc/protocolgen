@@ -1,0 +1,74 @@
+{
+  "operations": [
+    {
+      "id": "death-info-fields-are-not-wrapped",
+      "file": "DeathInfoPacketPayload.json",
+      "pointer": "/properties",
+      "pre_patch_sha256": "sha256:7135c996eaf2a6f1ef0976b2dbdfc5e5e9e7eb1e6d4de32a4ee39cd154e7dbf5",
+      "replace": {
+        "Death Cause Attack Name": {
+          "type": "string",
+          "x-ordinal-index": 0
+        },
+        "Death Cause Message List": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-ordinal-index": 1
+        }
+      },
+      "why": "DeathInfo writes two packet fields directly rather than a nested DeathCauseMessageType wrapper.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v534/serializer/DeathInfoSerializer_v534.java",
+          "summary": "The inherited serializer writes the cause string and message array directly."
+        }
+      ]
+    },
+    {
+      "id": "death-info-required-fields-follow-flat-layout",
+      "file": "DeathInfoPacketPayload.json",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:3ee555d5389102bc31c1d0f3542a2fbe9a34b99a44bb4084ab6eab4f375f71c7",
+      "replace": [
+        "Death Cause Attack Name",
+        "Death Cause Message List"
+      ],
+      "why": "Both directly encoded DeathInfo fields are required.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v534/serializer/DeathInfoSerializer_v534.java",
+          "summary": "The inherited serializer unconditionally writes both fields."
+        }
+      ]
+    },
+    {
+      "id": "player-video-capture-has-one-action-union",
+      "file": "PlayerVideoCapturePacketPayload.json",
+      "pointer": "/properties",
+      "pre_patch_sha256": "sha256:bec1a56f7f8fd8f03d01a077061437916a31634a57f7865fa17bb6e095adf4c3",
+      "replace": {
+        "Action": {
+          "oneOf": [
+            {
+              "$ref": "./Start_Video_Capture.json"
+            },
+            {
+              "$ref": "./Stop_Video_Capture.json"
+            }
+          ],
+          "x-control-value-type": "uint32",
+          "x-ordinal-index": 0
+        }
+      },
+      "why": "PlayerVideoCapture has one action union in the published order, start then stop, and only the start alternative carries a payload. The schema repeats that union as two properties.",
+      "evidence": [
+        {
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
+          "summary": "The 26.51 payload has one member, std::variant<StartVideoCapture, StopVideoCapture>, so start is alternative 0."
+        }
+      ]
+    }
+  ]
+}

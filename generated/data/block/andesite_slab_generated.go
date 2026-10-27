@@ -9,6 +9,6 @@ var AndesiteSlab = Block{
 }
 
 var andesiteSlabStates = [...]State{
-	{Hash: 1480285677, Block: 959, Properties: 683},
-	{Hash: 3119241642, Block: 959, Properties: 684},
+	{Hash: 1480285677, Block: 961, Properties: 683},
+	{Hash: 3119241642, Block: 961, Properties: 684},
 }

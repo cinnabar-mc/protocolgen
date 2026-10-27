@@ -9,10 +9,10 @@ var ColoredTorchRed = Block{
 }
 
 var coloredTorchRedStates = [...]State{
-	{Hash: 1779733491, Block: 1458, Properties: 1026},
-	{Hash: 629038031, Block: 1458, Properties: 1027},
-	{Hash: 1034026677, Block: 1458, Properties: 1028},
-	{Hash: 2564145992, Block: 1458, Properties: 1029},
-	{Hash: 427827166, Block: 1458, Properties: 1030},
-	{Hash: 30523022, Block: 1458, Properties: 1026},
+	{Hash: 1779733491, Block: 1461, Properties: 1026},
+	{Hash: 629038031, Block: 1461, Properties: 1027},
+	{Hash: 1034026677, Block: 1461, Properties: 1028},
+	{Hash: 2564145992, Block: 1461, Properties: 1029},
+	{Hash: 427827166, Block: 1461, Properties: 1030},
+	{Hash: 30523022, Block: 1461, Properties: 1026},
 }

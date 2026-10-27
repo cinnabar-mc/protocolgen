@@ -9,10 +9,10 @@ var CreeperHead = Block{
 }
 
 var creeperHeadStates = [...]State{
-	{Hash: 1989274695, Block: 810, Properties: 14},
-	{Hash: 2050749518, Block: 810, Properties: 14},
-	{Hash: 2112224341, Block: 810, Properties: 15},
-	{Hash: 2173699164, Block: 810, Properties: 16},
-	{Hash: 2235173987, Block: 810, Properties: 17},
-	{Hash: 2296648810, Block: 810, Properties: 18},
+	{Hash: 1989274695, Block: 812, Properties: 14},
+	{Hash: 2050749518, Block: 812, Properties: 14},
+	{Hash: 2112224341, Block: 812, Properties: 15},
+	{Hash: 2173699164, Block: 812, Properties: 16},
+	{Hash: 2235173987, Block: 812, Properties: 17},
+	{Hash: 2296648810, Block: 812, Properties: 18},
 }

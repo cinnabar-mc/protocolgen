@@ -9,16 +9,16 @@ var RepeatingCommandBlock = Block{
 }
 
 var repeatingCommandBlockStates = [...]State{
-	{Hash: 69024718, Block: 1382, Properties: 3499},
-	{Hash: 7549895, Block: 1382, Properties: 3499},
-	{Hash: 191974364, Block: 1382, Properties: 3499},
-	{Hash: 130499541, Block: 1382, Properties: 3499},
-	{Hash: 314924010, Block: 1382, Properties: 3499},
-	{Hash: 253449187, Block: 1382, Properties: 3499},
-	{Hash: 44558571, Block: 1382, Properties: 3499},
-	{Hash: 106033394, Block: 1382, Properties: 3499},
-	{Hash: 167508217, Block: 1382, Properties: 3499},
-	{Hash: 228983040, Block: 1382, Properties: 3499},
-	{Hash: 4093626575, Block: 1382, Properties: 3499},
-	{Hash: 4155101398, Block: 1382, Properties: 3499},
+	{Hash: 69024718, Block: 1385, Properties: 3502},
+	{Hash: 7549895, Block: 1385, Properties: 3502},
+	{Hash: 191974364, Block: 1385, Properties: 3502},
+	{Hash: 130499541, Block: 1385, Properties: 3502},
+	{Hash: 314924010, Block: 1385, Properties: 3502},
+	{Hash: 253449187, Block: 1385, Properties: 3502},
+	{Hash: 44558571, Block: 1385, Properties: 3502},
+	{Hash: 106033394, Block: 1385, Properties: 3502},
+	{Hash: 167508217, Block: 1385, Properties: 3502},
+	{Hash: 228983040, Block: 1385, Properties: 3502},
+	{Hash: 4093626575, Block: 1385, Properties: 3502},
+	{Hash: 4155101398, Block: 1385, Properties: 3502},
 }

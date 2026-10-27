@@ -9,5 +9,5 @@ var Netherrack = Block{
 }
 
 var netherrackStates = [...]State{
-	{Hash: 2150861248, Block: 1106, Properties: 3171},
+	{Hash: 2150861248, Block: 1109, Properties: 3174},
 }

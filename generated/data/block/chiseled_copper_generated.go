@@ -9,5 +9,5 @@ var ChiseledCopper = Block{
 }
 
 var chiseledCopperStates = [...]State{
-	{Hash: 3116543351, Block: 787, Properties: 847},
+	{Hash: 3116543351, Block: 789, Properties: 847},
 }

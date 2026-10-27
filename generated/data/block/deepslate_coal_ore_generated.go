@@ -9,5 +9,5 @@ var DeepslateCoalOre = Block{
 }
 
 var deepslateCoalOreStates = [...]State{
-	{Hash: 680219455, Block: 1135, Properties: 2684},
+	{Hash: 680219455, Block: 1138, Properties: 2686},
 }

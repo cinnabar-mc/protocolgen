@@ -9,6 +9,6 @@ var PoplarDoubleSlab = Block{
 }
 
 var poplarDoubleSlabStates = [...]State{
-	{Hash: 3979407077, Block: 1030, Properties: 2785},
-	{Hash: 431215410, Block: 1030, Properties: 2785},
+	{Hash: 3979407077, Block: 1033, Properties: 2787},
+	{Hash: 431215410, Block: 1033, Properties: 2787},
 }

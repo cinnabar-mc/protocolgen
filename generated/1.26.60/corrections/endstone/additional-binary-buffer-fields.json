@@ -1,0 +1,127 @@
+{
+  "operations": [
+    {
+      "id": "endstone-login-connection-request-is-bytes",
+      "file": "packets/LoginPacket.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:7ff0071fb95c21144e5ef13946c87bb8830ae3902e4d2f25a2c5342a1df522ee",
+      "replace": {
+        "name": "Connection Request",
+        "type": "bytearray",
+        "constraints": {
+          "description": "Connection request validity check"
+        }
+      },
+      "why": "The login request contains little-endian binary length prefixes around JSON and a JWT; treating it as UTF-8 corrupts valid payload lengths.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/login.go",
+          "summary": "Pinned Login.Marshal writes ConnectionRequest with io.ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "endstone-sub-client-login-request-is-bytes",
+      "file": "packets/SubClientLoginPacket.json",
+      "pointer": "/fields/0",
+      "pre_patch_sha256": "sha256:9049104176dc4fcea6cc859e728492395fa7e7e4e38bd22433ad13eb07d46fdb",
+      "replace": {
+        "name": "Sub Client Connection Request",
+        "type": "bytearray"
+      },
+      "why": "The sub-client login request has the same binary framing as the primary login request.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/sub_client_login.go",
+          "summary": "Pinned SubClientLogin.Marshal writes ConnectionRequest with io.ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "endstone-resource-pack-file-hash-is-bytes",
+      "file": "packets/ResourcePackDataInfoPacket.json",
+      "pointer": "/fields/4",
+      "pre_patch_sha256": "sha256:d6232162fda018c80e267205c93a186286a8fff7f6454d3d38fc8dfaef3af5c5",
+      "replace": {
+        "name": "File Hash",
+        "type": "bytearray"
+      },
+      "why": "The resource-pack file hash is a raw SHA-256 digest, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/resource_pack_data_info.go",
+          "summary": "Pinned ResourcePackDataInfo.Marshal writes Hash with io.ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "endstone-debug-info-data-is-bytes",
+      "file": "packets/DebugInfoPacket.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:d09774e991aa09b84c11167e45ea5d0820b6802fbac42f7d3f0650ead3f3091c",
+      "replace": {
+        "name": "Data",
+        "type": "bytearray"
+      },
+      "why": "Debug data is an opaque byte payload with no UTF-8 guarantee.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/debug_info.go",
+          "summary": "Pinned DebugInfo.Marshal writes Data with io.ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "endstone-script-message-value-is-bytes",
+      "file": "packets/ScriptMessagePacket.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:c28b32c3360321e916a0c3cee56f7b85ce16867939fbd61694c3bc51c3d31c11",
+      "replace": {
+        "name": "Message Value",
+        "type": "bytearray"
+      },
+      "why": "Script message values are opaque payload bytes while the sibling identifier remains text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/packet/script_message.go",
+          "summary": "Pinned ScriptMessage.Marshal writes Data with io.ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "endstone-sub-chunk-payload-is-bytes",
+      "file": "types/SubChunkPacketPayload__SubChunkPacketData.json",
+      "pointer": "/fields/2",
+      "pre_patch_sha256": "sha256:a3fc09566bd6a78020f68496cd25cd97c37e820cd0f068b7fc451a2558678aab",
+      "replace": {
+        "name": "Serialized Sub Chunk",
+        "type": "bytearray",
+        "optional": true
+      },
+      "why": "Serialized sub-chunk data is an optional palettized binary blob, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/sub_chunk.go",
+          "summary": "Pinned SubChunkEntry Marshal writes RawPayload with OptionalFunc and ByteSlice."
+        }
+      ]
+    },
+    {
+      "id": "endstone-feature-binary-json-is-bytes",
+      "file": "types/FeatureRegistry__FeatureBinaryJsonFormat.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:d4c9cda5343b1bd98d4c2e19b37c8667c8a44f725af58520e426bda683b5a7b2",
+      "replace": {
+        "name": "Binary Json Output",
+        "type": "bytearray"
+      },
+      "why": "Binary JSON output is an opaque binary representation, not UTF-8 JSON text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/be6713da4dc051a4197f897d04835e89e9c54321/minecraft/protocol/world.go",
+          "summary": "Pinned GenerationFeature Marshal writes JSON with ByteSlice while Name uses String."
+        }
+      ]
+    }
+  ]
+}

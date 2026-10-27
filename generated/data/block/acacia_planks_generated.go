@@ -9,5 +9,5 @@ var AcaciaPlanks = Block{
 }
 
 var acaciaPlanksStates = [...]State{
-	{Hash: 3297533652, Block: 560, Properties: 1809},
+	{Hash: 3297533652, Block: 562, Properties: 1811},
 }

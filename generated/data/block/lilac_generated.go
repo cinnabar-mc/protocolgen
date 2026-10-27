@@ -9,6 +9,6 @@ var Lilac = Block{
 }
 
 var lilacStates = [...]State{
-	{Hash: 346976229, Block: 1189, Properties: 1488},
-	{Hash: 3586636954, Block: 1189, Properties: 1489},
+	{Hash: 346976229, Block: 1192, Properties: 1489},
+	{Hash: 3586636954, Block: 1192, Properties: 1490},
 }

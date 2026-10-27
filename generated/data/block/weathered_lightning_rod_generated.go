@@ -9,16 +9,16 @@ var WeatheredLightningRod = Block{
 }
 
 var weatheredLightningRodStates = [...]State{
-	{Hash: 4023338217, Block: 691, Properties: 585},
-	{Hash: 3060980926, Block: 691, Properties: 585},
-	{Hash: 1056572795, Block: 691, Properties: 586},
-	{Hash: 173887896, Block: 691, Properties: 586},
-	{Hash: 247030381, Block: 691, Properties: 587},
-	{Hash: 122970930, Block: 691, Properties: 587},
-	{Hash: 2968031646, Block: 691, Properties: 585},
-	{Hash: 4116287497, Block: 691, Properties: 585},
-	{Hash: 1266224, Block: 691, Properties: 586},
-	{Hash: 1229194467, Block: 691, Properties: 586},
-	{Hash: 3486691106, Block: 691, Properties: 587},
-	{Hash: 1178277501, Block: 691, Properties: 587},
+	{Hash: 4023338217, Block: 693, Properties: 585},
+	{Hash: 3060980926, Block: 693, Properties: 585},
+	{Hash: 1056572795, Block: 693, Properties: 586},
+	{Hash: 173887896, Block: 693, Properties: 586},
+	{Hash: 247030381, Block: 693, Properties: 587},
+	{Hash: 122970930, Block: 693, Properties: 587},
+	{Hash: 2968031646, Block: 693, Properties: 585},
+	{Hash: 4116287497, Block: 693, Properties: 585},
+	{Hash: 1266224, Block: 693, Properties: 586},
+	{Hash: 1229194467, Block: 693, Properties: 586},
+	{Hash: 3486691106, Block: 693, Properties: 587},
+	{Hash: 1178277501, Block: 693, Properties: 587},
 }

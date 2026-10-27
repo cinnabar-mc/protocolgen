@@ -9,5 +9,5 @@ var DirtWithRoots = Block{
 }
 
 var dirtWithRootsStates = [...]State{
-	{Hash: 985900240, Block: 722, Properties: 1855},
+	{Hash: 985900240, Block: 724, Properties: 1857},
 }

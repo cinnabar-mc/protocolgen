@@ -9,12 +9,12 @@ var SeaPickle = Block{
 }
 
 var seaPickleStates = [...]State{
-	{Hash: 845428104, Block: 824, Properties: 2477},
-	{Hash: 2891842849, Block: 824, Properties: 2478},
-	{Hash: 570293998, Block: 824, Properties: 2479},
-	{Hash: 3111906463, Block: 824, Properties: 2480},
-	{Hash: 1900734675, Block: 824, Properties: 2481},
-	{Hash: 1836536278, Block: 824, Properties: 2481},
-	{Hash: 1625600569, Block: 824, Properties: 2481},
-	{Hash: 2056599892, Block: 824, Properties: 2481},
+	{Hash: 845428104, Block: 826, Properties: 2479},
+	{Hash: 2891842849, Block: 826, Properties: 2480},
+	{Hash: 570293998, Block: 826, Properties: 2481},
+	{Hash: 3111906463, Block: 826, Properties: 2482},
+	{Hash: 1900734675, Block: 826, Properties: 2483},
+	{Hash: 1836536278, Block: 826, Properties: 2483},
+	{Hash: 1625600569, Block: 826, Properties: 2483},
+	{Hash: 2056599892, Block: 826, Properties: 2483},
 }

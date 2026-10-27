@@ -9,5 +9,5 @@ var LitDeepslateRedstoneOre = Block{
 }
 
 var litDeepslateRedstoneOreStates = [...]State{
-	{Hash: 3255417052, Block: 1277, Properties: 3447},
+	{Hash: 3255417052, Block: 1280, Properties: 3450},
 }

@@ -9,16 +9,16 @@ var Barrel = Block{
 }
 
 var barrelStates = [...]State{
-	{Hash: 198111737, Block: 569, Properties: 1475},
-	{Hash: 501043176, Block: 569, Properties: 1475},
-	{Hash: 1071581843, Block: 569, Properties: 1475},
-	{Hash: 4094588762, Block: 569, Properties: 1475},
-	{Hash: 4152884613, Block: 569, Properties: 1475},
-	{Hash: 1814814452, Block: 569, Properties: 1475},
-	{Hash: 3437772462, Block: 569, Properties: 1475},
-	{Hash: 1556349747, Block: 569, Properties: 1475},
-	{Hash: 16275272, Block: 569, Properties: 1475},
-	{Hash: 854928037, Block: 569, Properties: 1475},
-	{Hash: 3097578042, Block: 569, Properties: 1475},
-	{Hash: 2870121023, Block: 569, Properties: 1475},
+	{Hash: 198111737, Block: 571, Properties: 1476},
+	{Hash: 501043176, Block: 571, Properties: 1476},
+	{Hash: 1071581843, Block: 571, Properties: 1476},
+	{Hash: 4094588762, Block: 571, Properties: 1476},
+	{Hash: 4152884613, Block: 571, Properties: 1476},
+	{Hash: 1814814452, Block: 571, Properties: 1476},
+	{Hash: 3437772462, Block: 571, Properties: 1476},
+	{Hash: 1556349747, Block: 571, Properties: 1476},
+	{Hash: 16275272, Block: 571, Properties: 1476},
+	{Hash: 854928037, Block: 571, Properties: 1476},
+	{Hash: 3097578042, Block: 571, Properties: 1476},
+	{Hash: 2870121023, Block: 571, Properties: 1476},
 }

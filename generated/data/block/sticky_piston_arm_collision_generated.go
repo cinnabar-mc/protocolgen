@@ -9,10 +9,10 @@ var StickyPistonArmCollision = Block{
 }
 
 var stickyPistonArmCollisionStates = [...]State{
-	{Hash: 979333010, Block: 951, Properties: 30},
-	{Hash: 917858187, Block: 951, Properties: 30},
-	{Hash: 1102282656, Block: 951, Properties: 30},
-	{Hash: 1040807833, Block: 951, Properties: 30},
-	{Hash: 733433718, Block: 951, Properties: 30},
-	{Hash: 671958895, Block: 951, Properties: 30},
+	{Hash: 979333010, Block: 953, Properties: 30},
+	{Hash: 917858187, Block: 953, Properties: 30},
+	{Hash: 1102282656, Block: 953, Properties: 30},
+	{Hash: 1040807833, Block: 953, Properties: 30},
+	{Hash: 733433718, Block: 953, Properties: 30},
+	{Hash: 671958895, Block: 953, Properties: 30},
 }
