@@ -44,7 +44,7 @@ func (x *PersonaPieceType) Marshal(io IO) { io.Uint32((*uint32)(x)) }
 type SerializedSkinImage struct {
 	Width      uint32
 	Height     uint32
-	ImageBytes []uint8
+	ImageBytes []byte
 }
 
 // Marshal reads or writes SerializedSkinImage using its canonical wire layout.
@@ -53,15 +53,13 @@ func (x *SerializedSkinImage) Marshal(io IO) {
 	Maximum(io, &x.Width, 4096)
 	io.Uint32(&x.Height)
 	Maximum(io, &x.Height, 4096)
-	FuncSliceLimits(io, &x.ImageBytes, io.Varuint32, 0, 67108864, func(value *uint8) {
-		io.Uint8(value)
-	})
+	io.ByteSliceLimits(&x.ImageBytes, 0, 67108864)
 }
 
 type SkinImage struct {
 	Width      uint32
 	Height     uint32
-	ImageBytes []uint8
+	ImageBytes []byte
 }
 
 // Marshal reads or writes SkinImage using its canonical wire layout.

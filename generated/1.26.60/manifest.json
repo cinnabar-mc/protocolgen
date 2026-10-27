@@ -34722,7 +34722,7 @@
                                     "name": "ImageBytes",
                                     "semantic": "ImageBytes",
                                     "encode": {
-                                      "kind": "array",
+                                      "kind": "bytes",
                                       "prefix": {
                                         "kind": "primitive",
                                         "primitive": {
@@ -34733,18 +34733,9 @@
                                           "endianness": "none"
                                         }
                                       },
-                                      "element": {
-                                        "kind": "primitive",
-                                        "primitive": {
-                                          "code": "u8",
-                                          "width": 8,
-                                          "signed": false,
-                                          "zigzag": false,
-                                          "endianness": "none"
-                                        }
-                                      },
+                                      "representation": "bytes",
                                       "constraints": {
-                                        "max_items": 67108864
+                                        "max_length": 67108864
                                       }
                                     },
                                     "symmetry": "symmetric",
@@ -34846,7 +34837,7 @@
                                             "name": "ImageBytes",
                                             "semantic": "ImageBytes",
                                             "encode": {
-                                              "kind": "array",
+                                              "kind": "bytes",
                                               "prefix": {
                                                 "kind": "primitive",
                                                 "primitive": {
@@ -34857,18 +34848,9 @@
                                                   "endianness": "none"
                                                 }
                                               },
-                                              "element": {
-                                                "kind": "primitive",
-                                                "primitive": {
-                                                  "code": "u8",
-                                                  "width": 8,
-                                                  "signed": false,
-                                                  "zigzag": false,
-                                                  "endianness": "none"
-                                                }
-                                              },
+                                              "representation": "bytes",
                                               "constraints": {
-                                                "max_items": 67108864
+                                                "max_length": 67108864
                                               }
                                             },
                                             "symmetry": "symmetric",
@@ -35072,7 +35054,7 @@
                                     "name": "ImageBytes",
                                     "semantic": "ImageBytes",
                                     "encode": {
-                                      "kind": "array",
+                                      "kind": "bytes",
                                       "prefix": {
                                         "kind": "primitive",
                                         "primitive": {
@@ -35083,18 +35065,9 @@
                                           "endianness": "none"
                                         }
                                       },
-                                      "element": {
-                                        "kind": "primitive",
-                                        "primitive": {
-                                          "code": "u8",
-                                          "width": 8,
-                                          "signed": false,
-                                          "zigzag": false,
-                                          "endianness": "none"
-                                        }
-                                      },
+                                      "representation": "bytes",
                                       "constraints": {
-                                        "max_items": 67108864
+                                        "max_length": 67108864
                                       }
                                     },
                                     "symmetry": "symmetric",
@@ -47110,7 +47083,7 @@
                       "name": "ImageBytes",
                       "semantic": "ImageBytes",
                       "encode": {
-                        "kind": "array",
+                        "kind": "bytes",
                         "prefix": {
                           "kind": "primitive",
                           "primitive": {
@@ -47121,22 +47094,9 @@
                             "endianness": "none"
                           }
                         },
-                        "element": {
-                          "kind": "primitive",
-                          "primitive": {
-                            "code": "u8",
-                            "width": 8,
-                            "signed": false,
-                            "zigzag": false,
-                            "endianness": "none"
-                          },
-                          "constraints": {
-                            "minimum": 0,
-                            "maximum": 255
-                          }
-                        },
+                        "representation": "bytes",
                         "constraints": {
-                          "max_items": 67108864
+                          "max_length": 67108864
                         }
                       },
                       "symmetry": "symmetric",
@@ -47241,7 +47201,7 @@
                               "name": "ImageBytes",
                               "semantic": "ImageBytes",
                               "encode": {
-                                "kind": "array",
+                                "kind": "bytes",
                                 "prefix": {
                                   "kind": "primitive",
                                   "primitive": {
@@ -47252,22 +47212,9 @@
                                     "endianness": "none"
                                   }
                                 },
-                                "element": {
-                                  "kind": "primitive",
-                                  "primitive": {
-                                    "code": "u8",
-                                    "width": 8,
-                                    "signed": false,
-                                    "zigzag": false,
-                                    "endianness": "none"
-                                  },
-                                  "constraints": {
-                                    "minimum": 0,
-                                    "maximum": 255
-                                  }
-                                },
+                                "representation": "bytes",
                                 "constraints": {
-                                  "max_items": 67108864
+                                  "max_length": 67108864
                                 }
                               },
                               "symmetry": "symmetric",
@@ -47476,7 +47423,7 @@
                       "name": "ImageBytes",
                       "semantic": "ImageBytes",
                       "encode": {
-                        "kind": "array",
+                        "kind": "bytes",
                         "prefix": {
                           "kind": "primitive",
                           "primitive": {
@@ -47487,22 +47434,9 @@
                             "endianness": "none"
                           }
                         },
-                        "element": {
-                          "kind": "primitive",
-                          "primitive": {
-                            "code": "u8",
-                            "width": 8,
-                            "signed": false,
-                            "zigzag": false,
-                            "endianness": "none"
-                          },
-                          "constraints": {
-                            "minimum": 0,
-                            "maximum": 255
-                          }
-                        },
+                        "representation": "bytes",
                         "constraints": {
-                          "max_items": 67108864
+                          "max_length": 67108864
                         }
                       },
                       "symmetry": "symmetric",
@@ -116105,171 +116039,21 @@
             "variants": [
               {
                 "value": 0,
-                "name": "SoundDataEvent::Stop",
+                "name": "Stop",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::Stop",
-                  "type_id": "SoundDataEvent::Stop",
-                  "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    }
-                  ]
+                  "type_id": "SoundDataEvent::Stop"
                 }
               },
               {
                 "value": 1,
-                "name": "SoundDataEvent::SetVolume",
+                "name": "SetVolume",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::SetVolume",
                   "type_id": "SoundDataEvent::SetVolume",
                   "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    },
                     {
                       "ordinal": 1,
                       "name": "Volume",
@@ -116296,86 +116080,12 @@
               },
               {
                 "value": 2,
-                "name": "SoundDataEvent::SetPitch",
+                "name": "SetPitch",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::SetPitch",
                   "type_id": "SoundDataEvent::SetPitch",
                   "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    },
                     {
                       "ordinal": 1,
                       "name": "Pitch",
@@ -116402,86 +116112,12 @@
               },
               {
                 "value": 3,
-                "name": "SoundDataEvent::Fade",
+                "name": "Fade",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::Fade",
                   "type_id": "SoundDataEvent::Fade",
                   "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    },
                     {
                       "ordinal": 1,
                       "name": "Duration",
@@ -116529,86 +116165,12 @@
               },
               {
                 "value": 4,
-                "name": "SoundDataEvent::SeekTo",
+                "name": "SeekTo",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::SeekTo",
                   "type_id": "SoundDataEvent::SeekTo",
                   "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    },
                     {
                       "ordinal": 1,
                       "name": "Seconds",
@@ -116635,180 +116197,28 @@
               },
               {
                 "value": 5,
-                "name": "SoundDataEvent::Pause",
+                "name": "Pause",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::Pause",
-                  "type_id": "SoundDataEvent::Pause",
-                  "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    }
-                  ]
+                  "type_id": "SoundDataEvent::Pause"
                 }
               },
               {
                 "value": 6,
-                "name": "SoundDataEvent::Resume",
+                "name": "Resume",
                 "encode": {
                   "kind": "struct",
                   "semantic": "SoundDataEvent::Resume",
-                  "type_id": "SoundDataEvent::Resume",
-                  "fields": [
-                    {
-                      "ordinal": 0,
-                      "name": "Type",
-                      "semantic": "Type",
-                      "encode": {
-                        "kind": "enum",
-                        "semantic": "SoundDataEventType",
-                        "type_id": "enums/SoundDataEventType",
-                        "primitive": {
-                          "code": "u8",
-                          "width": 8,
-                          "signed": false,
-                          "zigzag": false,
-                          "endianness": "none"
-                        },
-                        "variants": [
-                          {
-                            "value": 0,
-                            "name": "Stop",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 1,
-                            "name": "SetVolume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 2,
-                            "name": "SetPitch",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 3,
-                            "name": "Fade",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 4,
-                            "name": "SeekTo",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 5,
-                            "name": "Pause",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          },
-                          {
-                            "value": 6,
-                            "name": "Resume",
-                            "encode": {
-                              "kind": "void"
-                            }
-                          }
-                        ]
-                      },
-                      "symmetry": "symmetric",
-                      "provenance": {
-                        "pins": [
-                          "endstone"
-                        ]
-                      }
-                    }
-                  ]
+                  "type_id": "SoundDataEvent::Resume"
                 }
               }
             ],
             "control": {
               "kind": "primitive",
               "primitive": {
-                "code": "var_u32",
-                "width": 32,
+                "code": "u8",
+                "width": 8,
                 "signed": false,
                 "zigzag": false,
                 "endianness": "none"
@@ -116818,8 +116228,30 @@
           "symmetry": "symmetric",
           "provenance": {
             "pins": [
-              "endstone",
-              "mojang"
+              "endstone"
+            ],
+            "evidence": [
+              {
+                "source_id": "endstone",
+                "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+                "summary": "Each target alternative already starts with its fixed uint8 Type value."
+              },
+              {
+                "source_id": "endstone",
+                "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+                "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+              },
+              {
+                "source_id": "endstone",
+                "locator": "packets/ClientboundUpdateSoundDataPacket.json#/fields/1",
+                "claim_fingerprint": "sha256:5ef3e262263f31b2e79b2714238af2c293d789a992f76b8590a88918b2c236ba",
+                "summary": "Exact target source claim selected by this reviewed adjudication."
+              },
+              {
+                "source_id": "mojang",
+                "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+                "summary": "The target explicitly says the leading Type tag selects the alternative."
+              }
             ]
           }
         }
@@ -119394,6 +118826,46 @@
       "reason": "The target Endstone field references PlaySoundPacketPayload but omits that type from its dump. Select the complete Mojang referenced payload; the same target Endstone PlaySound packet independently lists its ordered fields and the protocol-2225 audio marshal delegates to PlaySound.Marshal."
     },
     {
+      "id": "protocol-2225-reviewed-005",
+      "target": "ClientboundUpdateSoundDataPacket.Event",
+      "pre_patch_context_sha256": "sha256:79b40bf4d228588993b2e33758c9c0ad9a7c632184009bd2ce77fa6ffbc3e3fe",
+      "claims": [
+        {
+          "source_id": "endstone",
+          "digest": "sha256:5ef3e262263f31b2e79b2714238af2c293d789a992f76b8590a88918b2c236ba"
+        },
+        {
+          "source_id": "mojang",
+          "digest": "sha256:4930ef6787f20b68cd6d58e2bbd90a4b0c7cae09a620033ae1191ddc442200af"
+        }
+      ],
+      "selected_source": "endstone",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "packets/ClientboundUpdateSoundDataPacket.json#/fields/1",
+          "claim_fingerprint": "sha256:5ef3e262263f31b2e79b2714238af2c293d789a992f76b8590a88918b2c236ba",
+          "summary": "Exact target source claim selected by this reviewed adjudication."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Both dumps repeat each event Type inside an outer positional union. The target Mojang field description identifies that leading Type as the discriminator, and the pinned protocol-2225 hand-written marshal writes a single uint8 Type. Select the corrected complete Endstone tagged-switch claim; its payload variants omit the consumed discriminator."
+    },
+    {
       "id": "protocol-2225-reviewed-024",
       "target": "PlayerAuthInputPacket.Input Data",
       "pre_patch_context_sha256": "sha256:9453e1f8cbea4086ea5ba5184381d149e3bcc4e6e89db35756cf4b0ded47d9d0",
@@ -120426,6 +119898,31 @@
       "reason": "Easing is a compressed signed int32, distinct from the unsigned transition tick counters. Both the exact target Mojang declaration and the protocol-2225 gophertunnel Varint32 marshal corroborate the signed encoding."
     },
     {
+      "id": "protocol-2225-endstone-skin-image-is-binary",
+      "target": "types/SkinImage.json#/fields/2",
+      "pre_patch_node_sha256": "sha256:d9e468e685880fc17c0d99cc78839178390a2a53db34edc2ded6452ca1b04d69",
+      "pre_patch_context_sha256": "sha256:6108ec650c8f6f01caa76c43b8d5f0a8352beb7fe3f591a8445617a06ebb4123",
+      "post_patch_node_sha256": "sha256:1fe5c8c9e959b511d81e18639091df3b60f1cd1a6d35ed1cd4ecd4c86251ed56",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SkinImage.json",
+          "summary": "The independent target dump has the same u8 payload and uvarint32 prefix."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/skin.go",
+          "summary": "The pinned protocol-2225 skin marshal reads/writes image data with ByteSlice."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/SkinImage.json",
+          "summary": "ImageBytes is a u8 array with a 67108864-byte maximum; Width and Height remain separate uint32 values."
+        }
+      ],
+      "reason": "Skin pixels are a length-prefixed binary byte buffer. Preserve the 67108864-byte schema bound without applying an unrelated collection-element limit; this representation preserves the original byte order and length prefix."
+    },
+    {
       "id": "protocol-2225-item-stack-id-width",
       "target": "ItemStackNetIdVariant.json##",
       "pre_patch_node_sha256": "sha256:eb57aa377b84152ec32d3ef3bdc396a7f8e56de7316febbfa80c27f1cb20ee53",
@@ -120869,6 +120366,231 @@
         }
       ],
       "reason": "Select the CraftingData serialized ingredient representation at this use site. Item-stack requests retain their separate union-based representation."
+    },
+    {
+      "id": "protocol-2225-skin-image-is-binary",
+      "target": "SkinImage.json#/properties/ImageBytes",
+      "pre_patch_node_sha256": "sha256:d9a5de3dda2bbe597a5350d5b626b562a085f412a9b203e24d5d049968663bf0",
+      "pre_patch_context_sha256": "sha256:7c74b031157fd8404f45155efb25870a45f28a76a067dea91232a88e912bf7e7",
+      "post_patch_node_sha256": "sha256:4d6d2c1ba38822fda62c8c91c83b9d586c287cd5bb7436982af0152e577774ce",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SkinImage.json",
+          "summary": "The independent target dump has the same u8 payload and uvarint32 prefix."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/skin.go",
+          "summary": "The pinned protocol-2225 skin marshal reads/writes image data with ByteSlice."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/SkinImage.json",
+          "summary": "ImageBytes is a u8 array with a 67108864-byte maximum; Width and Height remain separate uint32 values."
+        }
+      ],
+      "reason": "Skin pixels are a length-prefixed binary byte buffer. Preserve the 67108864-byte schema bound without applying an unrelated collection-element limit; this representation preserves the original byte order and length prefix."
+    },
+    {
+      "id": "protocol-2225-sound-event-embedded-selector",
+      "target": "packets/ClientboundUpdateSoundDataPacket.json#/fields/1/type",
+      "pre_patch_node_sha256": "sha256:032a3a7418e3441b15beb9a01e823fdf2485efb4bb7844590977831d18cb3555",
+      "pre_patch_context_sha256": "sha256:efea49f63bd936717f0c54d322216a992513d19322eda90aa771f40299ca0d0a",
+      "post_patch_node_sha256": "sha256:a222ef25aa3d168a1aa0249f3e3030c06e6017a325bee496d3f1307616029bd6",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "The leading uint8 Type in each alternative is the discriminator itself. Use an explicit tagged switch so the frontend consumes it once instead of adding a separate positional varuint32 selector."
+    },
+    {
+      "id": "protocol-2225-sound-event-fade-tag",
+      "target": "types/SoundDataEvent__Fade.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:1c9462fcc876ddbc20d7560502c0a689239e37df1184df2d1fba2a811ec355dd",
+      "pre_patch_context_sha256": "sha256:6ee39b571f52ac471a487ab2caffe1608407fff7c2ca6d133641e4d1a5249e21",
+      "post_patch_node_sha256": "sha256:191f444ad2cf6b1c59e494651b2e03016c2ac9b1a9de0736803b15074c060288",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
+    },
+    {
+      "id": "protocol-2225-sound-event-pause-tag",
+      "target": "types/SoundDataEvent__Pause.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:fd2a98070f7745bddd499594606540833b9502bc76eb3a1e159ebdda839214f0",
+      "pre_patch_context_sha256": "sha256:79352c09394ca7ec2b464d10e5d3a54a26e919b89efdc6ac8b7b66a9b6288bea",
+      "post_patch_node_sha256": "sha256:d00ee6cb5783015945a96a04d59e70ead553065682ece39748e1a1654f2ef26f",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
+    },
+    {
+      "id": "protocol-2225-sound-event-resume-tag",
+      "target": "types/SoundDataEvent__Resume.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:70ac61177b7bc6f91c5b25d70883d33409f05e1afe96c13d2e566a4ecb26fd1b",
+      "pre_patch_context_sha256": "sha256:22b66f2de5276e0a0bf19a9435f8feb0b413cad0365e69de507c840a336838a8",
+      "post_patch_node_sha256": "sha256:23ddc0879f189cdef50e0444b03044258ad06b448d4e12194a215b7d0dc6ed83",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
+    },
+    {
+      "id": "protocol-2225-sound-event-seekto-tag",
+      "target": "types/SoundDataEvent__SeekTo.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:dab5c99184d695a22775feb3226365477a3307dc04abe07e7ada9aed069a548a",
+      "pre_patch_context_sha256": "sha256:08a4deefe9450e0deaf3c115213e5f39249b402f9cada8007fb84d7d64e98445",
+      "post_patch_node_sha256": "sha256:4b66be21547292b5a25056f67545b4ff144925c19bbd96622c35c1b902c2469a",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
+    },
+    {
+      "id": "protocol-2225-sound-event-setpitch-tag",
+      "target": "types/SoundDataEvent__SetPitch.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:bb567385532137bb5748c3b2c91eaa2d43daa45ce80cb6f2ba8d1fe915f54150",
+      "pre_patch_context_sha256": "sha256:5cf7cc7dcaa89fd1b5c43ccf357ddd009665f125dd4bb80dee05404440f79375",
+      "post_patch_node_sha256": "sha256:22ab418b5c24b5f9c8cda095d62dd7dc01e7f1dfeeddaa1958b6657ca3d19a45",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
+    },
+    {
+      "id": "protocol-2225-sound-event-setvolume-tag",
+      "target": "types/SoundDataEvent__SetVolume.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:db9e38bd5b222f2cdbc66c09df96a420e76c1189485aeb6be2de722a8829ab9f",
+      "pre_patch_context_sha256": "sha256:1f25aa1d30a2f5cd355923b5537a3114a3f5c4fcb8ec2f5a2f83f6348fa8b8a0",
+      "post_patch_node_sha256": "sha256:e53306bc1a3140f90c90cb88b9459c4dcfe6163f748386758854fe5ded55caf2",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
+    },
+    {
+      "id": "protocol-2225-sound-event-stop-tag",
+      "target": "types/SoundDataEvent__Stop.json#/fields/0",
+      "pre_patch_node_sha256": "sha256:4e75f0d4b4f2b588448a5658113ca21247c7467c47c4b3423344cae335c51a90",
+      "pre_patch_context_sha256": "sha256:654854508426add20d79cc64a22e4a4e94f27e9b1d373222da6475bc54b83d53",
+      "post_patch_node_sha256": "sha256:3f7a39d4dfac0eb3fc7ad75f5321ed669d8268b06480781b344840a3b85c4128",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SoundDataEvent__Stop.json",
+          "summary": "Each target alternative already starts with its fixed uint8 Type value."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/sound.go",
+          "summary": "SoundDataUpdate.Marshal writes Type exactly once as Uint8, followed only by the selected event payload."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ClientboundUpdateSoundDataPacketPayload.json#/properties/Event",
+          "summary": "The target explicitly says the leading Type tag selects the alternative."
+        }
+      ],
+      "reason": "Expose the existing fixed Type value as the switch constraint; the same byte is the event selector, not a second payload field."
     },
     {
       "id": "protocol-2225-video-action-required",

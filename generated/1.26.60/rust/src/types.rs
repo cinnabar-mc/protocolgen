@@ -12875,7 +12875,7 @@ impl wire::Decode for PrimitiveShape {
 pub struct SerializedSkinImage {
     pub width: wire::U32LE,
     pub height: wire::U32LE,
-    pub image_bytes: Vec<wire::U8>,
+    pub image_bytes: bytes::Bytes,
 }
 
 impl wire::Encode for SerializedSkinImage {
@@ -12884,7 +12884,7 @@ impl wire::Encode for SerializedSkinImage {
         wire::assert_number_limits(self.width.0, Some(0), Some(4096));
         self.height.encode(writer);
         wire::assert_number_limits(self.height.0, Some(0), Some(4096));
-        wire::encode_collection_limits(writer, self.image_bytes.as_slice(), 0, 67108864);
+        wire::encode_bytes_limits(writer, self.image_bytes.as_ref(), 0, 67108864);
     }
 }
 
@@ -12900,7 +12900,7 @@ impl wire::Decode for SerializedSkinImage {
             wire::validate_number_limits(value.0, Some(0), Some(4096))?;
             value
         };
-        let image_bytes = wire::decode_collection_limits::<wire::U8>(reader, 1, 0, 67108864)?;
+        let image_bytes = wire::decode_bytes_limits(reader, 0, 67108864)?;
         Ok(Self {
             width,
             height,
@@ -13073,137 +13073,95 @@ impl wire::Decode for AudioSound {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Default)]
 pub enum SoundDataEvent {
-    Stop {
-        type_: SoundDataEventType,
-    },
+    #[default]
+    Stop,
     SetVolume {
-        type_: SoundDataEventType,
         volume: wire::F32LE,
     },
     SetPitch {
-        type_: SoundDataEventType,
         pitch: wire::F32LE,
     },
     Fade {
-        type_: SoundDataEventType,
         duration: wire::F32LE,
         target_volume: wire::F32LE,
     },
     SeekTo {
-        type_: SoundDataEventType,
         seconds: wire::F32LE,
     },
-    Pause {
-        type_: SoundDataEventType,
-    },
-    Resume {
-        type_: SoundDataEventType,
-    },
+    Pause,
+    Resume,
 }
 
 impl SoundDataEvent {
-    pub fn discriminant(&self) -> u32 {
+    pub fn discriminant(&self) -> u8 {
         match self {
-            Self::Stop { .. } => 0,
+            Self::Stop => 0,
             Self::SetVolume { .. } => 1,
             Self::SetPitch { .. } => 2,
             Self::Fade { .. } => 3,
             Self::SeekTo { .. } => 4,
-            Self::Pause { .. } => 5,
-            Self::Resume { .. } => 6,
-        }
-    }
-}
-
-impl Default for SoundDataEvent {
-    fn default() -> Self {
-        Self::Stop {
-            type_: Default::default(),
+            Self::Pause => 5,
+            Self::Resume => 6,
         }
     }
 }
 
 impl wire::Encode for SoundDataEvent {
     fn encode(&self, writer: &mut wire::Writer) {
-        wire::VarUInt(self.discriminant()).encode(writer);
+        wire::U8(self.discriminant()).encode(writer);
         match self {
-            Self::Stop { type_ } => {
-                type_.encode(writer);
-            }
-            Self::SetVolume { type_, volume } => {
-                type_.encode(writer);
+            Self::Stop => {}
+            Self::SetVolume { volume } => {
                 volume.encode(writer);
             }
-            Self::SetPitch { type_, pitch } => {
-                type_.encode(writer);
+            Self::SetPitch { pitch } => {
                 pitch.encode(writer);
             }
             Self::Fade {
-                type_,
                 duration,
                 target_volume,
             } => {
-                type_.encode(writer);
                 duration.encode(writer);
                 target_volume.encode(writer);
             }
-            Self::SeekTo { type_, seconds } => {
-                type_.encode(writer);
+            Self::SeekTo { seconds } => {
                 seconds.encode(writer);
             }
-            Self::Pause { type_ } => {
-                type_.encode(writer);
-            }
-            Self::Resume { type_ } => {
-                type_.encode(writer);
-            }
+            Self::Pause => {}
+            Self::Resume => {}
         }
     }
 }
 
 impl wire::Decode for SoundDataEvent {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
-        let discriminant = <wire::VarUInt as wire::Decode>::decode(reader)?.0;
+        let discriminant = <wire::U8 as wire::Decode>::decode(reader)?.0;
         Ok(match discriminant {
-            0 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
-                Self::Stop { type_ }
-            }
+            0 => Self::Stop,
             1 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
                 let volume = <wire::F32LE as wire::Decode>::decode(reader)?;
-                Self::SetVolume { type_, volume }
+                Self::SetVolume { volume }
             }
             2 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
                 let pitch = <wire::F32LE as wire::Decode>::decode(reader)?;
-                Self::SetPitch { type_, pitch }
+                Self::SetPitch { pitch }
             }
             3 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
                 let duration = <wire::F32LE as wire::Decode>::decode(reader)?;
                 let target_volume = <wire::F32LE as wire::Decode>::decode(reader)?;
                 Self::Fade {
-                    type_,
                     duration,
                     target_volume,
                 }
             }
             4 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
                 let seconds = <wire::F32LE as wire::Decode>::decode(reader)?;
-                Self::SeekTo { type_, seconds }
+                Self::SeekTo { seconds }
             }
-            5 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
-                Self::Pause { type_ }
-            }
-            6 => {
-                let type_ = <SoundDataEventType as wire::Decode>::decode(reader)?;
-                Self::Resume { type_ }
-            }
+            5 => Self::Pause,
+            6 => Self::Resume,
             value => {
                 return Err(wire::DecodeError::UnknownVariant {
                     type_name: "SoundDataEvent",

@@ -51,12 +51,12 @@ func (x *AudioSound) Marshal(io IO) {
 
 type SoundDataEvent interface {
 	Marshaler
-	tagSoundDataEvent() uint32
+	tagSoundDataEvent() uint8
 }
 
 // MarshalSoundDataEvent reads or writes the SoundDataEvent union using its canonical wire layout.
 func MarshalSoundDataEvent(io IO, x *SoundDataEvent) {
-	Union(io, x, io.Varuint32, SoundDataEvent.tagSoundDataEvent, func(tag uint32) SoundDataEvent {
+	Union(io, x, io.Uint8, SoundDataEvent.tagSoundDataEvent, func(tag uint8) SoundDataEvent {
 		switch tag {
 		case 0:
 			return new(SoundDataEventStop)
@@ -78,103 +78,74 @@ func MarshalSoundDataEvent(io IO, x *SoundDataEvent) {
 }
 
 type SoundDataEventFade struct {
-	Type         SoundDataEventType
 	Duration     float32
 	TargetVolume float32
 }
 
-func (*SoundDataEventFade) tagSoundDataEvent() uint32 { return 3 }
+func (*SoundDataEventFade) tagSoundDataEvent() uint8 { return 3 }
 
 // Marshal reads or writes SoundDataEventFade using its canonical wire layout.
 func (x *SoundDataEventFade) Marshal(io IO) {
-	x.Type.Marshal(io)
 	io.Float32(&x.Duration)
 	io.Float32(&x.TargetVolume)
 }
 
 type SoundDataEventPause struct {
-	Type SoundDataEventType
 }
 
-func (*SoundDataEventPause) tagSoundDataEvent() uint32 { return 5 }
+func (*SoundDataEventPause) tagSoundDataEvent() uint8 { return 5 }
 
 // Marshal reads or writes SoundDataEventPause using its canonical wire layout.
 func (x *SoundDataEventPause) Marshal(io IO) {
-	x.Type.Marshal(io)
 }
 
 type SoundDataEventResume struct {
-	Type SoundDataEventType
 }
 
-func (*SoundDataEventResume) tagSoundDataEvent() uint32 { return 6 }
+func (*SoundDataEventResume) tagSoundDataEvent() uint8 { return 6 }
 
 // Marshal reads or writes SoundDataEventResume using its canonical wire layout.
 func (x *SoundDataEventResume) Marshal(io IO) {
-	x.Type.Marshal(io)
 }
 
 type SoundDataEventSeekTo struct {
-	Type    SoundDataEventType
 	Seconds float32
 }
 
-func (*SoundDataEventSeekTo) tagSoundDataEvent() uint32 { return 4 }
+func (*SoundDataEventSeekTo) tagSoundDataEvent() uint8 { return 4 }
 
 // Marshal reads or writes SoundDataEventSeekTo using its canonical wire layout.
 func (x *SoundDataEventSeekTo) Marshal(io IO) {
-	x.Type.Marshal(io)
 	io.Float32(&x.Seconds)
 }
 
 type SoundDataEventSetPitch struct {
-	Type  SoundDataEventType
 	Pitch float32
 }
 
-func (*SoundDataEventSetPitch) tagSoundDataEvent() uint32 { return 2 }
+func (*SoundDataEventSetPitch) tagSoundDataEvent() uint8 { return 2 }
 
 // Marshal reads or writes SoundDataEventSetPitch using its canonical wire layout.
 func (x *SoundDataEventSetPitch) Marshal(io IO) {
-	x.Type.Marshal(io)
 	io.Float32(&x.Pitch)
 }
 
 type SoundDataEventSetVolume struct {
-	Type   SoundDataEventType
 	Volume float32
 }
 
-func (*SoundDataEventSetVolume) tagSoundDataEvent() uint32 { return 1 }
+func (*SoundDataEventSetVolume) tagSoundDataEvent() uint8 { return 1 }
 
 // Marshal reads or writes SoundDataEventSetVolume using its canonical wire layout.
 func (x *SoundDataEventSetVolume) Marshal(io IO) {
-	x.Type.Marshal(io)
 	io.Float32(&x.Volume)
 }
 
 type SoundDataEventStop struct {
-	Type SoundDataEventType
 }
 
-func (*SoundDataEventStop) tagSoundDataEvent() uint32 { return 0 }
+func (*SoundDataEventStop) tagSoundDataEvent() uint8 { return 0 }
 
 // Marshal reads or writes SoundDataEventStop using its canonical wire layout.
 func (x *SoundDataEventStop) Marshal(io IO) {
-	x.Type.Marshal(io)
 }
-
-type SoundDataEventType uint8
-
-const (
-	SoundDataEventTypeStop      SoundDataEventType = 0
-	SoundDataEventTypeSetVolume SoundDataEventType = 1
-	SoundDataEventTypeSetPitch  SoundDataEventType = 2
-	SoundDataEventTypeFade      SoundDataEventType = 3
-	SoundDataEventTypeSeekTo    SoundDataEventType = 4
-	SoundDataEventTypePause     SoundDataEventType = 5
-	SoundDataEventTypeResume    SoundDataEventType = 6
-)
-
-// Marshal reads or writes SoundDataEventType through its uint8 wire encoding.
-func (x *SoundDataEventType) Marshal(io IO) { io.Uint8((*uint8)(x)) }

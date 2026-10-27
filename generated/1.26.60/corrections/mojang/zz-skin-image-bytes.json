@@ -1,0 +1,33 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-skin-image-is-binary",
+      "file": "SkinImage.json",
+      "pointer": "/properties/ImageBytes",
+      "pre_patch_sha256": "sha256:d9a5de3dda2bbe597a5350d5b626b562a085f412a9b203e24d5d049968663bf0",
+      "replace": {
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 2,
+        "maxLength": 67108864
+      },
+      "why": "Skin pixels are a length-prefixed binary byte buffer. Preserve the 67108864-byte schema bound without applying an unrelated collection-element limit; this representation preserves the original byte order and length prefix.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/SkinImage.json",
+          "summary": "ImageBytes is a u8 array with a 67108864-byte maximum; Width and Height remain separate uint32 values."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/SkinImage.json",
+          "summary": "The independent target dump has the same u8 payload and uvarint32 prefix."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/skin.go",
+          "summary": "The pinned protocol-2225 skin marshal reads/writes image data with ByteSlice."
+        }
+      ]
+    }
+  ]
+}

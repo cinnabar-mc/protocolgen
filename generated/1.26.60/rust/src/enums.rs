@@ -10068,69 +10068,6 @@ impl wire::Decode for PersonaPieceType {
     }
 }
 
-// Domain: sound
-
-#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]
-pub enum SoundDataEventType {
-    #[default]
-    Stop,
-    SetVolume,
-    SetPitch,
-    Fade,
-    SeekTo,
-    Pause,
-    Resume,
-    Unknown(u8),
-}
-
-impl From<u8> for SoundDataEventType {
-    fn from(value: u8) -> Self {
-        match value {
-            0 => Self::Stop,
-            1 => Self::SetVolume,
-            2 => Self::SetPitch,
-            3 => Self::Fade,
-            4 => Self::SeekTo,
-            5 => Self::Pause,
-            6 => Self::Resume,
-            value => Self::Unknown(value),
-        }
-    }
-}
-
-impl SoundDataEventType {
-    pub fn to_raw(self) -> u8 {
-        match self {
-            Self::Stop => 0,
-            Self::SetVolume => 1,
-            Self::SetPitch => 2,
-            Self::Fade => 3,
-            Self::SeekTo => 4,
-            Self::Pause => 5,
-            Self::Resume => 6,
-            Self::Unknown(value) => value,
-        }
-    }
-}
-
-impl From<SoundDataEventType> for u8 {
-    fn from(value: SoundDataEventType) -> Self {
-        value.to_raw()
-    }
-}
-
-impl wire::Encode for SoundDataEventType {
-    fn encode(&self, writer: &mut wire::Writer) {
-        wire::U8(self.to_raw()).encode(writer);
-    }
-}
-
-impl wire::Decode for SoundDataEventType {
-    fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
-        Ok(Self::from(<wire::U8 as wire::Decode>::decode(reader)?.0))
-    }
-}
-
 // Domain: structure
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default)]

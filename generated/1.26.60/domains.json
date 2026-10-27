@@ -2591,11 +2591,6 @@
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
     {
-      "type_id": "enums/SoundDataEventType",
-      "domain": "sound",
-      "rationale": "Groups this shared type with its protocol domain."
-    },
-    {
       "type_id": "enums/SpawnPositionType",
       "domain": "misc",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."

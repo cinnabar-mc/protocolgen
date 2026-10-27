@@ -2006,7 +2006,7 @@
     },
     {
       "type_id": "ClientboundUpdateSoundDataPacket",
-      "doc": "ClientboundUpdateSoundData is sent by the server to update a sound that is currently playing, identified by\nthe handle that the server sent in the PlaySound packet that started it. Each optional field is a Cereal union\nslot that may hold any SoundDataUpdate variant; its name does not constrain the variant on the wire."
+      "doc": "ClientboundUpdateSoundData updates a playing sound by its server handle. The event starts with one byte selecting the update, followed by that update's payload."
     },
     {
       "type_id": "ClientboundUpdateSoundDataPacket",
