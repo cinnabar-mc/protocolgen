@@ -9,6 +9,6 @@ var NetherBrickDoubleSlab = Block{
 }
 
 var netherBrickDoubleSlabStates = [...]State{
-	{Hash: 445450925, Block: 915, Properties: 221},
-	{Hash: 2931172714, Block: 915, Properties: 221},
+	{Hash: 445450925, Block: 917, Properties: 221},
+	{Hash: 2931172714, Block: 917, Properties: 221},
 }

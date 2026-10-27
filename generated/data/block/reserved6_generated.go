@@ -9,5 +9,5 @@ var Reserved6 = Block{
 }
 
 var reserved6States = [...]State{
-	{Hash: 4184241260, Block: 603, Properties: 1941},
+	{Hash: 4184241260, Block: 605, Properties: 1943},
 }

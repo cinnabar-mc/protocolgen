@@ -2,6 +2,7 @@
 package nativeblock
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -9,11 +10,16 @@ import (
 	"strconv"
 
 	"github.com/bedrock-mc/protocolgen/data/source"
+	"github.com/sandertv/gophertunnel/minecraft/nbt"
 )
 
 // Properties are the per-type fields needed by the mining and property joins.
 type Properties struct {
-	RequiresCorrectToolForDrops *bool `json:"requiresCorrectToolForDrops"`
+	RequiresCorrectToolForDrops *bool           `json:"requiresCorrectToolForDrops"`
+	Thickness                   *float32        `json:"thickness"`
+	Translucency                *float32        `json:"translucency"`
+	MapColor                    *string         `json:"mapColor"`
+	VisualShape                 json.RawMessage `json:"visualShape"`
 }
 
 // State retains measured state fields without conflating absent and zero values.
@@ -34,6 +40,7 @@ type Catalog struct {
 	Properties map[string]Properties
 	States     []State
 	Tags       map[string][]string
+	Names      []string
 }
 
 // Read authenticates the snapshot and rejects a different protocol before decoding it.
@@ -65,7 +72,52 @@ func Read(ctx context.Context, sources *source.Sources, cache string) (Catalog, 
 	if raw.Tags == nil {
 		return Catalog{}, fmt.Errorf("native block tags must be a non-null object")
 	}
-	return Decode(raw.Properties, raw.States, raw.Tags)
+	catalog, err := Decode(raw.Properties, raw.States, raw.Tags)
+	if err != nil {
+		return Catalog{}, err
+	}
+	if _, ok := sources.Lock.Inputs["block_palette"]; ok {
+		palette, err := sources.Read(ctx, "block_palette", cache)
+		if err != nil {
+			return Catalog{}, err
+		}
+		if err := catalog.readNames(palette); err != nil {
+			return Catalog{}, err
+		}
+	}
+	return catalog, nil
+}
+
+// readNames checks the palette domain used to join supplemental data by hash.
+func (c *Catalog) readNames(palette []byte) error {
+	reader := bytes.NewReader(palette)
+	decoder := nbt.NewDecoder(reader)
+	seen := make(map[string]bool)
+	for reader.Len() != 0 {
+		if len(c.Names) >= len(c.States) {
+			return fmt.Errorf("native palette has more names than measured states")
+		}
+		var state struct {
+			Name    string         `nbt:"name"`
+			States  map[string]any `nbt:"states"`
+			Version int32          `nbt:"version"`
+		}
+		if err := decoder.Decode(&state); err != nil {
+			return fmt.Errorf("native palette: %w", err)
+		}
+		if state.States == nil || state.Version <= 0 {
+			return fmt.Errorf("native palette block %q lacks state properties or version", state.Name)
+		}
+		if _, ok := c.Properties[state.Name]; !ok {
+			return fmt.Errorf("native palette names unknown block %q", state.Name)
+		}
+		c.Names = append(c.Names, state.Name)
+		seen[state.Name] = true
+	}
+	if len(c.Names) != len(c.States) || len(seen) != len(c.Properties) {
+		return fmt.Errorf("native palette does not cover the measured state and block domains")
+	}
+	return nil
 }
 
 // Decode validates measured fields, contiguous ordinals and tag ownership.

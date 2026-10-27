@@ -9,6 +9,6 @@ var BrownWoolDoubleSlab = Block{
 }
 
 var brownWoolDoubleSlabStates = [...]State{
-	{Hash: 1443986419, Block: 1071, Properties: 68},
-	{Hash: 2806741868, Block: 1071, Properties: 68},
+	{Hash: 1443986419, Block: 1074, Properties: 68},
+	{Hash: 2806741868, Block: 1074, Properties: 68},
 }

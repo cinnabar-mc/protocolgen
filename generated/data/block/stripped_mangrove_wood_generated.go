@@ -9,7 +9,7 @@ var StrippedMangroveWood = Block{
 }
 
 var strippedMangroveWoodStates = [...]State{
-	{Hash: 1014956299, Block: 478, Properties: 1572},
-	{Hash: 4254617024, Block: 478, Properties: 1572},
-	{Hash: 2070262870, Block: 478, Properties: 1572},
+	{Hash: 1014956299, Block: 479, Properties: 1573},
+	{Hash: 4254617024, Block: 479, Properties: 1573},
+	{Hash: 2070262870, Block: 479, Properties: 1573},
 }

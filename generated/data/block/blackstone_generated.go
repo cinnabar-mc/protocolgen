@@ -9,5 +9,5 @@ var Blackstone = Block{
 }
 
 var blackstoneStates = [...]State{
-	{Hash: 2277266091, Block: 1275, Properties: 1906},
+	{Hash: 2277266091, Block: 1278, Properties: 1908},
 }

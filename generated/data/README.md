@@ -40,8 +40,8 @@ Treat returned slices and definitions as immutable.
 
 ## Independent source versions
 
-The runtime target is Minecraft 1.26.50, protocol 2193, with 2,076 runtime items.
-The native snapshot is release 1.26.51, protocol 2193. `NativeRef` pins its commit.
+The runtime target is Minecraft 1.26.60, protocol 2225, with 2,080 runtime items.
+The native snapshot is release 1.26.60, protocol 2225. `NativeRef` pins its commit.
 It supplies the block palette, scalar block properties, ordinary-tool and harvest
 classifications, item fields and tags, and biome scalar values and IDs. Selected
 CC0-1.0 input files are vendored so regeneration does not require upstream access.
@@ -51,7 +51,7 @@ can differ from effective runtime limits. Raw durability is not exposed.
 CloudburstMC/Data supplies geometry, rendering fields, biome tags, item identities
 and component payloads. Allay supplies only the two missing offhand/head capability
 tags. BDS `1.26.32.2` supplies base entity and food inputs; `BDSVersion` describes
-those inputs, independently of the target protocol. The catalog contains 22,091
+those inputs, independently of the target protocol. The catalog contains 23,960
 block states, 89 biomes, 96 entities, 38 foods and 220 named voxel shapes.
 [semantic_sources.json](semantic_sources.json) and `release.json` record the pins.
 
@@ -70,7 +70,12 @@ Entity values describe base components. They do not execute goals, events,
 filters or component-group transitions. Food definitions alone are not a
 runtime item registry. Neighbor-dependent block shapes describe the extraction
 context; live worlds may need their own models to resolve connections.
-Unavailable shapes remain distinct from known empty shapes. Thirty reviewed
+Unavailable shapes remain distinct from known empty shapes. The native palette
+has 1,902 states without a matching supplemental state. They retain native
+scalars; their collision, outline, UI and liquid-clip shapes are unavailable.
+Check `SupplementalPropertiesAvailable` before using `TintMethod`,
+`LiquidReactionOnTouch` or `CanContainLiquidSource`. Their native visual bounds
+remain separately available when supplied. Thirty reviewed
 liquid-clip boxes in the Cloudburst extract have invalid bounds and are marked
 unavailable. Their exact source values appear in `semantic_sources.json`, and
 `GeneratedCounts.UnavailableLiquidClipShapes` reports their count. Valid geometry

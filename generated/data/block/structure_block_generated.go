@@ -9,10 +9,10 @@ var StructureBlock = Block{
 }
 
 var structureBlockStates = [...]State{
-	{Hash: 388079635, Block: 962, Properties: 2796},
-	{Hash: 4018714398, Block: 962, Properties: 2796},
-	{Hash: 2132005739, Block: 962, Properties: 2796},
-	{Hash: 2604408804, Block: 962, Properties: 2796},
-	{Hash: 2588746603, Block: 962, Properties: 2796},
-	{Hash: 257434735, Block: 962, Properties: 2796},
+	{Hash: 388079635, Block: 964, Properties: 2798},
+	{Hash: 4018714398, Block: 964, Properties: 2798},
+	{Hash: 2132005739, Block: 964, Properties: 2798},
+	{Hash: 2604408804, Block: 964, Properties: 2798},
+	{Hash: 2588746603, Block: 964, Properties: 2798},
+	{Hash: 257434735, Block: 964, Properties: 2798},
 }

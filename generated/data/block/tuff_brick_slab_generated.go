@@ -9,6 +9,6 @@ var TuffBrickSlab = Block{
 }
 
 var tuffBrickSlabStates = [...]State{
-	{Hash: 390504169, Block: 391, Properties: 203},
-	{Hash: 3789318030, Block: 391, Properties: 204},
+	{Hash: 390504169, Block: 392, Properties: 203},
+	{Hash: 3789318030, Block: 392, Properties: 204},
 }

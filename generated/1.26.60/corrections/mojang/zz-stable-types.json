@@ -1,0 +1,103 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-item-stack-id-width",
+      "file": "ItemStackNetIdVariant.json",
+      "pointer": "#",
+      "pre_patch_sha256": "sha256:eb57aa377b84152ec32d3ef3bdc396a7f8e56de7316febbfa80c27f1cb20ee53",
+      "merge": {
+        "x-underlying-type": "int32"
+      },
+      "why": "Item stack network IDs serialize as signed 32-bit integers. Compression belongs to each use: item descriptors are compressed, while slot and mine-block request IDs are fixed-width.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/cerealizer_NetworkItemStackDescriptor___SerializedData.json",
+          "summary": "Net Id Variant is optional varint32, matching the Compression annotation on the corresponding Mojang field."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/ItemStackRequestCereal__SlotInfoData.json",
+          "summary": "Net Id Variant is int32 with no variable-length compression."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/ItemStackRequestCereal__MineBlockActionData.json",
+          "summary": "Net Id Variant is int32; the preceding Slot and Predicted Durability use varint32."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-recipe-serialized-definition",
+      "file": "RecipeIngredient.json",
+      "pointer": "#",
+      "pre_patch_sha256": "sha256:73253ecc47c05005b358aabefe413f593fef491ecb20af785291a54e15087087",
+      "merge": {
+        "definitions": {
+          "SerializedData": {
+            "type": "object",
+            "properties": {
+              "Descriptor": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "x-ordinal-index": 0
+              },
+              "Aux Value": {
+                "type": "integer",
+                "x-underlying-type": "int32",
+                "x-serialization-options": [
+                  "Compression"
+                ],
+                "x-ordinal-index": 1
+              },
+              "Stack Size": {
+                "type": "integer",
+                "x-underlying-type": "int32",
+                "x-serialization-options": [
+                  "Compression"
+                ],
+                "x-ordinal-index": 2,
+                "minimum": 0,
+                "maximum": 64
+              }
+            },
+            "required": [
+              "Descriptor",
+              "Aux Value",
+              "Stack Size"
+            ]
+          }
+        }
+      },
+      "why": "Add the serialized recipe ingredient representation used by CraftingData. Preserve the original descriptor union and uint16 count used by item-stack requests.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/cerealizer_RecipeIngredient___SerializedData.json",
+          "summary": "The protocol-2225 serialized type contains a string map followed by two signed compressed integers. The existing aux-range correction remains separate."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-video-action-required",
+      "file": "PlayerVideoCapturePacketPayload.json",
+      "pointer": "#",
+      "pre_patch_sha256": "sha256:77206419e4a65160a24f25cd9f8ba4bd20084d3648f7c44f46b617e0fc917569",
+      "merge": {
+        "required": [
+          "Action"
+        ]
+      },
+      "why": "The single action selector is always present; it has no optional presence flag.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/packets/PlayerVideoCapturePacket.json",
+          "summary": "The pinned target declares an unconditional action switch. The separate selector-width correction is unchanged."
+        }
+      ]
+    }
+  ]
+}

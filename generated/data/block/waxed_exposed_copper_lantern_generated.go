@@ -9,6 +9,6 @@ var WaxedExposedCopperLantern = Block{
 }
 
 var waxedExposedCopperLanternStates = [...]State{
-	{Hash: 1432913586, Block: 1193, Properties: 1560},
-	{Hash: 2488220157, Block: 1193, Properties: 1561},
+	{Hash: 1432913586, Block: 1196, Properties: 1561},
+	{Hash: 2488220157, Block: 1196, Properties: 1562},
 }

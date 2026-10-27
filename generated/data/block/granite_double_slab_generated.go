@@ -9,6 +9,6 @@ var GraniteDoubleSlab = Block{
 }
 
 var graniteDoubleSlabStates = [...]State{
-	{Hash: 569926434, Block: 1055, Properties: 67},
-	{Hash: 966260771, Block: 1055, Properties: 67},
+	{Hash: 569926434, Block: 1058, Properties: 67},
+	{Hash: 966260771, Block: 1058, Properties: 67},
 }

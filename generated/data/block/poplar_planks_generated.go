@@ -9,5 +9,5 @@ var PoplarPlanks = Block{
 }
 
 var poplarPlanksStates = [...]State{
-	{Hash: 1414931100, Block: 946, Properties: 2785},
+	{Hash: 1414931100, Block: 948, Properties: 2787},
 }

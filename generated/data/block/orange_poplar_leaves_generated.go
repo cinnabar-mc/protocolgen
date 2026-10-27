@@ -9,8 +9,8 @@ var OrangePoplarLeaves = Block{
 }
 
 var orangePoplarLeavesStates = [...]State{
-	{Hash: 3276109443, Block: 1230, Properties: 3411},
-	{Hash: 2220802872, Block: 1230, Properties: 3411},
-	{Hash: 4282607088, Block: 1230, Properties: 3411},
-	{Hash: 1042946363, Block: 1230, Properties: 3411},
+	{Hash: 3276109443, Block: 1233, Properties: 3414},
+	{Hash: 2220802872, Block: 1233, Properties: 3414},
+	{Hash: 4282607088, Block: 1233, Properties: 3414},
+	{Hash: 1042946363, Block: 1233, Properties: 3414},
 }

@@ -9,7 +9,7 @@ var StrippedBirchWood = Block{
 }
 
 var strippedBirchWoodStates = [...]State{
-	{Hash: 155416677, Block: 579, Properties: 924},
-	{Hash: 3395077402, Block: 579, Properties: 924},
-	{Hash: 1284464260, Block: 579, Properties: 924},
+	{Hash: 155416677, Block: 581, Properties: 924},
+	{Hash: 3395077402, Block: 581, Properties: 924},
+	{Hash: 1284464260, Block: 581, Properties: 924},
 }

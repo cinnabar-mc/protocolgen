@@ -9,7 +9,7 @@ var StrippedBirchLog = Block{
 }
 
 var strippedBirchLogStates = [...]State{
-	{Hash: 3526887645, Block: 861, Properties: 924},
-	{Hash: 2471581074, Block: 861, Properties: 924},
-	{Hash: 360967932, Block: 861, Properties: 924},
+	{Hash: 3526887645, Block: 863, Properties: 924},
+	{Hash: 2471581074, Block: 863, Properties: 924},
+	{Hash: 360967932, Block: 863, Properties: 924},
 }

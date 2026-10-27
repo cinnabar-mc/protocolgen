@@ -9,8 +9,8 @@ var LitFurnace = Block{
 }
 
 var litFurnaceStates = [...]State{
-	{Hash: 2568407871, Block: 1152, Properties: 3188},
-	{Hash: 42144652, Block: 1152, Properties: 3188},
-	{Hash: 1568180725, Block: 1152, Properties: 3188},
-	{Hash: 1899400230, Block: 1152, Properties: 3188},
+	{Hash: 2568407871, Block: 1155, Properties: 3191},
+	{Hash: 42144652, Block: 1155, Properties: 3191},
+	{Hash: 1568180725, Block: 1155, Properties: 3191},
+	{Hash: 1899400230, Block: 1155, Properties: 3191},
 }

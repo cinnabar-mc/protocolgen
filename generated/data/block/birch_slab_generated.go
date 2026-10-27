@@ -9,6 +9,6 @@ var BirchSlab = Block{
 }
 
 var birchSlabStates = [...]State{
-	{Hash: 4074260449, Block: 412, Properties: 1506},
-	{Hash: 3124745110, Block: 412, Properties: 1507},
+	{Hash: 4074260449, Block: 413, Properties: 1507},
+	{Hash: 3124745110, Block: 413, Properties: 1508},
 }

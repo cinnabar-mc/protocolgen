@@ -9,10 +9,10 @@ var MediumAmethystBud = Block{
 }
 
 var mediumAmethystBudStates = [...]State{
-	{Hash: 2286694015, Block: 544, Properties: 1749},
-	{Hash: 553552024, Block: 544, Properties: 1750},
-	{Hash: 2315681205, Block: 544, Properties: 1751},
-	{Hash: 3740365823, Block: 544, Properties: 1752},
-	{Hash: 4176966732, Block: 544, Properties: 1753},
-	{Hash: 1739255014, Block: 544, Properties: 1754},
+	{Hash: 2286694015, Block: 546, Properties: 1751},
+	{Hash: 553552024, Block: 546, Properties: 1752},
+	{Hash: 2315681205, Block: 546, Properties: 1753},
+	{Hash: 3740365823, Block: 546, Properties: 1754},
+	{Hash: 4176966732, Block: 546, Properties: 1755},
+	{Hash: 1739255014, Block: 546, Properties: 1756},
 }

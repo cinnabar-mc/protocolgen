@@ -193,6 +193,7 @@ type rawBlockState struct {
 	VisualShape                 json.RawMessage `json:"visualShape"`
 	UIShape                     json.RawMessage `json:"uiShape"`
 	LiquidClipShape             json.RawMessage `json:"liquidClipShape"`
+	supplementalUnavailable     bool
 }
 
 type generatedBox [6]float32
@@ -203,26 +204,27 @@ type generatedBlock struct {
 }
 
 type generatedProperties struct {
-	Hardness                    float32
-	ExplosionResistance         float32
-	Friction                    float32
-	Thickness                   float32
-	Translucency                float32
-	MapColor                    uint32
-	TintMethod                  string
-	LiquidReactionOnTouch       string
-	LightEmission               uint8
-	LightDampening              uint8
-	BurnOdds                    uint8
-	FlameOdds                   uint8
-	CollisionShape              uint16
-	OutlineShape                uint16
-	VisualShape                 uint16
-	UIShape                     uint16
-	LiquidClipShape             uint16
-	Solid                       bool
-	RequiresCorrectToolForDrops bool
-	CanContainLiquidSource      bool
+	Hardness                        float32
+	ExplosionResistance             float32
+	Friction                        float32
+	Thickness                       float32
+	Translucency                    float32
+	MapColor                        uint32
+	TintMethod                      string
+	LiquidReactionOnTouch           string
+	LightEmission                   uint8
+	LightDampening                  uint8
+	BurnOdds                        uint8
+	FlameOdds                       uint8
+	CollisionShape                  uint16
+	OutlineShape                    uint16
+	VisualShape                     uint16
+	UIShape                         uint16
+	LiquidClipShape                 uint16
+	Solid                           bool
+	RequiresCorrectToolForDrops     bool
+	CanContainLiquidSource          bool
+	SupplementalPropertiesAvailable bool
 }
 
 type generatedState struct {
@@ -240,13 +242,22 @@ func generateBlocks(path string, omissions []LiquidClipOmission, native *nativeb
 	if len(raw) > math.MaxUint16 {
 		return nil, 0, fmt.Errorf("state count %d exceeds uint16 lookup capacity", len(raw))
 	}
+	if err := prepareBlockShapes(raw, omissions); err != nil {
+		return nil, 0, err
+	}
 	if native != nil {
-		if err := applyNativeBlocks(raw, *native); err != nil {
+		if len(native.Names) != 0 {
+			var err error
+			raw, err = alignNativeBlocks(raw, *native)
+			if err != nil {
+				return nil, 0, err
+			}
+		} else if err := applyNativeBlocks(raw, *native); err != nil {
 			return nil, 0, err
 		}
 	}
-	if err := prepareBlockShapes(raw, omissions); err != nil {
-		return nil, 0, err
+	if len(raw) > math.MaxUint16 {
+		return nil, 0, fmt.Errorf("native state count %d exceeds uint16 lookup capacity", len(raw))
 	}
 
 	blocks := make([]generatedBlock, 0, 2048)
@@ -324,26 +335,27 @@ func generateBlocks(path string, omissions []LiquidClipOmission, native *nativeb
 			return nil, 0, fmt.Errorf("%s map color: %w", value.Name, err)
 		}
 		propertyValue := generatedProperties{
-			Hardness:                    value.Hardness,
-			ExplosionResistance:         value.ExplosionResistance,
-			Friction:                    value.Friction,
-			Thickness:                   value.Thickness,
-			Translucency:                value.Translucency,
-			MapColor:                    mapColor,
-			TintMethod:                  value.TintMethod,
-			LiquidReactionOnTouch:       value.LiquidReactionOnTouch,
-			LightEmission:               value.LightEmission,
-			LightDampening:              value.LightDampening,
-			BurnOdds:                    value.BurnOdds,
-			FlameOdds:                   value.FlameOdds,
-			CollisionShape:              collision,
-			OutlineShape:                outline,
-			VisualShape:                 visual,
-			UIShape:                     ui,
-			LiquidClipShape:             liquidClip,
-			Solid:                       value.Solid,
-			RequiresCorrectToolForDrops: value.RequiresCorrectToolForDrops,
-			CanContainLiquidSource:      value.CanContainLiquidSource,
+			Hardness:                        value.Hardness,
+			ExplosionResistance:             value.ExplosionResistance,
+			Friction:                        value.Friction,
+			Thickness:                       value.Thickness,
+			Translucency:                    value.Translucency,
+			MapColor:                        mapColor,
+			TintMethod:                      value.TintMethod,
+			LiquidReactionOnTouch:           value.LiquidReactionOnTouch,
+			LightEmission:                   value.LightEmission,
+			LightDampening:                  value.LightDampening,
+			BurnOdds:                        value.BurnOdds,
+			FlameOdds:                       value.FlameOdds,
+			CollisionShape:                  collision,
+			OutlineShape:                    outline,
+			VisualShape:                     visual,
+			UIShape:                         ui,
+			LiquidClipShape:                 liquidClip,
+			Solid:                           value.Solid,
+			RequiresCorrectToolForDrops:     value.RequiresCorrectToolForDrops,
+			CanContainLiquidSource:          value.CanContainLiquidSource,
+			SupplementalPropertiesAvailable: !value.supplementalUnavailable,
 		}
 		propertyIndex, ok := propertyIndexes[propertyValue]
 		if !ok {
@@ -432,13 +444,13 @@ var %s = [...]State{
 	}
 	output.WriteString("}\n\nvar properties = [...]Properties{\n")
 	for _, value := range properties {
-		fmt.Fprintf(&output, `{Hardness:%s, ExplosionResistance:%s, Friction:%s, Thickness:%s, Translucency:%s, MapColor:0x%08x, TintMethod:%q, LiquidReactionOnTouch:%q, LightEmission:%d, LightDampening:%d, BurnOdds:%d, FlameOdds:%d, CollisionShape:%d, OutlineShape:%d, VisualShape:%d, UIShape:%d, LiquidClipShape:%d, Solid:%t, RequiresCorrectToolForDrops:%t, CanContainLiquidSource:%t},
+		fmt.Fprintf(&output, `{Hardness:%s, ExplosionResistance:%s, Friction:%s, Thickness:%s, Translucency:%s, MapColor:0x%08x, TintMethod:%q, LiquidReactionOnTouch:%q, LightEmission:%d, LightDampening:%d, BurnOdds:%d, FlameOdds:%d, CollisionShape:%d, OutlineShape:%d, VisualShape:%d, UIShape:%d, LiquidClipShape:%d, Solid:%t, RequiresCorrectToolForDrops:%t, CanContainLiquidSource:%t, SupplementalPropertiesAvailable:%t},
 `,
 			goFloat(value.Hardness), goFloat(value.ExplosionResistance), goFloat(value.Friction),
 			goFloat(value.Thickness), goFloat(value.Translucency), value.MapColor, value.TintMethod,
 			value.LiquidReactionOnTouch, value.LightEmission, value.LightDampening, value.BurnOdds,
 			value.FlameOdds, value.CollisionShape, value.OutlineShape, value.VisualShape, value.UIShape,
-			value.LiquidClipShape, value.Solid, value.RequiresCorrectToolForDrops, value.CanContainLiquidSource)
+			value.LiquidClipShape, value.Solid, value.RequiresCorrectToolForDrops, value.CanContainLiquidSource, value.SupplementalPropertiesAvailable)
 	}
 	output.WriteString("}\n\nvar states = [...]State{\n")
 	stateOffsets := make([]int, len(blocks))

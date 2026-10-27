@@ -9,5 +9,5 @@ var SoulSoil = Block{
 }
 
 var soulSoilStates = [...]State{
-	{Hash: 601701031, Block: 802, Properties: 2416},
+	{Hash: 601701031, Block: 804, Properties: 2418},
 }

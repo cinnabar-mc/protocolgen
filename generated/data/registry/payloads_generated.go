@@ -5,16 +5,16 @@ package registry
 import _ "embed"
 
 // SourceLockSHA256 identifies the authenticated inputs used for these payloads.
-const SourceLockSHA256 = "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4"
+const SourceLockSHA256 = "a1c1c5faa367c92257dd19aa4521033e707f93868035cec568a6cc70a82dd953"
 
 // BlockStateCount is the number of versioned states in BlockStatesNBT.
-const BlockStateCount = 22091
+const BlockStateCount = 23960
 
 // DataDrivenBlockCount is the number of component definitions in DataDrivenBlocksNBT.
 const DataDrivenBlockCount = 98
 
 // ItemCount is the number of entries in ItemsNBT.
-const ItemCount = 2076
+const ItemCount = 2080
 
 //go:embed block_states.nbt
 var blockStates []byte

@@ -9,6 +9,6 @@ var BlackConcreteDoubleSlab = Block{
 }
 
 var blackConcreteDoubleSlabStates = [...]State{
-	{Hash: 3069171918, Block: 672, Properties: 477},
-	{Hash: 1903074439, Block: 672, Properties: 477},
+	{Hash: 3069171918, Block: 674, Properties: 477},
+	{Hash: 1903074439, Block: 674, Properties: 477},
 }

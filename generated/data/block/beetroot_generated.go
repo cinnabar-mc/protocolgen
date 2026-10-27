@@ -9,12 +9,12 @@ var Beetroot = Block{
 }
 
 var beetrootStates = [...]State{
-	{Hash: 999460327, Block: 700, Properties: 618},
-	{Hash: 1060935150, Block: 700, Properties: 619},
-	{Hash: 1122409973, Block: 700, Properties: 620},
-	{Hash: 1183884796, Block: 700, Properties: 621},
-	{Hash: 1245359619, Block: 700, Properties: 622},
-	{Hash: 1306834442, Block: 700, Properties: 623},
-	{Hash: 1368309265, Block: 700, Properties: 624},
-	{Hash: 1429784088, Block: 700, Properties: 625},
+	{Hash: 999460327, Block: 702, Properties: 618},
+	{Hash: 1060935150, Block: 702, Properties: 619},
+	{Hash: 1122409973, Block: 702, Properties: 620},
+	{Hash: 1183884796, Block: 702, Properties: 621},
+	{Hash: 1245359619, Block: 702, Properties: 622},
+	{Hash: 1306834442, Block: 702, Properties: 623},
+	{Hash: 1368309265, Block: 702, Properties: 624},
+	{Hash: 1429784088, Block: 702, Properties: 625},
 }

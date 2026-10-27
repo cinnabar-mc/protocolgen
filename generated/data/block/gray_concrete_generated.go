@@ -9,5 +9,5 @@ var GrayConcrete = Block{
 }
 
 var grayConcreteStates = [...]State{
-	{Hash: 4027707683, Block: 1204, Properties: 3369},
+	{Hash: 4027707683, Block: 1207, Properties: 3372},
 }

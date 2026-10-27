@@ -9,12 +9,12 @@ var Carrots = Block{
 }
 
 var carrotsStates = [...]State{
-	{Hash: 3132048452, Block: 846, Properties: 2512},
-	{Hash: 3070573629, Block: 846, Properties: 2513},
-	{Hash: 3009098806, Block: 846, Properties: 2514},
-	{Hash: 2947623983, Block: 846, Properties: 2515},
-	{Hash: 3377947744, Block: 846, Properties: 2516},
-	{Hash: 3316472921, Block: 846, Properties: 624},
-	{Hash: 3254998098, Block: 846, Properties: 2517},
-	{Hash: 3193523275, Block: 846, Properties: 2518},
+	{Hash: 3132048452, Block: 848, Properties: 2514},
+	{Hash: 3070573629, Block: 848, Properties: 2515},
+	{Hash: 3009098806, Block: 848, Properties: 2516},
+	{Hash: 2947623983, Block: 848, Properties: 2517},
+	{Hash: 3377947744, Block: 848, Properties: 2518},
+	{Hash: 3316472921, Block: 848, Properties: 624},
+	{Hash: 3254998098, Block: 848, Properties: 2519},
+	{Hash: 3193523275, Block: 848, Properties: 2520},
 }

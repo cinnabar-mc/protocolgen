@@ -9,7 +9,7 @@ var StrippedPoplarLog = Block{
 }
 
 var strippedPoplarLogStates = [...]State{
-	{Hash: 1192710024, Block: 910, Properties: 2689},
-	{Hash: 2248016595, Block: 910, Properties: 2689},
-	{Hash: 63662441, Block: 910, Properties: 2689},
+	{Hash: 1192710024, Block: 912, Properties: 2691},
+	{Hash: 2248016595, Block: 912, Properties: 2691},
+	{Hash: 63662441, Block: 912, Properties: 2691},
 }

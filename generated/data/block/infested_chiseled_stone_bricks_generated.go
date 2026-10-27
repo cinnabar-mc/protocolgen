@@ -9,5 +9,5 @@ var InfestedChiseledStoneBricks = Block{
 }
 
 var infestedChiseledStoneBricksStates = [...]State{
-	{Hash: 656057126, Block: 499, Properties: 983},
+	{Hash: 656057126, Block: 500, Properties: 983},
 }

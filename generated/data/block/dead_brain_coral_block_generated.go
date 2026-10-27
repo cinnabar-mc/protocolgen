@@ -9,5 +9,5 @@ var DeadBrainCoralBlock = Block{
 }
 
 var deadBrainCoralBlockStates = [...]State{
-	{Hash: 2585849648, Block: 1021, Properties: 1092},
+	{Hash: 2585849648, Block: 1024, Properties: 1092},
 }

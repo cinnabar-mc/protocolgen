@@ -106,3 +106,25 @@ func TestModulePath(t *testing.T) {
 		t.Fatal("go.mod does not declare the catalog module path")
 	}
 }
+
+// TestNativePaletteCoverage keeps unmatched states distinct from known empty shapes.
+func TestNativePaletteCoverage(t *testing.T) {
+	unavailable := 0
+	for i := range block.StateCount() {
+		state, _ := block.StateAt(i)
+		properties, _ := block.PropertiesAt(state.Properties)
+		if properties.SupplementalPropertiesAvailable {
+			continue
+		}
+		unavailable++
+		if _, ok := block.Shape(properties.CollisionShape); ok {
+			t.Fatalf("unmatched native state %d has guessed supplemental collision", i)
+		}
+		if _, ok := block.Shape(properties.OutlineShape); ok {
+			t.Fatalf("unmatched native state %d has guessed supplemental outline", i)
+		}
+	}
+	if block.StateCount() != 23960 || unavailable != 1902 {
+		t.Fatalf("native state coverage = %d total, %d unavailable", block.StateCount(), unavailable)
+	}
+}

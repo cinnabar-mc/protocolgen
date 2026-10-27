@@ -9,5 +9,5 @@ var PurpleTerracotta = Block{
 }
 
 var purpleTerracottaStates = [...]State{
-	{Hash: 2537804934, Block: 964, Properties: 2829},
+	{Hash: 2537804934, Block: 966, Properties: 2831},
 }

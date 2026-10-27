@@ -9,14 +9,14 @@ var MangrovePropagule = Block{
 }
 
 var mangrovePropaguleStates = [...]State{
-	{Hash: 2529044738, Block: 1085, Properties: 3090},
-	{Hash: 2467569915, Block: 1085, Properties: 3090},
-	{Hash: 2651994384, Block: 1085, Properties: 3090},
-	{Hash: 2590519561, Block: 1085, Properties: 3090},
-	{Hash: 2283145446, Block: 1085, Properties: 3090},
-	{Hash: 2388552713, Block: 1085, Properties: 3091},
-	{Hash: 2450027536, Block: 1085, Properties: 3092},
-	{Hash: 2265603067, Block: 1085, Properties: 3093},
-	{Hash: 2327077890, Block: 1085, Properties: 3094},
-	{Hash: 2142653421, Block: 1085, Properties: 3090},
+	{Hash: 2529044738, Block: 1088, Properties: 3093},
+	{Hash: 2467569915, Block: 1088, Properties: 3093},
+	{Hash: 2651994384, Block: 1088, Properties: 3093},
+	{Hash: 2590519561, Block: 1088, Properties: 3093},
+	{Hash: 2283145446, Block: 1088, Properties: 3093},
+	{Hash: 2388552713, Block: 1088, Properties: 3094},
+	{Hash: 2450027536, Block: 1088, Properties: 3095},
+	{Hash: 2265603067, Block: 1088, Properties: 3096},
+	{Hash: 2327077890, Block: 1088, Properties: 3097},
+	{Hash: 2142653421, Block: 1088, Properties: 3093},
 }

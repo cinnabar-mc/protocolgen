@@ -9,6 +9,6 @@ var JungleSapling = Block{
 }
 
 var jungleSaplingStates = [...]State{
-	{Hash: 1950376030, Block: 874, Properties: 735},
-	{Hash: 3005682601, Block: 874, Properties: 735},
+	{Hash: 1950376030, Block: 876, Properties: 735},
+	{Hash: 3005682601, Block: 876, Properties: 735},
 }

@@ -1,16 +1,11 @@
 {
-  "schema_version": 1,
-  "default_protocol": "1.26.51",
   "default_capture": "1.26.44",
+  "default_protocol": "1.26.60",
   "releases": {
     "1.26.40": {
-      "minecraft_version": "1.26.40",
-      "protocol_version": 2168,
-      "channel": "retail",
       "aliases": [
         "1.26.40"
       ],
-      "snapshot": "1.26.40",
       "capture": {
         "go_args": [
           "-modfile",
@@ -18,38 +13,52 @@
           "-tags",
           "protocolgen_12640"
         ]
-      }
+      },
+      "channel": "retail",
+      "minecraft_version": "1.26.40",
+      "protocol_version": 2168,
+      "snapshot": "1.26.40"
     },
     "1.26.44": {
-      "minecraft_version": "1.26.44",
-      "protocol_version": 2168,
-      "channel": "retail",
       "aliases": [
         "1.26.44"
       ],
-      "snapshot": "1.26.44",
       "capture": {
         "go_args": []
-      }
+      },
+      "channel": "retail",
+      "minecraft_version": "1.26.44",
+      "protocol_version": 2168,
+      "snapshot": "1.26.44"
     },
     "1.26.50": {
-      "minecraft_version": "1.26.50",
-      "protocol_version": 2187,
-      "channel": "preview",
       "aliases": [
         "1.26.50"
       ],
+      "channel": "preview",
+      "minecraft_version": "1.26.50",
+      "protocol_version": 2187,
       "snapshot": "1.26.50"
     },
     "1.26.51": {
-      "minecraft_version": "1.26.50",
-      "protocol_version": 2193,
-      "channel": "retail",
       "aliases": [
         "1.26.50",
         "1.26.51"
       ],
+      "channel": "retail",
+      "minecraft_version": "1.26.50",
+      "protocol_version": 2193,
       "snapshot": "1.26.51"
+    },
+    "1.26.60": {
+      "aliases": [
+        "1.26.60"
+      ],
+      "channel": "retail",
+      "minecraft_version": "1.26.60",
+      "protocol_version": 2225,
+      "snapshot": "1.26.60"
     }
-  }
+  },
+  "schema_version": 1
 }

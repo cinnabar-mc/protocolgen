@@ -9,5 +9,5 @@ var SporeBlossom = Block{
 }
 
 var sporeBlossomStates = [...]State{
-	{Hash: 481848731, Block: 1192, Properties: 3330},
+	{Hash: 481848731, Block: 1195, Properties: 3333},
 }

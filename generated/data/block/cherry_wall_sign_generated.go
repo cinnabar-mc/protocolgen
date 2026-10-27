@@ -9,10 +9,10 @@ var CherryWallSign = Block{
 }
 
 var cherryWallSignStates = [...]State{
-	{Hash: 1221622460, Block: 1379, Properties: 3486},
-	{Hash: 1160147637, Block: 1379, Properties: 3486},
-	{Hash: 1098672814, Block: 1379, Properties: 3487},
-	{Hash: 1037197991, Block: 1379, Properties: 3488},
-	{Hash: 1467521752, Block: 1379, Properties: 3489},
-	{Hash: 1406046929, Block: 1379, Properties: 3490},
+	{Hash: 1221622460, Block: 1382, Properties: 3489},
+	{Hash: 1160147637, Block: 1382, Properties: 3489},
+	{Hash: 1098672814, Block: 1382, Properties: 3490},
+	{Hash: 1037197991, Block: 1382, Properties: 3491},
+	{Hash: 1467521752, Block: 1382, Properties: 3492},
+	{Hash: 1406046929, Block: 1382, Properties: 3493},
 }

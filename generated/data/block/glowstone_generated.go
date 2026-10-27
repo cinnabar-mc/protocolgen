@@ -9,5 +9,5 @@ var Glowstone = Block{
 }
 
 var glowstoneStates = [...]State{
-	{Hash: 2254044004, Block: 425, Properties: 1252},
+	{Hash: 2254044004, Block: 426, Properties: 1252},
 }

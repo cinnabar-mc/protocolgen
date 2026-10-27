@@ -9,5 +9,5 @@ var NetherSprouts = Block{
 }
 
 var netherSproutsStates = [...]State{
-	{Hash: 3713025338, Block: 983, Properties: 2849},
+	{Hash: 3713025338, Block: 985, Properties: 2851},
 }

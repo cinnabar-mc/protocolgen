@@ -9,5 +9,5 @@ var OrangeConcretePowder = Block{
 }
 
 var orangeConcretePowderStates = [...]State{
-	{Hash: 85829319, Block: 1448, Properties: 981},
+	{Hash: 85829319, Block: 1451, Properties: 981},
 }

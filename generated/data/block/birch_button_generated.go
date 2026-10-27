@@ -9,16 +9,16 @@ var BirchButton = Block{
 }
 
 var birchButtonStates = [...]State{
-	{Hash: 719300965, Block: 1399, Properties: 94},
-	{Hash: 780775788, Block: 1399, Properties: 95},
-	{Hash: 596351319, Block: 1399, Properties: 96},
-	{Hash: 657826142, Block: 1399, Properties: 97},
-	{Hash: 965200257, Block: 1399, Properties: 98},
-	{Hash: 1026675080, Block: 1399, Properties: 99},
-	{Hash: 3013494280, Block: 1399, Properties: 100},
-	{Hash: 2952019457, Block: 1399, Properties: 101},
-	{Hash: 2890544634, Block: 1399, Properties: 102},
-	{Hash: 2829069811, Block: 1399, Properties: 103},
-	{Hash: 2767594988, Block: 1399, Properties: 104},
-	{Hash: 2706120165, Block: 1399, Properties: 105},
+	{Hash: 719300965, Block: 1402, Properties: 94},
+	{Hash: 780775788, Block: 1402, Properties: 95},
+	{Hash: 596351319, Block: 1402, Properties: 96},
+	{Hash: 657826142, Block: 1402, Properties: 97},
+	{Hash: 965200257, Block: 1402, Properties: 98},
+	{Hash: 1026675080, Block: 1402, Properties: 99},
+	{Hash: 3013494280, Block: 1402, Properties: 100},
+	{Hash: 2952019457, Block: 1402, Properties: 101},
+	{Hash: 2890544634, Block: 1402, Properties: 102},
+	{Hash: 2829069811, Block: 1402, Properties: 103},
+	{Hash: 2767594988, Block: 1402, Properties: 104},
+	{Hash: 2706120165, Block: 1402, Properties: 105},
 }

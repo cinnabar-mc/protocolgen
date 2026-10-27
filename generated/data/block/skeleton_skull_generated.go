@@ -9,10 +9,10 @@ var SkeletonSkull = Block{
 }
 
 var skeletonSkullStates = [...]State{
-	{Hash: 1872108285, Block: 727, Properties: 14},
-	{Hash: 1933583108, Block: 727, Properties: 14},
-	{Hash: 1749158639, Block: 727, Properties: 15},
-	{Hash: 1810633462, Block: 727, Properties: 16},
-	{Hash: 2118007577, Block: 727, Properties: 17},
-	{Hash: 2179482400, Block: 727, Properties: 18},
+	{Hash: 1872108285, Block: 729, Properties: 14},
+	{Hash: 1933583108, Block: 729, Properties: 14},
+	{Hash: 1749158639, Block: 729, Properties: 15},
+	{Hash: 1810633462, Block: 729, Properties: 16},
+	{Hash: 2118007577, Block: 729, Properties: 17},
+	{Hash: 2179482400, Block: 729, Properties: 18},
 }

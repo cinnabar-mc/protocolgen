@@ -9,7 +9,7 @@ var CherryWood = Block{
 }
 
 var cherryWoodStates = [...]State{
-	{Hash: 3254844204, Block: 1128, Properties: 3213},
-	{Hash: 15183479, Block: 1128, Properties: 3213},
-	{Hash: 2125796621, Block: 1128, Properties: 3213},
+	{Hash: 3254844204, Block: 1131, Properties: 3216},
+	{Hash: 15183479, Block: 1131, Properties: 3216},
+	{Hash: 2125796621, Block: 1131, Properties: 3216},
 }

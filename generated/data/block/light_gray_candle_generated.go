@@ -9,12 +9,12 @@ var LightGrayCandle = Block{
 }
 
 var lightGrayCandleStates = [...]State{
-	{Hash: 2060361839, Block: 929, Properties: 2741},
-	{Hash: 758606716, Block: 929, Properties: 2742},
-	{Hash: 1518656177, Block: 929, Properties: 2743},
-	{Hash: 2636335718, Block: 929, Properties: 2744},
-	{Hash: 1005055268, Block: 929, Properties: 2745},
-	{Hash: 1813913287, Block: 929, Properties: 2746},
-	{Hash: 463349606, Block: 929, Properties: 2747},
-	{Hash: 3691642289, Block: 929, Properties: 2748},
+	{Hash: 2060361839, Block: 931, Properties: 2743},
+	{Hash: 758606716, Block: 931, Properties: 2744},
+	{Hash: 1518656177, Block: 931, Properties: 2745},
+	{Hash: 2636335718, Block: 931, Properties: 2746},
+	{Hash: 1005055268, Block: 931, Properties: 2747},
+	{Hash: 1813913287, Block: 931, Properties: 2748},
+	{Hash: 463349606, Block: 931, Properties: 2749},
+	{Hash: 3691642289, Block: 931, Properties: 2750},
 }

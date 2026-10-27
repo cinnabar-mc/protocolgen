@@ -1,0 +1,109 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-legacytelemetryeventpacketpayload__cauldronused-1",
+      "file": "types/LegacyTelemetryEventPacketPayload__CauldronUsed.json",
+      "pointer": "/fields/1/type",
+      "pre_patch_sha256": "sha256:bf57c4578db03c6ed5c2459342c47dd9c24965fd6115e2a63b0503445c6ce45d",
+      "replace": "int16",
+      "why": "Keep the explicitly declared fixed signed 16-bit telemetry field. The target Mojang schema and the protocol-2225 gophertunnel Int16 marshal agree; the dump incorrectly describes varint32.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/CauldronUsed.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-legacytelemetryeventpacketpayload__cauldronused-2",
+      "file": "types/LegacyTelemetryEventPacketPayload__CauldronUsed.json",
+      "pointer": "/fields/2/type",
+      "pre_patch_sha256": "sha256:bf57c4578db03c6ed5c2459342c47dd9c24965fd6115e2a63b0503445c6ce45d",
+      "replace": "int16",
+      "why": "Keep the explicitly declared fixed signed 16-bit telemetry field; the target Mojang schema and the protocol-2225 gophertunnel Int16 marshal agree.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/CauldronUsed.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-legacytelemetryeventpacketpayload__poicauldronused-1",
+      "file": "types/LegacyTelemetryEventPacketPayload__POICauldronUsed.json",
+      "pointer": "/fields/1/type",
+      "pre_patch_sha256": "sha256:bf57c4578db03c6ed5c2459342c47dd9c24965fd6115e2a63b0503445c6ce45d",
+      "replace": "int16",
+      "why": "Keep the explicitly declared fixed signed 16-bit telemetry field. The target Mojang schema and the protocol-2225 gophertunnel Int16 marshal agree; the dump incorrectly describes varint32.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/POICauldronUsed.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-legacytelemetryeventpacketpayload__composterused-1",
+      "file": "types/LegacyTelemetryEventPacketPayload__ComposterUsed.json",
+      "pointer": "/fields/1/type",
+      "pre_patch_sha256": "sha256:bf57c4578db03c6ed5c2459342c47dd9c24965fd6115e2a63b0503445c6ce45d",
+      "replace": "int16",
+      "why": "Keep the explicitly declared fixed signed 16-bit telemetry field. The target Mojang schema and the protocol-2225 gophertunnel Int16 marshal agree; the dump incorrectly describes varint32.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/ComposterUsed.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-legacytelemetryeventpacketpayload__bellused-0",
+      "file": "types/LegacyTelemetryEventPacketPayload__BellUsed.json",
+      "pointer": "/fields/0/type",
+      "pre_patch_sha256": "sha256:bf57c4578db03c6ed5c2459342c47dd9c24965fd6115e2a63b0503445c6ce45d",
+      "replace": "int16",
+      "why": "Keep the explicitly declared fixed signed 16-bit telemetry field. The target Mojang schema and the protocol-2225 gophertunnel Int16 marshal agree; the dump incorrectly describes varint32.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/BellUsed.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-eas__transitionsettingsdata-2",
+      "file": "types/EAS__TransitionSettingsData.json",
+      "pointer": "/fields/2/type",
+      "pre_patch_sha256": "sha256:5582e89fd2a6de3fa42a276330594bcd524d152a73a2160deea29ff4213ad9fe",
+      "replace": "varint32",
+      "why": "Easing is a compressed signed int32, distinct from the unsigned transition tick counters. Both the exact target Mojang declaration and the protocol-2225 gophertunnel Varint32 marshal corroborate the signed encoding.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/TransitionSettingsData.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-eas__noisetransitionsettingsdata-2",
+      "file": "types/EAS__NoiseTransitionSettingsData.json",
+      "pointer": "/fields/2/type",
+      "pre_patch_sha256": "sha256:5582e89fd2a6de3fa42a276330594bcd524d152a73a2160deea29ff4213ad9fe",
+      "replace": "varint32",
+      "why": "Easing is a compressed signed int32, distinct from the unsigned transition tick counters. Both the exact target Mojang declaration and the protocol-2225 gophertunnel Varint32 marshal corroborate the signed encoding.",
+      "evidence": [
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json/NoiseTransitionSettingsData.json",
+          "summary": "The exact protocol-2225 schema explicitly declares this width and compression."
+        }
+      ]
+    }
+  ]
+}

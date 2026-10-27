@@ -9,6 +9,6 @@ var MossyStoneBrickDoubleSlab = Block{
 }
 
 var mossyStoneBrickDoubleSlabStates = [...]State{
-	{Hash: 2568995581, Block: 488, Properties: 107},
-	{Hash: 500378010, Block: 488, Properties: 107},
+	{Hash: 2568995581, Block: 489, Properties: 107},
+	{Hash: 500378010, Block: 489, Properties: 107},
 }

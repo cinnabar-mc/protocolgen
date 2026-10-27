@@ -9,12 +9,12 @@ var SoulCampfire = Block{
 }
 
 var soulCampfireStates = [...]State{
-	{Hash: 1167306394, Block: 1429, Properties: 3575},
-	{Hash: 1825062515, Block: 1429, Properties: 3575},
-	{Hash: 2286863764, Block: 1429, Properties: 3575},
-	{Hash: 227648673, Block: 1429, Properties: 3575},
-	{Hash: 366306909, Block: 1429, Properties: 2414},
-	{Hash: 3751330998, Block: 1429, Properties: 2414},
-	{Hash: 251829039, Block: 1429, Properties: 2414},
-	{Hash: 653876244, Block: 1429, Properties: 2414},
+	{Hash: 1167306394, Block: 1432, Properties: 3578},
+	{Hash: 1825062515, Block: 1432, Properties: 3578},
+	{Hash: 2286863764, Block: 1432, Properties: 3578},
+	{Hash: 227648673, Block: 1432, Properties: 3578},
+	{Hash: 366306909, Block: 1432, Properties: 2416},
+	{Hash: 3751330998, Block: 1432, Properties: 2416},
+	{Hash: 251829039, Block: 1432, Properties: 2416},
+	{Hash: 653876244, Block: 1432, Properties: 2416},
 }

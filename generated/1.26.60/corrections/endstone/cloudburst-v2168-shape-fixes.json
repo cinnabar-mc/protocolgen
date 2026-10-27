@@ -1,0 +1,116 @@
+{
+  "operations": [
+    {
+      "id": "education-agent-capabilities-is-an-optional-bool",
+      "file": "types/EducationLevelSettings.json",
+      "pointer": "/fields/6/type",
+      "pre_patch_sha256": "sha256:ff6d3bb2021b22e7d0b0a1117b530b0868e3584db36b3a274e6a4d9a2ed80785",
+      "replace": "bool",
+      "why": "EducationSettings carries Agent Capabilities as one optional boolean. Modeling an optional AgentCapabilities struct containing an optional boolean would emit two presence markers instead of the single marker used by protocol 2168.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v465/serializer/EducationSettingsSerializer_v465.java",
+          "summary": "The inherited serializer writes one optional presence flag followed by the capability boolean."
+        }
+      ]
+    },
+    {
+      "id": "editor-network-is-nbt-endstone",
+      "file": "packets/EditorNetworkPacket.json",
+      "pointer": "/fields",
+      "pre_patch_sha256": "sha256:d479e324cf9668558d1c36566c568594e87d2cca8021b60cc316f7ff15d54252",
+      "replace": [
+        {
+          "name": "Route To Manager",
+          "type": "bool"
+        },
+        {
+          "name": "Payload",
+          "type": "nbt"
+        }
+      ],
+      "why": "EditorNetwork's protocol 2168 payload is a NetworkLittleEndian NBT value after the route flag, not two length-prefixed raw variant strings.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v712/serializer/EditorNetworkSerializer_v712.java",
+          "summary": "The v712 serializer writes the route flag and delegates the remaining payload to the inherited NBT serializer; v2168 does not replace it."
+        },
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v534/serializer/EditorNetworkSerializer_v534.java",
+          "summary": "The inherited serializer encodes EditorNetwork payload with writeTag/readTag."
+        }
+      ]
+    },
+    {
+      "id": "camera-preset-target-mode-is-int32",
+      "file": "types/SharedTypes__v1_21_50__CameraAimAssistCommandPresetDefinition.json",
+      "pointer": "/fields/1/type",
+      "pre_patch_sha256": "sha256:3f217ac350c3de4ce43381a5cfee8ed95e269db4237ff4ef3d22d8435a43fd88",
+      "replace": "int32",
+      "why": "Camera preset aim-assist Target Mode is an optional little-endian int32 on the protocol 2168 wire, despite the documentation's uint8 label.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v776/serializer/CameraPresetsSerializer_v776.java",
+          "summary": "The inherited camera-preset serializer reads and writes TargetMode with readIntLE/writeIntLE inside an optional slot."
+        }
+      ]
+    },
+    {
+      "id": "structure-editor-name-is-two-strings",
+      "file": "types/StructureEditorData.json",
+      "pointer": "/fields",
+      "pre_patch_sha256": "sha256:6558e711ad0d689acdfe138572c2f30753666dcb968480fd2171bc982e7d9260",
+      "replace": [
+        {
+          "name": "Structure Name",
+          "type": "string"
+        },
+        {
+          "name": "Filtered Structure Name",
+          "type": "string"
+        },
+        {
+          "name": "Data Field",
+          "type": "string"
+        },
+        {
+          "name": "Should include players?",
+          "type": "bool"
+        },
+        {
+          "name": "Should show bounding box?",
+          "type": "bool"
+        },
+        {
+          "name": "Structure Block Type",
+          "type": "varint32",
+          "enum": "StructureBlockType"
+        },
+        {
+          "name": "Structure Settings",
+          "type": "StructureSettings"
+        },
+        {
+          "name": "Redstone Save Mode",
+          "type": "uint8",
+          "enum": "StructureRedstoneSaveMode"
+        }
+      ],
+      "why": "StructureBlockUpdate serializes its structure name with a hand-written writer that emits the filtered name as a plain string, so both strings are always present at this site. The shared RedactableString keeps its optional filtered name, which ItemStackResponse writes with a presence marker.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2168/serializer/StructureBlockUpdateSerializer_v2168.java",
+          "summary": "The exact v2168 serializer writes both structure-name strings directly with no optional marker."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_block_update.go#L69",
+          "summary": "The protocol 2193 gophertunnel StructureBlockUpdate marshal writes the filtered structure name as a plain string."
+        },
+        {
+          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/item_stack.go#L296",
+          "summary": "The protocol 2193 gophertunnel ItemStackResponse marshal writes the filtered custom name as an optional, so the shared type keeps its optional member."
+        }
+      ]
+    }
+  ]
+}

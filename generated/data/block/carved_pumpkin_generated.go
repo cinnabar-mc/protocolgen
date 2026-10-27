@@ -9,8 +9,8 @@ var CarvedPumpkin = Block{
 }
 
 var carvedPumpkinStates = [...]State{
-	{Hash: 3848786780, Block: 1208, Properties: 1900},
-	{Hash: 795460305, Block: 1208, Properties: 1900},
-	{Hash: 1890932090, Block: 1208, Properties: 1900},
-	{Hash: 2817331619, Block: 1208, Properties: 1900},
+	{Hash: 3848786780, Block: 1211, Properties: 1902},
+	{Hash: 795460305, Block: 1211, Properties: 1902},
+	{Hash: 1890932090, Block: 1211, Properties: 1902},
+	{Hash: 2817331619, Block: 1211, Properties: 1902},
 }

@@ -9,7 +9,7 @@ var PaleOakWood = Block{
 }
 
 var paleOakWoodStates = [...]State{
-	{Hash: 3407753039, Block: 688, Properties: 1733},
-	{Hash: 2352446468, Block: 688, Properties: 1733},
-	{Hash: 168092314, Block: 688, Properties: 1733},
+	{Hash: 3407753039, Block: 690, Properties: 1735},
+	{Hash: 2352446468, Block: 690, Properties: 1735},
+	{Hash: 168092314, Block: 690, Properties: 1735},
 }

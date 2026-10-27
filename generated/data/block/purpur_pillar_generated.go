@@ -9,7 +9,7 @@ var PurpurPillar = Block{
 }
 
 var purpurPillarStates = [...]State{
-	{Hash: 518574878, Block: 784, Properties: 2373},
-	{Hash: 1573881449, Block: 784, Properties: 2373},
-	{Hash: 3758235603, Block: 784, Properties: 2373},
+	{Hash: 518574878, Block: 786, Properties: 2375},
+	{Hash: 1573881449, Block: 786, Properties: 2375},
+	{Hash: 3758235603, Block: 786, Properties: 2375},
 }

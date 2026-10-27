@@ -1,0 +1,2689 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.60",
+    "protocol_version": 2225
+  },
+  "entries": [
+    {
+      "type_id": "ActorDataBoundingBoxComponent",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ActorDataFlagComponent",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ActorLink",
+      "domain": "entity_link",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ActorRuntimeID",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ActorSwingSource.json#",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ActorUniqueID",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ActorUniqueID.json#",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "AdventureSettings",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "AnimatedImageData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "AnimatedImageData.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "AnimationMode.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ArmorSlotAndDamagePair",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ArrowDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "AttributeData",
+      "domain": "attribute_layer",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData",
+      "domain": "attribute_layer",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::RemoveEnvironmentAttributesData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::UpdateAttributeLayerSettingsData",
+      "domain": "attribute_layer",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::UpdateAttributeLayersData",
+      "domain": "attribute_layer",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AttributeLayerSyncPacketData::UpdateEnvironmentAttributesData",
+      "domain": "attribute_layer",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AttributeModifier",
+      "domain": "attribute",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "Audio::SignedAudioContent",
+      "domain": "sound",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "AudioContentPlaybackType.json#",
+      "domain": "sound",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "AudioContentRegistrationEntry",
+      "domain": "sound",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ChainedSubcommandData",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ChainedSubcommandRelationship",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::CommandData",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ConstrainedValueData",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::EnumData",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::OverloadData",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::ParamData",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "AvailableCommandsPacketPayload::SoftEnumData",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "Bedrock::DDUI",
+      "domain": "misc",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "Bedrock::DDUI::DataStoreChange",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Bedrock::DDUI::DataStoreRemoval",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Bedrock::DDUI::DataStoreUpdate",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Bedrock::Profile::Whisker::Diagnostics::ScopeDataSummary",
+      "domain": "bedrock_profile",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Bedrock::Safety::RedactableString",
+      "domain": "bedrock_safety",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeCappedSurfaceData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeClimateData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeConditionalTransformationData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeConsolidatedFeatureData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeConsolidatedFeaturesData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeCoordinateData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeDefinitionChunkGenData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeDefinitionData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeElementData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeLegacyWorldGenRulesData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeMesaSurfaceData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeMountainParamsData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeMultinoiseGenRulesData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeNoiseGradientSurfaceData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeOverworldGenRulesData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeReplacementData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeReplacementsData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeScatterParamData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeStringList",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeSurfaceBuilderData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeSurfaceMaterialAdjustmentData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeSurfaceMaterialData",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BiomeTagsData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeWeightedData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BiomeWeightedTemperatureData",
+      "domain": "biome",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BlockPos",
+      "domain": "block_pos",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BlockPos.json#",
+      "domain": "block_pos",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "BookEditAction",
+      "domain": "book",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "BookEditAction::AddPage",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BookEditAction::DeletePage",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BookEditAction::Finalize",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BookEditAction::ReplacePage",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BookEditAction::SwapPages",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "BoxDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraAimAssistActorPriority::PriorityData",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstruction",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::AttachToEntityInstruction",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FadeInstruction",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FadeInstruction::ColorOption",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FadeInstruction::TimeOption",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::FovInstruction",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::EaseOption",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::EntityOffsetOption",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::FacingOption",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::PosOption",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::RotOption",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SetInstruction::ViewOffsetOption",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SplineInstruction",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SplineInstruction::SplineProgressOption",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::SplineInstruction::SplineRotationOption",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraInstructionOptions::TargetInstruction",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CameraPresets",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ChangeEntityScore",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ChangeFakePlayerScore",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ChangePlayerScore",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ChatRestrictionLevel.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ChunkPos",
+      "domain": "chunk_pos",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ClientboundDebugRendererPacketPayload::DebugMarkerData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Color.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CommandBlockUpdatePacketPayload",
+      "domain": "command",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "CommandBlockUpdatePacketPayload::BlockCommandData",
+      "domain": "block",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CommandBlockUpdatePacketPayload::EntityCommandTarget",
+      "domain": "entity",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CommandOriginData.json#",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CommandOutput.json#",
+      "domain": "command",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CommandOutputMessage.json#",
+      "domain": "command",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CommandOutputType.json#",
+      "domain": "command",
+      "rationale": "The output type belongs to the shared command-output payload."
+    },
+    {
+      "type_id": "ConeDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ContainerMixDataEntry",
+      "domain": "container",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ContentIdentity",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CreativeGroupInfoPayload",
+      "domain": "creative",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "CreativeItemEntryPayload",
+      "domain": "creative",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CurrentCmdVersion.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "CylinderDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataDrivenScreenClosedReason.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemBytePayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemCompoundTagPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemFloatPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemInt64Payload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemIntPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemPosPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemShortPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemStringPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DataItemVec3Payload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Difficulty.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "DimensionDefinitionGroup::DimensionDefinition",
+      "domain": "world",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "DimensionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "DisconnectPacketMessages",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EAS",
+      "domain": "attribute_layer",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "EAS::AttributeLayerData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EAS::AttributeLayerSettings",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EAS::BoolAttributeData",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::ColorAttributeData",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::ConstantAttributeData",
+      "domain": "attribute_layer",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::EnvironmentAttributeData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EAS::FloatAttributeData",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::NoiseAlignment",
+      "domain": "attribute_layer",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "EAS::NoiseTransitionAttributeData",
+      "domain": "attribute_layer",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::NoiseTransitionSettingsData",
+      "domain": "attribute_layer",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::TransitionAttributeData",
+      "domain": "attribute_layer",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EAS::TransitionSettingsData",
+      "domain": "attribute_layer",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ECS::Profiling::Diagnostics::EntityDiagnosticTimingInfo",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ECS::Profiling::Diagnostics::SystemCategory",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ECS::Profiling::Diagnostics::SystemDiagnosticTimingInfo",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EditorLevelMigrationVersion.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EditorWorldType.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EduSharedUriResource",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EduSharedUriResource.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EducationEditionOffer.json#",
+      "domain": "education",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "EducationLevelSettings",
+      "domain": "education",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EducationLocalLevelSettings",
+      "domain": "education",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EllipsoidDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "EnchantmentInstance",
+      "domain": "enchant",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "EntityNetId",
+      "domain": "entity",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ExperimentToggle.json#",
+      "domain": "experiment",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "Experiments",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Experiments.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ExternalLinkSettings",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "FeatureRegistry::FeatureBinaryJsonFormat",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "FullContainerName",
+      "domain": "container",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "FurnaceOptions",
+      "domain": "furnace",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "GamePublishSetting.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "GameRule",
+      "domain": "game_rule",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "GameRule.json#",
+      "domain": "game_rule",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "GameRulesChangedPacketData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "GameRulesChangedPacketData.json#",
+      "domain": "game_rule",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "GameType.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "GeneratorType.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "InventoryAction",
+      "domain": "inventory",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "InventoryMismatchData",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "InventoryOptions",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "InventorySource",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "InventoryTransaction",
+      "domain": "inventory",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemData",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemEnchantOption",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemEnchants",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemReleaseInventoryTransaction",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemStackRequestCereal",
+      "domain": "item_stack",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::BeaconPaymentActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::ConsumeActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftCreativeActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftDiscPressActionData",
+      "domain": "item_stack",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftLoomActionData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftNonImplementedActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRecipeActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRecipeAutoActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRecipeOptionalActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftRepairAndDisenchantActionData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CraftResultsActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::CreateActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::DestroyActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::DropActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::EmptyItemDescriptorData",
+      "domain": "item_descriptor",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::ItemNameDescriptorData",
+      "domain": "item_descriptor",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::ItemTagDescriptorData",
+      "domain": "item_descriptor",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::LabTableCombineActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::MineBlockActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::MolangItemDescriptorData",
+      "domain": "item_descriptor",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::NetworkItemInstanceDescriptorData",
+      "domain": "item",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::PlaceActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::RecipeIngredientData",
+      "domain": "recipe",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::RequestData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::SlotInfoData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::SwapActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestCereal::TakeActionData",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackRequestPacketData::RequestData",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemStackResponseContainerInfo",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemStackResponseInfo",
+      "domain": "item_stack",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ItemStackResponseSlotInfo",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemUseInventoryTransaction",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ItemUseOnActorInventoryTransaction",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Json__Value.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacySetSlot",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload",
+      "domain": "event",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::Achievement",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::ActorDefinition",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::BellUsed",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::BossKilled",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::CauldronUsed",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::CodeBuilderRuntimeAction",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::CodeBuilderScoreboard",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::ComposterUsed",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::Empty",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::Interaction",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::ItemUsed",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::MobBorn",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::MobKilled",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::POICauldronUsed",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::PiglinBarter",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::PlayerDied",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::PlayerWaxedOrUnwaxedCopper",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::PortalCreated",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::PortalUsed",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::RaidUpdate",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::SlashCommand",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LegacyTelemetryEventPacketPayload::TargetBlockHit",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LevelChunkPacketPayload::SubChunkMetadata",
+      "domain": "sub_chunk",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LevelSettings.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "LineDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "LocatorBarWaypointPayload",
+      "domain": "waypoint",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "MapDecoration",
+      "domain": "map",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "MapInfoRequestPacketAnon::ClientPixelsProxy",
+      "domain": "map",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "MapItemTrackedActor::UniqueId",
+      "domain": "map",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MatchmakingStateOptions",
+      "domain": "server",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "MaterialReducerDataEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MaterialReducerEntryOutput",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Memory::MemoryCategoryCounter",
+      "domain": "memory_category",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "MinEngineVersion.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Mirror.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "MissingBlobData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MolangVariableMap.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MoveActorAbsoluteData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MoveActorDeltaData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MovePlayerTeleportData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MovementAttributesComponent.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "MultiRecipePayload",
+      "domain": "recipe",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "NetworkPermissions",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "NormalTransactionData",
+      "domain": "inventory",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "PackIdVersion",
+      "domain": "pack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PackIdVersion.json#",
+      "domain": "pack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PackInfoData",
+      "domain": "pack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PackInstanceId",
+      "domain": "pack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PackedItemUseLegacyInventoryTransaction",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PartyDestinationCookieIntent.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PassengerOfBlockArguments",
+      "domain": "actor",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlaySoundPacketPayload.json#",
+      "domain": "sound",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlayerBlockActionData",
+      "domain": "player",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "PlayerInputTick",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerListPacketPayload",
+      "domain": "player",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "PlayerListPacketPayload::AddEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerListPacketPayload::RemoveEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerLocationPacketPayload",
+      "domain": "player",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "PlayerLocationPacketPayload::CoordinatesLocation",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerLocationPacketPayload::HiddenLocation",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerPartyInfo",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerPermissionLevel.json#",
+      "domain": "player",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlayerScoreboardId",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerUpdateEntityOverridesPacketPayload",
+      "domain": "actor",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "PlayerUpdateEntityOverridesPacketPayload::ClearOverride",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlayerUpdateEntityOverridesPacketPayload::FloatOverride",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlayerUpdateEntityOverridesPacketPayload::IntOverride",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlayerUpdateEntityOverridesPacketPayload::RemoveOverride",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "PlayerVideoCapturePacketPayload",
+      "domain": "player",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "PlayerVideoCapturePacketPayload::StartVideoCapture",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PlayerVideoCapturePacketPayload::StopVideoCapture",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PositionTrackingId",
+      "domain": "position_tracking",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PotionMixDataEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PrimitiveShapeDataPayload",
+      "domain": "shape",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "PropertySyncData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PropertySyncData::PropertySyncFloatEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PropertySyncData::PropertySyncIntEntry",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "PyramidDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "RemoveScore",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ResourcePackClientResponsePacketPayload",
+      "domain": "resource_pack",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "ResourcePackClientResponsePacketPayload::Cancel",
+      "domain": "resource_pack",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ResourcePackClientResponsePacketPayload::Downloading",
+      "domain": "resource_pack",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ResourcePackClientResponsePacketPayload::DownloadingFinished",
+      "domain": "resource_pack",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ResourcePackClientResponsePacketPayload::ResourcePackStackFinished",
+      "domain": "resource_pack",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "Rotation.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ScoreboardId",
+      "domain": "scoreboard",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ScoreboardIdentityPacketInfo",
+      "domain": "scoreboard",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SemVersion",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SemVersion.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SerializedAbilitiesData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SerializedAbilitiesData::SerializedLayer",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SerializedNoiseBlockSpecifier",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SerializedPersonaPieceHandle",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SerializedPersonaPieceHandle.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SerializedSkin.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SerializedSkinRef",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerBlockProperty",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerConfiguration::ClientStoreEntryPointConfiguration",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerConfiguration::GatheringsConfigurationJoinInfo",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerConfiguration::PresenceConfiguration",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerConfiguration::ServerConfigurationJoinInfo",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerEditorConnectionPolicy.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ServerSoundHandle",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ServerSoundHandle.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "ServerWaypoint::Payload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "ShapedRecipePayload",
+      "domain": "recipe",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "ShapelessRecipePayload",
+      "domain": "recipe",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SharedTypes::FloatRange",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SharedTypes::v1_21_120::CameraAimAssistPresetDefinition",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_21_120::CameraAimAssistPresetExclusionDefinition",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_21_50::CameraAimAssistCategoryDefinition",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_21_50::CameraAimAssistCategoryPriorities",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_21_50::CameraAimAssistCommandPresetDefinition",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_26_0::CameraSplineControlPoint",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_26_0::CameraSplineDefinition",
+      "domain": "camera",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SharedTypes::v1_26_0::CameraSplineProgressKeyFrame",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_26_0::CameraSplineRotationKeyFrame",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SharedTypes::v1_26_30::NoiseDescriptor",
+      "domain": "biome",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SharedTypes::v1_26_50::CameraPreset",
+      "domain": "camera",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "SkinImage",
+      "domain": "skin",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SkinImage.json#",
+      "domain": "skin",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SmithingTransformRecipePayload",
+      "domain": "recipe",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SmithingTrimRecipePayload",
+      "domain": "recipe",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "Social::Events::ServerTelemetryData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent",
+      "domain": "sound",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "SoundDataEvent::Fade",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent::Pause",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent::Resume",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent::SeekTo",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent::SetPitch",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent::SetVolume",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundDataEvent::Stop",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SoundEventIdentifier.json#",
+      "domain": "sound",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SpawnBiomeType.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SpawnSettings.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SphereDataPayload",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "StructureEditorData",
+      "domain": "structure",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "StructureSettings",
+      "domain": "structure",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "StructureSettings.json#",
+      "domain": "structure",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SubChunkHeightmapData.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SubChunkHeightmapData.json#SubChunkPacketSubChunk_DataItemHeight_Map_DataHeight_Map_Type",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SubChunkHeightmapData.json#SubChunkPacketSubChunk_DataItemHeight_Map_DataRender_Height_Map_Type",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SubChunkPacketData.json#SubChunkPacketSubChunk_DataItemSubChunk_Request_Result",
+      "domain": "sub_chunk",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "SubChunkPacketPayload::HeightmapData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SubChunkPacketPayload::SubChunkPacketData",
+      "domain": "sub_chunk",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SubChunkPacketPayload::SubChunkPosOffset",
+      "domain": "sub_chunk",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SubChunkPos",
+      "domain": "chunk_pos",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SubChunkPosOffset.json#",
+      "domain": "sub_chunk",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SyncWorldClockStateData",
+      "domain": "clock",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "SyncWorldClocksPacketPayload",
+      "domain": "clock",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "SyncWorldClocksPacketPayload::AddTimeMarkerData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SyncWorldClocksPacketPayload::InitializeRegistryData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SyncWorldClocksPacketPayload::RemoveTimeMarkerData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SyncWorldClocksPacketPayload::SyncStateData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SyncedAttribute",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SyncedPlayerMovementSettings",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "SynchedActorData::CopyableDataList",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TextDataPayload",
+      "domain": "shape",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "TextPacketPayload",
+      "domain": "text",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "TextPacketPayload::AuthorAndMessage",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TextPacketPayload::MessageAndParams",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TextPacketPayload::MessageOnly",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TimeMarkerData",
+      "domain": "clock",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "TintMapColor",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TintMapColor.json#",
+      "domain": "misc",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "TrimMaterial",
+      "domain": "trim",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "TrimPattern",
+      "domain": "trim",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "TrustedSkinFlag.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TypedClientNetId<struct ItemStackLegacyRequestIdTag, int32_t, 0>",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TypedClientNetId<struct ItemStackRequestIdTag, int32_t, 0>",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TypedServerNetId<struct CreativeItemNetIdTag>",
+      "domain": "creative",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TypedServerNetId<struct ItemStackNetIdTag, int32_t, 0>",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "TypedServerNetId<struct RecipeNetIdTag>",
+      "domain": "recipe",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "UpdateSubChunkBlocksChangedInfo",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "UpdateSubChunkNetworkBlockInfo",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Vec2",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Vec3",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "Vec3.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "VoxelShapes::RegistryHandle",
+      "domain": "voxel",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "VoxelShapes::SerializableCells",
+      "domain": "voxel",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "VoxelShapes::SerializableVoxelShape",
+      "domain": "voxel",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "WaypointGroup::WaypointHandle",
+      "domain": "waypoint",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "WebSocketPacketData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "WorldClockData",
+      "domain": "clock",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "WorldPosition",
+      "domain": "world",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "cereal::DynamicValue",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "cerealizer<NetworkItemInstanceDescriptor>::SerializedData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "cerealizer<NetworkItemStackDescriptor>::SerializedData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "cerealizer<RecipeIngredient>::SerializedData",
+      "domain": "recipe",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "cerealizer<RecipeUnlockingRequirement>::SerializedData",
+      "domain": "recipe",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "cerealizer_ExperimentsAnon::ExperimentToggle",
+      "domain": "experiment",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ActorEvent",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ActorLinkType",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ActorType",
+      "domain": "actor",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/AgentActionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/AgentAnimation",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/AnimatePacketPayload::Action",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/AnimationMode",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/BossBarColor",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/BossBarOverlay",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/BossEventUpdateType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/BuildPlatform",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CameraAimAssist::TargetMode",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CameraAimAssistPacketPayload::Action",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CameraAimAssistPacketPayload::TargetMode",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CameraAimAssistPresetsPacketOperation",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CameraShakeAction",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CameraShakeType",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ClientCameraAimAssistPacketAction",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ClientPlayMode",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ClientboundTextureShiftPacketPayload::Action",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CodeBuilderExecutionState::CodeStatus",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CodeBuilderStorageQueryOptions::Category",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CodeBuilderStorageQueryOptions::Operation",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CommandPermissionLevel",
+      "domain": "command",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/Connection::DisconnectFailReason",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ContainerEnumName",
+      "domain": "container",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ControlScheme::Scheme",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/CursorItemDragState",
+      "domain": "item_stack",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "enums/DataItemType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/EAS::NoiseAlignmentType",
+      "domain": "attribute_layer",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "enums/EasingType",
+      "domain": "attribute_layer",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "enums/Enchant::Type",
+      "domain": "enchant",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/FurnaceLayout",
+      "domain": "furnace",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "enums/FurnaceLeftTabIndex",
+      "domain": "furnace",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "enums/GameType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/GeneratorType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/GraphicsMode",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/GraphicsOverrideParameterType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/HandSlot",
+      "domain": "inventory",
+      "rationale": "Hand slot of an item-use transaction."
+    },
+    {
+      "type_id": "enums/HudElement",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/HudVisibility",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InputMode",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InteractPacketPayload::Action",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InventoryLayout",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InventoryLeftTabIndex",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InventoryRightTabIndex",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InventorySource::InventorySourceFlags",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/InventorySourceType",
+      "domain": "inventory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemReleaseInventoryTransaction::ActionType",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemStackNetResult",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemStackRequestActionType",
+      "domain": "item_stack",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemStackRequestCereal::ItemDescriptorType",
+      "domain": "item_descriptor",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "enums/ItemUseInventoryTransaction::ActionType",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemUseInventoryTransaction::ClientCooldownState",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemUseInventoryTransaction::PredictedResult",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemUseInventoryTransaction::TriggerType",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemUseOnActorInventoryTransaction::ActionType",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ItemVersion",
+      "domain": "item",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/LabTablePacketPayload::Type",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/LabTableReactionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/LegacyTelemetryEventPacketPayload::Type",
+      "domain": "telemetry",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MapDecoration::Type",
+      "domain": "map",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "enums/MapItemTrackedActor::Type",
+      "domain": "map",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MatchmakingState",
+      "domain": "server",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "enums/Memory::MemoryCategory",
+      "domain": "memory",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MinecraftEventing::AchievementIds",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MinecraftEventing::InteractionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MinecraftEventing::POIBlockInteractionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/Mirror",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MobEffectPacketPayload::Event",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ModalFormCancelReason",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MolangVersion",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MovementEffectType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/MultiplayerSettingsPacketType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/NewInteractionModel",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/NpcDialoguePacketPayload::NpcDialogueActionType",
+      "domain": "npc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/NpcRequestPacketPayload::RequestType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PacketCompressionAlgorithm",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PacketViolationSeverity",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PacketViolationType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PassengerOfBlockArguments::EmoteType",
+      "domain": "actor",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "enums/PhotoType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayStatus",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayerActionType",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayerAuthInputPacketPayload::InputData",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayerListPacketType",
+      "domain": "player",
+      "rationale": "Matches the gophertunnel player protocol domain and the PlayerList packet family."
+    },
+    {
+      "type_id": "enums/PlayerLocationPacketPayload::Type",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayerPermissionLevel",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayerPositionModeComponent::PositionMode",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PlayerRespawnState",
+      "domain": "player",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PositionTrackingDBClientRequestPacketPayload::Action",
+      "domain": "position_tracking",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/PositionTrackingDBServerBroadcastPacketPayload::Action",
+      "domain": "position_tracking",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/RecipeUnlockingRequirement::UnlockingContext",
+      "domain": "recipe",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/RequestAbilityPacketPayload::Type",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/RewindType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/Rotation",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ScoreboardIdentityPacketType",
+      "domain": "scoreboard",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ScriptModuleMinecraft::ScriptPrimitiveShapeType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ServerWaypointGroup::Action",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ServerboundLoadingScreenPacketType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SetPlayerFurnaceOptionsPacketPayload::FurnaceType",
+      "domain": "furnace",
+      "rationale": "Assigned from the owning target-version protocol subsystem."
+    },
+    {
+      "type_id": "enums/SetTitlePacketPayload::TitleType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::CreativeItemCategory",
+      "domain": "creative",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::Legacy::ArmorSlot",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::VillageType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::persona::ArmSizeType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::persona::PieceType",
+      "domain": "skin",
+      "rationale": "Matches the gophertunnel protocol domain file layout."
+    },
+    {
+      "type_id": "enums/SharedTypes::v1_21_10::CoordinateEvaluationOrder",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::v1_21_10::RandomDistributionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SharedTypes::v1_21_90::CameraPreset::AudioListener",
+      "domain": "camera",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/ShowStoreOfferRedirectType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SimpleEventPacketPayload::Subtype",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SimulationType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SoftEnumUpdateType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SoundDataEventType",
+      "domain": "sound",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "enums/SpawnPositionType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/StructureBlockType",
+      "domain": "structure",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/StructureRedstoneSaveMode",
+      "domain": "structure",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/StructureTemplateRequestOperation",
+      "domain": "structure",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/StructureTemplateResponseType",
+      "domain": "structure",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SubChunkPacketPayload::HeightMapDataType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/SubChunkPacketPayload::SubChunkRequestResult",
+      "domain": "sub_chunk",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/TextPacketType",
+      "domain": "text",
+      "rationale": "Text packet message type."
+    },
+    {
+      "type_id": "enums/TextProcessingEventOrigin",
+      "domain": "text",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/UnlockedRecipesPacketPayload::PacketType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/persona::AnimatedTextureType",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "enums/persona::AnimationExpression",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "mce::Color",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "mce__UUID.json#",
+      "domain": "misc",
+      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
+    },
+    {
+      "type_id": "persona__AnimatedTextureType.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "persona__AnimationExpression.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "persona__ArmSize__Type.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "persona__PieceType.json#",
+      "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    }
+  ]
+}

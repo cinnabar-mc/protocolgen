@@ -9,5 +9,5 @@ var DeepslateTiles = Block{
 }
 
 var deepslateTilesStates = [...]State{
-	{Hash: 385861263, Block: 586, Properties: 680},
+	{Hash: 385861263, Block: 588, Properties: 680},
 }

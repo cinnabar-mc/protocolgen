@@ -1,0 +1,28 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-colour-binary-components",
+      "file": "ColorAttributeData.json",
+      "pointer": "/properties/value",
+      "pre_patch_sha256": "sha256:f462ee667cdceb18b8db87af63589107b43cd215beeb05f286af82d83ea1042a",
+      "replace": {
+        "x-ordinal-index": 0,
+        "type": "array",
+        "items": {
+          "type": "integer",
+          "x-underlying-type": "int32"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "why": "The colour attribute binary value is a fixed array of four signed 32-bit RGBA components. Its hexadecimal-string or array choice describes JSON representation and does not add a binary selector.",
+      "evidence": [
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/EndstoneMC/protocol-docs/blob/68d4b6ccca59f4619be7a1507abf36c98d1ff46c/types/EAS__ColorAttributeData.json",
+          "summary": "The pinned protocol-2225 value field is int32 repeated exactly four times, with no length prefix or variant selector."
+        }
+      ]
+    }
+  ]
+}

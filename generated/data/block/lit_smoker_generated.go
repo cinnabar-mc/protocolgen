@@ -9,8 +9,8 @@ var LitSmoker = Block{
 }
 
 var litSmokerStates = [...]State{
-	{Hash: 2080399355, Block: 1369, Properties: 3188},
-	{Hash: 859357296, Block: 1369, Properties: 3188},
-	{Hash: 4033512929, Block: 1369, Properties: 3188},
-	{Hash: 3231615138, Block: 1369, Properties: 3188},
+	{Hash: 2080399355, Block: 1372, Properties: 3191},
+	{Hash: 859357296, Block: 1372, Properties: 3191},
+	{Hash: 4033512929, Block: 1372, Properties: 3191},
+	{Hash: 3231615138, Block: 1372, Properties: 3191},
 }

@@ -9,5 +9,5 @@ var PolishedCinnabar = Block{
 }
 
 var polishedCinnabarStates = [...]State{
-	{Hash: 2854807857, Block: 1140, Properties: 1628},
+	{Hash: 2854807857, Block: 1143, Properties: 1629},
 }

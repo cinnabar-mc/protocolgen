@@ -1,0 +1,29 @@
+{
+  "operations": [
+    {
+      "id": "player-video-capture-is-one-byte-action-union",
+      "file": "packets/PlayerVideoCapturePacket.json",
+      "pointer": "/fields",
+      "pre_patch_sha256": "sha256:6b7dde126407d8d8d37da0892d5aeb407e391cf0cb1083fb7393c4346daa26b9",
+      "replace": [
+        {
+          "name": "Action",
+          "type": {
+            "switch": "uvarint32",
+            "cases": [
+              "PlayerVideoCapturePacketPayload::StartVideoCapture",
+              "PlayerVideoCapturePacketPayload::StopVideoCapture"
+            ]
+          }
+        }
+      ],
+      "why": "PlayerVideoCapture has one action union with a positional selector, start then stop; the dump repeats that union as two fields.",
+      "evidence": [
+        {
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
+          "summary": "The 26.51 payload has one member, std::variant<StartVideoCapture, StopVideoCapture>, so start is alternative 0."
+        }
+      ]
+    }
+  ]
+}

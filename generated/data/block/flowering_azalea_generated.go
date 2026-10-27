@@ -9,5 +9,5 @@ var FloweringAzalea = Block{
 }
 
 var floweringAzaleaStates = [...]State{
-	{Hash: 356354615, Block: 740, Properties: 2237},
+	{Hash: 356354615, Block: 742, Properties: 2239},
 }

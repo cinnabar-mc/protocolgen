@@ -9,6 +9,6 @@ var PurpurDoubleSlab = Block{
 }
 
 var purpurDoubleSlabStates = [...]State{
-	{Hash: 3747959097, Block: 891, Properties: 2604},
-	{Hash: 777701694, Block: 891, Properties: 2604},
+	{Hash: 3747959097, Block: 893, Properties: 2606},
+	{Hash: 777701694, Block: 893, Properties: 2606},
 }

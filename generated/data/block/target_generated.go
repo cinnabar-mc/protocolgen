@@ -9,5 +9,5 @@ var Target = Block{
 }
 
 var targetStates = [...]State{
-	{Hash: 3452856560, Block: 965, Properties: 2044},
+	{Hash: 3452856560, Block: 967, Properties: 2046},
 }

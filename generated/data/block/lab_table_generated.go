@@ -9,8 +9,8 @@ var LabTable = Block{
 }
 
 var labTableStates = [...]State{
-	{Hash: 1694901163, Block: 606, Properties: 1490},
-	{Hash: 1756375986, Block: 606, Properties: 1490},
-	{Hash: 1817850809, Block: 606, Properties: 1490},
-	{Hash: 1879325632, Block: 606, Properties: 1490},
+	{Hash: 1694901163, Block: 608, Properties: 1491},
+	{Hash: 1756375986, Block: 608, Properties: 1491},
+	{Hash: 1817850809, Block: 608, Properties: 1491},
+	{Hash: 1879325632, Block: 608, Properties: 1491},
 }

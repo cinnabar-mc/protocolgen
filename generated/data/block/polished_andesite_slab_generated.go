@@ -9,6 +9,6 @@ var PolishedAndesiteSlab = Block{
 }
 
 var polishedAndesiteSlabStates = [...]State{
-	{Hash: 1169142593, Block: 1215, Properties: 683},
-	{Hash: 3850410614, Block: 1215, Properties: 684},
+	{Hash: 1169142593, Block: 1218, Properties: 683},
+	{Hash: 3850410614, Block: 1218, Properties: 684},
 }

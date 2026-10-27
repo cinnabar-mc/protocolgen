@@ -9,10 +9,10 @@ var WallSign = Block{
 }
 
 var wallSignStates = [...]State{
-	{Hash: 171384131, Block: 666, Properties: 2060},
-	{Hash: 232858954, Block: 666, Properties: 2060},
-	{Hash: 294333777, Block: 666, Properties: 2061},
-	{Hash: 355808600, Block: 666, Properties: 2062},
-	{Hash: 4220452135, Block: 666, Properties: 2063},
-	{Hash: 4281926958, Block: 666, Properties: 2064},
+	{Hash: 171384131, Block: 668, Properties: 2062},
+	{Hash: 232858954, Block: 668, Properties: 2062},
+	{Hash: 294333777, Block: 668, Properties: 2063},
+	{Hash: 355808600, Block: 668, Properties: 2064},
+	{Hash: 4220452135, Block: 668, Properties: 2065},
+	{Hash: 4281926958, Block: 668, Properties: 2066},
 }

@@ -9,5 +9,5 @@ var HardLimeStainedGlass = Block{
 }
 
 var hardLimeStainedGlassStates = [...]State{
-	{Hash: 826766177, Block: 971, Properties: 2835},
+	{Hash: 826766177, Block: 973, Properties: 2837},
 }

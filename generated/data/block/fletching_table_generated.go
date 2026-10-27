@@ -9,5 +9,5 @@ var FletchingTable = Block{
 }
 
 var fletchingTableStates = [...]State{
-	{Hash: 1247520413, Block: 808, Properties: 1475},
+	{Hash: 1247520413, Block: 810, Properties: 1476},
 }

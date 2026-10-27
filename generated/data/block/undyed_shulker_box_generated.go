@@ -9,5 +9,5 @@ var UndyedShulkerBox = Block{
 }
 
 var undyedShulkerBoxStates = [...]State{
-	{Hash: 2647010207, Block: 369, Properties: 1401},
+	{Hash: 2647010207, Block: 370, Properties: 1402},
 }

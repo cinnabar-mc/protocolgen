@@ -9,8 +9,8 @@ var Anvil = Block{
 }
 
 var anvilStates = [...]State{
-	{Hash: 2412608681, Block: 1024, Properties: 1982},
-	{Hash: 2047166698, Block: 1024, Properties: 1983},
-	{Hash: 1509232843, Block: 1024, Properties: 1982},
-	{Hash: 484875168, Block: 1024, Properties: 1983},
+	{Hash: 2412608681, Block: 1027, Properties: 1984},
+	{Hash: 2047166698, Block: 1027, Properties: 1985},
+	{Hash: 1509232843, Block: 1027, Properties: 1984},
+	{Hash: 484875168, Block: 1027, Properties: 1985},
 }

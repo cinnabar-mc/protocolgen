@@ -9,7 +9,7 @@ var StrippedMangroveLog = Block{
 }
 
 var strippedMangroveLogStates = [...]State{
-	{Hash: 3047117307, Block: 1469, Properties: 1572},
-	{Hash: 1991810736, Block: 1469, Properties: 1572},
-	{Hash: 4102423878, Block: 1469, Properties: 1572},
+	{Hash: 3047117307, Block: 1472, Properties: 1573},
+	{Hash: 1991810736, Block: 1472, Properties: 1573},
+	{Hash: 4102423878, Block: 1472, Properties: 1573},
 }

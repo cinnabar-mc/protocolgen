@@ -9,5 +9,5 @@ var BlueConcrete = Block{
 }
 
 var blueConcreteStates = [...]State{
-	{Hash: 3444948044, Block: 1167, Properties: 3306},
+	{Hash: 3444948044, Block: 1170, Properties: 3309},
 }

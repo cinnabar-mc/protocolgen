@@ -9,16 +9,16 @@ var SpruceButton = Block{
 }
 
 var spruceButtonStates = [...]State{
-	{Hash: 2927710436, Block: 523, Properties: 94},
-	{Hash: 2866235613, Block: 523, Properties: 95},
-	{Hash: 2804760790, Block: 523, Properties: 96},
-	{Hash: 2743285967, Block: 523, Properties: 97},
-	{Hash: 3173609728, Block: 523, Properties: 98},
-	{Hash: 3112134905, Block: 523, Properties: 99},
-	{Hash: 1126399313, Block: 523, Properties: 100},
-	{Hash: 1187874136, Block: 523, Properties: 101},
-	{Hash: 1003449667, Block: 523, Properties: 102},
-	{Hash: 1064924490, Block: 523, Properties: 103},
-	{Hash: 880500021, Block: 523, Properties: 104},
-	{Hash: 941974844, Block: 523, Properties: 105},
+	{Hash: 2927710436, Block: 524, Properties: 94},
+	{Hash: 2866235613, Block: 524, Properties: 95},
+	{Hash: 2804760790, Block: 524, Properties: 96},
+	{Hash: 2743285967, Block: 524, Properties: 97},
+	{Hash: 3173609728, Block: 524, Properties: 98},
+	{Hash: 3112134905, Block: 524, Properties: 99},
+	{Hash: 1126399313, Block: 524, Properties: 100},
+	{Hash: 1187874136, Block: 524, Properties: 101},
+	{Hash: 1003449667, Block: 524, Properties: 102},
+	{Hash: 1064924490, Block: 524, Properties: 103},
+	{Hash: 880500021, Block: 524, Properties: 104},
+	{Hash: 941974844, Block: 524, Properties: 105},
 }

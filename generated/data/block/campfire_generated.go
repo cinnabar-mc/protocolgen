@@ -9,12 +9,12 @@ var Campfire = Block{
 }
 
 var campfireStates = [...]State{
-	{Hash: 2722749277, Block: 799, Properties: 2413},
-	{Hash: 623877046, Block: 799, Properties: 2413},
-	{Hash: 2608271407, Block: 799, Properties: 2413},
-	{Hash: 1821389588, Block: 799, Properties: 2413},
-	{Hash: 3523748762, Block: 799, Properties: 2414},
-	{Hash: 2992575859, Block: 799, Properties: 2414},
-	{Hash: 348338836, Block: 799, Properties: 2414},
-	{Hash: 1395162017, Block: 799, Properties: 2414},
+	{Hash: 2722749277, Block: 801, Properties: 2415},
+	{Hash: 623877046, Block: 801, Properties: 2415},
+	{Hash: 2608271407, Block: 801, Properties: 2415},
+	{Hash: 1821389588, Block: 801, Properties: 2415},
+	{Hash: 3523748762, Block: 801, Properties: 2416},
+	{Hash: 2992575859, Block: 801, Properties: 2416},
+	{Hash: 348338836, Block: 801, Properties: 2416},
+	{Hash: 1395162017, Block: 801, Properties: 2416},
 }

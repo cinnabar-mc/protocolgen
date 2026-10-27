@@ -9,5 +9,5 @@ var RedTulip = Block{
 }
 
 var redTulipStates = [...]State{
-	{Hash: 3751690758, Block: 1231, Properties: 219},
+	{Hash: 3751690758, Block: 1234, Properties: 219},
 }

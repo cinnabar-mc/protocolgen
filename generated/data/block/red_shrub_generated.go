@@ -9,5 +9,5 @@ var RedShrub = Block{
 }
 
 var redShrubStates = [...]State{
-	{Hash: 1319997426, Block: 709, Properties: 2172},
+	{Hash: 1319997426, Block: 711, Properties: 2174},
 }

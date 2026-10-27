@@ -9,12 +9,12 @@ var BrownCandle = Block{
 }
 
 var brownCandleStates = [...]State{
-	{Hash: 1980081316, Block: 832, Properties: 2493},
-	{Hash: 3607002295, Block: 832, Properties: 2494},
-	{Hash: 2345758254, Block: 832, Properties: 2495},
-	{Hash: 3370269017, Block: 832, Properties: 2496},
-	{Hash: 3035387887, Block: 832, Properties: 2497},
-	{Hash: 2551695724, Block: 832, Properties: 2498},
-	{Hash: 3401064825, Block: 832, Properties: 2499},
-	{Hash: 2314962446, Block: 832, Properties: 2500},
+	{Hash: 1980081316, Block: 834, Properties: 2495},
+	{Hash: 3607002295, Block: 834, Properties: 2496},
+	{Hash: 2345758254, Block: 834, Properties: 2497},
+	{Hash: 3370269017, Block: 834, Properties: 2498},
+	{Hash: 3035387887, Block: 834, Properties: 2499},
+	{Hash: 2551695724, Block: 834, Properties: 2500},
+	{Hash: 3401064825, Block: 834, Properties: 2501},
+	{Hash: 2314962446, Block: 834, Properties: 2502},
 }

@@ -9,10 +9,10 @@ var PiglinHead = Block{
 }
 
 var piglinHeadStates = [...]State{
-	{Hash: 1460883779, Block: 1103, Properties: 14},
-	{Hash: 1522358602, Block: 1103, Properties: 14},
-	{Hash: 1583833425, Block: 1103, Properties: 15},
-	{Hash: 1645308248, Block: 1103, Properties: 16},
-	{Hash: 1214984487, Block: 1103, Properties: 17},
-	{Hash: 1276459310, Block: 1103, Properties: 18},
+	{Hash: 1460883779, Block: 1106, Properties: 14},
+	{Hash: 1522358602, Block: 1106, Properties: 14},
+	{Hash: 1583833425, Block: 1106, Properties: 15},
+	{Hash: 1645308248, Block: 1106, Properties: 16},
+	{Hash: 1214984487, Block: 1106, Properties: 17},
+	{Hash: 1276459310, Block: 1106, Properties: 18},
 }

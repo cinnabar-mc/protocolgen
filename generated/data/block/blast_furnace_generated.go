@@ -9,8 +9,8 @@ var BlastFurnace = Block{
 }
 
 var blastFurnaceStates = [...]State{
-	{Hash: 2142573020, Block: 1257, Properties: 921},
-	{Hash: 3066600017, Block: 1257, Properties: 921},
-	{Hash: 184718330, Block: 1257, Properties: 921},
-	{Hash: 793504035, Block: 1257, Properties: 921},
+	{Hash: 2142573020, Block: 1260, Properties: 921},
+	{Hash: 3066600017, Block: 1260, Properties: 921},
+	{Hash: 184718330, Block: 1260, Properties: 921},
+	{Hash: 793504035, Block: 1260, Properties: 921},
 }

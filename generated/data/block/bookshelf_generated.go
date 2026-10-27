@@ -9,5 +9,5 @@ var Bookshelf = Block{
 }
 
 var bookshelfStates = [...]State{
-	{Hash: 2361398807, Block: 1032, Properties: 2947},
+	{Hash: 2361398807, Block: 1035, Properties: 2950},
 }

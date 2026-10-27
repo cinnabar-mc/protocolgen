@@ -9,12 +9,12 @@ var RedCandle = Block{
 }
 
 var redCandleStates = [...]State{
-	{Hash: 114257755, Block: 628, Properties: 1968},
-	{Hash: 919016808, Block: 628, Properties: 1969},
-	{Hash: 3685947709, Block: 628, Properties: 1970},
-	{Hash: 1451737890, Block: 628, Properties: 1971},
-	{Hash: 3353918480, Block: 628, Properties: 1972},
-	{Hash: 1974323379, Block: 628, Properties: 1973},
-	{Hash: 2630641138, Block: 628, Properties: 1974},
-	{Hash: 2507044461, Block: 628, Properties: 1975},
+	{Hash: 114257755, Block: 630, Properties: 1970},
+	{Hash: 919016808, Block: 630, Properties: 1971},
+	{Hash: 3685947709, Block: 630, Properties: 1972},
+	{Hash: 1451737890, Block: 630, Properties: 1973},
+	{Hash: 3353918480, Block: 630, Properties: 1974},
+	{Hash: 1974323379, Block: 630, Properties: 1975},
+	{Hash: 2630641138, Block: 630, Properties: 1976},
+	{Hash: 2507044461, Block: 630, Properties: 1977},
 }

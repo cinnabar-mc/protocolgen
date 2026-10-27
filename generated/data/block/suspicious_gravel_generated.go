@@ -9,12 +9,12 @@ var SuspiciousGravel = Block{
 }
 
 var suspiciousGravelStates = [...]State{
-	{Hash: 1055929607, Block: 639, Properties: 1994},
-	{Hash: 623036, Block: 639, Properties: 1994},
-	{Hash: 2137681700, Block: 639, Properties: 1994},
-	{Hash: 3192988271, Block: 639, Properties: 1994},
-	{Hash: 2124375457, Block: 639, Properties: 1994},
-	{Hash: 1069068886, Block: 639, Properties: 1994},
-	{Hash: 826109438, Block: 639, Properties: 1994},
-	{Hash: 1881416009, Block: 639, Properties: 1994},
+	{Hash: 1055929607, Block: 641, Properties: 1996},
+	{Hash: 623036, Block: 641, Properties: 1996},
+	{Hash: 2137681700, Block: 641, Properties: 1996},
+	{Hash: 3192988271, Block: 641, Properties: 1996},
+	{Hash: 2124375457, Block: 641, Properties: 1996},
+	{Hash: 1069068886, Block: 641, Properties: 1996},
+	{Hash: 826109438, Block: 641, Properties: 1996},
+	{Hash: 1881416009, Block: 641, Properties: 1996},
 }

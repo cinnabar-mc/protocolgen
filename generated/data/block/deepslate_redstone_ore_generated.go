@@ -9,5 +9,5 @@ var DeepslateRedstoneOre = Block{
 }
 
 var deepslateRedstoneOreStates = [...]State{
-	{Hash: 299238750, Block: 1020, Properties: 2684},
+	{Hash: 299238750, Block: 1023, Properties: 2686},
 }

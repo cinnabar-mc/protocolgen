@@ -9,10 +9,10 @@ var StickyPiston = Block{
 }
 
 var stickyPistonStates = [...]State{
-	{Hash: 2363112454, Block: 542, Properties: 1090},
-	{Hash: 2301637631, Block: 542, Properties: 1090},
-	{Hash: 2486062100, Block: 542, Properties: 1090},
-	{Hash: 2424587277, Block: 542, Properties: 1090},
-	{Hash: 2609011746, Block: 542, Properties: 1090},
-	{Hash: 2547536923, Block: 542, Properties: 1090},
+	{Hash: 2363112454, Block: 544, Properties: 1090},
+	{Hash: 2301637631, Block: 544, Properties: 1090},
+	{Hash: 2486062100, Block: 544, Properties: 1090},
+	{Hash: 2424587277, Block: 544, Properties: 1090},
+	{Hash: 2609011746, Block: 544, Properties: 1090},
+	{Hash: 2547536923, Block: 544, Properties: 1090},
 }

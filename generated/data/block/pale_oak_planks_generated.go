@@ -9,5 +9,5 @@ var PaleOakPlanks = Block{
 }
 
 var paleOakPlanksStates = [...]State{
-	{Hash: 3941092442, Block: 375, Properties: 1406},
+	{Hash: 3941092442, Block: 376, Properties: 1407},
 }

@@ -9,5 +9,5 @@ var EmeraldOre = Block{
 }
 
 var emeraldOreStates = [...]State{
-	{Hash: 170572189, Block: 1198, Properties: 1085},
+	{Hash: 170572189, Block: 1201, Properties: 1085},
 }

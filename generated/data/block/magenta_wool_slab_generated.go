@@ -9,6 +9,6 @@ var MagentaWoolSlab = Block{
 }
 
 var magentaWoolSlabStates = [...]State{
-	{Hash: 1048533111, Block: 450, Properties: 963},
-	{Hash: 4064506568, Block: 450, Properties: 964},
+	{Hash: 1048533111, Block: 451, Properties: 963},
+	{Hash: 4064506568, Block: 451, Properties: 964},
 }

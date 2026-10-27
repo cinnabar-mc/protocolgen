@@ -9,8 +9,8 @@ var EnderChest = Block{
 }
 
 var enderChestStates = [...]State{
-	{Hash: 1106211301, Block: 543, Properties: 1748},
-	{Hash: 3919650990, Block: 543, Properties: 1748},
-	{Hash: 1239582919, Block: 543, Properties: 1748},
-	{Hash: 4102080908, Block: 543, Properties: 1748},
+	{Hash: 1106211301, Block: 545, Properties: 1750},
+	{Hash: 3919650990, Block: 545, Properties: 1750},
+	{Hash: 1239582919, Block: 545, Properties: 1750},
+	{Hash: 4102080908, Block: 545, Properties: 1750},
 }

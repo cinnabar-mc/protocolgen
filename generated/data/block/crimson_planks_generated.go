@@ -9,5 +9,5 @@ var CrimsonPlanks = Block{
 }
 
 var crimsonPlanksStates = [...]State{
-	{Hash: 1967379138, Block: 657, Properties: 2058},
+	{Hash: 1967379138, Block: 659, Properties: 2060},
 }

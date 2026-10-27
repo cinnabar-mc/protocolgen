@@ -9,10 +9,10 @@ var AmethystCluster = Block{
 }
 
 var amethystClusterStates = [...]State{
-	{Hash: 326255689, Block: 1408, Properties: 3543},
-	{Hash: 3334683778, Block: 1408, Properties: 3544},
-	{Hash: 839180963, Block: 1408, Properties: 3545},
-	{Hash: 3430070289, Block: 1408, Properties: 3546},
-	{Hash: 2581329506, Block: 1408, Properties: 3547},
-	{Hash: 429109880, Block: 1408, Properties: 3548},
+	{Hash: 326255689, Block: 1411, Properties: 3546},
+	{Hash: 3334683778, Block: 1411, Properties: 3547},
+	{Hash: 839180963, Block: 1411, Properties: 3548},
+	{Hash: 3430070289, Block: 1411, Properties: 3549},
+	{Hash: 2581329506, Block: 1411, Properties: 3550},
+	{Hash: 429109880, Block: 1411, Properties: 3551},
 }

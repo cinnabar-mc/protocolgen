@@ -9,16 +9,16 @@ var PolishedBlackstoneButton = Block{
 }
 
 var polishedBlackstoneButtonStates = [...]State{
-	{Hash: 3879588878, Block: 1402, Properties: 94},
-	{Hash: 3818114055, Block: 1402, Properties: 95},
-	{Hash: 4002538524, Block: 1402, Properties: 96},
-	{Hash: 3941063701, Block: 1402, Properties: 97},
-	{Hash: 4125488170, Block: 1402, Properties: 98},
-	{Hash: 4064013347, Block: 1402, Properties: 99},
-	{Hash: 3862681131, Block: 1402, Properties: 100},
-	{Hash: 3924155954, Block: 1402, Properties: 101},
-	{Hash: 3985630777, Block: 1402, Properties: 102},
-	{Hash: 4047105600, Block: 1402, Properties: 103},
-	{Hash: 3616781839, Block: 1402, Properties: 104},
-	{Hash: 3678256662, Block: 1402, Properties: 105},
+	{Hash: 3879588878, Block: 1405, Properties: 94},
+	{Hash: 3818114055, Block: 1405, Properties: 95},
+	{Hash: 4002538524, Block: 1405, Properties: 96},
+	{Hash: 3941063701, Block: 1405, Properties: 97},
+	{Hash: 4125488170, Block: 1405, Properties: 98},
+	{Hash: 4064013347, Block: 1405, Properties: 99},
+	{Hash: 3862681131, Block: 1405, Properties: 100},
+	{Hash: 3924155954, Block: 1405, Properties: 101},
+	{Hash: 3985630777, Block: 1405, Properties: 102},
+	{Hash: 4047105600, Block: 1405, Properties: 103},
+	{Hash: 3616781839, Block: 1405, Properties: 104},
+	{Hash: 3678256662, Block: 1405, Properties: 105},
 }

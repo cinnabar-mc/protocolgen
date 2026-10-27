@@ -9,12 +9,12 @@ var SmallDripleafBlock = Block{
 }
 
 var smallDripleafBlockStates = [...]State{
-	{Hash: 2324694387, Block: 519, Properties: 1730},
-	{Hash: 1269387816, Block: 519, Properties: 1730},
-	{Hash: 1494828638, Block: 519, Properties: 1730},
-	{Hash: 2550135209, Block: 519, Properties: 1730},
-	{Hash: 2061851969, Block: 519, Properties: 1730},
-	{Hash: 1006545398, Block: 519, Properties: 1730},
-	{Hash: 15631192, Block: 519, Properties: 1730},
-	{Hash: 1070937763, Block: 519, Properties: 1730},
+	{Hash: 2324694387, Block: 520, Properties: 1731},
+	{Hash: 1269387816, Block: 520, Properties: 1731},
+	{Hash: 1494828638, Block: 520, Properties: 1731},
+	{Hash: 2550135209, Block: 520, Properties: 1731},
+	{Hash: 2061851969, Block: 520, Properties: 1731},
+	{Hash: 1006545398, Block: 520, Properties: 1731},
+	{Hash: 15631192, Block: 520, Properties: 1731},
+	{Hash: 1070937763, Block: 520, Properties: 1731},
 }

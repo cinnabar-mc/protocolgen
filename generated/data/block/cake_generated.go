@@ -9,11 +9,11 @@ var Cake = Block{
 }
 
 var cakeStates = [...]State{
-	{Hash: 1996091415, Block: 1131, Properties: 201},
-	{Hash: 2057566238, Block: 1131, Properties: 3247},
-	{Hash: 2119041061, Block: 1131, Properties: 3248},
-	{Hash: 2180515884, Block: 1131, Properties: 3249},
-	{Hash: 2241990707, Block: 1131, Properties: 3250},
-	{Hash: 2303465530, Block: 1131, Properties: 3251},
-	{Hash: 2364940353, Block: 1131, Properties: 3252},
+	{Hash: 1996091415, Block: 1134, Properties: 201},
+	{Hash: 2057566238, Block: 1134, Properties: 3250},
+	{Hash: 2119041061, Block: 1134, Properties: 3251},
+	{Hash: 2180515884, Block: 1134, Properties: 3252},
+	{Hash: 2241990707, Block: 1134, Properties: 3253},
+	{Hash: 2303465530, Block: 1134, Properties: 3254},
+	{Hash: 2364940353, Block: 1134, Properties: 3255},
 }

@@ -9,5 +9,5 @@ var Poppy = Block{
 }
 
 var poppyStates = [...]State{
-	{Hash: 3417975282, Block: 388, Properties: 219},
+	{Hash: 3417975282, Block: 389, Properties: 219},
 }

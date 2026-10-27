@@ -9,6 +9,6 @@ var RoseBush = Block{
 }
 
 var roseBushStates = [...]State{
-	{Hash: 2411679686, Block: 739, Properties: 1488},
-	{Hash: 3466986257, Block: 739, Properties: 1489},
+	{Hash: 2411679686, Block: 741, Properties: 1489},
+	{Hash: 3466986257, Block: 741, Properties: 1490},
 }

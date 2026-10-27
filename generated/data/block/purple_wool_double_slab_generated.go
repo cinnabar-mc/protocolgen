@@ -9,6 +9,6 @@ var PurpleWoolDoubleSlab = Block{
 }
 
 var purpleWoolDoubleSlabStates = [...]State{
-	{Hash: 2378472834, Block: 629, Properties: 68},
-	{Hash: 136863491, Block: 629, Properties: 68},
+	{Hash: 2378472834, Block: 631, Properties: 68},
+	{Hash: 136863491, Block: 631, Properties: 68},
 }

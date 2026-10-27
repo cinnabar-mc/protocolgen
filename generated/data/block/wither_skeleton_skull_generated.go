@@ -9,10 +9,10 @@ var WitherSkeletonSkull = Block{
 }
 
 var witherSkeletonSkullStates = [...]State{
-	{Hash: 4196103830, Block: 1145, Properties: 14},
-	{Hash: 4134629007, Block: 1145, Properties: 14},
-	{Hash: 24086180, Block: 1145, Properties: 15},
-	{Hash: 4257578653, Block: 1145, Properties: 16},
-	{Hash: 147035826, Block: 1145, Properties: 17},
-	{Hash: 85561003, Block: 1145, Properties: 18},
+	{Hash: 4196103830, Block: 1148, Properties: 14},
+	{Hash: 4134629007, Block: 1148, Properties: 14},
+	{Hash: 24086180, Block: 1148, Properties: 15},
+	{Hash: 4257578653, Block: 1148, Properties: 16},
+	{Hash: 147035826, Block: 1148, Properties: 17},
+	{Hash: 85561003, Block: 1148, Properties: 18},
 }

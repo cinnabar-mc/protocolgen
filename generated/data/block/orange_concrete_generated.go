@@ -9,5 +9,5 @@ var OrangeConcrete = Block{
 }
 
 var orangeConcreteStates = [...]State{
-	{Hash: 1060622528, Block: 1048, Properties: 2956},
+	{Hash: 1060622528, Block: 1051, Properties: 2959},
 }

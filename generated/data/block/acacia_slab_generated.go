@@ -9,6 +9,6 @@ var AcaciaSlab = Block{
 }
 
 var acaciaSlabStates = [...]State{
-	{Hash: 1549458206, Block: 1259, Properties: 3432},
-	{Hash: 2924851063, Block: 1259, Properties: 3433},
+	{Hash: 1549458206, Block: 1262, Properties: 3435},
+	{Hash: 2924851063, Block: 1262, Properties: 3436},
 }

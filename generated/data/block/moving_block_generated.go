@@ -9,5 +9,5 @@ var MovingBlock = Block{
 }
 
 var movingBlockStates = [...]State{
-	{Hash: 3651099133, Block: 774, Properties: 2356},
+	{Hash: 3651099133, Block: 776, Properties: 2358},
 }

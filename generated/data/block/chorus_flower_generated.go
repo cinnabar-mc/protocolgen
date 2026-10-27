@@ -9,10 +9,10 @@ var ChorusFlower = Block{
 }
 
 var chorusFlowerStates = [...]State{
-	{Hash: 1448507239, Block: 572, Properties: 1856},
-	{Hash: 1509982062, Block: 572, Properties: 1856},
-	{Hash: 1571456885, Block: 572, Properties: 1856},
-	{Hash: 1632931708, Block: 572, Properties: 1856},
-	{Hash: 1694406531, Block: 572, Properties: 1856},
-	{Hash: 1755881354, Block: 572, Properties: 1856},
+	{Hash: 1448507239, Block: 574, Properties: 1858},
+	{Hash: 1509982062, Block: 574, Properties: 1858},
+	{Hash: 1571456885, Block: 574, Properties: 1858},
+	{Hash: 1632931708, Block: 574, Properties: 1858},
+	{Hash: 1694406531, Block: 574, Properties: 1858},
+	{Hash: 1755881354, Block: 574, Properties: 1858},
 }

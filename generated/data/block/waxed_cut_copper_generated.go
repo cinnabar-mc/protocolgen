@@ -9,5 +9,5 @@ var WaxedCutCopper = Block{
 }
 
 var waxedCutCopperStates = [...]State{
-	{Hash: 2099034927, Block: 1183, Properties: 847},
+	{Hash: 2099034927, Block: 1186, Properties: 847},
 }

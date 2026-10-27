@@ -9,5 +9,5 @@ var NetheriteBlock = Block{
 }
 
 var netheriteBlockStates = [...]State{
-	{Hash: 2912613516, Block: 403, Properties: 966},
+	{Hash: 2912613516, Block: 404, Properties: 966},
 }

@@ -9,5 +9,5 @@ var ChemicalHeat = Block{
 }
 
 var chemicalHeatStates = [...]State{
-	{Hash: 640009779, Block: 1232, Properties: 3412},
+	{Hash: 640009779, Block: 1235, Properties: 3415},
 }

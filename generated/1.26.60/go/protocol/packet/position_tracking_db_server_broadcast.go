@@ -1,0 +1,35 @@
+// Code generated from canonical protocol manifest v2. DO NOT EDIT.
+
+package packet
+
+import (
+	"protocolgen/generated/1.26.60/go/protocol"
+)
+
+// PositionTrackingDBServerBroadcast is sent by the server in response to the PositionTrackingDBClientRequest
+// packet. This packet is, as of 1.16, currently only used for lodestones. The server maintains a database
+// with tracking IDs and their position and dimension. The client will request these tracking IDs, (NBT tag
+// set on the lodestone compass with the tracking ID?) and the server will respond with the status of those
+// tracking IDs. What is actually done with the data sent depends on what the client chooses to do with it.
+// For the lodestone compass, it is used to make the compass point towards lodestones and to make it spin if
+// the lodestone at a position is no longer there.
+type PositionTrackingDBServerBroadcast struct {
+	// BroadcastAction specifies the status of the position tracking DB response. It is one of the constants
+	// above, specifying the result of the request with the ID below. The Update action is sent for setting the
+	// position of a lodestone compass, the Destroy and NotFound to indicate that there is not (no longer) a
+	// lodestone at that position.
+	Action               protocol.PositionTrackingDBServerBroadcastAction
+	IDValue              protocol.PositionTrackingID
+	PositionTrackingData []byte
+}
+
+// ID ...
+func (*PositionTrackingDBServerBroadcast) ID() uint32 {
+	return IDPositionTrackingDBServerBroadcast
+}
+
+func (pk *PositionTrackingDBServerBroadcast) Marshal(io protocol.IO) {
+	pk.Action.Marshal(io)
+	pk.IDValue.Marshal(io)
+	io.NBT(&pk.PositionTrackingData, protocol.NBTNetwork)
+}

@@ -9,8 +9,8 @@ var Furnace = Block{
 }
 
 var furnaceStates = [...]State{
-	{Hash: 3463497305, Block: 1406, Properties: 921},
-	{Hash: 2478237434, Block: 1406, Properties: 921},
-	{Hash: 1875646683, Block: 1406, Properties: 921},
-	{Hash: 4038254352, Block: 1406, Properties: 921},
+	{Hash: 3463497305, Block: 1409, Properties: 921},
+	{Hash: 2478237434, Block: 1409, Properties: 921},
+	{Hash: 1875646683, Block: 1409, Properties: 921},
+	{Hash: 4038254352, Block: 1409, Properties: 921},
 }

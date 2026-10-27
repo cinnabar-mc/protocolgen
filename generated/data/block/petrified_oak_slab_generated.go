@@ -9,6 +9,6 @@ var PetrifiedOakSlab = Block{
 }
 
 var petrifiedOakSlabStates = [...]State{
-	{Hash: 3479117989, Block: 1203, Properties: 3367},
-	{Hash: 4532210, Block: 1203, Properties: 3368},
+	{Hash: 3479117989, Block: 1206, Properties: 3370},
+	{Hash: 4532210, Block: 1206, Properties: 3371},
 }

@@ -9,7 +9,7 @@ var SculkSensor = Block{
 }
 
 var sculkSensorStates = [...]State{
-	{Hash: 4149802680, Block: 548, Properties: 1762},
-	{Hash: 4088327857, Block: 548, Properties: 1763},
-	{Hash: 4026853034, Block: 548, Properties: 1762},
+	{Hash: 4149802680, Block: 550, Properties: 1764},
+	{Hash: 4088327857, Block: 550, Properties: 1765},
+	{Hash: 4026853034, Block: 550, Properties: 1764},
 }

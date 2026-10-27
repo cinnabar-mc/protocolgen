@@ -9,16 +9,16 @@ var PaleOakButton = Block{
 }
 
 var paleOakButtonStates = [...]State{
-	{Hash: 2632568530, Block: 1226, Properties: 94},
-	{Hash: 2571093707, Block: 1226, Properties: 95},
-	{Hash: 2755518176, Block: 1226, Properties: 96},
-	{Hash: 2694043353, Block: 1226, Properties: 97},
-	{Hash: 2386669238, Block: 1226, Properties: 98},
-	{Hash: 2325194415, Block: 1226, Properties: 99},
-	{Hash: 2853396671, Block: 1226, Properties: 100},
-	{Hash: 2914871494, Block: 1226, Properties: 101},
-	{Hash: 2976346317, Block: 1226, Properties: 102},
-	{Hash: 3037821140, Block: 1226, Properties: 103},
-	{Hash: 3099295963, Block: 1226, Properties: 104},
-	{Hash: 3160770786, Block: 1226, Properties: 105},
+	{Hash: 2632568530, Block: 1229, Properties: 94},
+	{Hash: 2571093707, Block: 1229, Properties: 95},
+	{Hash: 2755518176, Block: 1229, Properties: 96},
+	{Hash: 2694043353, Block: 1229, Properties: 97},
+	{Hash: 2386669238, Block: 1229, Properties: 98},
+	{Hash: 2325194415, Block: 1229, Properties: 99},
+	{Hash: 2853396671, Block: 1229, Properties: 100},
+	{Hash: 2914871494, Block: 1229, Properties: 101},
+	{Hash: 2976346317, Block: 1229, Properties: 102},
+	{Hash: 3037821140, Block: 1229, Properties: 103},
+	{Hash: 3099295963, Block: 1229, Properties: 104},
+	{Hash: 3160770786, Block: 1229, Properties: 105},
 }

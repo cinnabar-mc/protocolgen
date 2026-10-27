@@ -9,5 +9,5 @@ var RawIronBlock = Block{
 }
 
 var rawIronBlockStates = [...]State{
-	{Hash: 1077242782, Block: 1462, Properties: 3692},
+	{Hash: 1077242782, Block: 1465, Properties: 3695},
 }

@@ -9,8 +9,8 @@ var DamagedAnvil = Block{
 }
 
 var damagedAnvilStates = [...]State{
-	{Hash: 3827426657, Block: 1437, Properties: 1982},
-	{Hash: 6657298, Block: 1437, Properties: 1983},
-	{Hash: 2712994899, Block: 1437, Properties: 1982},
-	{Hash: 2261764680, Block: 1437, Properties: 1983},
+	{Hash: 3827426657, Block: 1440, Properties: 1984},
+	{Hash: 6657298, Block: 1440, Properties: 1985},
+	{Hash: 2712994899, Block: 1440, Properties: 1984},
+	{Hash: 2261764680, Block: 1440, Properties: 1985},
 }

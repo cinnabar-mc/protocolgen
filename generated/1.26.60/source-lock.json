@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.60",
+    "protocol_version": 2225
+  },
+  "sources": [
+    {
+      "id": "mojang",
+      "kind": "mojang",
+      "revision": "0879ab5c4c70be1bd520e32a8c49ea4a155616d6",
+      "digest": "sha256:8d60153a115ac1f595c62ef47cddeffe2fce40102121999be48fda8bf115cf9b",
+      "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/0879ab5c4c70be1bd520e32a8c49ea4a155616d6/json",
+      "minecraft_version": "1.26.60",
+      "protocol_version": 2225
+    },
+    {
+      "id": "endstone",
+      "kind": "endstone",
+      "revision": "68d4b6ccca59f4619be7a1507abf36c98d1ff46c",
+      "digest": "sha256:22ef444a46494a7c4bb792a4a9ab815aa59dc9ebc04337f17158a6a6056cc90e",
+      "locator": "https://github.com/EndstoneMC/protocol-docs/tree/68d4b6ccca59f4619be7a1507abf36c98d1ff46c",
+      "minecraft_version": "1.26.60",
+      "protocol_version": 2225
+    }
+  ]
+}

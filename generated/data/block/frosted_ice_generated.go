@@ -9,8 +9,8 @@ var FrostedIce = Block{
 }
 
 var frostedIceStates = [...]State{
-	{Hash: 909589632, Block: 635, Properties: 1981},
-	{Hash: 848114809, Block: 635, Properties: 1981},
-	{Hash: 786639986, Block: 635, Properties: 1981},
-	{Hash: 725165163, Block: 635, Properties: 1981},
+	{Hash: 909589632, Block: 637, Properties: 1983},
+	{Hash: 848114809, Block: 637, Properties: 1983},
+	{Hash: 786639986, Block: 637, Properties: 1983},
+	{Hash: 725165163, Block: 637, Properties: 1983},
 }

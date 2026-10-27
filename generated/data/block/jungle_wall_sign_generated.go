@@ -9,10 +9,10 @@ var JungleWallSign = Block{
 }
 
 var jungleWallSignStates = [...]State{
-	{Hash: 270529816, Block: 547, Properties: 1757},
-	{Hash: 209054993, Block: 547, Properties: 1757},
-	{Hash: 147580170, Block: 547, Properties: 1758},
-	{Hash: 86105347, Block: 547, Properties: 1759},
-	{Hash: 24630524, Block: 547, Properties: 1760},
-	{Hash: 4258122997, Block: 547, Properties: 1761},
+	{Hash: 270529816, Block: 549, Properties: 1759},
+	{Hash: 209054993, Block: 549, Properties: 1759},
+	{Hash: 147580170, Block: 549, Properties: 1760},
+	{Hash: 86105347, Block: 549, Properties: 1761},
+	{Hash: 24630524, Block: 549, Properties: 1762},
+	{Hash: 4258122997, Block: 549, Properties: 1763},
 }

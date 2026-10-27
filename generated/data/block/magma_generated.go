@@ -9,5 +9,5 @@ var Magma = Block{
 }
 
 var magmaStates = [...]State{
-	{Hash: 1719727561, Block: 1421, Properties: 3569},
+	{Hash: 1719727561, Block: 1424, Properties: 3572},
 }

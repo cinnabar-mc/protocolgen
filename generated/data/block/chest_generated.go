@@ -9,8 +9,8 @@ var Chest = Block{
 }
 
 var chestStates = [...]State{
-	{Hash: 741882976, Block: 1127, Properties: 2357},
-	{Hash: 1429214429, Block: 1127, Properties: 2357},
-	{Hash: 3162850062, Block: 1127, Properties: 2357},
-	{Hash: 2001328343, Block: 1127, Properties: 2357},
+	{Hash: 741882976, Block: 1130, Properties: 2359},
+	{Hash: 1429214429, Block: 1130, Properties: 2359},
+	{Hash: 3162850062, Block: 1130, Properties: 2359},
+	{Hash: 2001328343, Block: 1130, Properties: 2359},
 }

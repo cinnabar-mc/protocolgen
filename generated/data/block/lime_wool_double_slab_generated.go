@@ -9,6 +9,6 @@ var LimeWoolDoubleSlab = Block{
 }
 
 var limeWoolDoubleSlabStates = [...]State{
-	{Hash: 4284138367, Block: 969, Properties: 68},
-	{Hash: 1633997536, Block: 969, Properties: 68},
+	{Hash: 4284138367, Block: 971, Properties: 68},
+	{Hash: 1633997536, Block: 971, Properties: 68},
 }

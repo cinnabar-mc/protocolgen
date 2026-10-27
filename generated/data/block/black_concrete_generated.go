@@ -9,5 +9,5 @@ var BlackConcrete = Block{
 }
 
 var blackConcreteStates = [...]State{
-	{Hash: 227928282, Block: 1038, Properties: 2952},
+	{Hash: 227928282, Block: 1041, Properties: 2955},
 }

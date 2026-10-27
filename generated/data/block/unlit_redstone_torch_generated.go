@@ -9,10 +9,10 @@ var UnlitRedstoneTorch = Block{
 }
 
 var unlitRedstoneTorchStates = [...]State{
-	{Hash: 711862229, Block: 1452, Properties: 3682},
-	{Hash: 2060267321, Block: 1452, Properties: 3683},
-	{Hash: 4247609259, Block: 1452, Properties: 3684},
-	{Hash: 3084706402, Block: 1452, Properties: 3685},
-	{Hash: 2780919828, Block: 1452, Properties: 3686},
-	{Hash: 4112550380, Block: 1452, Properties: 3682},
+	{Hash: 711862229, Block: 1455, Properties: 3685},
+	{Hash: 2060267321, Block: 1455, Properties: 3686},
+	{Hash: 4247609259, Block: 1455, Properties: 3687},
+	{Hash: 3084706402, Block: 1455, Properties: 3688},
+	{Hash: 2780919828, Block: 1455, Properties: 3689},
+	{Hash: 4112550380, Block: 1455, Properties: 3685},
 }

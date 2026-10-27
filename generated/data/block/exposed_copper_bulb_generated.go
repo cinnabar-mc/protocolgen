@@ -9,8 +9,8 @@ var ExposedCopperBulb = Block{
 }
 
 var exposedCopperBulbStates = [...]State{
-	{Hash: 2261349451, Block: 937, Properties: 830},
-	{Hash: 4283054986, Block: 937, Properties: 1586},
-	{Hash: 1206042880, Block: 937, Properties: 830},
-	{Hash: 1043394261, Block: 937, Properties: 1586},
+	{Hash: 2261349451, Block: 939, Properties: 830},
+	{Hash: 4283054986, Block: 939, Properties: 1587},
+	{Hash: 1206042880, Block: 939, Properties: 830},
+	{Hash: 1043394261, Block: 939, Properties: 1587},
 }

@@ -9,5 +9,5 @@ var MagentaConcretePowder = Block{
 }
 
 var magentaConcretePowderStates = [...]State{
-	{Hash: 1135729023, Block: 562, Properties: 1810},
+	{Hash: 1135729023, Block: 564, Properties: 1812},
 }

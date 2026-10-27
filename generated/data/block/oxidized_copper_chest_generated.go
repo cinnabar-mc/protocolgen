@@ -9,8 +9,8 @@ var OxidizedCopperChest = Block{
 }
 
 var oxidizedCopperChestStates = [...]State{
-	{Hash: 1456752037, Block: 1043, Properties: 1575},
-	{Hash: 4213074030, Block: 1043, Properties: 1575},
-	{Hash: 2756911751, Block: 1043, Properties: 1575},
-	{Hash: 3228715852, Block: 1043, Properties: 1575},
+	{Hash: 1456752037, Block: 1046, Properties: 1576},
+	{Hash: 4213074030, Block: 1046, Properties: 1576},
+	{Hash: 2756911751, Block: 1046, Properties: 1576},
+	{Hash: 3228715852, Block: 1046, Properties: 1576},
 }

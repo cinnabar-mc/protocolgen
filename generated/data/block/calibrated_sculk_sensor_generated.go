@@ -9,16 +9,16 @@ var CalibratedSculkSensor = Block{
 }
 
 var calibratedSculkSensorStates = [...]State{
-	{Hash: 1098378432, Block: 816, Properties: 1762},
-	{Hash: 1036903609, Block: 816, Properties: 1763},
-	{Hash: 975428786, Block: 816, Properties: 1762},
-	{Hash: 3647576451, Block: 816, Properties: 1762},
-	{Hash: 3709051274, Block: 816, Properties: 1763},
-	{Hash: 3770526097, Block: 816, Properties: 1762},
-	{Hash: 538527806, Block: 816, Properties: 1762},
-	{Hash: 477052983, Block: 816, Properties: 1763},
-	{Hash: 661477452, Block: 816, Properties: 1762},
-	{Hash: 2239628029, Block: 816, Properties: 1762},
-	{Hash: 2301102852, Block: 816, Properties: 1763},
-	{Hash: 2116678383, Block: 816, Properties: 1762},
+	{Hash: 1098378432, Block: 818, Properties: 1764},
+	{Hash: 1036903609, Block: 818, Properties: 1765},
+	{Hash: 975428786, Block: 818, Properties: 1764},
+	{Hash: 3647576451, Block: 818, Properties: 1764},
+	{Hash: 3709051274, Block: 818, Properties: 1765},
+	{Hash: 3770526097, Block: 818, Properties: 1764},
+	{Hash: 538527806, Block: 818, Properties: 1764},
+	{Hash: 477052983, Block: 818, Properties: 1765},
+	{Hash: 661477452, Block: 818, Properties: 1764},
+	{Hash: 2239628029, Block: 818, Properties: 1764},
+	{Hash: 2301102852, Block: 818, Properties: 1765},
+	{Hash: 2116678383, Block: 818, Properties: 1764},
 }

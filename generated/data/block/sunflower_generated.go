@@ -9,6 +9,6 @@ var Sunflower = Block{
 }
 
 var sunflowerStates = [...]State{
-	{Hash: 713651213, Block: 611, Properties: 1488},
-	{Hash: 3953311938, Block: 611, Properties: 1489},
+	{Hash: 713651213, Block: 613, Properties: 1489},
+	{Hash: 3953311938, Block: 613, Properties: 1490},
 }

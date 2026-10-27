@@ -9,5 +9,5 @@ var Jukebox = Block{
 }
 
 var jukeboxStates = [...]State{
-	{Hash: 1605519270, Block: 667, Properties: 2065},
+	{Hash: 1605519270, Block: 669, Properties: 2067},
 }

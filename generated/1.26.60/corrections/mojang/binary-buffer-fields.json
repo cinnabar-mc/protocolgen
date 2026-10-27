@@ -1,0 +1,136 @@
+{
+  "operations": [
+    {
+      "id": "mojang-level-chunk-payload-is-bytes",
+      "file": "LevelChunkPacketPayload.json",
+      "pointer": "/properties/Serialized Chunk Data",
+      "pre_patch_sha256": "sha256:93c7151f605ac611b7b41d0ca7902b86ea0a0c064b19b1255dfd3e12ed8ec57a",
+      "replace": {
+        "description": "The serialized chunk payload (block, biome, heightmap and block-entity data).",
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 6
+      },
+      "why": "The field is a length-prefixed arbitrary byte buffer, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2168/serializer/LevelChunkSerializer_v2168.java",
+          "summary": "The exact v2168 serializer writes and reads the payload with the ByteBuf helper."
+        }
+      ]
+    },
+    {
+      "id": "mojang-resource-pack-chunk-data-is-bytes",
+      "file": "ResourcePackChunkDataPacketPayload.json",
+      "pointer": "/properties/Chunk Data",
+      "pre_patch_sha256": "sha256:3c4a03f0f557c9c9b373ee092e9a767ac8c7c05b620a003bdafd690e84761d27",
+      "replace": {
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 3
+      },
+      "why": "A resource-pack chunk contains compressed binary data, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/ResourcePackChunkDataSerializer_v388.java",
+          "summary": "The inherited serializer uses the ByteBuf helper for the chunk data."
+        }
+      ]
+    },
+    {
+      "id": "mojang-photo-data-is-bytes",
+      "file": "PhotoTransferPacketPayload.json",
+      "pointer": "/properties/Photo Data",
+      "pre_patch_sha256": "sha256:3aa8bb29407369367f93ba94813276cc050c81e96679d106d14fac4aef8801d1",
+      "replace": {
+        "maxLength": 20971520,
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 1
+      },
+      "why": "Photo data is an image byte sequence and may not be valid UTF-8.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v291/serializer/PhotoTransferSerializer_v291.java",
+          "summary": "The serializer reads and writes Photo Data as byte[]."
+        }
+      ]
+    },
+    {
+      "id": "mojang-missing-blob-data-is-bytes",
+      "file": "MissingBlobData.json",
+      "pointer": "/properties/Blob Data",
+      "pre_patch_sha256": "sha256:1fbfa1fae875928b41b0d1b2e19103e02f32e3cabab634891c85384922b8b25f",
+      "replace": {
+        "description": "Subchunk data (see https://gist.github.com/Tomcc/a96af509e275b1af483b25c543cfbf37) plus biome data",
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 1
+      },
+      "why": "A cache blob is an opaque chunk-data byte buffer, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v361/serializer/ClientCacheMissResponseSerializer_v361.java",
+          "summary": "The cache-miss serializer delegates blob payloads to the binary codec helper."
+        }
+      ]
+    },
+    {
+      "id": "mojang-network-item-stack-user-data-is-bytes",
+      "file": "cerealizer_NetworkItemStackDescriptor___SerializedData.json",
+      "pointer": "/properties/User Data Buffer",
+      "pre_patch_sha256": "sha256:e38d35ebed219463ca18f4d23b5d8f50cb4053283c54969259cb56795a702d2f",
+      "replace": {
+        "description": "The @ItemInstanceUserData.html#ItemInstanceUserData@  binary blob encoded as a String, so it's unsigned varint length prefixed. Get all your nbt+property bytes, calculate the length, write that length, THEN write the data.",
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 5
+      },
+      "why": "The source description explicitly identifies this as a binary blob whose framing happens to match String.",
+      "evidence": [
+        {
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/json/cerealizer_NetworkItemStackDescriptor___SerializedData.json",
+          "summary": "The pinned official description calls the field a binary NBT and property blob."
+        }
+      ]
+    },
+    {
+      "id": "mojang-network-item-instance-user-data-is-bytes",
+      "file": "NetworkItemInstanceDescriptorData.json",
+      "pointer": "/properties/User Data Buffer",
+      "pre_patch_sha256": "sha256:21564ef4f7249f5098eb75f4e054432e390b000bd487f394132a288c751c9e8e",
+      "replace": {
+        "description": "The item user data binary blob encoded as a String.",
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 4
+      },
+      "why": "The source description explicitly identifies this as a binary blob.",
+      "evidence": [
+        {
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/json/NetworkItemInstanceDescriptorData.json",
+          "summary": "The pinned official description calls the field an item user-data binary blob."
+        }
+      ]
+    },
+    {
+      "id": "mojang-stack-request-item-user-data-is-bytes",
+      "file": "ItemStackRequestNetworkItemInstanceDescriptor.json",
+      "pointer": "/properties/User Data Buffer",
+      "pre_patch_sha256": "sha256:287a95c7e61ea24f3f5f01bc3f175415749c2b0d5ad244b8616bfd637d78a6cf",
+      "replace": {
+        "description": "The @ItemInstanceUserData.html#ItemInstanceUserData@ binary blob encoded as a String, so it's unsigned varint length prefixed. Get all your nbt+property bytes, calculate the length, write that length, THEN write the data.",
+        "type": "string",
+        "x-wire-kind": "bytes",
+        "x-ordinal-index": 3
+      },
+      "why": "The source description explicitly identifies this as a binary blob whose framing happens to match String.",
+      "evidence": [
+        {
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/json/ItemStackRequestNetworkItemInstanceDescriptor.json",
+          "summary": "The pinned official description calls the field a binary NBT and property blob."
+        }
+      ]
+    }
+  ]
+}

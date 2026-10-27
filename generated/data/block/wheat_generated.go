@@ -9,12 +9,12 @@ var Wheat = Block{
 }
 
 var wheatStates = [...]State{
-	{Hash: 1485804093, Block: 1182, Properties: 3313},
-	{Hash: 1547278916, Block: 1182, Properties: 3314},
-	{Hash: 1362854447, Block: 1182, Properties: 3315},
-	{Hash: 1424329270, Block: 1182, Properties: 3316},
-	{Hash: 1731703385, Block: 1182, Properties: 3317},
-	{Hash: 1793178208, Block: 1182, Properties: 3318},
-	{Hash: 1608753739, Block: 1182, Properties: 3319},
-	{Hash: 1670228562, Block: 1182, Properties: 3320},
+	{Hash: 1485804093, Block: 1185, Properties: 3316},
+	{Hash: 1547278916, Block: 1185, Properties: 3317},
+	{Hash: 1362854447, Block: 1185, Properties: 3318},
+	{Hash: 1424329270, Block: 1185, Properties: 3319},
+	{Hash: 1731703385, Block: 1185, Properties: 3320},
+	{Hash: 1793178208, Block: 1185, Properties: 3321},
+	{Hash: 1608753739, Block: 1185, Properties: 3322},
+	{Hash: 1670228562, Block: 1185, Properties: 3323},
 }

@@ -9,8 +9,8 @@ var CompoundCreator = Block{
 }
 
 var compoundCreatorStates = [...]State{
-	{Hash: 869977194, Block: 401, Properties: 1490},
-	{Hash: 808502371, Block: 401, Properties: 1490},
-	{Hash: 992926840, Block: 401, Properties: 1490},
-	{Hash: 931452017, Block: 401, Properties: 1490},
+	{Hash: 869977194, Block: 402, Properties: 1491},
+	{Hash: 808502371, Block: 402, Properties: 1491},
+	{Hash: 992926840, Block: 402, Properties: 1491},
+	{Hash: 931452017, Block: 402, Properties: 1491},
 }

@@ -9,5 +9,5 @@ var DeadTubeCoralBlock = Block{
 }
 
 var deadTubeCoralBlockStates = [...]State{
-	{Hash: 2787647837, Block: 416, Properties: 1092},
+	{Hash: 2787647837, Block: 417, Properties: 1092},
 }

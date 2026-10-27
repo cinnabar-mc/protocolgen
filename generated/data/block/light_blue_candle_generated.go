@@ -9,12 +9,12 @@ var LightBlueCandle = Block{
 }
 
 var lightBlueCandleStates = [...]State{
-	{Hash: 4067585498, Block: 582, Properties: 1892},
-	{Hash: 3306699029, Block: 582, Properties: 1893},
-	{Hash: 539768128, Block: 582, Properties: 1894},
-	{Hash: 2216341267, Block: 582, Properties: 1895},
-	{Hash: 827924773, Block: 582, Properties: 1896},
-	{Hash: 2251392458, Block: 582, Properties: 1897},
-	{Hash: 1595074699, Block: 582, Properties: 1898},
-	{Hash: 1161034696, Block: 582, Properties: 1899},
+	{Hash: 4067585498, Block: 584, Properties: 1894},
+	{Hash: 3306699029, Block: 584, Properties: 1895},
+	{Hash: 539768128, Block: 584, Properties: 1896},
+	{Hash: 2216341267, Block: 584, Properties: 1897},
+	{Hash: 827924773, Block: 584, Properties: 1898},
+	{Hash: 2251392458, Block: 584, Properties: 1899},
+	{Hash: 1595074699, Block: 584, Properties: 1900},
+	{Hash: 1161034696, Block: 584, Properties: 1901},
 }

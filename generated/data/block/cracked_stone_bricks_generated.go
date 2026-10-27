@@ -9,5 +9,5 @@ var CrackedStoneBricks = Block{
 }
 
 var crackedStoneBricksStates = [...]State{
-	{Hash: 194928973, Block: 348, Properties: 107},
+	{Hash: 194928973, Block: 349, Properties: 107},
 }

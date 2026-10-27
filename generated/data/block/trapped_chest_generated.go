@@ -9,8 +9,8 @@ var TrappedChest = Block{
 }
 
 var trappedChestStates = [...]State{
-	{Hash: 1235022161, Block: 776, Properties: 2357},
-	{Hash: 1655451298, Block: 776, Properties: 2357},
-	{Hash: 828777955, Block: 776, Properties: 2357},
-	{Hash: 3798198968, Block: 776, Properties: 2357},
+	{Hash: 1235022161, Block: 778, Properties: 2359},
+	{Hash: 1655451298, Block: 778, Properties: 2359},
+	{Hash: 828777955, Block: 778, Properties: 2359},
+	{Hash: 3798198968, Block: 778, Properties: 2359},
 }

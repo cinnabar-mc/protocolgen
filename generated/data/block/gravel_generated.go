@@ -9,5 +9,5 @@ var Gravel = Block{
 }
 
 var gravelStates = [...]State{
-	{Hash: 1529044762, Block: 1471, Properties: 3703},
+	{Hash: 1529044762, Block: 1474, Properties: 3706},
 }

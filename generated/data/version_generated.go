@@ -4,16 +4,16 @@ package data
 
 const (
 	SchemaVersion = 1
-	CloudburstRef = "659ce1e2eee3a67045693f4fd5515c6ccf571953"
+	CloudburstRef = "293c848098cc636a2758937fb6610b8bed1f12c5"
 	// NativeRef pins native block, biome and item measurements independently of shapes.
-	NativeRef  = "bb896a46ba856c58383e3cfb962a38c45a0dea78"
+	NativeRef  = "1e041bf547b7c12e94d2b998f68d5ed146975742"
 	BDSVersion = "1.26.32.2"
 	// SemanticSourceLockSHA256 identifies the lock used for semantic generation.
-	SemanticSourceLockSHA256 = "62824ba020f9c4d0eec51455a7b3398dc0e3d5d4ba964bc5770a65b2e4d478d4"
+	SemanticSourceLockSHA256 = "a1c1c5faa367c92257dd19aa4521033e707f93868035cec568a6cc70a82dd953"
 )
 
 var GeneratedCounts = Counts{
-	BlockStates:                 22091,
+	BlockStates:                 23960,
 	Biomes:                      89,
 	VoxelShapes:                 220,
 	Entities:                    96,

@@ -1,0 +1,126 @@
+{
+  "operations": [
+    {
+      "id": "endstone-level-chunk-payload-is-bytes",
+      "file": "packets/LevelChunkPacket.json",
+      "pointer": "/fields/6",
+      "pre_patch_sha256": "sha256:c52302f5883de9863aba4c4c3d3a250bd3d69700e8499b58b1c22ea2d299ee22",
+      "replace": {
+        "name": "Serialized Chunk Data",
+        "type": "bytearray"
+      },
+      "why": "The field is a length-prefixed arbitrary byte buffer, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2168/serializer/LevelChunkSerializer_v2168.java",
+          "summary": "The exact v2168 serializer uses the ByteBuf helper."
+        }
+      ]
+    },
+    {
+      "id": "endstone-resource-pack-chunk-data-is-bytes",
+      "file": "packets/ResourcePackChunkDataPacket.json",
+      "pointer": "/fields/3",
+      "pre_patch_sha256": "sha256:20e9b6893ae9cdc6233b4294a9b929a78184ce5706d615de769f2341c02248bd",
+      "replace": {
+        "name": "Chunk Data",
+        "type": "bytearray"
+      },
+      "why": "A resource-pack chunk contains compressed binary data, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/ResourcePackChunkDataSerializer_v388.java",
+          "summary": "The inherited serializer uses the ByteBuf helper."
+        }
+      ]
+    },
+    {
+      "id": "endstone-photo-data-is-bytes",
+      "file": "packets/PhotoTransferPacket.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:ea6b4a2c95a4a11f4d030e3692608a798152be0940e701906c6cc12010938fff",
+      "replace": {
+        "constraints": {
+          "max_length": 20971520
+        },
+        "name": "Photo Data",
+        "type": "bytearray"
+      },
+      "why": "Photo data is an image byte sequence and may not be valid UTF-8.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v291/serializer/PhotoTransferSerializer_v291.java",
+          "summary": "The serializer reads and writes Photo Data as byte[]."
+        }
+      ]
+    },
+    {
+      "id": "endstone-missing-blob-data-is-bytes",
+      "file": "types/MissingBlobData.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:80c9fb02dc90a77cab40d6bbba59370b4e1bbfccb9c0b9564b53920f16f3ae5d",
+      "replace": {
+        "name": "Blob Data",
+        "type": "bytearray"
+      },
+      "why": "A cache blob is an opaque chunk-data byte buffer, not UTF-8 text.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v361/serializer/ClientCacheMissResponseSerializer_v361.java",
+          "summary": "The cache-miss serializer delegates blob payloads to the binary codec helper."
+        }
+      ]
+    },
+    {
+      "id": "endstone-network-item-stack-user-data-is-bytes",
+      "file": "types/cerealizer_NetworkItemStackDescriptor___SerializedData.json",
+      "pointer": "/fields/5",
+      "pre_patch_sha256": "sha256:e4bb287a8b7d0cb863c51ebbb8bc9199ca6ba34663bbe5460cb0731a5cb261e6",
+      "replace": {
+        "name": "User Data Buffer",
+        "type": "bytearray"
+      },
+      "why": "The pinned official source identifies this as a binary item user-data blob.",
+      "evidence": [
+        {
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/json/cerealizer_NetworkItemStackDescriptor___SerializedData.json",
+          "summary": "The official description calls the field a binary NBT and property blob."
+        }
+      ]
+    },
+    {
+      "id": "endstone-network-item-instance-user-data-is-bytes",
+      "file": "types/cerealizer_NetworkItemInstanceDescriptor___SerializedData.json",
+      "pointer": "/fields/4",
+      "pre_patch_sha256": "sha256:e4bb287a8b7d0cb863c51ebbb8bc9199ca6ba34663bbe5460cb0731a5cb261e6",
+      "replace": {
+        "name": "User Data Buffer",
+        "type": "bytearray"
+      },
+      "why": "The pinned official source identifies this as a binary item user-data blob.",
+      "evidence": [
+        {
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/json/NetworkItemInstanceDescriptorData.json",
+          "summary": "The official description calls the field an item user-data binary blob."
+        }
+      ]
+    },
+    {
+      "id": "endstone-stack-request-item-user-data-is-bytes",
+      "file": "types/ItemStackRequestCereal__NetworkItemInstanceDescriptorData.json",
+      "pointer": "/fields/3",
+      "pre_patch_sha256": "sha256:e4bb287a8b7d0cb863c51ebbb8bc9199ca6ba34663bbe5460cb0731a5cb261e6",
+      "replace": {
+        "name": "User Data Buffer",
+        "type": "bytearray"
+      },
+      "why": "The pinned official source identifies this as a binary item user-data blob.",
+      "evidence": [
+        {
+          "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/json/ItemStackRequestNetworkItemInstanceDescriptor.json",
+          "summary": "The official description calls the field a binary NBT and property blob."
+        }
+      ]
+    }
+  ]
+}

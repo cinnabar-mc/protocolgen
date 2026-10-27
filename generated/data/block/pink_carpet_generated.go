@@ -9,5 +9,5 @@ var PinkCarpet = Block{
 }
 
 var pinkCarpetStates = [...]State{
-	{Hash: 257454254, Block: 1372, Properties: 3451},
+	{Hash: 257454254, Block: 1375, Properties: 3454},
 }

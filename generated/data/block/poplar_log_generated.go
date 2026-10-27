@@ -9,7 +9,7 @@ var PoplarLog = Block{
 }
 
 var poplarLogStates = [...]State{
-	{Hash: 391599337, Block: 1414, Properties: 2689},
-	{Hash: 3631260062, Block: 1414, Properties: 2689},
-	{Hash: 1520646920, Block: 1414, Properties: 2689},
+	{Hash: 391599337, Block: 1417, Properties: 2691},
+	{Hash: 3631260062, Block: 1417, Properties: 2691},
+	{Hash: 1520646920, Block: 1417, Properties: 2691},
 }

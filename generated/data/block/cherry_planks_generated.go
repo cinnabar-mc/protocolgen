@@ -9,5 +9,5 @@ var CherryPlanks = Block{
 }
 
 var cherryPlanksStates = [...]State{
-	{Hash: 1754553875, Block: 1390, Properties: 2593},
+	{Hash: 1754553875, Block: 1393, Properties: 2595},
 }

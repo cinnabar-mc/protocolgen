@@ -9,5 +9,5 @@ var Conduit = Block{
 }
 
 var conduitStates = [...]State{
-	{Hash: 1729458390, Block: 479, Properties: 1624},
+	{Hash: 1729458390, Block: 480, Properties: 1625},
 }

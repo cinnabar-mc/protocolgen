@@ -9,7 +9,7 @@ var MangroveWood = Block{
 }
 
 var mangroveWoodStates = [...]State{
-	{Hash: 480159908, Block: 453, Properties: 1572},
-	{Hash: 1535466479, Block: 453, Properties: 1572},
-	{Hash: 3646079621, Block: 453, Properties: 1572},
+	{Hash: 480159908, Block: 454, Properties: 1573},
+	{Hash: 1535466479, Block: 454, Properties: 1573},
+	{Hash: 3646079621, Block: 454, Properties: 1573},
 }

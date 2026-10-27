@@ -9,8 +9,8 @@ var CherryLeaves = Block{
 }
 
 var cherryLeavesStates = [...]State{
-	{Hash: 1895459964, Block: 809, Properties: 2458},
-	{Hash: 2950766535, Block: 809, Properties: 2458},
-	{Hash: 3219983471, Block: 809, Properties: 2458},
-	{Hash: 2164676900, Block: 809, Properties: 2458},
+	{Hash: 1895459964, Block: 811, Properties: 2460},
+	{Hash: 2950766535, Block: 811, Properties: 2460},
+	{Hash: 3219983471, Block: 811, Properties: 2460},
+	{Hash: 2164676900, Block: 811, Properties: 2460},
 }

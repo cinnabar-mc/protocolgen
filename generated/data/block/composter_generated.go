@@ -9,13 +9,13 @@ var Composter = Block{
 }
 
 var composterStates = [...]State{
-	{Hash: 787090290, Block: 731, Properties: 2226},
-	{Hash: 725615467, Block: 731, Properties: 2227},
-	{Hash: 910039936, Block: 731, Properties: 2228},
-	{Hash: 848565113, Block: 731, Properties: 2229},
-	{Hash: 541190998, Block: 731, Properties: 2230},
-	{Hash: 479716175, Block: 731, Properties: 2231},
-	{Hash: 664140644, Block: 731, Properties: 2232},
-	{Hash: 602665821, Block: 731, Properties: 2233},
-	{Hash: 295291706, Block: 731, Properties: 2233},
+	{Hash: 787090290, Block: 733, Properties: 2228},
+	{Hash: 725615467, Block: 733, Properties: 2229},
+	{Hash: 910039936, Block: 733, Properties: 2230},
+	{Hash: 848565113, Block: 733, Properties: 2231},
+	{Hash: 541190998, Block: 733, Properties: 2232},
+	{Hash: 479716175, Block: 733, Properties: 2233},
+	{Hash: 664140644, Block: 733, Properties: 2234},
+	{Hash: 602665821, Block: 733, Properties: 2235},
+	{Hash: 295291706, Block: 733, Properties: 2235},
 }

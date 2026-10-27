@@ -9,5 +9,5 @@ var WhiteTulip = Block{
 }
 
 var whiteTulipStates = [...]State{
-	{Hash: 2914537378, Block: 592, Properties: 219},
+	{Hash: 2914537378, Block: 594, Properties: 219},
 }

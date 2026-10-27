@@ -9,7 +9,7 @@ var StrippedBambooBlock = Block{
 }
 
 var strippedBambooBlockStates = [...]State{
-	{Hash: 3513553323, Block: 344, Properties: 29},
-	{Hash: 2458246752, Block: 344, Properties: 29},
-	{Hash: 273892598, Block: 344, Properties: 29},
+	{Hash: 3513553323, Block: 345, Properties: 29},
+	{Hash: 2458246752, Block: 345, Properties: 29},
+	{Hash: 273892598, Block: 345, Properties: 29},
 }

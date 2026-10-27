@@ -9,6 +9,6 @@ var BirchSapling = Block{
 }
 
 var birchSaplingStates = [...]State{
-	{Hash: 1998475830, Block: 1241, Properties: 735},
-	{Hash: 3053782401, Block: 1241, Properties: 735},
+	{Hash: 1998475830, Block: 1244, Properties: 735},
+	{Hash: 3053782401, Block: 1244, Properties: 735},
 }

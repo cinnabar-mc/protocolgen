@@ -9,5 +9,5 @@ var SeaLantern = Block{
 }
 
 var seaLanternStates = [...]State{
-	{Hash: 3369464788, Block: 1252, Properties: 3428},
+	{Hash: 3369464788, Block: 1255, Properties: 3431},
 }

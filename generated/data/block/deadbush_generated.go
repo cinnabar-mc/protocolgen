@@ -9,5 +9,5 @@ var Deadbush = Block{
 }
 
 var deadbushStates = [...]State{
-	{Hash: 4209375573, Block: 623, Properties: 1967},
+	{Hash: 4209375573, Block: 625, Properties: 1969},
 }

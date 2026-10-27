@@ -9,7 +9,7 @@ var WaxedCopperChain = Block{
 }
 
 var waxedCopperChainStates = [...]State{
-	{Hash: 1732436259, Block: 497, Properties: 19},
-	{Hash: 677129688, Block: 497, Properties: 20},
-	{Hash: 2787742830, Block: 497, Properties: 21},
+	{Hash: 1732436259, Block: 498, Properties: 19},
+	{Hash: 677129688, Block: 498, Properties: 20},
+	{Hash: 2787742830, Block: 498, Properties: 21},
 }

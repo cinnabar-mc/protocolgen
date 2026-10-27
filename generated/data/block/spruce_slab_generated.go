@@ -9,6 +9,6 @@ var SpruceSlab = Block{
 }
 
 var spruceSlabStates = [...]State{
-	{Hash: 1636743342, Block: 1096, Properties: 3166},
-	{Hash: 2055113703, Block: 1096, Properties: 3167},
+	{Hash: 1636743342, Block: 1099, Properties: 3169},
+	{Hash: 2055113703, Block: 1099, Properties: 3170},
 }

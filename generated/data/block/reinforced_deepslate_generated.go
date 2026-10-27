@@ -9,5 +9,5 @@ var ReinforcedDeepslate = Block{
 }
 
 var reinforcedDeepslateStates = [...]State{
-	{Hash: 1769900828, Block: 807, Properties: 2457},
+	{Hash: 1769900828, Block: 809, Properties: 2459},
 }

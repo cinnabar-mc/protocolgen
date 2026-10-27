@@ -342,3 +342,23 @@ func TestNativeTagMembershipRejectsDrift(t *testing.T) {
 		t.Fatal(err)
 	}
 }
+
+// TestSeparateNativeTagTable covers snapshots that omit inline item tags.
+func TestSeparateNativeTagTable(t *testing.T) {
+	for _, input := range []string{
+		`null`, `{"minecraft:food":[]}`, `{"minecraft:food":["minecraft:missing"]}`,
+		`{"minecraft:food":["minecraft:apple","minecraft:apple"]}`,
+	} {
+		properties := map[string]Properties{"minecraft:apple": {MaxStackSize: 64}}
+		if err := validateNativeTags(properties, []byte(input)); err == nil {
+			t.Fatalf("accepted invalid separate tag table %s", input)
+		}
+	}
+	properties := map[string]Properties{"minecraft:apple": {MaxStackSize: 64}}
+	if err := validateNativeTags(properties, []byte(`{"minecraft:fruit":["minecraft:apple"],"minecraft:food":["minecraft:apple"]}`)); err != nil {
+		t.Fatal(err)
+	}
+	if tags := properties["minecraft:apple"].Tags; len(tags) != 2 || tags[0] != "minecraft:food" || tags[1] != "minecraft:fruit" {
+		t.Fatal("separate native tags were not retained")
+	}
+}

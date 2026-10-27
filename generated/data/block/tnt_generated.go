@@ -9,6 +9,6 @@ var Tnt = Block{
 }
 
 var tntStates = [...]State{
-	{Hash: 622850821, Block: 1039, Properties: 1068},
-	{Hash: 3862511546, Block: 1039, Properties: 1068},
+	{Hash: 622850821, Block: 1042, Properties: 1068},
+	{Hash: 3862511546, Block: 1042, Properties: 1068},
 }

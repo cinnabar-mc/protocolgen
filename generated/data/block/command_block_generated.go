@@ -9,16 +9,16 @@ var CommandBlock = Block{
 }
 
 var commandBlockStates = [...]State{
-	{Hash: 1788278054, Block: 1401, Properties: 3541},
-	{Hash: 1726803231, Block: 1401, Properties: 3541},
-	{Hash: 1911227700, Block: 1401, Properties: 3541},
-	{Hash: 1849752877, Block: 1401, Properties: 3541},
-	{Hash: 2034177346, Block: 1401, Properties: 3541},
-	{Hash: 1972702523, Block: 1401, Properties: 3541},
-	{Hash: 3426353219, Block: 1401, Properties: 3541},
-	{Hash: 3487828042, Block: 1401, Properties: 3541},
-	{Hash: 3549302865, Block: 1401, Properties: 3541},
-	{Hash: 3610777688, Block: 1401, Properties: 3541},
-	{Hash: 3180453927, Block: 1401, Properties: 3541},
-	{Hash: 3241928750, Block: 1401, Properties: 3541},
+	{Hash: 1788278054, Block: 1404, Properties: 3544},
+	{Hash: 1726803231, Block: 1404, Properties: 3544},
+	{Hash: 1911227700, Block: 1404, Properties: 3544},
+	{Hash: 1849752877, Block: 1404, Properties: 3544},
+	{Hash: 2034177346, Block: 1404, Properties: 3544},
+	{Hash: 1972702523, Block: 1404, Properties: 3544},
+	{Hash: 3426353219, Block: 1404, Properties: 3544},
+	{Hash: 3487828042, Block: 1404, Properties: 3544},
+	{Hash: 3549302865, Block: 1404, Properties: 3544},
+	{Hash: 3610777688, Block: 1404, Properties: 3544},
+	{Hash: 3180453927, Block: 1404, Properties: 3544},
+	{Hash: 3241928750, Block: 1404, Properties: 3544},
 }

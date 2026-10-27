@@ -7,8 +7,8 @@
       "upstream": "mojang_samples"
     },
     "block_palette": {
-      "path": "inputs/1.26.51/native/canonical_block_states.nbt",
-      "sha256": "f0784a6284d6ca7d98cc3472f4ce84241a11e11b18ed16f6591dfd5e6da6fbd6",
+      "path": "inputs/1.26.60/native/canonical_block_states.nbt",
+      "sha256": "88b8c903ac75d46247bed5ff785c0c050068d28440190f7412d697b045d2d51f",
       "upstream": "native"
     },
     "data_driven_blocks": {
@@ -18,7 +18,7 @@
     },
     "item_components": {
       "file": "item_components.nbt",
-      "sha256": "d7ae67c058b995f1e8baaa4177e0f8155d77e5a8b6742c5cfec6ca8332ae7674",
+      "sha256": "4af00111861dfb90a03e087053e8b6d9d3e581efe51ca75daad03d31fbff5717",
       "upstream": "cloudburst"
     },
     "item_corrections": {
@@ -30,7 +30,7 @@
     "item_registry": {
       "description": "Vanilla item identities from the same Cloudburst revision as block and biome data",
       "file": "runtime_item_states.json",
-      "sha256": "240b17a148e277afc114ba9030b92e2903c957c47b1f2970d50ae3683ac6ff11",
+      "sha256": "1dca3a7482201b7c2609cd2b03fa96c7406ed14af79b27e3e5ea8ce540df68ec",
       "upstream": "cloudburst"
     },
     "item_tags": {
@@ -46,43 +46,43 @@
       "upstream": "cloudburst"
     },
     "native_biome_ids": {
-      "path": "inputs/1.26.51/native/biome_id_map.json",
+      "path": "inputs/1.26.60/native/biome_id_map.json",
       "sha256": "a4d67dd4bd577e0a3f30d785bab061911883c5c4443b0ea4768bd5f7f2f50919",
       "upstream": "native"
     },
     "native_biomes": {
-      "path": "inputs/1.26.51/native/biome_definitions.json",
+      "path": "inputs/1.26.60/native/biome_definitions.json",
       "sha256": "20e2da2467f8162ea9fc511cb6bd472c62e7741e72d941ac05a7a823cb0d1271",
       "upstream": "native"
     },
     "native_block_properties": {
-      "path": "inputs/1.26.51/native/block_properties_table.json",
-      "sha256": "8df2196ec64aa37032eaad27fbd6f45741523a850836b66906cbc8cc76fe95a7",
+      "path": "inputs/1.26.60/native/block_properties_table.json",
+      "sha256": "e091038128bc43b00db0e6a35764474de8a356a9e63e20fa1766feb45d85cbf6",
       "upstream": "native"
     },
     "native_block_states": {
-      "path": "inputs/1.26.51/native/block_state_data.json",
-      "sha256": "1ba588b762c35412282b877cbff2a3033879f119755ab1e2f2edb86063ed5cd8",
+      "path": "inputs/1.26.60/native/block_state_data.json",
+      "sha256": "1e4e7ca182e0181d7cefabf5abe8736de552ef1a9b623416b4ce24a8bff0f167",
       "upstream": "native"
     },
     "native_block_tags": {
-      "path": "inputs/1.26.51/native/block_tags.json",
-      "sha256": "241c10a929c2fd7cfca4915702edbe1c9d60a0093a392ae464ccc61c9c3d9ec0",
+      "path": "inputs/1.26.60/native/block_tags.json",
+      "sha256": "f9445d7f6b0beb54bf1022df29b38fdf933898c9cea39a2cf7011ce0ac9b374d",
       "upstream": "native"
     },
     "native_item_properties": {
-      "path": "inputs/1.26.51/native/item_properties_table.json",
-      "sha256": "2d298982999b1ed1fcb99f0ad042986fd197321311bc43a270bf62a5e8eed063",
+      "path": "inputs/1.26.60/native/item_properties_table.json",
+      "sha256": "00cf9752282b6607e605ad365974c928df9797c72062de2aeca8f82e658e623e",
       "upstream": "native"
     },
     "native_item_tags": {
-      "path": "inputs/1.26.51/native/item_tags.json",
+      "path": "inputs/1.26.60/native/item_tags.json",
       "sha256": "4af255938ccb9617cb7d33f9d531e38e5f2cbfeda28dbaca80bcb6076350227d",
       "upstream": "native"
     },
     "native_version": {
-      "path": "inputs/1.26.51/native/version.json",
-      "sha256": "22e35cfdca2d6a83d506c8482ebde37d91c63ef233ec199d649b7e0a0d586280",
+      "path": "inputs/1.26.60/native/version.json",
+      "sha256": "65d66eb026a7474c7de1d1abfeff82b76e6d50c92bbc35aaf94e9053bba56049",
       "upstream": "native"
     },
     "resource_pack": {
@@ -98,7 +98,7 @@
       "upstream": "prismarine"
     }
   },
-  "release": "1.26.51",
+  "release": "1.26.60",
   "schema_version": 2,
   "semantic": {
     "bds_files": {
@@ -258,7 +258,7 @@
     },
     "cloudburst": {
       "repository": "CloudburstMC/Data",
-      "revision": "659ce1e2eee3a67045693f4fd5515c6ccf571953"
+      "revision": "293c848098cc636a2758937fb6610b8bed1f12c5"
     },
     "mojang_samples": {
       "repository": "Mojang/bedrock-samples",
@@ -266,7 +266,7 @@
     },
     "native": {
       "repository": "didntpot/bedrock-data",
-      "revision": "bb896a46ba856c58383e3cfb962a38c45a0dea78"
+      "revision": "1e041bf547b7c12e94d2b998f68d5ed146975742"
     },
     "prismarine": {
       "repository": "PrismarineJS/minecraft-data",

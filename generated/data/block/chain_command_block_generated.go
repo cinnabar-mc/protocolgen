@@ -9,16 +9,16 @@ var ChainCommandBlock = Block{
 }
 
 var chainCommandBlockStates = [...]State{
-	{Hash: 1828746574, Block: 1011, Properties: 2918},
-	{Hash: 1767271751, Block: 1011, Properties: 2918},
-	{Hash: 1951696220, Block: 1011, Properties: 2918},
-	{Hash: 1890221397, Block: 1011, Properties: 2918},
-	{Hash: 2074645866, Block: 1011, Properties: 2918},
-	{Hash: 2013171043, Block: 1011, Properties: 2918},
-	{Hash: 1804280427, Block: 1011, Properties: 2918},
-	{Hash: 1865755250, Block: 1011, Properties: 2918},
-	{Hash: 1927230073, Block: 1011, Properties: 2918},
-	{Hash: 1988704896, Block: 1011, Properties: 2918},
-	{Hash: 1558381135, Block: 1011, Properties: 2918},
-	{Hash: 1619855958, Block: 1011, Properties: 2918},
+	{Hash: 1828746574, Block: 1014, Properties: 2921},
+	{Hash: 1767271751, Block: 1014, Properties: 2921},
+	{Hash: 1951696220, Block: 1014, Properties: 2921},
+	{Hash: 1890221397, Block: 1014, Properties: 2921},
+	{Hash: 2074645866, Block: 1014, Properties: 2921},
+	{Hash: 2013171043, Block: 1014, Properties: 2921},
+	{Hash: 1804280427, Block: 1014, Properties: 2921},
+	{Hash: 1865755250, Block: 1014, Properties: 2921},
+	{Hash: 1927230073, Block: 1014, Properties: 2921},
+	{Hash: 1988704896, Block: 1014, Properties: 2921},
+	{Hash: 1558381135, Block: 1014, Properties: 2921},
+	{Hash: 1619855958, Block: 1014, Properties: 2921},
 }

@@ -9,5 +9,5 @@ var BambooMosaic = Block{
 }
 
 var bambooMosaicStates = [...]State{
-	{Hash: 832568857, Block: 1460, Properties: 1582},
+	{Hash: 832568857, Block: 1463, Properties: 1583},
 }

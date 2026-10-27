@@ -9,6 +9,6 @@ var TuffDoubleSlab = Block{
 }
 
 var tuffDoubleSlabStates = [...]State{
-	{Hash: 3920422624, Block: 1392, Properties: 1510},
-	{Hash: 3799694557, Block: 1392, Properties: 1510},
+	{Hash: 3920422624, Block: 1395, Properties: 1511},
+	{Hash: 3799694557, Block: 1395, Properties: 1511},
 }

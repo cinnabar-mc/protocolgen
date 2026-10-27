@@ -9,10 +9,10 @@ var WallBanner = Block{
 }
 
 var wallBannerStates = [...]State{
-	{Hash: 909112222, Block: 785, Properties: 2374},
-	{Hash: 847637399, Block: 785, Properties: 2374},
-	{Hash: 1032061868, Block: 785, Properties: 2375},
-	{Hash: 970587045, Block: 785, Properties: 2376},
-	{Hash: 1155011514, Block: 785, Properties: 2377},
-	{Hash: 1093536691, Block: 785, Properties: 2378},
+	{Hash: 909112222, Block: 787, Properties: 2376},
+	{Hash: 847637399, Block: 787, Properties: 2376},
+	{Hash: 1032061868, Block: 787, Properties: 2377},
+	{Hash: 970587045, Block: 787, Properties: 2378},
+	{Hash: 1155011514, Block: 787, Properties: 2379},
+	{Hash: 1093536691, Block: 787, Properties: 2380},
 }

@@ -9,5 +9,5 @@ var OxeyeDaisy = Block{
 }
 
 var oxeyeDaisyStates = [...]State{
-	{Hash: 2004595907, Block: 1180, Properties: 219},
+	{Hash: 2004595907, Block: 1183, Properties: 219},
 }

@@ -9,5 +9,5 @@ var PinkShulkerBox = Block{
 }
 
 var pinkShulkerBoxStates = [...]State{
-	{Hash: 3815051278, Block: 545, Properties: 1755},
+	{Hash: 3815051278, Block: 547, Properties: 1757},
 }

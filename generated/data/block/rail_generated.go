@@ -9,14 +9,14 @@ var Rail = Block{
 }
 
 var railStates = [...]State{
-	{Hash: 2560510590, Block: 436, Properties: 610},
-	{Hash: 2499035767, Block: 436, Properties: 610},
-	{Hash: 2683460236, Block: 436, Properties: 611},
-	{Hash: 2621985413, Block: 436, Properties: 611},
-	{Hash: 2806409882, Block: 436, Properties: 611},
-	{Hash: 2744935059, Block: 436, Properties: 611},
-	{Hash: 2929359528, Block: 436, Properties: 610},
-	{Hash: 2867884705, Block: 436, Properties: 610},
-	{Hash: 3052309174, Block: 436, Properties: 610},
-	{Hash: 2990834351, Block: 436, Properties: 610},
+	{Hash: 2560510590, Block: 437, Properties: 610},
+	{Hash: 2499035767, Block: 437, Properties: 610},
+	{Hash: 2683460236, Block: 437, Properties: 611},
+	{Hash: 2621985413, Block: 437, Properties: 611},
+	{Hash: 2806409882, Block: 437, Properties: 611},
+	{Hash: 2744935059, Block: 437, Properties: 611},
+	{Hash: 2929359528, Block: 437, Properties: 610},
+	{Hash: 2867884705, Block: 437, Properties: 610},
+	{Hash: 3052309174, Block: 437, Properties: 610},
+	{Hash: 2990834351, Block: 437, Properties: 610},
 }

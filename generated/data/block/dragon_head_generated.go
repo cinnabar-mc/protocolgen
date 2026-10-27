@@ -9,10 +9,10 @@ var DragonHead = Block{
 }
 
 var dragonHeadStates = [...]State{
-	{Hash: 3068016895, Block: 814, Properties: 14},
-	{Hash: 3129491718, Block: 814, Properties: 14},
-	{Hash: 3190966541, Block: 814, Properties: 15},
-	{Hash: 3252441364, Block: 814, Properties: 16},
-	{Hash: 3313916187, Block: 814, Properties: 17},
-	{Hash: 3375391010, Block: 814, Properties: 18},
+	{Hash: 3068016895, Block: 816, Properties: 14},
+	{Hash: 3129491718, Block: 816, Properties: 14},
+	{Hash: 3190966541, Block: 816, Properties: 15},
+	{Hash: 3252441364, Block: 816, Properties: 16},
+	{Hash: 3313916187, Block: 816, Properties: 17},
+	{Hash: 3375391010, Block: 816, Properties: 18},
 }

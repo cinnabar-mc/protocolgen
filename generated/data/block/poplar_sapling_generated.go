@@ -9,6 +9,6 @@ var PoplarSapling = Block{
 }
 
 var poplarSaplingStates = [...]State{
-	{Hash: 4227199909, Block: 1235, Properties: 772},
-	{Hash: 3171893338, Block: 1235, Properties: 772},
+	{Hash: 4227199909, Block: 1238, Properties: 772},
+	{Hash: 3171893338, Block: 1238, Properties: 772},
 }
