@@ -38,13 +38,13 @@ func alignNativeBlocks(raw []rawBlockState, native nativeblock.Catalog) ([]rawBl
 			if !finiteFloat32(*properties.Thickness) || !finiteFloat32(*properties.Translucency) {
 				return nil, fmt.Errorf("native block %s has non-finite rendering scalars", name)
 			}
-			// Native map colours use #AARRGGBB; the generator takes #RRGGBBAA.
+			// Block map colours already use the generator's #RRGGBBAA order.
 			color := *properties.MapColor
 			if len(color) != 9 || color[0] != '#' {
 				return nil, fmt.Errorf("native block %s has invalid map colour", name)
 			}
 			state = rawBlockState{Name: name, Hash: hash, Thickness: *properties.Thickness,
-				Translucency: *properties.Translucency, MapColor: "#" + color[3:] + color[1:3],
+				Translucency: *properties.Translucency, MapColor: color,
 				VisualShape: properties.VisualShape, supplementalUnavailable: true}
 		}
 		states[i] = state
