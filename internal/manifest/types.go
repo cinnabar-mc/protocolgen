@@ -64,6 +64,7 @@ type Manifest struct {
 	Target        Target           `json:"target"`
 	Sources       []SourcePin      `json:"sources"`
 	Packets       []Packet         `json:"packets"`
+	Symbols       []Symbol         `json:"symbols,omitempty"`
 	Adjudications []Adjudication   `json:"adjudications,omitempty"`
 	Overrides     []OverrideProof  `json:"overrides,omitempty"`
 	Derivation    *DerivationProof `json:"derivation,omitempty"`
@@ -173,11 +174,24 @@ type Case struct {
 	Decode []Node `json:"decode,omitempty"`
 }
 
-// EnumValue names a wire value. Distinct names may alias the same numeric value;
-// the first declared name is canonical when decoding to a named variant.
+// EnumValue names a numeric value for wire enums or non-wire symbol tables.
+// Distinct names may alias one value; the first declared name is canonical
+// when decoding a wire enum to a named variant.
 type EnumValue struct {
 	Name  string `json:"name"`
 	Value int64  `json:"value"`
+}
+
+// Symbol is a non-wire numeric vocabulary. Representation describes the
+// in-memory integer, not a codec; raw protocol fields remain open integers.
+// Reference catalogs retain their own source version, separate from wire pins.
+type Symbol struct {
+	ID             string      `json:"id"`
+	Name           string      `json:"name"`
+	Representation string      `json:"representation"`
+	Values         []EnumValue `json:"values"`
+	Source         SourcePin   `json:"source"`
+	Provenance     Provenance  `json:"provenance"`
 }
 
 // Provenance carries only source pins for agreement. Evidence is populated for

@@ -51,3 +51,49 @@ CI runs all of them except `verify-data`.
 The `regen` targets need `MOJANG_DIR` and `ENDSTONE_DIR` checked out at the
 snapshot's `source-lock.json` revisions. CI checks `generated/data` by rerunning
 only the runtime, mining and registry generators, which need no external inputs.
+
+### Actor metadata reference symbols
+
+`manifest.json` carries non-wire `symbols` tables with exact published names,
+explicit numeric values and a versioned `source` pin. `ActorFlags` values are
+**bit indices**, not masks. Count sentinels are excluded. The tables do not
+narrow raw metadata IDs, add codecs or authorize packet wire-shape claims.
+
+The primary input is Mojang's `html/enums.html` at revision
+`0e00fe80f4f3c71572ff6429de40146d1f4412fc`, already pinned by the workspace's
+`bedrock-protocol-docs` submodule. Initialize that submodule before regeneration:
+
+```sh
+git submodule update --init crates/valentine_gen/bedrock-protocol-docs
+```
+
+`generated/1.26.51/symbols-lock.json` pins the exact catalog-file SHA-256 and its
+path relative to that lock, without copying the documentation or a downstream
+implementation's constant table into this repository. The importer decodes the
+HTML table structure and reads explicit values; it does not infer ordinals from
+row positions or rename reserved slots.
+
+**Reference-version boundary:** this catalog describes Minecraft
+1.26.40-beta.0 / protocol2168, not target1.26.51 / protocol2193. Its source pin
+stays inside each symbol table, separate from the target's wire sources.
+Generated consumers must retain that distinction; importing the catalog is not
+proof that every historical mapping is current. In particular, Mojang publishes
+`RESERVED_038`, `RESERVED_053` and `RESERVED_054`, not Scale/Width/Height aliases.
+Target-native observations are separate evidence for any gameplay use.
+
+The target's `source-lock.json` persists `symbols_lock: "symbols-lock.json"`.
+Both `reconcile` and `reconcile-claims` load it automatically, including normal
+`make regen-1.26.51`: missing configured inputs, digest drift, unsupported pins
+and conflicting existing values are errors, never silent omissions.
+An explicit `-symbols-lock` overrides the configured path. From protocolgen's
+repository root, an existing canonical manifest can also be supplemented offline:
+
+```sh
+go run ./cmd/protocolgen supplement-symbols \
+  -manifest generated/1.26.51/manifest.json \
+  -symbols-lock generated/1.26.51/symbols-lock.json \
+  -out generated/1.26.51/manifest.json
+```
+
+Reapplying the identical catalog is deterministic and idempotent. As with any
+manifest change, downstream manifest SHA-256 pins must be regenerated.
