@@ -215,17 +215,17 @@ func (x *PlayerScoreboardID) Marshal(io IO) {
 
 type PlayerVideoCaptureData interface {
 	Marshaler
-	tagPlayerVideoCaptureData() uint32
+	tagPlayerVideoCaptureData() uint8
 }
 
 // MarshalPlayerVideoCaptureData reads or writes the PlayerVideoCaptureData union using its canonical wire layout.
 func MarshalPlayerVideoCaptureData(io IO, x *PlayerVideoCaptureData) {
-	Union(io, x, io.Varuint32, PlayerVideoCaptureData.tagPlayerVideoCaptureData, func(tag uint32) PlayerVideoCaptureData {
+	Union(io, x, io.Uint8, PlayerVideoCaptureData.tagPlayerVideoCaptureData, func(tag uint8) PlayerVideoCaptureData {
 		switch tag {
 		case 0:
-			return new(StartVideoCapture)
-		case 1:
 			return new(StopVideoCapture)
+		case 1:
+			return new(StartVideoCapture)
 		}
 		return nil
 	})

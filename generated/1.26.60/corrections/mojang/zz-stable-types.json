@@ -84,7 +84,7 @@
       "id": "protocol-2225-video-action-required",
       "file": "PlayerVideoCapturePacketPayload.json",
       "pointer": "#",
-      "pre_patch_sha256": "sha256:77206419e4a65160a24f25cd9f8ba4bd20084d3648f7c44f46b617e0fc917569",
+      "pre_patch_sha256": "sha256:514fd26f06cc98b299f848c4457589df38b9afc479a7300bdd17b05b466528e3",
       "merge": {
         "required": [
           "Action"

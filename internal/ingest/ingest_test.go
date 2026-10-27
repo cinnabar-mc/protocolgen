@@ -195,6 +195,18 @@ func TestMojangUnionUsesPositionalVaruint32WithoutCompressionOrOrdinals(t *testi
 	}
 }
 
+// TestMojangUnionByteSelector preserves fixed-byte selectors instead of adding varint framing.
+func TestMojangUnionByteSelector(t *testing.T) {
+	lowerer := &mojangLowerer{documents: map[string]any{}, active: map[string]bool{}}
+	node := lowerer.lowerSchema(map[string]any{
+		"oneOf":                []any{map[string]any{"type": "null"}, map[string]any{"type": "string"}},
+		"x-control-value-type": "uint8",
+	}, "Packet.json", "Action")
+	if node.Kind != manifest.KindUnion || node.Control.Primitive.Code != "u8" || node.Variants[1].Value != 1 {
+		t.Fatalf("byte selector = %+v", node)
+	}
+}
+
 func TestMojangUnionKeepsInnerTagSeparateFromSelector(t *testing.T) {
 	lowerer := &mojangLowerer{documents: map[string]any{}, active: map[string]bool{}}
 	branches := []any{}

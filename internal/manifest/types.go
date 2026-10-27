@@ -32,6 +32,8 @@ type NBTEncoding string
 const (
 	NBTNetwork    NBTEncoding = "network"
 	NBTPersistent NBTEncoding = "persistent"
+	// NBTNetworkCompound omits the root tag ID and name, retaining the compound end tag.
+	NBTNetworkCompound NBTEncoding = "network_compound"
 )
 
 type NodeKind string
@@ -263,7 +265,7 @@ func IsNBT(node Node) bool {
 
 func ValidNBTEncoding(value string) bool {
 	switch NBTEncoding(value) {
-	case NBTNetwork, NBTPersistent:
+	case NBTNetwork, NBTPersistent, NBTNetworkCompound:
 		return true
 	default:
 		return false

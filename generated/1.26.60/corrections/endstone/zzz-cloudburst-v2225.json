@@ -1,0 +1,106 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-cloudburst-structure-response-presence-endstone",
+      "file": "packets/StructureTemplateDataResponsePacket.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:00c3d1d0b68cde4bd66ad0ef199b9883eee64676cb28eadc9f1065143a85dc44",
+      "replace": {
+        "name": "Structure's NBT",
+        "type": "CompoundTag",
+        "optional": true
+      },
+      "why": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/StructureTemplateDataResponseSerializer_v388.java",
+          "summary": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-cloudburst-spline-progress-easing-endstone",
+      "file": "types/SharedTypes__v1_26_0__CameraSplineProgressKeyFrame.json",
+      "pointer": "/fields/2/optional",
+      "pre_patch_sha256": "sha256:b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+      "replace": false,
+      "why": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/CameraSplineSerializer_v944.java",
+          "summary": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-cloudburst-spline-rotation-easing-endstone",
+      "file": "types/SharedTypes__v1_26_0__CameraSplineRotationKeyFrame.json",
+      "pointer": "/fields/2/optional",
+      "pre_patch_sha256": "sha256:b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+      "replace": false,
+      "why": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/CameraSplineSerializer_v944.java",
+          "summary": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-cloudburst-height-map-row-1",
+      "file": "types/SubChunkPacketPayload__HeightmapData.json",
+      "pointer": "/fields/1",
+      "pre_patch_sha256": "sha256:7cd36a1798ef0540a1805eceb3e96b1d1da3c014dafda7809421e3587bb428f2",
+      "replace": {
+        "name": "Subchunk Height Map",
+        "type": {
+          "type": "int8",
+          "repeat": "uvarint32"
+        },
+        "repeat": 16,
+        "optional": true,
+        "constraints": {
+          "items": {
+            "min_items": 16,
+            "max_items": 16
+          }
+        }
+      },
+      "why": "The v2225 inherited serializer requires each of 16 height-map rows to have a varuint32 length equal to 16, matching gophertunnel HeightMap.Marshal at 8c30047d86617a56e1f1871e3a1d47ec4f670d99. Preserve the row prefixes and enforce the row length.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/SubChunkSerializer_v2193.java",
+          "summary": "The v2225 inherited serializer requires each of 16 height-map rows to have a varuint32 length equal to 16, matching gophertunnel HeightMap.Marshal at 8c30047d86617a56e1f1871e3a1d47ec4f670d99. Preserve the row prefixes and enforce the row length."
+        }
+      ]
+    },
+    {
+      "id": "protocol-2225-cloudburst-height-map-row-3",
+      "file": "types/SubChunkPacketPayload__HeightmapData.json",
+      "pointer": "/fields/3",
+      "pre_patch_sha256": "sha256:63d0f8cdaf81a13eddafd66afff0170fddd0d32d30a3740faebbe1386394e6ed",
+      "replace": {
+        "name": "Subchunk Render Height Map",
+        "type": {
+          "type": "int8",
+          "repeat": "uvarint32"
+        },
+        "repeat": 16,
+        "optional": true,
+        "constraints": {
+          "items": {
+            "min_items": 16,
+            "max_items": 16
+          }
+        }
+      },
+      "why": "The v2225 inherited serializer requires each of 16 height-map rows to have a varuint32 length equal to 16, matching gophertunnel HeightMap.Marshal at 8c30047d86617a56e1f1871e3a1d47ec4f670d99. Preserve the row prefixes and enforce the row length.",
+      "evidence": [
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/SubChunkSerializer_v2193.java",
+          "summary": "The v2225 inherited serializer requires each of 16 height-map rows to have a varuint32 length equal to 16, matching gophertunnel HeightMap.Marshal at 8c30047d86617a56e1f1871e3a1d47ec4f670d99. Preserve the row prefixes and enforce the row length."
+        }
+      ]
+    }
+  ]
+}

@@ -928,6 +928,8 @@ impl Decode for bytes::Bytes {
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum NbtVariant {
     Network,
+    /// A network compound body without its root tag ID and name.
+    NetworkCompound,
     Persistent,
 }
 
@@ -948,7 +950,7 @@ const TAG_LONG_ARRAY: u8 = 12;
 impl<'a> Reader<'a> {
     fn nbt_len(&mut self, variant: NbtVariant) -> DecodeResult<usize> {
         let declared = match variant {
-            NbtVariant::Network => i64::from(self.read_zigzag_i32()?),
+            NbtVariant::Network | NbtVariant::NetworkCompound => i64::from(self.read_zigzag_i32()?),
             NbtVariant::Persistent => i64::from(i32::from_le_bytes(self.read_bytes::<4>()?)),
         };
         if declared < 0 {
@@ -959,7 +961,7 @@ impl<'a> Reader<'a> {
 
     fn nbt_name(&mut self, variant: NbtVariant) -> DecodeResult<()> {
         let count = match variant {
-            NbtVariant::Network => {
+            NbtVariant::Network | NbtVariant::NetworkCompound => {
                 let declared = u64::from(self.read_var_u32()?);
                 self.checked_count_with(declared, 1, self.byte_buffer_limit())?
             }
@@ -981,7 +983,7 @@ impl<'a> Reader<'a> {
                 self.take(2)?;
             }
             TAG_INT => match variant {
-                NbtVariant::Network => {
+                NbtVariant::Network | NbtVariant::NetworkCompound => {
                     self.read_zigzag_i32()?;
                 }
                 NbtVariant::Persistent => {
@@ -989,7 +991,7 @@ impl<'a> Reader<'a> {
                 }
             },
             TAG_LONG => match variant {
-                NbtVariant::Network => {
+                NbtVariant::Network | NbtVariant::NetworkCompound => {
                     self.read_zigzag_i64()?;
                 }
                 NbtVariant::Persistent => {
@@ -1029,7 +1031,7 @@ impl<'a> Reader<'a> {
                 let count = self.nbt_len(variant)?;
                 for _ in 0..count {
                     match variant {
-                        NbtVariant::Network => {
+                        NbtVariant::Network | NbtVariant::NetworkCompound => {
                             self.read_zigzag_i32()?;
                         }
                         NbtVariant::Persistent => {
@@ -1042,7 +1044,7 @@ impl<'a> Reader<'a> {
                 let count = self.nbt_len(variant)?;
                 for _ in 0..count {
                     match variant {
-                        NbtVariant::Network => {
+                        NbtVariant::Network | NbtVariant::NetworkCompound => {
                             self.read_zigzag_i64()?;
                         }
                         NbtVariant::Persistent => {
@@ -1059,6 +1061,10 @@ impl<'a> Reader<'a> {
     /// Advances past exactly one root NBT value and borrows its bytes.
     pub fn read_nbt(&mut self, variant: NbtVariant) -> DecodeResult<&'a [u8]> {
         let start = self.pos;
+        if variant == NbtVariant::NetworkCompound {
+            self.scan_nbt_payload(TAG_COMPOUND, NbtVariant::Network, 0)?;
+            return Ok(&self.buf[start..self.pos]);
+        }
         let tag = self.read_u8()?;
         if tag != TAG_END {
             self.nbt_name(variant)?;
@@ -1106,6 +1112,11 @@ nbt_codec!(
     "NBT with varint integers and lengths."
 );
 nbt_codec!(
+    NetworkCompoundNbt,
+    NbtVariant::NetworkCompound,
+    "Network NBT compound body without a root tag ID or name, ending in TAG_End."
+);
+nbt_codec!(
     PersistentNbt,
     NbtVariant::Persistent,
     "NBT with fixed-width little-endian integers and lengths."
@@ -1132,6 +1143,26 @@ mod nbt_tests {
         let mut reader = Reader::new(&persistent);
         reader.read_nbt(NbtVariant::Network).expect("scan");
         assert_ne!(reader.remaining(), 0);
+    }
+
+    /// Compound bodies omit the root header but keep their end tag and packet boundary.
+    #[test]
+    fn network_compound_framing() {
+        for body in [
+            &[0][..],
+            &[3, 1, b'x', 2, 0],
+            &[10, 1, b'n', 3, 1, b'x', 2, 0, 0],
+        ] {
+            let mut bytes = body.to_vec();
+            bytes.push(0x7f);
+            let mut reader = Reader::new(&bytes);
+            assert_eq!(reader.read_nbt(NbtVariant::NetworkCompound), Ok(body));
+            assert_eq!(reader.remaining(), 1);
+            for end in 0..body.len() {
+                let mut reader = Reader::new(&body[..end]);
+                assert!(reader.read_nbt(NbtVariant::NetworkCompound).is_err());
+            }
+        }
     }
 
     #[test]

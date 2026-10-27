@@ -576,7 +576,7 @@ func (x *CameraSplineInstruction) Marshal(io IO) {
 type CameraSplineProgressKeyFrame struct {
 	Progress float32
 	Time     float32
-	Easing   Optional[string]
+	Easing   string
 }
 
 // Marshal reads or writes CameraSplineProgressKeyFrame using its canonical wire layout.
@@ -586,13 +586,13 @@ func (x *CameraSplineProgressKeyFrame) Marshal(io IO) {
 	Maximum(io, &x.Progress, 1)
 	io.Float32(&x.Time)
 	Minimum(io, &x.Time, 0)
-	OptionalFunc(io, &x.Easing, io.String)
+	io.String(&x.Easing)
 }
 
 type CameraSplineRotationKeyFrame struct {
 	Rotation mgl32.Vec3
 	Time     float32
-	Easing   Optional[string]
+	Easing   string
 }
 
 // Marshal reads or writes CameraSplineRotationKeyFrame using its canonical wire layout.
@@ -600,7 +600,7 @@ func (x *CameraSplineRotationKeyFrame) Marshal(io IO) {
 	io.Vec3(&x.Rotation)
 	io.Float32(&x.Time)
 	Minimum(io, &x.Time, 0)
-	OptionalFunc(io, &x.Easing, io.String)
+	io.String(&x.Easing)
 }
 
 type CameraViewOffset struct {

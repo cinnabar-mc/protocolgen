@@ -1569,13 +1569,13 @@ func (x *HeightmapData) Marshal(io IO) {
 	x.HeightMapType.Marshal(io)
 	OptionalFunc(io, &x.SubchunkHeightMap, func(value *[16][]int8) {
 		for index1 := range *value {
-			FuncSlice(io, &(*value)[index1], io.Varuint32, io.Int8)
+			FuncSliceLimits(io, &(*value)[index1], io.Varuint32, 16, 16, io.Int8)
 		}
 	})
 	x.RenderHeightMapType.Marshal(io)
 	OptionalFunc(io, &x.SubchunkRenderHeightMap, func(value *[16][]int8) {
 		for index2 := range *value {
-			FuncSlice(io, &(*value)[index2], io.Varuint32, io.Int8)
+			FuncSliceLimits(io, &(*value)[index2], io.Varuint32, 16, 16, io.Int8)
 		}
 	})
 }
@@ -3303,7 +3303,7 @@ type StartVideoCapture struct {
 	FilePrefix string
 }
 
-func (*StartVideoCapture) tagPlayerVideoCaptureData() uint32 { return 0 }
+func (*StartVideoCapture) tagPlayerVideoCaptureData() uint8 { return 1 }
 
 // Marshal reads or writes StartVideoCapture using its canonical wire layout.
 func (x *StartVideoCapture) Marshal(io IO) {
@@ -3314,7 +3314,7 @@ func (x *StartVideoCapture) Marshal(io IO) {
 type StopVideoCapture struct {
 }
 
-func (*StopVideoCapture) tagPlayerVideoCaptureData() uint32 { return 1 }
+func (*StopVideoCapture) tagPlayerVideoCaptureData() uint8 { return 0 }
 
 // Marshal reads or writes StopVideoCapture using its canonical wire layout.
 func (x *StopVideoCapture) Marshal(io IO) {

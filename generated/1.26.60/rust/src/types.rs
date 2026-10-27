@@ -3999,8 +3999,7 @@ impl wire::Decode for CameraSplineInstruction {
 pub struct CameraSplineProgressKeyFrame {
     pub progress: wire::F32LE,
     pub time: wire::F32LE,
-    /// Wire presence: optional value is preceded by a presence marker.
-    pub easing: Option<String>,
+    pub easing: String,
 }
 
 impl wire::Encode for CameraSplineProgressKeyFrame {
@@ -4009,13 +4008,7 @@ impl wire::Encode for CameraSplineProgressKeyFrame {
         wire::assert_number_limits(self.progress.0, Some(0.0), Some(1.0));
         self.time.encode(writer);
         wire::assert_number_limits(self.time.0, Some(0.0), None);
-        match &self.easing {
-            Some(value) => {
-                writer.write_u8(1);
-                value.encode(writer);
-            }
-            None => writer.write_u8(0),
-        }
+        self.easing.encode(writer);
     }
 }
 
@@ -4031,13 +4024,7 @@ impl wire::Decode for CameraSplineProgressKeyFrame {
             wire::validate_number_limits(value.0, Some(0.0), None)?;
             value
         };
-        let easing = {
-            if reader.read_u8()? == 0 {
-                None
-            } else {
-                Some(<String as wire::Decode>::decode(reader)?)
-            }
-        };
+        let easing = <String as wire::Decode>::decode(reader)?;
         Ok(Self {
             progress,
             time,
@@ -4050,8 +4037,7 @@ impl wire::Decode for CameraSplineProgressKeyFrame {
 pub struct CameraSplineRotationKeyFrame {
     pub rotation: glam::Vec3,
     pub time: wire::F32LE,
-    /// Wire presence: optional value is preceded by a presence marker.
-    pub easing: Option<String>,
+    pub easing: String,
 }
 
 impl wire::Encode for CameraSplineRotationKeyFrame {
@@ -4059,13 +4045,7 @@ impl wire::Encode for CameraSplineRotationKeyFrame {
         self.rotation.encode(writer);
         self.time.encode(writer);
         wire::assert_number_limits(self.time.0, Some(0.0), None);
-        match &self.easing {
-            Some(value) => {
-                writer.write_u8(1);
-                value.encode(writer);
-            }
-            None => writer.write_u8(0),
-        }
+        self.easing.encode(writer);
     }
 }
 
@@ -4077,13 +4057,7 @@ impl wire::Decode for CameraSplineRotationKeyFrame {
             wire::validate_number_limits(value.0, Some(0.0), None)?;
             value
         };
-        let easing = {
-            if reader.read_u8()? == 0 {
-                None
-            } else {
-                Some(<String as wire::Decode>::decode(reader)?)
-            }
-        };
+        let easing = <String as wire::Decode>::decode(reader)?;
         Ok(Self {
             rotation,
             time,
@@ -9506,7 +9480,7 @@ impl wire::Encode for HeightmapData {
             Some(value) => {
                 writer.write_u8(1);
                 for item in value.iter() {
-                    wire::encode_collection(writer, item.as_slice());
+                    wire::encode_collection_limits(writer, item.as_slice(), 16, 16);
                 }
             }
             None => writer.write_u8(0),
@@ -9516,7 +9490,7 @@ impl wire::Encode for HeightmapData {
             Some(value) => {
                 writer.write_u8(1);
                 for item in value.iter() {
-                    wire::encode_collection(writer, item.as_slice());
+                    wire::encode_collection_limits(writer, item.as_slice(), 16, 16);
                 }
             }
             None => writer.write_u8(0),
@@ -9532,22 +9506,22 @@ impl wire::Decode for HeightmapData {
                 None
             } else {
                 Some([
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
                 ])
             }
         };
@@ -9557,22 +9531,22 @@ impl wire::Decode for HeightmapData {
                 None
             } else {
                 Some([
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
-                    wire::decode_collection::<wire::I8>(reader, 1)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
+                    wire::decode_collection_limits::<wire::I8>(reader, 1, 16, 16)?,
                 ])
             }
         };
@@ -11991,37 +11965,30 @@ impl wire::Decode for PlayerScoreboardId {
     }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Default)]
 pub enum PlayerVideoCaptureData {
+    #[default]
+    StopVideoCapture,
     StartVideoCapture {
         frame_rate: wire::U32LE,
         file_prefix: String,
     },
-    StopVideoCapture,
 }
 
 impl PlayerVideoCaptureData {
-    pub fn discriminant(&self) -> u32 {
+    pub fn discriminant(&self) -> u8 {
         match self {
-            Self::StartVideoCapture { .. } => 0,
-            Self::StopVideoCapture => 1,
-        }
-    }
-}
-
-impl Default for PlayerVideoCaptureData {
-    fn default() -> Self {
-        Self::StartVideoCapture {
-            frame_rate: Default::default(),
-            file_prefix: Default::default(),
+            Self::StopVideoCapture => 0,
+            Self::StartVideoCapture { .. } => 1,
         }
     }
 }
 
 impl wire::Encode for PlayerVideoCaptureData {
     fn encode(&self, writer: &mut wire::Writer) {
-        wire::VarUInt(self.discriminant()).encode(writer);
+        wire::U8(self.discriminant()).encode(writer);
         match self {
+            Self::StopVideoCapture => {}
             Self::StartVideoCapture {
                 frame_rate,
                 file_prefix,
@@ -12029,16 +11996,16 @@ impl wire::Encode for PlayerVideoCaptureData {
                 frame_rate.encode(writer);
                 file_prefix.encode(writer);
             }
-            Self::StopVideoCapture => {}
         }
     }
 }
 
 impl wire::Decode for PlayerVideoCaptureData {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
-        let discriminant = <wire::VarUInt as wire::Decode>::decode(reader)?.0;
+        let discriminant = <wire::U8 as wire::Decode>::decode(reader)?.0;
         Ok(match discriminant {
-            0 => {
+            0 => Self::StopVideoCapture,
+            1 => {
                 let frame_rate = <wire::U32LE as wire::Decode>::decode(reader)?;
                 let file_prefix = <String as wire::Decode>::decode(reader)?;
                 Self::StartVideoCapture {
@@ -12046,7 +12013,6 @@ impl wire::Decode for PlayerVideoCaptureData {
                     file_prefix,
                 }
             }
-            1 => Self::StopVideoCapture,
             value => {
                 return Err(wire::DecodeError::UnknownVariant {
                     type_name: "PlayerVideoCaptureData",

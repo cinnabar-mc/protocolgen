@@ -20,6 +20,11 @@ func Test12660PacketGoldens(t *testing.T) {
 		{&packet.ServerboundStonecutterSetRecipe{ContainerID: 7, RecipeIndex: -2}, &packet.ServerboundStonecutterSetRecipe{}, "0703"},
 		{&packet.ClientboundStonecutterSetRecipe{PlayerID: -1, ContainerID: 7, RecipeIndex: 130}, &packet.ClientboundStonecutterSetRecipe{}, "01078402"},
 		{&packet.SetPassengerOfBlock{Passenger: -1}, &packet.SetPassengerOfBlock{}, "0100"},
+		{&packet.PlayerVideoCapture{Action: &protocol.StopVideoCapture{}}, &packet.PlayerVideoCapture{}, "00"},
+		{&packet.PlayerVideoCapture{Action: &protocol.StartVideoCapture{FrameRate: 30, FilePrefix: "a"}}, &packet.PlayerVideoCapture{}, "011e0000000161"},
+		{&packet.LevelEventGeneric{EventID: 1, CTD: []byte{3, 1, 'x', 2, 0}}, &packet.LevelEventGeneric{}, "020301780200"},
+		{&packet.StructureTemplateDataResponse{StructureName: "a", ResponseType: 1}, &packet.StructureTemplateDataResponse{}, "01610001"},
+		{&packet.StructureTemplateDataResponse{StructureName: "a", StructureSNBT: protocol.Option([]byte{10, 0, 0}), ResponseType: 1}, &packet.StructureTemplateDataResponse{}, "0161010a000001"},
 		{&packet.ClientboundPlayAudioContent{
 			SharedMetadata:  protocol.AudioSignedAudioContent{CompactJWT: "a"},
 			PlaybackContent: protocol.AudioSignedAudioContent{CompactJWT: "c"},
@@ -47,6 +52,70 @@ func Test12660PacketGoldens(t *testing.T) {
 				t.Fatalf("decoded %#v, want %#v: %v, remaining %d", tc.empty, tc.value, reader.Err(), reader.Remaining())
 			}
 		})
+	}
+}
+
+// Test12660SplineEasingBytes checks both key-frame encodings without an optional presence marker.
+func Test12660SplineEasingBytes(t *testing.T) {
+	for _, tc := range []struct {
+		value interface{ Marshal(protocol.IO) }
+		wire  string
+	}{
+		{&protocol.CameraSplineProgressKeyFrame{Easing: "linear"}, "0000000000000000066c696e656172"},
+		{&protocol.CameraSplineRotationKeyFrame{Easing: "linear"}, "00000000000000000000000000000000066c696e656172"},
+	} {
+		want, err := hex.DecodeString(tc.wire)
+		if err != nil {
+			t.Fatal(err)
+		}
+		writer := protocol.NewWriter()
+		tc.value.Marshal(writer)
+		if writer.Err() != nil || !bytes.Equal(writer.Data(), want) {
+			t.Fatalf("encoded %x, want %x: %v", writer.Data(), want, writer.Err())
+		}
+		reader := protocol.NewReader(want)
+		tc.value.Marshal(reader)
+		if reader.Err() != nil || reader.Remaining() != 0 {
+			t.Fatalf("easing decode: %v, remaining %d", reader.Err(), reader.Remaining())
+		}
+	}
+}
+
+// Test12660HeightMapRows preserves each row prefix and rejects rows with the wrong length.
+func Test12660HeightMapRows(t *testing.T) {
+	var rows [16][]int8
+	want := []byte{1, 1}
+	for index := range rows {
+		rows[index] = make([]int8, 16)
+		want = append(want, 16)
+		want = append(want, make([]byte, 16)...)
+	}
+	want = append(want, 0, 0)
+	value := protocol.HeightmapData{HeightMapType: 1, SubchunkHeightMap: protocol.Option(rows)}
+	writer := protocol.NewWriter()
+	value.Marshal(writer)
+	if writer.Err() != nil || !bytes.Equal(writer.Data(), want) {
+		t.Fatalf("height map encoded %x, want %x: %v", writer.Data(), want, writer.Err())
+	}
+	var decoded protocol.HeightmapData
+	reader := protocol.NewReader(want)
+	decoded.Marshal(reader)
+	if reader.Err() != nil || reader.Remaining() != 0 || !reflect.DeepEqual(value, decoded) {
+		t.Fatalf("height map decode: %v, remaining %d", reader.Err(), reader.Remaining())
+	}
+	malformed := append([]byte(nil), want...)
+	malformed[2] = 15
+	reader = protocol.NewReader(malformed)
+	decoded.Marshal(reader)
+	if reader.Err() == nil {
+		t.Fatal("accepted a row with 15 heights")
+	}
+	rows[0] = rows[0][:15]
+	value.SubchunkHeightMap = protocol.Option(rows)
+	writer = protocol.NewWriter()
+	value.Marshal(writer)
+	if writer.Err() == nil {
+		t.Fatal("encoded a row with 15 heights")
 	}
 }
 
