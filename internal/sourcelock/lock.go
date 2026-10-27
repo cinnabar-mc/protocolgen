@@ -22,6 +22,10 @@ type Lock struct {
 	SchemaVersion uint32               `json:"schema_version"`
 	Target        manifest.Target      `json:"target"`
 	Sources       []manifest.SourcePin `json:"sources"`
+	SymbolsLock   string               `json:"symbols_lock,omitempty"`
+	// Non-wire reference catalogs may describe a different source version.
+	Catalog   string           `json:"catalog,omitempty"`
+	AppliesTo *manifest.Target `json:"applies_to,omitempty"`
 }
 
 func Load(path string) (Lock, error) {
@@ -41,6 +45,9 @@ func Load(path string) (Lock, error) {
 	}
 	if len(lock.Sources) == 0 {
 		return Lock{}, fmt.Errorf("source lock has no sources")
+	}
+	if lock.SymbolsLock != "" && !filepath.IsLocal(lock.SymbolsLock) {
+		return Lock{}, fmt.Errorf("source lock symbols_lock must be a local relative path")
 	}
 	seen := map[string]bool{}
 	for _, source := range lock.Sources {

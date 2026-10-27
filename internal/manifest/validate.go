@@ -46,6 +46,9 @@ func Validate(m Manifest) error {
 			return fmt.Errorf("mixes Minecraft %s source %q into target Minecraft %s", source.MinecraftVersion, source.ID, m.Target.MinecraftVersion)
 		}
 	}
+	if err := validateSymbols(m.Symbols); err != nil {
+		return err
+	}
 
 	packetIDs := map[uint32]bool{}
 	for i, packet := range m.Packets {
@@ -628,6 +631,12 @@ func normalize(m Manifest) Manifest {
 	var out Manifest
 	_ = json.Unmarshal(data, &out)
 	sort.Slice(out.Sources, func(i, j int) bool { return out.Sources[i].ID < out.Sources[j].ID })
+	sort.Slice(out.Symbols, func(i, j int) bool { return out.Symbols[i].ID < out.Symbols[j].ID })
+	for index := range out.Symbols {
+		// Preserve declaration order: aliases retain the source's canonical name.
+		sort.Strings(out.Symbols[index].Provenance.Pins)
+		sortEvidence(out.Symbols[index].Provenance.Evidence)
+	}
 	sort.Slice(out.Packets, func(i, j int) bool {
 		if out.Packets[i].ID != out.Packets[j].ID {
 			return out.Packets[i].ID < out.Packets[j].ID

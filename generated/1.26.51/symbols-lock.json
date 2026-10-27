@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "target": {
+    "minecraft_version": "1.26.40-beta.0",
+    "protocol_version": 2168
+  },
+  "applies_to": {
+    "minecraft_version": "1.26.51",
+    "protocol_version": 2193
+  },
+  "catalog": "../../../bedrock-protocol-docs/html/enums.html",
+  "sources": [
+    {
+      "id": "mojang-actor-enum-catalog-2168",
+      "kind": "mojang-enum-catalog",
+      "revision": "0e00fe80f4f3c71572ff6429de40146d1f4412fc",
+      "digest": "sha256:9b293f41d51947868cb84035eea46cc371e53271c57fbb5400c52d4b8605eb70",
+      "locator": "https://github.com/Mojang/bedrock-protocol-docs/blob/0e00fe80f4f3c71572ff6429de40146d1f4412fc/html/enums.html",
+      "minecraft_version": "1.26.40-beta.0",
+      "protocol_version": 2168
+    }
+  ]
+}
