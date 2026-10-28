@@ -445,17 +445,11 @@ func mergeMojangConstraints(node manifest.Node, schema map[string]any) manifest.
 	return node
 }
 
-// lowerUnion keeps a wire variant's explicit selector encoding and zero-based index.
+// lowerUnion writes a wire variant's zero-based index as a varuint32 before its fields.
 func (l *mojangLowerer) lowerUnion(schema map[string]any, branches []any, file, hint string) manifest.Node {
 	// A plain JSON oneOf can describe alternate representations of the same value,
 	// such as hexadecimal and array colours. Only marked wire variants use this rule.
-	var control manifest.Node
-	switch asString(schema["x-control-value-type"]) {
-	case "uint32":
-		control = manifest.Primitive("var_u32")
-	case "uint8":
-		control = manifest.Primitive("u8")
-	default:
+	if asString(schema["x-control-value-type"]) != "uint32" {
 		return manifest.Unresolved("Mojang oneOf lacks a supported wire selector type "+hint, true)
 	}
 	if len(branches) == 0 {
@@ -474,7 +468,7 @@ func (l *mojangLowerer) lowerUnion(schema map[string]any, branches []any, file, 
 		}
 		variants = append(variants, manifest.Variant{Value: value, Name: name, Encode: l.lowerSchema(branch, file, hint+name)})
 	}
-	return manifest.Union(control, variants...)
+	return manifest.Union(manifest.Primitive("var_u32"), variants...)
 }
 
 // lowerEnum reads the explicit numeric mapping or the string encoding selected at this use.

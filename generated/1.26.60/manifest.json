@@ -104180,15 +104180,6 @@
             "variants": [
               {
                 "value": 0,
-                "name": "PlayerVideoCapturePacketPayload::StopVideoCapture",
-                "encode": {
-                  "kind": "struct",
-                  "semantic": "PlayerVideoCapturePacketPayload::StopVideoCapture",
-                  "type_id": "PlayerVideoCapturePacketPayload::StopVideoCapture"
-                }
-              },
-              {
-                "value": 1,
                 "name": "PlayerVideoCapturePacketPayload::StartVideoCapture",
                 "encode": {
                   "kind": "struct",
@@ -104244,13 +104235,22 @@
                     }
                   ]
                 }
+              },
+              {
+                "value": 1,
+                "name": "PlayerVideoCapturePacketPayload::StopVideoCapture",
+                "encode": {
+                  "kind": "struct",
+                  "semantic": "PlayerVideoCapturePacketPayload::StopVideoCapture",
+                  "type_id": "PlayerVideoCapturePacketPayload::StopVideoCapture"
+                }
               }
             ],
             "control": {
               "kind": "primitive",
               "primitive": {
-                "code": "u8",
-                "width": 8,
+                "code": "var_u32",
+                "width": 32,
                 "signed": false,
                 "zigzag": false,
                 "endianness": "none"
@@ -109237,19 +109237,22 @@
                           "name": "easing",
                           "semantic": "easing",
                           "encode": {
-                            "kind": "string",
-                            "prefix": {
-                              "kind": "primitive",
-                              "primitive": {
-                                "code": "var_u32",
-                                "width": 32,
-                                "signed": false,
-                                "zigzag": false,
-                                "endianness": "none"
-                              }
-                            },
-                            "encoding": "utf8",
-                            "representation": "text"
+                            "kind": "optional",
+                            "value": {
+                              "kind": "string",
+                              "prefix": {
+                                "kind": "primitive",
+                                "primitive": {
+                                  "code": "var_u32",
+                                  "width": 32,
+                                  "signed": false,
+                                  "zigzag": false,
+                                  "endianness": "none"
+                                }
+                              },
+                              "encoding": "utf8",
+                              "representation": "text"
+                            }
                           },
                           "symmetry": "symmetric",
                           "provenance": {
@@ -109399,19 +109402,22 @@
                           "name": "easing",
                           "semantic": "easing",
                           "encode": {
-                            "kind": "string",
-                            "prefix": {
-                              "kind": "primitive",
-                              "primitive": {
-                                "code": "var_u32",
-                                "width": 32,
-                                "signed": false,
-                                "zigzag": false,
-                                "endianness": "none"
-                              }
-                            },
-                            "encoding": "utf8",
-                            "representation": "text"
+                            "kind": "optional",
+                            "value": {
+                              "kind": "string",
+                              "prefix": {
+                                "kind": "primitive",
+                                "primitive": {
+                                  "code": "var_u32",
+                                  "width": 32,
+                                  "signed": false,
+                                  "zigzag": false,
+                                  "endianness": "none"
+                                }
+                              },
+                              "encoding": "utf8",
+                              "representation": "text"
+                            }
                           },
                           "symmetry": "symmetric",
                           "provenance": {
@@ -119972,30 +119978,30 @@
       "target": "PlayerVideoCapturePacketPayload.json#/properties",
       "pre_patch_node_sha256": "sha256:bec1a56f7f8fd8f03d01a077061437916a31634a57f7865fa17bb6e095adf4c3",
       "pre_patch_context_sha256": "sha256:73d96fede7d9dbe9467f830254c6d5d09f37b3fe984781d5f8f3a948466ef650",
-      "post_patch_node_sha256": "sha256:91e984af79724561960af29bf354907d8450f3f4388d06a6d64d014d874aa850",
+      "post_patch_node_sha256": "sha256:d6196b920176e5dcf087026903d7964c70242bd5f376e049d411ac4a13733fda",
       "evidence": [
         {
           "source_id": "mojang",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v786/serializer/PlayerVideoCaptureSerializer_v786.java",
-          "summary": "The v2225 codec inherits a one-byte action selector: STOP_VIDEO_CAPTURE is 0 and START_VIDEO_CAPTURE is 1, followed by frame rate and file prefix. The same values and framing are used by gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99."
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
+          "summary": "The 26.51 payload has one member, std::variant\u003cStartVideoCapture, StopVideoCapture\u003e, so start is alternative 0."
         }
       ],
-      "reason": "The v2225 codec inherits a one-byte action selector: STOP_VIDEO_CAPTURE is 0 and START_VIDEO_CAPTURE is 1, followed by frame rate and file prefix. The same values and framing are used by gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99."
+      "reason": "PlayerVideoCapture has one action union in the published order, start then stop, and only the start alternative carries a payload. The schema repeats that union as two properties."
     },
     {
       "id": "player-video-capture-is-one-byte-action-union",
       "target": "packets/PlayerVideoCapturePacket.json#/fields",
       "pre_patch_node_sha256": "sha256:6b7dde126407d8d8d37da0892d5aeb407e391cf0cb1083fb7393c4346daa26b9",
       "pre_patch_context_sha256": "sha256:893d42933b3fe65a8a1b5a3d2bf882325fe3a531af2abba4c9e8b4fe41bf8b51",
-      "post_patch_node_sha256": "sha256:47494143d97a3a9a997c8b71cfead91c81d55454c6a34dd472fa83dc2043d9d3",
+      "post_patch_node_sha256": "sha256:ae6d0ea209cb3cb3e1d3706de07f93f3ac23afe6c0b942ba928637e873f36877",
       "evidence": [
         {
           "source_id": "endstone",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v786/serializer/PlayerVideoCaptureSerializer_v786.java",
-          "summary": "The v2225 codec inherits a one-byte action selector: STOP_VIDEO_CAPTURE is 0 and START_VIDEO_CAPTURE is 1, followed by frame rate and file prefix. The same values and framing are used by gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99."
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
+          "summary": "The 26.51 payload has one member, std::variant\u003cStartVideoCapture, StopVideoCapture\u003e, so start is alternative 0."
         }
       ],
-      "reason": "The v2225 codec inherits a one-byte action selector: STOP_VIDEO_CAPTURE is 0 and START_VIDEO_CAPTURE is 1, followed by frame rate and file prefix. The same values and framing are used by gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99."
+      "reason": "PlayerVideoCapture has one action union with a positional selector, start then stop; the dump repeats that union as two fields."
     },
     {
       "id": "protocol-2225-cloudburst-height-map-row-1",
@@ -120028,66 +120034,6 @@
       "reason": "The v2225 inherited serializer requires each of 16 height-map rows to have a varuint32 length equal to 16, matching gophertunnel HeightMap.Marshal at 8c30047d86617a56e1f1871e3a1d47ec4f670d99. Preserve the row prefixes and enforce the row length."
     },
     {
-      "id": "protocol-2225-cloudburst-spline-progress-easing-endstone",
-      "target": "types/SharedTypes__v1_26_0__CameraSplineProgressKeyFrame.json#/fields/2/optional",
-      "pre_patch_node_sha256": "sha256:b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
-      "pre_patch_context_sha256": "sha256:e273d76c728a3033ff14bf360ec76a4c63641c06cdd7b918ba3fa71ab51ca383",
-      "post_patch_node_sha256": "sha256:fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
-      "evidence": [
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/CameraSplineSerializer_v944.java",
-          "summary": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-        }
-      ],
-      "reason": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-    },
-    {
-      "id": "protocol-2225-cloudburst-spline-progress-easing-mojang",
-      "target": "CameraSplineProgressKeyFrame.json#/required",
-      "pre_patch_node_sha256": "sha256:b6570023bbb89e9bdd72570b7f1f39e6e1750402d8aeb434919bedabbc36cce7",
-      "pre_patch_context_sha256": "sha256:8527b6d191bdd567a19237fce11b1d69e4b0fb1542674e34416f40237a08154e",
-      "post_patch_node_sha256": "sha256:54380fc99a0ad21e8b251b88281b40958859841b003503d5728cf351ef13989b",
-      "evidence": [
-        {
-          "source_id": "mojang",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/CameraSplineSerializer_v944.java",
-          "summary": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-        }
-      ],
-      "reason": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-    },
-    {
-      "id": "protocol-2225-cloudburst-spline-rotation-easing-endstone",
-      "target": "types/SharedTypes__v1_26_0__CameraSplineRotationKeyFrame.json#/fields/2/optional",
-      "pre_patch_node_sha256": "sha256:b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
-      "pre_patch_context_sha256": "sha256:610f3853721b8a52089c3fcc16c8566cdae20946140d40974ed43c0338f3aefc",
-      "post_patch_node_sha256": "sha256:fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
-      "evidence": [
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/CameraSplineSerializer_v944.java",
-          "summary": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-        }
-      ],
-      "reason": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-    },
-    {
-      "id": "protocol-2225-cloudburst-spline-rotation-easing-mojang",
-      "target": "CameraSplineRotationKeyFrame.json#/required",
-      "pre_patch_node_sha256": "sha256:f038537fa497acddd62a51d80dde6bee62216927b3074cef6d352aa37faff136",
-      "pre_patch_context_sha256": "sha256:4f61606651fa3ea5249d035cba01f3c4ce9dac88b39b47a4beb64a9f057e8c3f",
-      "post_patch_node_sha256": "sha256:107eb8515c55b8446f9ff35022276add732c210cd91870604afd1b24385b8c61",
-      "evidence": [
-        {
-          "source_id": "mojang",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/CameraSplineSerializer_v944.java",
-          "summary": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-        }
-      ],
-      "reason": "The serializer inherited by v2225 writes each progress and rotation easing as a required string, matching gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99; there is no easing presence boolean."
-    },
-    {
       "id": "protocol-2225-cloudburst-structure-response-presence-endstone",
       "target": "packets/StructureTemplateDataResponsePacket.json#/fields/1",
       "pre_patch_node_sha256": "sha256:00c3d1d0b68cde4bd66ad0ef199b9883eee64676cb28eadc9f1065143a85dc44",
@@ -120098,9 +120044,14 @@
           "source_id": "endstone",
           "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/StructureTemplateDataResponseSerializer_v388.java",
           "summary": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
+        },
+        {
+          "source_id": "endstone",
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/StructureTemplateDataResponsePacketPayload.h#L18",
+          "summary": "The payload holds the structure as std::unique_ptr\u003cCompoundTag\u003e, so the NBT is absent when the pointer is null."
         }
       ],
-      "reason": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
+      "reason": "The payload holds the structure NBT behind a nullable pointer, so a success boolean precedes it and the NBT is written only when it is true."
     },
     {
       "id": "protocol-2225-cloudburst-structure-response-presence-mojang",
@@ -120113,9 +120064,14 @@
           "source_id": "mojang",
           "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/StructureTemplateDataResponseSerializer_v388.java",
           "summary": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
+        },
+        {
+          "source_id": "mojang",
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/StructureTemplateDataResponsePacketPayload.h#L18",
+          "summary": "The payload holds the structure as std::unique_ptr\u003cCompoundTag\u003e, so the NBT is absent when the pointer is null."
         }
       ],
-      "reason": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
+      "reason": "The payload holds the structure NBT behind a nullable pointer, so a success boolean precedes it and the NBT is written only when it is true."
     },
     {
       "id": "protocol-2225-colour-binary-components",
@@ -120860,9 +120816,9 @@
     {
       "id": "protocol-2225-video-action-required",
       "target": "PlayerVideoCapturePacketPayload.json##",
-      "pre_patch_node_sha256": "sha256:514fd26f06cc98b299f848c4457589df38b9afc479a7300bdd17b05b466528e3",
-      "pre_patch_context_sha256": "sha256:6ce322b000d0b818ea8b6b4c5e3af7dbc86a8cc62b8b7d2f4112d42c0f793196",
-      "post_patch_node_sha256": "sha256:6821c680ec36b38a95a3d298f08e8ba5d760dd947cedfbd77513b959be841928",
+      "pre_patch_node_sha256": "sha256:77206419e4a65160a24f25cd9f8ba4bd20084d3648f7c44f46b617e0fc917569",
+      "pre_patch_context_sha256": "sha256:17edbcd29bf0207d9519e3799fbe8822484518332c36024b00990f3f19639893",
+      "post_patch_node_sha256": "sha256:26fc68a9041d39acfae7a98ab2ecb6cfd63927abdecc64c031da6d0abff25e42",
       "evidence": [
         {
           "source_id": "endstone",

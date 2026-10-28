@@ -9,19 +9,19 @@
         {
           "name": "Action",
           "type": {
-            "switch": "uint8",
+            "switch": "uvarint32",
             "cases": [
-              "PlayerVideoCapturePacketPayload::StopVideoCapture",
-              "PlayerVideoCapturePacketPayload::StartVideoCapture"
+              "PlayerVideoCapturePacketPayload::StartVideoCapture",
+              "PlayerVideoCapturePacketPayload::StopVideoCapture"
             ]
           }
         }
       ],
-      "why": "The v2225 codec inherits a one-byte action selector: STOP_VIDEO_CAPTURE is 0 and START_VIDEO_CAPTURE is 1, followed by frame rate and file prefix. The same values and framing are used by gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99.",
+      "why": "PlayerVideoCapture has one action union with a positional selector, start then stop; the dump repeats that union as two fields.",
       "evidence": [
         {
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v786/serializer/PlayerVideoCaptureSerializer_v786.java",
-          "summary": "The v2225 codec inherits a one-byte action selector: STOP_VIDEO_CAPTURE is 0 and START_VIDEO_CAPTURE is 1, followed by frame rate and file prefix. The same values and framing are used by gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99."
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
+          "summary": "The 26.51 payload has one member, std::variant<StartVideoCapture, StopVideoCapture>, so start is alternative 0."
         }
       ]
     }

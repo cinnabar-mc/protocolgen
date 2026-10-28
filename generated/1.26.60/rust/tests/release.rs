@@ -57,40 +57,55 @@ fn structure_response_presence() {
     }
 }
 
-/// Stop is byte zero; start is byte one with a fixed frame rate and file prefix.
+/// Start is selector zero with a fixed frame rate and file prefix; stop is selector one.
 #[test]
 fn video_capture_action_values() {
     use bedrock_protocol_1_26_60::packets::PlayerVideoCapture;
     use bedrock_protocol_1_26_60::types::PlayerVideoCaptureData;
-    for bytes in [&[0][..], &[1, 30, 0, 0, 0, 1, b'a']] {
+    for bytes in [&[0, 30, 0, 0, 0, 1, b'a'][..], &[1]] {
         let decoded = PlayerVideoCapture::decode_exact(bytes).unwrap();
         assert_eq!(
             matches!(
                 decoded.action,
                 PlayerVideoCaptureData::StartVideoCapture { .. }
             ),
-            bytes[0] == 1
+            bytes[0] == 0
         );
         assert_eq!(decoded.encode_to_vec(), bytes);
     }
 }
 
-/// Spline easing strings immediately follow the key-frame floats.
+/// Spline easing is an optional string after the key-frame floats.
 #[test]
-fn spline_easing_is_required() {
+fn spline_easing_is_optional() {
     use bedrock_protocol_1_26_60::types::{
         CameraSplineProgressKeyFrame, CameraSplineRotationKeyFrame,
     };
-    let mut progress = vec![0; 8];
-    progress.extend_from_slice(b"\x06linear");
-    let decoded = CameraSplineProgressKeyFrame::decode_exact(&progress).unwrap();
-    assert_eq!(decoded.easing, "linear");
-    assert_eq!(decoded.encode_to_vec(), progress);
-    let mut rotation = vec![0; 16];
-    rotation.extend_from_slice(b"\x06linear");
-    let decoded = CameraSplineRotationKeyFrame::decode_exact(&rotation).unwrap();
-    assert_eq!(decoded.easing, "linear");
-    assert_eq!(decoded.encode_to_vec(), rotation);
+    for (floats, easing) in [
+        (8, None),
+        (8, Some("linear")),
+        (16, None),
+        (16, Some("linear")),
+    ] {
+        let mut bytes = vec![0; floats];
+        match easing {
+            Some(easing) => {
+                bytes.extend_from_slice(&[1, easing.len() as u8]);
+                bytes.extend_from_slice(easing.as_bytes());
+            }
+            None => bytes.push(0),
+        }
+        let want = easing.map(str::to_owned);
+        if floats == 8 {
+            let decoded = CameraSplineProgressKeyFrame::decode_exact(&bytes).unwrap();
+            assert_eq!(decoded.easing, want);
+            assert_eq!(decoded.encode_to_vec(), bytes);
+        } else {
+            let decoded = CameraSplineRotationKeyFrame::decode_exact(&bytes).unwrap();
+            assert_eq!(decoded.easing, want);
+            assert_eq!(decoded.encode_to_vec(), bytes);
+        }
+    }
 }
 
 /// Each optional height map has sixteen length-prefixed rows of sixteen heights.

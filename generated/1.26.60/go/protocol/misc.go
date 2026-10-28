@@ -3303,7 +3303,7 @@ type StartVideoCapture struct {
 	FilePrefix string
 }
 
-func (*StartVideoCapture) tagPlayerVideoCaptureData() uint8 { return 1 }
+func (*StartVideoCapture) tagPlayerVideoCaptureData() uint32 { return 0 }
 
 // Marshal reads or writes StartVideoCapture using its canonical wire layout.
 func (x *StartVideoCapture) Marshal(io IO) {
@@ -3314,7 +3314,7 @@ func (x *StartVideoCapture) Marshal(io IO) {
 type StopVideoCapture struct {
 }
 
-func (*StopVideoCapture) tagPlayerVideoCaptureData() uint8 { return 0 }
+func (*StopVideoCapture) tagPlayerVideoCaptureData() uint32 { return 1 }
 
 // Marshal reads or writes StopVideoCapture using its canonical wire layout.
 func (x *StopVideoCapture) Marshal(io IO) {

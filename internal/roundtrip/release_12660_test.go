@@ -20,8 +20,8 @@ func Test12660PacketGoldens(t *testing.T) {
 		{&packet.ServerboundStonecutterSetRecipe{ContainerID: 7, RecipeIndex: -2}, &packet.ServerboundStonecutterSetRecipe{}, "0703"},
 		{&packet.ClientboundStonecutterSetRecipe{PlayerID: -1, ContainerID: 7, RecipeIndex: 130}, &packet.ClientboundStonecutterSetRecipe{}, "01078402"},
 		{&packet.SetPassengerOfBlock{Passenger: -1}, &packet.SetPassengerOfBlock{}, "0100"},
-		{&packet.PlayerVideoCapture{Action: &protocol.StopVideoCapture{}}, &packet.PlayerVideoCapture{}, "00"},
-		{&packet.PlayerVideoCapture{Action: &protocol.StartVideoCapture{FrameRate: 30, FilePrefix: "a"}}, &packet.PlayerVideoCapture{}, "011e0000000161"},
+		{&packet.PlayerVideoCapture{Action: &protocol.StopVideoCapture{}}, &packet.PlayerVideoCapture{}, "01"},
+		{&packet.PlayerVideoCapture{Action: &protocol.StartVideoCapture{FrameRate: 30, FilePrefix: "a"}}, &packet.PlayerVideoCapture{}, "001e0000000161"},
 		{&packet.LevelEventGeneric{EventID: 1, CTD: []byte{3, 1, 'x', 2, 0}}, &packet.LevelEventGeneric{}, "020301780200"},
 		{&packet.StructureTemplateDataResponse{StructureName: "a", ResponseType: 1}, &packet.StructureTemplateDataResponse{}, "01610001"},
 		{&packet.StructureTemplateDataResponse{StructureName: "a", StructureSNBT: protocol.Option([]byte{10, 0, 0}), ResponseType: 1}, &packet.StructureTemplateDataResponse{}, "0161010a000001"},
@@ -55,14 +55,16 @@ func Test12660PacketGoldens(t *testing.T) {
 	}
 }
 
-// Test12660SplineEasingBytes checks both key-frame encodings without an optional presence marker.
+// Test12660SplineEasingBytes checks that both key-frame encodings carry easing as an optional string.
 func Test12660SplineEasingBytes(t *testing.T) {
 	for _, tc := range []struct {
 		value interface{ Marshal(protocol.IO) }
 		wire  string
 	}{
-		{&protocol.CameraSplineProgressKeyFrame{Easing: "linear"}, "0000000000000000066c696e656172"},
-		{&protocol.CameraSplineRotationKeyFrame{Easing: "linear"}, "00000000000000000000000000000000066c696e656172"},
+		{&protocol.CameraSplineProgressKeyFrame{}, "000000000000000000"},
+		{&protocol.CameraSplineProgressKeyFrame{Easing: protocol.Option("linear")}, "000000000000000001066c696e656172"},
+		{&protocol.CameraSplineRotationKeyFrame{}, "0000000000000000000000000000000000"},
+		{&protocol.CameraSplineRotationKeyFrame{Easing: protocol.Option("linear")}, "0000000000000000000000000000000001066c696e656172"},
 	} {
 		want, err := hex.DecodeString(tc.wire)
 		if err != nil {
