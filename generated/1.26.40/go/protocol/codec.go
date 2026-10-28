@@ -75,4 +75,6 @@ type NBTEncoding uint8
 const (
 	NBTNetwork NBTEncoding = iota
 	NBTPersistent
+	// NBTNetworkCompound is a network compound body without a root tag ID or name.
+	NBTNetworkCompound
 )

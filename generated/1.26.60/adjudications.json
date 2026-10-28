@@ -289,9 +289,14 @@
         "locator": "packets/ServerToClientHandshakePacket.json#/fields/0",
         "claim_fingerprint": "sha256:80430be535e7e69f6f33cc9f60c0b6a003b3894f62c821e0ec3360b6835c8aa3",
         "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v291/serializer/ServerToClientHandshakeSerializer_v291.java",
+        "summary": "The serializer inherited by v2225 writes the JWT as a varuint-length-prefixed string.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "The pinned Gophertunnel serializer independently agrees with the complete Endstone claim for this field. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes the JWT as a varuint-length-prefixed string. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-gophertunnel-packet-308-field-0",
@@ -331,9 +336,14 @@
         "locator": "packets/SetHudPacket.json#/fields/0",
         "claim_fingerprint": "sha256:e03e35dd8d5135ac676eec3ac98baa1c9005837ddd37d96716614ffe9338a696",
         "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v786/serializer/SetHudSerializer_v786.java",
+        "summary": "The serializer inherited by v2225 writes the element array with signed zigzag varint32 values, not strings.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "The pinned Gophertunnel serializer independently agrees with the complete Endstone claim for this field. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes the element array with signed zigzag varint32 values, not strings. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-gophertunnel-packet-330-field-0",
@@ -373,9 +383,14 @@
         "locator": "packets/ClientboundDataStorePacket.json#/fields/0",
         "claim_fingerprint": "sha256:256cf2c1906cd741c3f13a4a01127509c4c9f4ad9a04961d5b9e9736155f78fd",
         "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v924/serializer/ClientboundDataStoreSerializer_v924.java",
+        "summary": "The serializer inherited by v2225 writes positional update variants, including the double/bool/string scalar variant and recursively typed changed properties.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Direct inspection of the pinned Gophertunnel serializer supports the complete Endstone claim; the automated oracle is unresolved only at a helper or runtime-control boundary. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes positional update variants, including the double/bool/string scalar variant and recursively typed changed properties. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-gophertunnel-packet-344-field-0",
@@ -415,9 +430,14 @@
         "locator": "packets/SyncWorldClocksPacket.json#/fields/0",
         "claim_fingerprint": "sha256:0495f90d919ac8c9f0ba7dd675d34fd1f25462506e805b862d223a98c296bb54",
         "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v944/serializer/SyncWorldClocksSerializer_v944.java",
+        "summary": "The serializer inherited by v2225 writes four positional payload variants with registry and time-marker data.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Direct inspection of the pinned Gophertunnel serializer supports the complete Endstone claim; the automated oracle is unresolved only at a helper or runtime-control boundary. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes four positional payload variants with registry and time-marker data. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-packet-137-field-0",
@@ -499,9 +519,14 @@
         "locator": "packets/ClientMovementPredictionSyncPacket.json#/fields/0",
         "claim_fingerprint": "sha256:28c62b5dbaacdc0f7a8024dd4984278cf99d6a3a7d335d241b3027cebd2a68c8",
         "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
+      },
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v766/BedrockCodecHelper_v766.java",
+        "summary": "The writeLargeVarIntFlags helper inherited by v2225 encodes entity flags as an unsigned large varint. This corroborates the selected bitset field only; the older MovementPredictionSync serializer does not corroborate the rest of the target packet."
       }
     ],
-    "reason": "The exact Cloudburst 1.26.40 serializer agrees with the Endstone claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "Select the complete Endstone bitset claim, corroborated by the target gophertunnel writer and the inherited Cloudburst large-varint flag helper. This selection covers the flag field only."
   },
   {
     "id": "protocol-2225-retarget-035",
@@ -540,9 +565,14 @@
         "source_id": "mojang",
         "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/8667debe0adad27de6c692c88942c489a1193206/json",
         "summary": "The exact 1.26.51 Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/SubChunkSerializer_v2193.java",
+        "summary": "The serializer inherited by v2225 writes each optional height map as 16 rows, each with a varuint32 length of 16. This corroborates the Endstone row prefixes.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Protocol 2193 writes each 16-entry sub-chunk height map row with an unsigned varint length prefix; the 1.26.51.1 Endstone dump and the protocol 2193 gophertunnel HeightMap marshal agree. Select the complete Endstone claim. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes each optional height map as 16 rows, each with a varuint32 length of 16. This corroborates the Endstone row prefixes. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-retarget-040",
@@ -616,9 +646,19 @@
         "locator": "packets/LevelEventGenericPacket.json#/fields/1",
         "claim_fingerprint": "sha256:a51103bad76aa01a64387a36b34906854f5a5a689241c89a9997462e2b0967b1",
         "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v361/serializer/LevelEventGenericSerializer_v361.java",
+        "summary": "The v2225 registration uses writeTagValue/readTagValue(COMPOUND), omitting the root tag ID and name. The NBT encoding overlay selects the compound body framing.",
+        "source_id": "endstone"
+      },
+      {
+        "source_id": "endstone",
+        "locator": "https://github.com/CloudburstMC/NBT/blob/1849e078949a6f48d477e132ed923e05fa1fd95c/src/main/java/org/cloudburstmc/nbt/NBTOutputStream.java",
+        "summary": "Protocol pins NBT 3.1.0.Final. writeValue writes a compound payload without the root ID or name and retains TAG_End."
       }
     ],
-    "reason": "Mojang leaves its special compound payload without a lowerable type. Retain the complete target Endstone CompoundTag claim and the existing network-NBT encoding overlay. The special compound root framing remains unverified by these documents; this selection establishes the available schema representation rather than new live parity evidence."
+    "reason": "The v2225 registration uses writeTagValue/readTagValue(COMPOUND), omitting the root tag ID and name. The NBT encoding overlay selects the compound body framing. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-reviewed-004",
@@ -661,9 +701,14 @@
         "locator": "ClientboundPlayAudioContentPacketPayload.json#/properties/Play Sound",
         "claim_fingerprint": "sha256:fd9dcaf748aa573b2806ed237d54faeb0089ff4c05914b021325153d863962ef",
         "summary": "Exact target source claim selected by this reviewed adjudication."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2225/serializer/ClientboundPlayAudioContentSerializer_v2225.java",
+        "summary": "The exact v2225 serializer delegates the trailing payload to PlaySoundSerializer_v2193, corroborating the complete Mojang Play Sound claim.",
+        "source_id": "mojang"
       }
     ],
-    "reason": "The target Endstone field references PlaySoundPacketPayload but omits that type from its dump. Select the complete Mojang referenced payload; the same target Endstone PlaySound packet independently lists its ordered fields and the protocol-2225 audio marshal delegates to PlaySound.Marshal."
+    "reason": "The exact v2225 serializer delegates the trailing payload to PlaySoundSerializer_v2193, corroborating the complete Mojang Play Sound claim. Select the fingerprinted mojang claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-reviewed-005",
@@ -743,9 +788,14 @@
         "source_id": "mojang",
         "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
         "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/PlayerAuthInputSerializer_v2193.java",
+        "summary": "The serializer inherited by v2225 writes an array of signed zigzag flag ordinals rather than a packed bitset.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes an array of signed zigzag flag ordinals rather than a packed bitset. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-reviewed-027",
@@ -785,9 +835,14 @@
         "source_id": "mojang",
         "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
         "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/PlayerAuthInputSerializer_v2193.java",
+        "summary": "The serializer inherited by v2225 writes one presence boolean followed by a counted block-action array.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes one presence boolean followed by a counted block-action array. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-reviewed-028",
@@ -827,9 +882,14 @@
         "source_id": "mojang",
         "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
         "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/PlayerAuthInputSerializer_v2193.java",
+        "summary": "The serializer inherited by v2225 writes a separate presence boolean before the two vehicle-rotation floats.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes a separate presence boolean before the two vehicle-rotation floats. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-reviewed-029",
@@ -869,9 +929,14 @@
         "source_id": "mojang",
         "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
         "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/PlayerAuthInputSerializer_v2193.java",
+        "summary": "The serializer inherited by v2225 writes a separate presence boolean and a signed zigzag varint64 vehicle ID.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 writes a separate presence boolean and a signed zigzag varint64 vehicle ID. Select the fingerprinted endstone claim; other source limitations remain explicit."
   },
   {
     "id": "protocol-2225-reviewed-037",
@@ -911,8 +976,13 @@
         "source_id": "mojang",
         "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/e0a1dad9341b85d3191f998c3d84b7d2c96e6c81/json",
         "summary": "The exact target Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
+      },
+      {
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/CameraPresetsSerializer_v2193.java",
+        "summary": "The serializer inherited by v2225 reads the complete optional preset layout, including optional int32 aim-assist target mode, inherited starting rotation and optional starting rotation.",
+        "source_id": "endstone"
       }
     ],
-    "reason": "Select the complete exact 1.26.50.25 BDS reflection-graph claim, using the exact target Mojang schema as independent field-order and semantic evidence. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
+    "reason": "The serializer inherited by v2225 reads the complete optional preset layout, including optional int32 aim-assist target mode, inherited starting rotation and optional starting rotation. Select the fingerprinted endstone claim; other source limitations remain explicit."
   }
 ]

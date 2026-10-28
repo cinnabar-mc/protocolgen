@@ -782,6 +782,9 @@ func (g *generator) nativeRustType(node manifest.Node) (string, bool, error) {
 			if node.Encoding == string(manifest.NBTNetwork) {
 				return "wire::NetworkNbt", true, nil
 			}
+			if node.Encoding == string(manifest.NBTNetworkCompound) {
+				return "wire::NetworkCompoundNbt", true, nil
+			}
 			return "wire::PersistentNbt", true, nil
 		}
 	}

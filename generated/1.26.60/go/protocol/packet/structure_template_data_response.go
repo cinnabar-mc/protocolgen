@@ -12,7 +12,7 @@ type StructureTemplateDataResponse struct {
 	// StructureName is the name of the structure that was requested. This is the name used to export the
 	// structure to a file.
 	StructureName string
-	StructureSNBT []byte
+	StructureSNBT protocol.Optional[[]byte]
 	// ResponseType specifies the response type of the packet. This depends on the RequestType field sent in the
 	// StructureTemplateDataRequest packet and is one of the constants above.
 	ResponseType protocol.StructureTemplateResponseType
@@ -25,6 +25,8 @@ func (*StructureTemplateDataResponse) ID() uint32 {
 
 func (pk *StructureTemplateDataResponse) Marshal(io protocol.IO) {
 	io.String(&pk.StructureName)
-	io.NBT(&pk.StructureSNBT, protocol.NBTNetwork)
+	protocol.OptionalFunc(io, &pk.StructureSNBT, func(value *[]byte) {
+		io.NBT(value, protocol.NBTNetwork)
+	})
 	pk.ResponseType.Marshal(io)
 }

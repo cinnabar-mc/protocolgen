@@ -10451,7 +10451,7 @@ impl wire::Encode for HeightmapData {
             Some(value) => {
                 writer.write_u8(1)?;
                 for item in value.iter() {
-                    wire::encode_collection(writer, item.as_slice())?;
+                    wire::encode_collection_limits(writer, item.as_slice(), 16, 16)?;
                 }
             }
             None => writer.write_u8(0)?,
@@ -10461,7 +10461,7 @@ impl wire::Encode for HeightmapData {
             Some(value) => {
                 writer.write_u8(1)?;
                 for item in value.iter() {
-                    wire::encode_collection(writer, item.as_slice())?;
+                    wire::encode_collection_limits(writer, item.as_slice(), 16, 16)?;
                 }
             }
             None => writer.write_u8(0)?,
@@ -10478,85 +10478,117 @@ impl wire::Decode for HeightmapData {
                 None
             } else {
                 Some([
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
                 ])
             }
@@ -10567,85 +10599,117 @@ impl wire::Decode for HeightmapData {
                 None
             } else {
                 Some([
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
-                    wire::decode_collection::<wire::I8>(
+                    wire::decode_collection_limits::<wire::I8>(
                         reader,
                         crate::fields::HEIGHTMAP_DATA_SUBCHUNK_RENDER_HEIGHT_MAP_ITEM,
                         1,
+                        16,
+                        16,
                     )?,
                 ])
             }

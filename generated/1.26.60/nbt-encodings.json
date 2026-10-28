@@ -137,10 +137,10 @@
       "field_ordinal": 1,
       "field_name": "__[[CTD]]__",
       "path": "encode",
-      "encoding": "network",
+      "encoding": "network_compound",
       "evidence": {
-        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/level_event_generic.go#L93",
-        "summary": "LevelEventGenericPacket carries the documented network NBT bytes through io.Bytes; the packet has no format-specific io.NBT call."
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v361/serializer/LevelEventGenericSerializer_v361.java",
+        "summary": "The v2225 registration uses writeTagValue/readTagValue(COMPOUND), which omits the root tag ID and name. Cloudburst NBT 3.1.0.Final writeValue retains the closing TAG_End."
       }
     },
     {
@@ -148,11 +148,11 @@
       "packet_name": "StructureTemplateDataResponsePacket",
       "field_ordinal": 1,
       "field_name": "Structure's NBT",
-      "path": "encode",
+      "path": "encode.value",
       "encoding": "network",
       "evidence": {
-        "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_template_data_response.go#L38",
-        "summary": "StructureTemplateDataResponsePacket marshals Structure's NBT with nbt.NetworkLittleEndian."
+        "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/StructureTemplateDataResponseSerializer_v388.java",
+        "summary": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
       }
     },
     {

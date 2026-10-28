@@ -1,0 +1,25 @@
+{
+  "operations": [
+    {
+      "id": "protocol-2225-cloudburst-structure-response-presence-mojang",
+      "file": "StructureTemplateDataResponsePacketPayload.json",
+      "pointer": "/required",
+      "pre_patch_sha256": "sha256:56427a503eb2ece65263afae01a7dca6884304e9eb112fee661bbf60d14507d6",
+      "replace": [
+        "Response Type",
+        "Structure Name"
+      ],
+      "why": "The payload holds the structure NBT behind a nullable pointer, so a success boolean precedes it and the NBT is written only when it is true.",
+      "evidence": [
+        {
+          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/StructureTemplateDataResponsePacketPayload.h#L18",
+          "summary": "The payload holds the structure as std::unique_ptr<CompoundTag>, so the NBT is absent when the pointer is null."
+        },
+        {
+          "locator": "https://github.com/CloudburstMC/Protocol/blob/17a89ac156ff874fc8773e42a96bbc0635be9eed/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v388/serializer/StructureTemplateDataResponseSerializer_v388.java",
+          "summary": "The serializer inherited by v2225 writes a success boolean and writes network NBT only when success is true; gophertunnel at 8c30047d86617a56e1f1871e3a1d47ec4f670d99 independently uses the same presence framing."
+        }
+      ]
+    }
+  ]
+}

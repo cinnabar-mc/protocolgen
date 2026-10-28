@@ -1553,6 +1553,8 @@ func nbtIOConstant(node manifest.Node, qualifier string) (string, error) {
 	switch manifest.NBTEncoding(node.Encoding) {
 	case manifest.NBTNetwork:
 		return qualifier + "NBTNetwork", nil
+	case manifest.NBTNetworkCompound:
+		return qualifier + "NBTNetworkCompound", nil
 	case manifest.NBTPersistent:
 		return qualifier + "NBTPersistent", nil
 	default:

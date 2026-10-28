@@ -33,3 +33,93 @@ fn sound_update_uses_one_selector() {
         assert_eq!(decoded.encode_to_vec(), bytes);
     }
 }
+
+/// Generic level events carry a rootless compound body, retaining its end tag.
+#[test]
+fn generic_event_compound_body() {
+    use bedrock_protocol_1_26_60::packets::LevelEventGeneric;
+    for bytes in [&[2, 0][..], &[2, 3, 1, b'x', 2, 0]] {
+        let decoded = LevelEventGeneric::decode_exact(bytes).unwrap();
+        assert_eq!(decoded.ctd.0.as_ref(), &bytes[1..]);
+        assert_eq!(decoded.encode_to_vec(), bytes);
+        assert!(LevelEventGeneric::decode_exact(&bytes[..bytes.len() - 1]).is_err());
+    }
+}
+
+/// A structure response always has a presence marker, even when no NBT follows.
+#[test]
+fn structure_response_presence() {
+    use bedrock_protocol_1_26_60::packets::StructureTemplateDataResponse;
+    for bytes in [&[1, b'a', 0, 1][..], &[1, b'a', 1, 10, 0, 0, 1]] {
+        let decoded = StructureTemplateDataResponse::decode_exact(bytes).unwrap();
+        assert_eq!(decoded.structure_nbt.is_some(), bytes[2] == 1);
+        assert_eq!(decoded.encode_to_vec(), bytes);
+    }
+}
+
+/// Start is selector zero with a fixed frame rate and file prefix; stop is selector one.
+#[test]
+fn video_capture_action_values() {
+    use bedrock_protocol_1_26_60::packets::PlayerVideoCapture;
+    use bedrock_protocol_1_26_60::types::PlayerVideoCaptureData;
+    for bytes in [&[0, 30, 0, 0, 0, 1, b'a'][..], &[1]] {
+        let decoded = PlayerVideoCapture::decode_exact(bytes).unwrap();
+        assert_eq!(
+            matches!(
+                decoded.action,
+                PlayerVideoCaptureData::StartVideoCapture { .. }
+            ),
+            bytes[0] == 0
+        );
+        assert_eq!(decoded.encode_to_vec(), bytes);
+    }
+}
+
+/// Spline easing is an optional string after the key-frame floats.
+#[test]
+fn spline_easing_is_optional() {
+    use bedrock_protocol_1_26_60::types::{
+        CameraSplineProgressKeyFrame, CameraSplineRotationKeyFrame,
+    };
+    for (floats, easing) in [
+        (8, None),
+        (8, Some("linear")),
+        (16, None),
+        (16, Some("linear")),
+    ] {
+        let mut bytes = vec![0; floats];
+        match easing {
+            Some(easing) => {
+                bytes.extend_from_slice(&[1, easing.len() as u8]);
+                bytes.extend_from_slice(easing.as_bytes());
+            }
+            None => bytes.push(0),
+        }
+        let want = easing.map(str::to_owned);
+        if floats == 8 {
+            let decoded = CameraSplineProgressKeyFrame::decode_exact(&bytes).unwrap();
+            assert_eq!(decoded.easing, want);
+            assert_eq!(decoded.encode_to_vec(), bytes);
+        } else {
+            let decoded = CameraSplineRotationKeyFrame::decode_exact(&bytes).unwrap();
+            assert_eq!(decoded.easing, want);
+            assert_eq!(decoded.encode_to_vec(), bytes);
+        }
+    }
+}
+
+/// Each optional height map has sixteen length-prefixed rows of sixteen heights.
+#[test]
+fn height_map_rows() {
+    use bedrock_protocol_1_26_60::types::HeightmapData;
+    let mut bytes = vec![1, 1];
+    for _ in 0..16 {
+        bytes.push(16);
+        bytes.extend_from_slice(&[0; 16]);
+    }
+    bytes.extend_from_slice(&[0, 0]);
+    let decoded = HeightmapData::decode_exact(&bytes).unwrap();
+    assert_eq!(decoded.encode_to_vec(), bytes);
+    bytes[2] = 15;
+    assert!(HeightmapData::decode_exact(&bytes).is_err());
+}

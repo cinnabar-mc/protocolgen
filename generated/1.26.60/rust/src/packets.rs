@@ -5459,7 +5459,7 @@ pub struct LevelEventGeneric {
     /// `event_id` is a unique identifier that identifies the event called. The data that follows has fields in
     /// the NBT depending on what event it is.
     pub event_id: wire::ZigZag32,
-    pub ctd: wire::NetworkNbt,
+    pub ctd: wire::NetworkCompoundNbt,
 }
 
 impl LevelEventGeneric {
@@ -5475,7 +5475,7 @@ impl wire::Encode for LevelEventGeneric {
 impl wire::Decode for LevelEventGeneric {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
         let event_id = <wire::ZigZag32 as wire::Decode>::decode(reader)?;
-        let ctd = <wire::NetworkNbt as wire::Decode>::decode(reader)?;
+        let ctd = <wire::NetworkCompoundNbt as wire::Decode>::decode(reader)?;
         Ok(Self { event_id, ctd })
     }
 }
@@ -5667,7 +5667,8 @@ pub struct StructureTemplateDataResponse {
     /// `structure_name` is the name of the structure that was requested. This is the name used to export the
     /// structure to a file.
     pub structure_name: String,
-    pub structure_nbt: wire::NetworkNbt,
+    /// Wire presence: optional value is preceded by a presence marker.
+    pub structure_nbt: Option<wire::NetworkNbt>,
     /// `response_type` specifies the response type of the packet. This depends on the RequestType field sent in
     /// the StructureTemplateDataRequest packet and is one of the constants above.
     pub response_type: StructureTemplateResponseType,
@@ -5679,7 +5680,13 @@ impl StructureTemplateDataResponse {
 impl wire::Encode for StructureTemplateDataResponse {
     fn encode(&self, writer: &mut wire::Writer) {
         self.structure_name.encode(writer);
-        self.structure_nbt.encode(writer);
+        match &self.structure_nbt {
+            Some(value) => {
+                writer.write_u8(1);
+                value.encode(writer);
+            }
+            None => writer.write_u8(0),
+        }
         self.response_type.encode(writer);
     }
 }
@@ -5687,7 +5694,13 @@ impl wire::Encode for StructureTemplateDataResponse {
 impl wire::Decode for StructureTemplateDataResponse {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
         let structure_name = <String as wire::Decode>::decode(reader)?;
-        let structure_nbt = <wire::NetworkNbt as wire::Decode>::decode(reader)?;
+        let structure_nbt = {
+            if reader.read_u8()? == 0 {
+                None
+            } else {
+                Some(<wire::NetworkNbt as wire::Decode>::decode(reader)?)
+            }
+        };
         let response_type = <StructureTemplateResponseType as wire::Decode>::decode(reader)?;
         Ok(Self {
             structure_name,

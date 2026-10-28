@@ -271,6 +271,7 @@ func TestNBTScannersRejectTruncation(t *testing.T) {
 	}{
 		{"persistent", persistentNBTFixture(), NBTPersistent},
 		{"network", networkNBTFixture(), NBTNetwork},
+		{"network compound", networkNBTFixture()[2:], NBTNetworkCompound},
 	} {
 		t.Run(test.name, func(t *testing.T) {
 			for length := 0; length < len(test.data); length++ {
@@ -282,6 +283,18 @@ func TestNBTScannersRejectTruncation(t *testing.T) {
 				}
 			}
 		})
+	}
+}
+
+// TestNetworkCompoundNBTFraming checks that a rootless body consumes its end tag and no following bytes.
+func TestNetworkCompoundNBTFraming(t *testing.T) {
+	for _, body := range [][]byte{{0}, {3, 1, 'x', 2, 0}, {10, 1, 'n', 3, 1, 'x', 2, 0, 0}} {
+		reader := NewReader(append(append([]byte{}, body...), 0x7f))
+		var got []byte
+		reader.NBT(&got, NBTNetworkCompound)
+		if reader.Err() != nil || !bytes.Equal(got, body) || reader.Remaining() != 1 {
+			t.Fatalf("body %x: got %x, remaining %d, error %v", body, got, reader.Remaining(), reader.Err())
+		}
 	}
 }
 

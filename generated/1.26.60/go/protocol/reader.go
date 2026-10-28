@@ -337,6 +337,8 @@ func (r *Reader) NBT(x *[]byte, encoding NBTEncoding) {
 	switch encoding {
 	case NBTNetwork:
 		err = scanNetworkNBT(r.data, &r.pos, true)
+	case NBTNetworkCompound:
+		err = scanNetworkNBTPayload(r.data, &r.pos, 10)
 	case NBTPersistent:
 		err = scanNBT(r.data, &r.pos, true)
 	default:

@@ -36,6 +36,11 @@ nbt_codec!(
     "NBT with varint integers and lengths."
 );
 nbt_codec!(
+    NetworkCompoundNbt,
+    NbtVariant::NetworkCompound,
+    "Network NBT compound body without a root tag ID or name, ending in TAG_End."
+);
+nbt_codec!(
     PersistentNbt,
     NbtVariant::Persistent,
     "NBT with fixed-width little-endian integers and lengths."
@@ -62,6 +67,22 @@ mod nbt_tests {
         let mut reader = Reader::new(&persistent);
         reader.read_nbt(NbtVariant::Network).expect("scan");
         assert_ne!(reader.remaining(), 0);
+    }
+
+    /// Compound bodies omit the root header but keep their end tag and packet boundary.
+    #[test]
+    fn network_compound_framing() {
+        for body in [&[0][..], &[3, 1, b'x', 2, 0], &[10, 1, b'n', 3, 1, b'x', 2, 0, 0]] {
+            let mut bytes = body.to_vec();
+            bytes.push(0x7f);
+            let mut reader = Reader::new(&bytes);
+            assert_eq!(reader.read_nbt(NbtVariant::NetworkCompound), Ok(body));
+            assert_eq!(reader.remaining(), 1);
+            for end in 0..body.len() {
+                let mut reader = Reader::new(&body[..end]);
+                assert!(reader.read_nbt(NbtVariant::NetworkCompound).is_err());
+            }
+        }
     }
 
     #[test]

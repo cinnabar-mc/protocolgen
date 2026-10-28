@@ -22,5 +22,5 @@ func (*LevelEventGeneric) ID() uint32 {
 
 func (pk *LevelEventGeneric) Marshal(io protocol.IO) {
 	io.Varint32(&pk.EventID)
-	io.NBT(&pk.CTD, protocol.NBTNetwork)
+	io.NBT(&pk.CTD, protocol.NBTNetworkCompound)
 }

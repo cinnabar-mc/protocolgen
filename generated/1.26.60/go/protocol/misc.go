@@ -1569,13 +1569,13 @@ func (x *HeightmapData) Marshal(io IO) {
 	x.HeightMapType.Marshal(io)
 	OptionalFunc(io, &x.SubchunkHeightMap, func(value *[16][]int8) {
 		for index1 := range *value {
-			FuncSlice(io, &(*value)[index1], io.Varuint32, io.Int8)
+			FuncSliceLimits(io, &(*value)[index1], io.Varuint32, 16, 16, io.Int8)
 		}
 	})
 	x.RenderHeightMapType.Marshal(io)
 	OptionalFunc(io, &x.SubchunkRenderHeightMap, func(value *[16][]int8) {
 		for index2 := range *value {
-			FuncSlice(io, &(*value)[index2], io.Varuint32, io.Int8)
+			FuncSliceLimits(io, &(*value)[index2], io.Varuint32, 16, 16, io.Int8)
 		}
 	})
 }
