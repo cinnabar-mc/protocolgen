@@ -58,3 +58,64 @@ CI checks every Rust snapshot from the committed manifests. The source-based
 The `regen` targets need `MOJANG_DIR` and `ENDSTONE_DIR` checked out at the
 snapshot's `source-lock.json` revisions. CI checks `generated/data` by rerunning
 only the runtime, mining and registry generators, which need no external inputs.
+
+### Actor metadata reference symbols
+
+`manifest.json` carries non-wire `symbols` tables with exact published names,
+explicit numeric values and a versioned `source` pin. `ActorFlags` values are
+**bit indices**, not masks. Count sentinels are excluded. The tables do not
+narrow raw metadata IDs, add codecs or authorize packet wire-shape claims.
+
+The input is `html/enums.html` from
+[Mojang/bedrock-protocol-docs](https://github.com/Mojang/bedrock-protocol-docs)
+at revision `0e00fe80f4f3c71572ff6429de40146d1f4412fc`. That commit is the head
+of Mojang/bedrock-protocol-docs#32 rather than a branch tip, so fetch it by SHA:
+
+```sh
+git clone --filter=blob:none --no-checkout https://github.com/Mojang/bedrock-protocol-docs.git /tmp/mojang-docs
+git -C /tmp/mojang-docs fetch --filter=blob:none origin 0e00fe80f4f3c71572ff6429de40146d1f4412fc
+git -C /tmp/mojang-docs worktree add --detach /tmp/mojang-catalog 0e00fe80f4f3c71572ff6429de40146d1f4412fc
+```
+
+`generated/1.26.51/symbols-lock.json` pins the exact catalog-file SHA-256,
+without copying the documentation or a downstream implementation's constant
+table into this repository. The importer decodes the HTML table structure and
+reads explicit values; it does not infer ordinals from row positions or rename
+reserved slots.
+
+**Reference-version boundary:** this catalog describes Minecraft
+1.26.40-beta.0 / protocol 2168, not target 1.26.51 / protocol 2193. Its source
+pin stays inside each symbol table, separate from the target's wire sources.
+Generated consumers must retain that distinction; importing the catalog is not
+proof that every historical mapping is current. In particular, Mojang publishes
+`RESERVED_038`, `RESERVED_053` and `RESERVED_054`, not Scale/Width/Height aliases.
+Target-native observations are separate evidence for any gameplay use.
+
+The target's `source-lock.json` persists `symbols_lock: "symbols-lock.json"`.
+Both `reconcile` and `reconcile-claims` load it automatically, including normal
+`make regen-1.26.51`: missing configured inputs, digest drift, unsupported pins
+and conflicting existing values are errors, never silent omissions. Pass the
+catalog checkout with `SYMBOLS_CATALOG` (the `-symbols-catalog` flag), as CI does:
+
+```sh
+make verify-1.26.51 MOJANG_DIR=… ENDSTONE_DIR=… \
+  SYMBOLS_CATALOG=/tmp/mojang-catalog/html/enums.html
+```
+
+Without it, the lock's `catalog` path is resolved relative to the lock. That
+default only resolves when protocolgen is checked out beside a
+`bedrock-protocol-docs` checkout at the pinned revision, as in a workspace that
+vendors both as sibling submodules. An explicit `-symbols-lock` overrides the
+configured lock. An existing canonical manifest can also be supplemented
+offline:
+
+```sh
+go run ./cmd/protocolgen supplement-symbols \
+  -manifest generated/1.26.51/manifest.json \
+  -symbols-lock generated/1.26.51/symbols-lock.json \
+  -symbols-catalog /tmp/mojang-catalog/html/enums.html \
+  -out generated/1.26.51/manifest.json
+```
+
+Reapplying the identical catalog is deterministic and idempotent. As with any
+manifest change, downstream manifest SHA-256 pins must be regenerated.

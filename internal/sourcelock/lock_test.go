@@ -2,7 +2,9 @@ package sourcelock
 
 import (
 	"os"
+	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -66,11 +68,57 @@ func TestDirectoryDigestRejectsSymlinksIncludingGitMetadata(t *testing.T) {
 	for _, name := range []string{"schema.json", ".git"} {
 		t.Run(name, func(t *testing.T) {
 			root := t.TempDir()
-			if err := os.Symlink(t.TempDir(), filepath.Join(root, name)); err != nil {
+			outside := t.TempDir()
+			if err := os.WriteFile(filepath.Join(outside, "outside.json"), []byte(`{"outside":true}`), 0o644); err != nil {
 				t.Fatal(err)
 			}
-			if _, err := DigestDirectory(root); err == nil || !strings.Contains(err.Error(), "unsupported symlink") {
-				t.Fatalf("DigestDirectory error = %v, want symlink rejection", err)
+			link := filepath.Join(root, name)
+			makeDirectoryLink(t, outside, link)
+			if _, err := os.Stat(filepath.Join(link, "outside.json")); err != nil {
+				t.Fatalf("directory link fixture does not reach its outside-root target: %v", err)
+			}
+			if _, err := DigestDirectory(root); err == nil {
+				t.Fatal("DigestDirectory accepted a directory link")
+			}
+		})
+	}
+}
+
+func makeDirectoryLink(t *testing.T, target, link string) {
+	t.Helper()
+	if runtime.GOOS != "windows" {
+		if err := os.Symlink(target, link); err != nil {
+			t.Fatal(err)
+		}
+		return
+	}
+	// Directory junctions exercise the same no-follow boundary without
+	// requiring Windows Developer Mode or an elevated test process.
+	if output, err := exec.Command("cmd", "/c", "mklink", "/J", link, target).CombinedOutput(); err != nil {
+		t.Fatalf("create directory junction: %v: %s", err, output)
+	}
+}
+
+func TestLoadValidatesConfiguredSymbolLockPath(t *testing.T) {
+	for _, configured := range []string{"symbols-lock.json", "../outside.json", "/outside.json"} {
+		t.Run(configured, func(t *testing.T) {
+			path := filepath.Join(t.TempDir(), "source-lock.json")
+			data := `{
+  "schema_version": 1,
+  "target": {"minecraft_version": "1.26.51", "protocol_version": 2193},
+  "symbols_lock": "` + configured + `",
+  "sources": [{"id":"wire","kind":"synthetic","revision":"fixture","digest":"fixture:wire"}]
+}`
+			if err := os.WriteFile(path, []byte(data), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			lock, err := Load(path)
+			if configured == "symbols-lock.json" {
+				if err != nil || lock.SymbolsLock != configured {
+					t.Fatalf("configured supplement lost: %+v, %v", lock, err)
+				}
+			} else if err == nil {
+				t.Fatal("accepted a symbols lock outside the configured snapshot")
 			}
 		})
 	}

@@ -40,6 +40,8 @@ func main() {
 		err = runReconcile(os.Args[2:])
 	case "reconcile-claims":
 		err = runReconcileClaims(os.Args[2:])
+	case "supplement-symbols":
+		err = runSupplementSymbols(os.Args[2:])
 	case "carry-adjudications":
 		err = runCarryAdjudications(os.Args[2:])
 	case "adjudicate-claims":
@@ -75,10 +77,11 @@ func main() {
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, `usage: protocolgen <reconcile|reconcile-claims|carry-adjudications|adjudicate-claims|ingest|validate|emit-go|emit-rust|parity|verify-gophertunnel|changelog|update-guide|hash-source|hotfix> [flags]
+	fmt.Fprintln(os.Stderr, `usage: protocolgen <reconcile|reconcile-claims|supplement-symbols|carry-adjudications|adjudicate-claims|ingest|validate|emit-go|emit-rust|parity|verify-gophertunnel|changelog|update-guide|hash-source|hotfix> [flags]
 
 reconcile lowers one or both explicit source checkouts and writes manifest v2.
 reconcile-claims reconciles two or more previously validated claims files and writes manifest v2.
+supplement-symbols adds source-locked, non-wire actor metadata vocabularies to a canonical manifest.
 carry-adjudications re-fingerprints prior adjudications only when the selected target claim remains byte-equivalent.
 adjudicate-claims fingerprints explicit reviewed source selections against target claims.
 ingest lowers one source to auditable machine-derived claims JSON.
@@ -388,6 +391,8 @@ func runReconcileClaims(args []string) error {
 	adjudicationsPath := fs.String("adjudications", "", "fingerprinted adjudications JSON")
 	directionsPath := fs.String("directions", "", "reviewed packet-direction JSON")
 	nbtEncodingsPath := fs.String("nbt-encodings", "", "reviewed per-field NBT encoding JSON")
+	symbolsLock := fs.String("symbols-lock", "", "override the persisted Mojang reference catalog lock")
+	symbolsCatalog := fs.String("symbols-catalog", "", "Mojang html/enums.html at the symbols lock revision; overrides the lock's relative catalog path")
 	outPath := fs.String("out", "", "canonical manifest v2 output")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -433,6 +438,9 @@ func runReconcileClaims(args []string) error {
 	}
 	result, err := reconcile.ReconcileWithDirectionsAndNBT(lock.Target, results, adjudications, directions, nbtEncodings)
 	if err != nil {
+		return err
+	}
+	if err := addConfiguredSymbols(&result, lock, *lockPath, *symbolsLock, *symbolsCatalog); err != nil {
 		return err
 	}
 	if err := manifest.Write(*outPath, result); err != nil {
@@ -574,6 +582,8 @@ func runReconcile(args []string) error {
 	adjudicationsPath := fs.String("adjudications", "", "fingerprinted adjudications JSON")
 	directionsPath := fs.String("directions", "", "reviewed packet-direction JSON")
 	nbtEncodingsPath := fs.String("nbt-encodings", "", "reviewed per-field NBT encoding JSON")
+	symbolsLock := fs.String("symbols-lock", "", "override the persisted Mojang reference catalog lock")
+	symbolsCatalog := fs.String("symbols-catalog", "", "Mojang html/enums.html at the symbols lock revision; overrides the lock's relative catalog path")
 	outPath := fs.String("out", "", "canonical manifest v2 output")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -620,6 +630,9 @@ func runReconcile(args []string) error {
 	}
 	result, err := reconcile.ReconcileWithDirectionsAndNBT(lock.Target, results, adjudications, directions, nbtEncodings)
 	if err != nil {
+		return err
+	}
+	if err := addConfiguredSymbols(&result, lock, *lockPath, *symbolsLock, *symbolsCatalog); err != nil {
 		return err
 	}
 	if err := manifest.Write(*outPath, result); err != nil {
