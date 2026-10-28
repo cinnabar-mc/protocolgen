@@ -392,6 +392,7 @@ func runReconcileClaims(args []string) error {
 	directionsPath := fs.String("directions", "", "reviewed packet-direction JSON")
 	nbtEncodingsPath := fs.String("nbt-encodings", "", "reviewed per-field NBT encoding JSON")
 	symbolsLock := fs.String("symbols-lock", "", "override the persisted Mojang reference catalog lock")
+	symbolsCatalog := fs.String("symbols-catalog", "", "Mojang html/enums.html at the symbols lock revision; overrides the lock's relative catalog path")
 	outPath := fs.String("out", "", "canonical manifest v2 output")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -439,7 +440,7 @@ func runReconcileClaims(args []string) error {
 	if err != nil {
 		return err
 	}
-	if err := addConfiguredSymbols(&result, lock, *lockPath, *symbolsLock); err != nil {
+	if err := addConfiguredSymbols(&result, lock, *lockPath, *symbolsLock, *symbolsCatalog); err != nil {
 		return err
 	}
 	if err := manifest.Write(*outPath, result); err != nil {
@@ -582,6 +583,7 @@ func runReconcile(args []string) error {
 	directionsPath := fs.String("directions", "", "reviewed packet-direction JSON")
 	nbtEncodingsPath := fs.String("nbt-encodings", "", "reviewed per-field NBT encoding JSON")
 	symbolsLock := fs.String("symbols-lock", "", "override the persisted Mojang reference catalog lock")
+	symbolsCatalog := fs.String("symbols-catalog", "", "Mojang html/enums.html at the symbols lock revision; overrides the lock's relative catalog path")
 	outPath := fs.String("out", "", "canonical manifest v2 output")
 	if err := fs.Parse(args); err != nil {
 		return err
@@ -630,7 +632,7 @@ func runReconcile(args []string) error {
 	if err != nil {
 		return err
 	}
-	if err := addConfiguredSymbols(&result, lock, *lockPath, *symbolsLock); err != nil {
+	if err := addConfiguredSymbols(&result, lock, *lockPath, *symbolsLock, *symbolsCatalog); err != nil {
 		return err
 	}
 	if err := manifest.Write(*outPath, result); err != nil {

@@ -61,43 +61,67 @@ func TestCatalogRejectsIncompleteOrNonnumericTables(t *testing.T) {
 	}
 }
 
+// writeFixtureLock writes a symbols lock whose lock-relative catalog is
+// catalog.html, writing that file only when defaultCatalog is non-nil.
+func writeFixtureLock(t *testing.T, defaultCatalog []byte) (string, manifest.SourcePin, manifest.Manifest) {
+	t.Helper()
+	root := t.TempDir()
+	wireTarget := manifest.Target{MinecraftVersion: "1.26.51", ProtocolVersion: 2193}
+	pin := manifest.SourcePin{
+		ID: "official-reference", Kind: "mojang-enum-catalog", Revision: catalogRevision,
+		Locator: catalogLocator, Digest: fmt.Sprintf("sha256:%x", sha256.Sum256([]byte(catalogFixture))),
+		MinecraftVersion: "1.26.40-beta.0", ProtocolVersion: 2168,
+	}
+	lock := sourcelock.Lock{
+		SchemaVersion: sourcelock.SchemaVersion,
+		Target:        manifest.Target{MinecraftVersion: pin.MinecraftVersion, ProtocolVersion: pin.ProtocolVersion},
+		AppliesTo:     &wireTarget, Catalog: "catalog.html", Sources: []manifest.SourcePin{pin},
+	}
+	if defaultCatalog != nil {
+		if err := os.WriteFile(filepath.Join(root, lock.Catalog), defaultCatalog, 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	lockPath := filepath.Join(root, "symbols-lock.json")
+	if err := sourcelock.Write(lockPath, lock); err != nil {
+		t.Fatal(err)
+	}
+	m := manifest.Manifest{
+		SchemaVersion: manifest.SchemaVersion, Target: wireTarget,
+		Sources: []manifest.SourcePin{{ID: "wire", Kind: "synthetic", Revision: "fixture", Digest: "fixture:wire"}},
+		Packets: []manifest.Packet{{ID: 1, Name: "Fixture", Direction: manifest.DirectionClientbound}},
+	}
+	return lockPath, pin, m
+}
+
 func TestCatalogRejectsSourceDriftWithoutMutatingManifest(t *testing.T) {
-	for _, mode := range []string{"missing source", "changed bytes", "wrong output target", "conflicting symbols"} {
+	for _, mode := range []string{
+		"missing source", "changed bytes", "wrong output target", "conflicting symbols",
+		"missing explicit catalog", "changed explicit catalog",
+	} {
 		t.Run(mode, func(t *testing.T) {
-			root := t.TempDir()
-			wireTarget := manifest.Target{MinecraftVersion: "1.26.51", ProtocolVersion: 2193}
-			pin := manifest.SourcePin{
-				ID: "official-reference", Kind: "mojang-enum-catalog", Revision: catalogRevision,
-				Locator: catalogLocator, Digest: fmt.Sprintf("sha256:%x", sha256.Sum256([]byte(catalogFixture))),
-				MinecraftVersion: "1.26.40-beta.0", ProtocolVersion: 2168,
+			var defaultCatalog []byte
+			switch mode {
+			case "missing source":
+			case "changed bytes":
+				defaultCatalog = []byte(catalogFixture + "\n")
+			default:
+				defaultCatalog = []byte(catalogFixture)
 			}
-			lock := sourcelock.Lock{
-				SchemaVersion: sourcelock.SchemaVersion,
-				Target:        manifest.Target{MinecraftVersion: pin.MinecraftVersion, ProtocolVersion: pin.ProtocolVersion},
-				AppliesTo:     &wireTarget, Catalog: "catalog.html", Sources: []manifest.SourcePin{pin},
-			}
-			if mode != "missing source" {
-				data := []byte(catalogFixture)
-				if mode == "changed bytes" {
-					data = append(data, '\n')
-				}
-				if err := os.WriteFile(filepath.Join(root, lock.Catalog), data, 0o644); err != nil {
+			lockPath, pin, m := writeFixtureLock(t, defaultCatalog)
+			explicit := ""
+			switch mode {
+			case "missing explicit catalog":
+				// A valid lock-relative default must not mask a missing explicit input.
+				explicit = filepath.Join(t.TempDir(), "enums.html")
+			case "changed explicit catalog":
+				explicit = filepath.Join(t.TempDir(), "enums.html")
+				if err := os.WriteFile(explicit, []byte(catalogFixture+"\n"), 0o644); err != nil {
 					t.Fatal(err)
 				}
-			}
-			lockPath := filepath.Join(root, "symbols-lock.json")
-			if err := sourcelock.Write(lockPath, lock); err != nil {
-				t.Fatal(err)
-			}
-			m := manifest.Manifest{
-				SchemaVersion: manifest.SchemaVersion, Target: wireTarget,
-				Sources: []manifest.SourcePin{{ID: "wire", Kind: "synthetic", Revision: "fixture", Digest: "fixture:wire"}},
-				Packets: []manifest.Packet{{ID: 1, Name: "Fixture", Direction: manifest.DirectionClientbound}},
-			}
-			if mode == "wrong output target" {
+			case "wrong output target":
 				m.Target.ProtocolVersion++
-			}
-			if mode == "conflicting symbols" {
+			case "conflicting symbols":
 				symbols, err := extractMetadataSymbols([]byte(catalogFixture), pin)
 				if err != nil {
 					t.Fatal(err)
@@ -109,7 +133,7 @@ func TestCatalogRejectsSourceDriftWithoutMutatingManifest(t *testing.T) {
 			if err != nil {
 				t.Fatal(err)
 			}
-			if err := AddMetadataSymbols(&m, lockPath); err == nil {
+			if err := AddMetadataSymbols(&m, lockPath, explicit); err == nil {
 				t.Fatal("accepted source drift or conflicting reference data")
 			}
 			after, err := manifest.MarshalStable(m)
@@ -117,5 +141,33 @@ func TestCatalogRejectsSourceDriftWithoutMutatingManifest(t *testing.T) {
 				t.Fatalf("failed import partially mutated caller's manifest: %v", err)
 			}
 		})
+	}
+}
+
+func TestExplicitCatalogOverridesLockRelativeDefaultIdempotently(t *testing.T) {
+	lockPath, _, m := writeFixtureLock(t, nil)
+	explicit := filepath.Join(t.TempDir(), "html", "enums.html")
+	if err := os.MkdirAll(filepath.Dir(explicit), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.WriteFile(explicit, []byte(catalogFixture), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := AddMetadataSymbols(&m, lockPath, explicit); err != nil {
+		t.Fatal(err)
+	}
+	first, err := manifest.MarshalStable(m)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(m.Symbols) != 2 {
+		t.Fatalf("explicit catalog imported %d symbol groups, want 2", len(m.Symbols))
+	}
+	if err := AddMetadataSymbols(&m, lockPath, explicit); err != nil {
+		t.Fatal(err)
+	}
+	second, err := manifest.MarshalStable(m)
+	if err != nil || !bytes.Equal(first, second) {
+		t.Fatalf("reapplying the identical catalog changed the manifest: %v", err)
 	}
 }

@@ -21,10 +21,13 @@ import (
 const catalogRevision = "0e00fe80f4f3c71572ff6429de40146d1f4412fc"
 const catalogLocator = "https://github.com/Mojang/bedrock-protocol-docs/blob/" + catalogRevision + "/html/enums.html"
 
-// AddMetadataSymbols reads the existing Mojang documentation submodule. Its
-// historical catalog has a distinct versioned source pin: it is not promoted
+// AddMetadataSymbols reads the pinned Mojang enum catalog. catalogPath, when
+// nonempty, names html/enums.html from a Mojang/bedrock-protocol-docs checkout
+// at the lock's revision; otherwise the lock's catalog path, relative to the
+// lock, is used. Either way the bytes must match the locked SHA-256. The
+// historical catalog keeps a distinct versioned source pin: it is not promoted
 // into the output target's wire sources or relabelled as current native data.
-func AddMetadataSymbols(m *manifest.Manifest, lockPath string) error {
+func AddMetadataSymbols(m *manifest.Manifest, lockPath, catalogPath string) error {
 	lock, err := sourcelock.Load(lockPath)
 	if err != nil {
 		return err
@@ -42,9 +45,12 @@ func AddMetadataSymbols(m *manifest.Manifest, lockPath string) error {
 	if pin.MinecraftVersion == "" || pin.ProtocolVersion <= 0 {
 		return fmt.Errorf("metadata catalog reference source version is required")
 	}
-	data, err := os.ReadFile(filepath.Join(filepath.Dir(lockPath), lock.Catalog))
+	if catalogPath == "" {
+		catalogPath = filepath.Join(filepath.Dir(lockPath), lock.Catalog)
+	}
+	data, err := os.ReadFile(catalogPath)
 	if err != nil {
-		return fmt.Errorf("read pinned Mojang enum catalog (initialize bedrock-protocol-docs submodule): %w", err)
+		return fmt.Errorf("read pinned Mojang enum catalog (pass -symbols-catalog with html/enums.html from Mojang/bedrock-protocol-docs at %s): %w", catalogRevision, err)
 	}
 	digest := sha256.Sum256(data)
 	if got := "sha256:" + hex.EncodeToString(digest[:]); got != pin.Digest {

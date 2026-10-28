@@ -16,6 +16,10 @@ LAYOUT_GOPHERTUNNEL_DIR ?= $(if $(GOPHERTUNNEL_DIR),$(GOPHERTUNNEL_DIR),../gophe
 RELEASE_INDEX := data/source/releases.json
 ORACLE_REPORT ?= /tmp/protocolgen-gophertunnel-report.json
 GOPHER_ARGS = $(if $(GOPHERTUNNEL_DIR),-gophertunnel $(GOPHERTUNNEL_DIR))
+# html/enums.html from Mojang/bedrock-protocol-docs at the revision pinned by a
+# snapshot's symbols-lock.json; overrides that lock's relative catalog path.
+SYMBOLS_CATALOG ?=
+SYMBOLS_ARGS = $(if $(SYMBOLS_CATALOG),-symbols-catalog $(SYMBOLS_CATALOG))
 
 VANILLA_VERSION ?= $(shell jq -er .default_capture $(RELEASE_INDEX))
 VANILLA_MANIFEST := ../generated/$(VANILLA_VERSION)/manifest.json
@@ -142,6 +146,7 @@ regen-1.26.51:
 		-adjudications $(TARGET_12651)/adjudications.json \
 		-directions $(TARGET_12651)/directions.json \
 		-nbt-encodings $(TARGET_12651)/nbt-encodings.json \
+		$(SYMBOLS_ARGS) \
 		-out $(TARGET_12651)/manifest.json
 	$(PROTOCOLGEN) validate -manifest $(TARGET_12651)/manifest.json
 	$(PROTOCOLGEN) emit-go \
