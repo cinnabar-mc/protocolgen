@@ -175,6 +175,13 @@ jobs:
             MOJANG_DIR="$RUNNER_TEMP/protocolgen-mojang-2187/json" \
             ENDSTONE_DIR="$RUNNER_TEMP/protocolgen-endstone-2187"
 
+      - name: Fetch pinned Mojang enum catalog for 1.26.51 symbols
+        run: |
+          # The pinned revision is not on a branch (it is the head of Mojang/bedrock-protocol-docs#32), so fetch it by SHA.
+          revision="$(jq -er '.sources[0].revision' generated/1.26.51/symbols-lock.json)"
+          git -C "$RUNNER_TEMP/protocolgen-mojang" fetch --filter=blob:none origin "$revision"
+          git -C "$RUNNER_TEMP/protocolgen-mojang" worktree add --detach "$RUNNER_TEMP/protocolgen-mojang-catalog" "$revision"
+
       - name: Regenerate and verify 1.26.51
         run: |
           git -C "$RUNNER_TEMP/protocolgen-mojang" worktree add --detach "$RUNNER_TEMP/protocolgen-mojang-2193" "$(jq -r '.sources[] | select(.id == "mojang") | .revision' generated/1.26.51/source-lock.json)"
@@ -183,7 +190,8 @@ jobs:
             GO_CACHE="$RUNNER_TEMP/protocolgen-go-cache" \
             ORACLE_REPORT="$RUNNER_TEMP/gophertunnel-report.json" \
             MOJANG_DIR="$RUNNER_TEMP/protocolgen-mojang-2193/json" \
-            ENDSTONE_DIR="$RUNNER_TEMP/protocolgen-endstone-2193"
+            ENDSTONE_DIR="$RUNNER_TEMP/protocolgen-endstone-2193" \
+            SYMBOLS_CATALOG="$RUNNER_TEMP/protocolgen-mojang-catalog/html/enums.html"
 
       - name: Preserve oracle comparison report
         if: always()
