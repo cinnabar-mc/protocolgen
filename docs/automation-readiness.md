@@ -133,7 +133,7 @@ Five deprecated oracle-only IDs are intentionally excluded from the generated po
 
 ### Differential byte-test allowances
 
-The separate executable differential harness targets protocol 2168. Its committed corpus covers shared packet pools, but this does not prove every branch or value. `differential/accepted-divergences.json` has **40 allowances across 30 packet IDs**: 33 re-encoded-byte allowances and 7 decode-success allowances. All use empty `input_hex`, so they apply to a packet/direction/error class rather than one exact sample. These are broader than the new AST comparison fingerprints and should be narrowed to semantic predicates or exact reproductions before unattended promotion.
+The separate executable differential harness targets protocol 2225. Its committed corpus covers shared packet pools, but this does not prove every branch or value. `differential/accepted-divergences.json` has **45 allowances across 33 packet IDs**: 37 re-encoded-byte allowances and 8 decode-success allowances. All use empty `input_hex`, so they apply to a packet/direction/error class rather than one exact sample. These are broader than the new AST comparison fingerprints and should be narrowed to semantic predicates or exact reproductions before unattended promotion.
 
 Affected IDs: 8, 9, 11, 12, 15, 30, 31, 32, 49, 50, 52, 56, 65, 80, 81, 86, 93, 108, 119, 124, 148, 153, 162, 165, 166, 184, 190, 313, 326, 347. The file records each rationale. Many concern oracle canonicalization, derived values, reserved bytes, or malformed-input tolerance; they are not automatically generated-code defects.
 

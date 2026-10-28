@@ -2,6 +2,7 @@ package differential
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -11,23 +12,11 @@ import (
 
 const gophertunnelModule = "github.com/sandertv/gophertunnel"
 
-// Every module under differential/ must link the gophertunnel fork commit
-// gophertunnel.json names; scripts/pin-gophertunnel.sh rewrites them all.
+// Every module under differential/ must link the gophertunnel fork commit named by the
+// gophertunnel.json beside its go.mod; scripts/pin-gophertunnel.sh rewrites them.
 func TestGophertunnelPinsMatchTheLock(t *testing.T) {
-	data, err := os.ReadFile("gophertunnel.json")
-	if err != nil {
-		t.Fatal(err)
-	}
-	var lock struct {
-		Module  string `json:"module"`
-		Version string `json:"version"`
-	}
-	if err := json.Unmarshal(data, &lock); err != nil || lock.Module == "" || lock.Version == "" {
-		t.Fatalf("gophertunnel.json: incomplete lock (%v)", err)
-	}
-	want := lock.Module + " " + lock.Version
 	modules := 0
-	err = filepath.WalkDir(".", func(path string, entry fs.DirEntry, err error) error {
+	err := filepath.WalkDir(".", func(path string, entry fs.DirEntry, err error) error {
 		if err != nil || entry.IsDir() || entry.Name() != "go.mod" {
 			return err
 		}
@@ -39,8 +28,13 @@ func TestGophertunnelPinsMatchTheLock(t *testing.T) {
 			return nil
 		}
 		modules++
+		want, err := lockedGophertunnel(filepath.Join(filepath.Dir(path), "gophertunnel.json"))
+		if err != nil {
+			t.Error(err)
+			return nil
+		}
 		if got := replacement(string(text)); got != want {
-			t.Errorf("%s replaces %s with %q, gophertunnel.json pins %q", path, gophertunnelModule, got, want)
+			t.Errorf("%s replaces %s with %q, its gophertunnel.json pins %q", path, gophertunnelModule, got, want)
 		}
 		return nil
 	})
@@ -50,6 +44,22 @@ func TestGophertunnelPinsMatchTheLock(t *testing.T) {
 	if modules < 2 {
 		t.Fatalf("found %d modules linking gophertunnel, want the differential and retail modules", modules)
 	}
+}
+
+// lockedGophertunnel returns "module version" from a gophertunnel.json lock.
+func lockedGophertunnel(path string) (string, error) {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return "", err
+	}
+	var lock struct {
+		Module  string `json:"module"`
+		Version string `json:"version"`
+	}
+	if err := json.Unmarshal(data, &lock); err != nil || lock.Module == "" || lock.Version == "" {
+		return "", fmt.Errorf("%s: incomplete lock (%v)", path, err)
+	}
+	return lock.Module + " " + lock.Version, nil
 }
 
 // replacement returns "path version" of the gophertunnel replace directive in

@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	gophertunnelpacket "github.com/sandertv/gophertunnel/minecraft/protocol/packet"
-	generatedpacket "protocolgen/generated/1.26.51/go/protocol/packet"
+	generatedpacket "protocolgen/generated/1.26.60/go/protocol/packet"
 )
 
 func TestPacketPoolsHaveMatchingIDs(t *testing.T) {

@@ -1,6 +1,6 @@
 # Differential codec harness
 
-This module compares protocol 2193 payloads between the generated 1.26.51 Go codec and the gophertunnel fork commit that `gophertunnel.json` pins. That lock is the one gophertunnel pin for every module here: `scripts/pin-gophertunnel.sh [VERSION]` rewrites their `go.mod` files from it, and `TestGophertunnelPinsMatchTheLock` fails when one disagrees.
+This module compares protocol 2225 payloads between the generated 1.26.60 Go codec and the gophertunnel fork commit that `gophertunnel.json` pins. Each module here has its own lock beside its `go.mod`: `scripts/pin-gophertunnel.sh [VERSION]` rewrites the harness lock and then every `go.mod` from its lock, and `TestGophertunnelPinsMatchTheLock` fails when one disagrees.
 
 Pool parity accepts five deprecated oracle-only IDs that are still registered by gophertunnel but absent from the manifest: 55 `AdventureSettings`, 117 `ScriptCustomEvent`, 163 `FilterText`, 173 `PhotoInfoRequest`, and 197 `ClientCheatAbility`.
 Run `go test ./...` for the committed corpus. Run `go test -fuzz=FuzzDifferential -fuzztime=10m -promote` to fuzz and promote successful cases.
@@ -26,6 +26,8 @@ each verified against oracle source:
 
 ## Retail 2193
 
+Retail stays on protocol 2193 and the 1.26.51 codec until Cinnabar has 1.26.60 captures.
+
 `make retail` (CI job `retail`) runs the 53 batches pinned in
 `retail/corpus.json`, and the 30 synthetic batches in `testdata/bench`, through
 four decoders and fails on any disagreement that
@@ -42,7 +44,7 @@ that vendored it into `build/valentine`.
 - **go:** the generated Go, with the reader's limits for client packets only.
   An id outside the manifest is forwarded as unknown; a manifest id from the
   wrong sender is a direction error.
-- **gophertunnel:** the fork commit `gophertunnel.json` pins, which is also
+- **gophertunnel:** the fork commit `retail/gophertunnel.json` pins, which is also
   the one Cinnabar's fixturegen pins at the corpus commit (`prepare` checks
   they match), used as its connections use it:
   `packet.Decoder` framing, the sender's pool, `packet.Unknown` for absent

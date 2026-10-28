@@ -33892,7 +33892,7 @@
     {
       "id": 60,
       "name": "SetDifficultyPacket",
-      "direction": "clientbound",
+      "direction": "bidirectional",
       "fields": [
         {
           "ordinal": 0,
@@ -40050,7 +40050,7 @@
     {
       "id": 66,
       "name": "SpawnExperienceOrbPacket",
-      "direction": "clientbound",
+      "direction": "bidirectional",
       "fields": [
         {
           "ordinal": 0,

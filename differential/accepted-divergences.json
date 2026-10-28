@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "minecraft_version": "1.26.51",
-  "protocol_version": 2193,
+  "minecraft_version": "1.26.60",
+  "protocol_version": 2225,
   "entries": [
     {
       "packet": 8,
@@ -172,6 +172,20 @@
       "rationale": "Oracle SoundPos converts the block position through a lossy /8*8 float round-trip on decode+encode; generated preserves the raw coordinate varint."
     },
     {
+      "packet": 90,
+      "direction": "client",
+      "input_hex": "",
+      "kind": "decode-success",
+      "rationale": "Oracle reads the structure name's filtered form as a plain string (structure_block_update.go Marshal); 1.26.60 vanilla writes it as an optional string, which generated follows."
+    },
+    {
+      "packet": 90,
+      "direction": "client",
+      "input_hex": "",
+      "kind": "re-encoded-bytes",
+      "rationale": "Oracle reads the structure name's filtered form as a plain string (structure_block_update.go Marshal); 1.26.60 vanilla writes it as an optional string, which generated follows."
+    },
+    {
       "packet": 93,
       "direction": "client",
       "input_hex": "",
@@ -205,6 +219,20 @@
       "input_hex": "",
       "kind": "decode-success",
       "rationale": "Oracle reads this packet's NBT payload as rest-of-buffer raw bytes (io.Bytes), consuming any trailing garbage; generated scans NBT structure and rejects bytes past the NBT boundary. Well-formed payloads fill the remainder exactly."
+    },
+    {
+      "packet": 133,
+      "direction": "client",
+      "input_hex": "",
+      "kind": "re-encoded-bytes",
+      "rationale": "Oracle decodes the structure template NBT to a map and re-encodes an explicit empty compound 0a0000 for empty input; generated preserves wire bytes (structure_template_data_response.go Marshal)."
+    },
+    {
+      "packet": 133,
+      "direction": "server",
+      "input_hex": "",
+      "kind": "re-encoded-bytes",
+      "rationale": "Oracle decodes the structure template NBT to a map and re-encodes an explicit empty compound 0a0000 for empty input; generated preserves wire bytes (structure_template_data_response.go Marshal)."
     },
     {
       "packet": 148,
