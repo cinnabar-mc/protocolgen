@@ -19,7 +19,7 @@ const extractionDepthLimit = 40
 // helper bodies, private writer methods and interface variant tables were
 // reviewed; the extractor expands them only at these commits.
 var reviewedHelperRevisions = map[string]bool{
-	"5f6e839b63c8bf000bca26e8d7cdac2fae8b7604": true, // protocol 2225
+	"77149b94f8024826e34efda6f625c366596118d2": true, // protocol 2225
 }
 
 type typeRef struct {

@@ -14,11 +14,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/disconnect.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/disconnect.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:ccccab3210f6f984855714809f51f689b18ac5c578b2bda86f7cc71795a2a133"
+      "fingerprint": "sha256:990e34399db66b336daec4cfd7e0b6e09f0e15e9dc27d14de6abbde5a4619e98"
     },
     {
       "id": 9,
@@ -31,11 +31,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/text.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/text.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:aff2cecea2d499cb01a92277454197576e7516e2cbc7bc0d701d68d2c0041cbc"
+      "fingerprint": "sha256:391f126992af6299ab7788ff179711361ff41528cabd5c0b7339aba1729e4646"
     },
     {
       "id": 12,
@@ -48,11 +48,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/add_player.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/add_player.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:c7373b97346c94702065ef6b92cc503a6c159ed61ffa226dd6d78e2ec6c6a4ce"
+      "fingerprint": "sha256:9165d4a6575a236ad58f2f7af1652c77c7b402004e0d096e9bb9663e4500e37e"
     },
     {
       "id": 13,
@@ -65,11 +65,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/add_actor.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/add_actor.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:48a47a1da013452c32d1b51a3c918dd52defc90fb45b76e148a1ec7e18adfa00"
+      "fingerprint": "sha256:d729e1c5b6a52f4fb99b5695f25455aa7f4e973db7b8abceabc42b3ce5237752"
     },
     {
       "id": 15,
@@ -82,11 +82,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/add_item_actor.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/add_item_actor.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:46b94bf1b9cb7d5a657ad8fe136152814dd55d0c29b8c727b700a794ec772796"
+      "fingerprint": "sha256:6608c20d72225ea16e802e485189f9a05a83d7a03ad3c508ed77941aa3af65fe"
     },
     {
       "id": 30,
@@ -99,11 +99,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/inventory_transaction.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/inventory_transaction.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:b670584cf10b3070f8e9573a93a73641965824e73f6453663ddfe5195f0a04f7"
+      "fingerprint": "sha256:87e415205ee749b00118c25aac5499cc1db3ec3b63705c98bf4d978cd2f46683"
     },
     {
       "id": 31,
@@ -116,11 +116,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/mob_equipment.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/mob_equipment.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:8a7c1434ed874dd425d56e28265207048bbe93559530be57bc7bfae88a6784bb"
+      "fingerprint": "sha256:20104426401485ff5b76fe9d84c6266accb63a0811af64e8fab496c4208983eb"
     },
     {
       "id": 32,
@@ -133,11 +133,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/mob_armour_equipment.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/mob_armour_equipment.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:d5c417a3d7d0a4cc03d8864f4fb40d99aa70de6ab79fc49ed9f54c17ad66669c"
+      "fingerprint": "sha256:a8d0708c5713fbd167b67091ecc0f357a4e9f1dd8c2f6dc5be35218cd0628b4f"
     },
     {
       "id": 39,
@@ -150,11 +150,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/set_actor_data.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/set_actor_data.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:cbbd31970d89d5d4f3858e949e6feb2a9ea6041c12270744442eeb2457cccff5"
+      "fingerprint": "sha256:118b517eb50ef66f761f0fa743826503276cc0376e6266462c97e57041860ce7"
     },
     {
       "id": 49,
@@ -167,11 +167,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/inventory_content.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/inventory_content.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:f899f4f7177740f6b367aee254a0f1a28a046123e1908422e1b2d2ceeb229712"
+      "fingerprint": "sha256:d0fd3e2406c0bac0081110bfefa3bce610508bd897fb8ba6e72fdb3e2f05ed65"
     },
     {
       "id": 50,
@@ -184,11 +184,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/inventory_slot.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/inventory_slot.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:3dc7491a58fba53e82919a41fcefee61e4aa1fdb3e43e714a1367658c8aeb42c"
+      "fingerprint": "sha256:4b8ff503637755e17ff79d784f770c61a7a9429a3b052c21ee9aaca3955f6696"
     },
     {
       "id": 52,
@@ -201,11 +201,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/crafting_data.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/crafting_data.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:0881422a7774ec0eb439f7104090c0459a8c02e2277c6caccfcbd5cd0c892188"
+      "fingerprint": "sha256:d3cc9f37fa3d45d86b106abdbafca844931421a590ce862772f0018f7dab204f"
     },
     {
       "id": 63,
@@ -218,11 +218,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/player_list.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/player_list.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:7127aec98e7387753ab85ab2d4b6585eaa43c568b0df78897f6cdfaead0b34cb"
+      "fingerprint": "sha256:4442468209c94984e3a0656b57d96a8a5d56265d2e2aaed8d8659baad7c5eb6f"
     },
     {
       "id": 65,
@@ -235,11 +235,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/event.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/event.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:88e0b7c17fd7903124e34f9962703cc0a67780fe12aee0baaabd1c3075a777af"
+      "fingerprint": "sha256:ed7e75879893831d49a4ce85aec25c6387233006d95afa063a34fb7edc9cbb44"
     },
     {
       "id": 78,
@@ -252,28 +252,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/command_block_update.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/command_block_update.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:7b07e3f9bccf1a2fde813b1ab4ac51df8ca62bd8b2379dafc01b77f3565e63b7"
-    },
-    {
-      "id": 90,
-      "name": "StructureBlockUpdatePacket",
-      "reason": "Wire conflict: StructureBlockUpdate is serialized only through its reflected schema at protocol 2225, so the structure name is a RedactableString whose filtered name is an optional string; the protocol 2225 StructureBlockUpdate marshal writes the filtered name as a plain string, the protocol 2168 hand-written layout.",
-      "what_would_settle_it": "Update the gophertunnel StructureBlockUpdate marshal to write the filtered structure name as an optional string, or capture a structure block update from a 1.26.60 client.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "Both 1.26.60 sources describe the structure name as a RedactableString with a required name and an optional filtered name."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/structure_block_update.go",
-          "summary": "The locked protocol 2225 source writes the structure name and the filtered structure name as two plain strings."
-        }
-      ],
-      "fingerprint": "sha256:413c9e228d23ce6492198de316af632d67413a576e0cea14caf6dbf49b8d518c"
+      "fingerprint": "sha256:6175b6289fa0767a71528153f1ecdeb3aad434fa6330b0349ecaf3d6cb33f467"
     },
     {
       "id": 108,
@@ -286,11 +269,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/set_score.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/set_score.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:ce4029a8a892f771965d7833d9b89bb331a822161a88ba144af53a9a4b197f4c"
+      "fingerprint": "sha256:f937d0b5952200e3687eba0d8714e40265aa5adeea66b61d5b47fafe10d9cb8a"
     },
     {
       "id": 144,
@@ -303,11 +286,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/player_auth_input.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/player_auth_input.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:8dd3e927d9d655aa752bf94f9656d77079d42b737fb2bed498cc6b31c6097c71"
+      "fingerprint": "sha256:338121eb90be0ce4b63eb9c286eeb0ae60cb7a27ef0b3fc3efd1485ab73c079c"
     },
     {
       "id": 145,
@@ -320,11 +303,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/creative_content.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/creative_content.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:426355b77d77133273502231103e2a3876aeb818295842cfcd1a98f40c908903"
+      "fingerprint": "sha256:148a21a1d79a5cc844db498010ba084d29e7c9d182b4269717880a7a9aeeb498"
     },
     {
       "id": 147,
@@ -337,11 +320,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/item_stack_request.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/item_stack_request.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:43c87769e9e876a54b5e508a333e1604b44bb46ff573595d28339a31ab10bcf5"
+      "fingerprint": "sha256:a2684a01edd80320a06510ccead7750bca2c2c0d92b9451338d38168ec3b49e3"
     },
     {
       "id": 174,
@@ -354,66 +337,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/sub_chunk.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/sub_chunk.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:ee4c5f2134a1a5be6c30c341144dabe047fa58605586af501f5717ffbec771a9"
-    },
-    {
-      "id": 300,
-      "name": "CameraInstructionPacket",
-      "reason": "Wire conflict: the canonical camera spline type and spline identifier are unconditional, while the protocol 2225 CameraInstruction marshal wraps both in optionals. CloudburstMC writeSplineInstruction writes the type byte unconditionally, matching the manifest, so the fork is the suspect side for the type.",
-      "what_would_settle_it": "A capture of a spline camera instruction with and without an identifier.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/camera_instruction.go",
-          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:19166081bca917235c6ed69f8d7829a5df1c9fc454ab744fa8607b1b5617c2ad"
-    },
-    {
-      "id": 324,
-      "name": "PlayerVideoCapturePacket",
-      "reason": "Wire conflict: both 1.26.60 sources and LeviLamina order the action union start then stop, so start is selector 0. The protocol 2225 PlayerVideoCapture marshal numbers stop as 0 and start as 1, so it swaps the two actions. The fork is the suspect side; its u8 action and the var_u32 selector are the same byte for these values.",
-      "what_would_settle_it": "A capture of a start video capture action.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape."
-        },
-        {
-          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
-          "summary": "The 26.51 payload is one std::variant<StartVideoCapture, StopVideoCapture>."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/player_video_capture.go#L33",
-          "summary": "The locked marshal writes the action byte with stop as 0."
-        }
-      ],
-      "fingerprint": "sha256:841f68f762e8008253b98f8163090714ea0d955b2221b167579912ce5a97b446"
-    },
-    {
-      "id": 338,
-      "name": "CameraSplinePacket",
-      "reason": "Wire conflict: canonical spline_type is unconditional but protocol 2225 CameraSpline makes it optional; canonical progress/rotation easing is optional but protocol 2225 code writes strings unconditionally.",
-      "what_would_settle_it": "Capture spline variants with absent/present spline_type and easing values or inspect the matching binary serializer to settle each presence boundary.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/camera_spline.go",
-          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:cc94542f45498debbf3c9fde25b8b1708e40b8b341fef83d091788ca3e4d7453"
+      "fingerprint": "sha256:7471121e674d723c0785018befe039eaf9958a2e82e3dd0ac8a1a431edddf29e"
     },
     {
       "id": 345,
@@ -426,11 +354,11 @@
           "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/clientbound_attribute_layer_sync.go",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/clientbound_attribute_layer_sync.go",
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:660242c965e311530b6ffbb6a90258a95ca5fb125bd022066cae668e80d1d235"
+      "fingerprint": "sha256:568a69b7739eae65abd89c3f64d3b9360661426bac1e72780bf8f3303bd8d075"
     }
   ]
 }
