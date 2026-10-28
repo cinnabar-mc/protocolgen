@@ -132,17 +132,6 @@ func (x *AnimatedImageData) Marshal(io IO) {
 	x.AnimationExpression.Marshal(io)
 }
 
-type AnimationMode uint8
-
-const (
-	AnimationModeNone   AnimationMode = 0
-	AnimationModeLayers AnimationMode = 1
-	AnimationModeBlocks AnimationMode = 2
-)
-
-// Marshal reads or writes AnimationMode through its uint8 wire encoding.
-func (x *AnimationMode) Marshal(io IO) { io.Uint8((*uint8)(x)) }
-
 // PlayerArmourDamageEntry represents an entry for a single piece of armour that should be damaged.
 type ArmorSlotAndDamagePair struct {
 	// ArmourSlot is the index of the armour slot to damage.
@@ -2185,18 +2174,6 @@ const (
 // Marshal reads or writes MinecraftEventingPOIBlockInteractionType through its uint8 wire encoding.
 func (x *MinecraftEventingPOIBlockInteractionType) Marshal(io IO) { io.Uint8((*uint8)(x)) }
 
-type Mirror uint8
-
-const (
-	MirrorNone Mirror = 0
-	MirrorX    Mirror = 1
-	MirrorZ    Mirror = 2
-	MirrorXZ   Mirror = 3
-)
-
-// Marshal reads or writes Mirror through its uint8 wire encoding.
-func (x *Mirror) Marshal(io IO) { io.Uint8((*uint8)(x)) }
-
 type MissingBlobData struct {
 	BlobID   uint64
 	BlobData []byte
@@ -2785,18 +2762,6 @@ const (
 
 // Marshal reads or writes RewindType through its uint8 wire encoding.
 func (x *RewindType) Marshal(io IO) { io.Uint8((*uint8)(x)) }
-
-type Rotation uint8
-
-const (
-	RotationNone      Rotation = 0
-	RotationRotate90  Rotation = 1
-	RotationRotate180 Rotation = 2
-	RotationRotate270 Rotation = 3
-)
-
-// Marshal reads or writes Rotation through its uint8 wire encoding.
-func (x *Rotation) Marshal(io IO) { io.Uint8((*uint8)(x)) }
 
 type ScriptModuleMinecraftScriptPrimitiveShapeType uint8
 

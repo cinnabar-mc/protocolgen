@@ -25,6 +25,8 @@ func Test12660PacketGoldens(t *testing.T) {
 		{&packet.LevelEventGeneric{EventID: 1, CTD: []byte{3, 1, 'x', 2, 0}}, &packet.LevelEventGeneric{}, "020301780200"},
 		{&packet.StructureTemplateDataResponse{StructureName: "a", ResponseType: 1}, &packet.StructureTemplateDataResponse{}, "01610001"},
 		{&packet.StructureTemplateDataResponse{StructureName: "a", StructureSNBT: protocol.Option([]byte{10, 0, 0}), ResponseType: 1}, &packet.StructureTemplateDataResponse{}, "0161010a000001"},
+		{&packet.EducationSettings{AgentCapabilities: protocol.Option(protocol.AgentCapabilities{CanModifyBlocks: protocol.Option(true)})}, &packet.EducationSettings{}, "000000000000010101000000"},
+		{&packet.EducationSettings{AgentCapabilities: protocol.Option(protocol.AgentCapabilities{})}, &packet.EducationSettings{}, "0000000000000100000000"},
 		{&packet.ClientboundPlayAudioContent{
 			SharedMetadata:  protocol.AudioSignedAudioContent{CompactJWT: "a"},
 			PlaybackContent: protocol.AudioSignedAudioContent{CompactJWT: "c"},
@@ -161,6 +163,33 @@ func Test12660SoundUpdatesHaveOneSelector(t *testing.T) {
 		decoded.Marshal(reader)
 		if reader.Err() != nil || reader.Remaining() != 0 || !reflect.DeepEqual(value, decoded) {
 			t.Fatalf("sound update did not decode: %v, remaining %d", reader.Err(), reader.Remaining())
+		}
+	}
+}
+
+// Test12660StructureNameBytes checks that a structure name carries its filtered name as an optional string.
+func Test12660StructureNameBytes(t *testing.T) {
+	for _, tc := range []struct {
+		value protocol.StructureRedactableName
+		wire  string
+	}{
+		{protocol.StructureRedactableName{Unredacted: "a"}, "016100"},
+		{protocol.StructureRedactableName{Unredacted: "a", Redacted: protocol.Option("b")}, "0161010162"},
+	} {
+		want, err := hex.DecodeString(tc.wire)
+		if err != nil {
+			t.Fatal(err)
+		}
+		writer := protocol.NewWriter()
+		tc.value.Marshal(writer)
+		if writer.Err() != nil || !bytes.Equal(writer.Data(), want) {
+			t.Fatalf("encoded %x, want %x: %v", writer.Data(), want, writer.Err())
+		}
+		var decoded protocol.StructureRedactableName
+		reader := protocol.NewReader(want)
+		decoded.Marshal(reader)
+		if reader.Err() != nil || reader.Remaining() != 0 || !reflect.DeepEqual(decoded, tc.value) {
+			t.Fatalf("decoded %#v, want %#v: %v", decoded, tc.value, reader.Err())
 		}
 	}
 }

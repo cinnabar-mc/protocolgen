@@ -45882,67 +45882,89 @@
         {
           "ordinal": 1,
           "name": "Structure Data",
-          "semantic": "StructureEditorData",
-          "type_id": "StructureEditorData",
+          "semantic": "Structure Data",
+          "type_id": "StructureEditorData.json#",
           "encode": {
             "kind": "struct",
             "semantic": "StructureEditorData",
-            "type_id": "StructureEditorData",
+            "type_id": "StructureEditorData.json#",
             "fields": [
               {
                 "ordinal": 0,
                 "name": "Structure Name",
                 "semantic": "Structure Name",
+                "type_id": "Bedrock__Safety__RedactableString.json#",
                 "encode": {
-                  "kind": "string",
-                  "prefix": {
-                    "kind": "primitive",
-                    "primitive": {
-                      "code": "var_u32",
-                      "width": 32,
-                      "signed": false,
-                      "zigzag": false,
-                      "endianness": "none"
+                  "kind": "struct",
+                  "semantic": "Bedrock::Safety::RedactableString",
+                  "type_id": "Bedrock__Safety__RedactableString.json#",
+                  "fields": [
+                    {
+                      "ordinal": 0,
+                      "name": "Unredacted",
+                      "semantic": "Unredacted",
+                      "encode": {
+                        "kind": "string",
+                        "prefix": {
+                          "kind": "primitive",
+                          "primitive": {
+                            "code": "var_u32",
+                            "width": 32,
+                            "signed": false,
+                            "zigzag": false,
+                            "endianness": "none"
+                          }
+                        },
+                        "encoding": "utf8",
+                        "representation": "text"
+                      },
+                      "symmetry": "symmetric",
+                      "provenance": {
+                        "pins": [
+                          "mojang"
+                        ]
+                      }
+                    },
+                    {
+                      "ordinal": 1,
+                      "name": "Redacted",
+                      "semantic": "Redacted",
+                      "encode": {
+                        "kind": "optional",
+                        "value": {
+                          "kind": "string",
+                          "prefix": {
+                            "kind": "primitive",
+                            "primitive": {
+                              "code": "var_u32",
+                              "width": 32,
+                              "signed": false,
+                              "zigzag": false,
+                              "endianness": "none"
+                            }
+                          },
+                          "encoding": "utf8",
+                          "representation": "text"
+                        }
+                      },
+                      "symmetry": "symmetric",
+                      "provenance": {
+                        "pins": [
+                          "mojang"
+                        ]
+                      }
                     }
-                  },
-                  "encoding": "utf8",
-                  "representation": "text"
+                  ]
                 },
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               },
               {
                 "ordinal": 1,
-                "name": "Filtered Structure Name",
-                "semantic": "Filtered Structure Name",
-                "encode": {
-                  "kind": "string",
-                  "prefix": {
-                    "kind": "primitive",
-                    "primitive": {
-                      "code": "var_u32",
-                      "width": 32,
-                      "signed": false,
-                      "zigzag": false,
-                      "endianness": "none"
-                    }
-                  },
-                  "encoding": "utf8",
-                  "representation": "text"
-                },
-                "symmetry": "symmetric",
-                "provenance": {
-                  "pins": [
-                    "endstone"
-                  ]
-                }
-              },
-              {
-                "ordinal": 2,
                 "name": "Data Field",
                 "semantic": "Data Field",
                 "encode": {
@@ -45963,12 +45985,12 @@
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               },
               {
-                "ordinal": 3,
+                "ordinal": 2,
                 "name": "Should include players?",
                 "semantic": "Should include players?",
                 "encode": {
@@ -45984,12 +46006,12 @@
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               },
               {
-                "ordinal": 4,
+                "ordinal": 3,
                 "name": "Should show bounding box?",
                 "semantic": "Should show bounding box?",
                 "encode": {
@@ -46005,18 +46027,19 @@
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               },
               {
-                "ordinal": 5,
+                "ordinal": 4,
                 "name": "Structure Block Type",
                 "semantic": "Structure Block Type",
+                "type_id": "StructureBlockType.json#",
                 "encode": {
                   "kind": "enum",
                   "semantic": "StructureBlockType",
-                  "type_id": "enums/StructureBlockType",
+                  "type_id": "StructureBlockType.json#",
                   "primitive": {
                     "code": "zigzag_i32",
                     "width": 32,
@@ -46072,18 +46095,19 @@
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               },
               {
-                "ordinal": 6,
+                "ordinal": 5,
                 "name": "Structure Settings",
                 "semantic": "Structure Settings",
+                "type_id": "StructureSettings.json#",
                 "encode": {
                   "kind": "struct",
                   "semantic": "StructureSettings",
-                  "type_id": "StructureSettings",
+                  "type_id": "StructureSettings.json#",
                   "fields": [
                     {
                       "ordinal": 0,
@@ -46110,7 +46134,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46131,7 +46155,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46152,7 +46176,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46173,7 +46197,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46181,10 +46205,11 @@
                       "ordinal": 4,
                       "name": "Structure Size",
                       "semantic": "Structure Size",
+                      "type_id": "BlockPos.json#",
                       "encode": {
                         "kind": "struct",
                         "semantic": "BlockPos",
-                        "type_id": "BlockPos",
+                        "type_id": "BlockPos.json#",
                         "fields": [
                           {
                             "ordinal": 0,
@@ -46203,7 +46228,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           },
@@ -46224,7 +46249,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           },
@@ -46245,7 +46270,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           }
@@ -46254,7 +46279,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46262,10 +46287,11 @@
                       "ordinal": 5,
                       "name": "Structure Offset",
                       "semantic": "Structure Offset",
+                      "type_id": "BlockPos.json#",
                       "encode": {
                         "kind": "struct",
                         "semantic": "BlockPos",
-                        "type_id": "BlockPos",
+                        "type_id": "BlockPos.json#",
                         "fields": [
                           {
                             "ordinal": 0,
@@ -46284,7 +46310,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           },
@@ -46305,7 +46331,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           },
@@ -46326,7 +46352,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           }
@@ -46335,7 +46361,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46343,10 +46369,11 @@
                       "ordinal": 6,
                       "name": "Last Edit Player",
                       "semantic": "Last Edit Player",
+                      "type_id": "ActorUniqueID.json#",
                       "encode": {
                         "kind": "struct",
                         "semantic": "ActorUniqueID",
-                        "type_id": "ActorUniqueID",
+                        "type_id": "ActorUniqueID.json#",
                         "fields": [
                           {
                             "ordinal": 0,
@@ -46365,7 +46392,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           }
@@ -46374,7 +46401,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46382,10 +46409,11 @@
                       "ordinal": 7,
                       "name": "Rotation",
                       "semantic": "Rotation",
+                      "type_id": "Rotation.json#",
                       "encode": {
                         "kind": "enum",
                         "semantic": "Rotation",
-                        "type_id": "enums/Rotation",
+                        "type_id": "Rotation.json#",
                         "primitive": {
                           "code": "u8",
                           "width": 8,
@@ -46409,8 +46437,22 @@
                             }
                           },
                           {
+                            "value": 1,
+                            "name": "Clockwise90",
+                            "encode": {
+                              "kind": "void"
+                            }
+                          },
+                          {
                             "value": 2,
                             "name": "Rotate180",
+                            "encode": {
+                              "kind": "void"
+                            }
+                          },
+                          {
+                            "value": 2,
+                            "name": "Clockwise180",
                             "encode": {
                               "kind": "void"
                             }
@@ -46421,13 +46463,20 @@
                             "encode": {
                               "kind": "void"
                             }
+                          },
+                          {
+                            "value": 3,
+                            "name": "CounterClockwise90",
+                            "encode": {
+                              "kind": "void"
+                            }
                           }
                         ]
                       },
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46435,10 +46484,11 @@
                       "ordinal": 8,
                       "name": "Mirror",
                       "semantic": "Mirror",
+                      "type_id": "Mirror.json#",
                       "encode": {
                         "kind": "enum",
                         "semantic": "Mirror",
-                        "type_id": "enums/Mirror",
+                        "type_id": "Mirror.json#",
                         "primitive": {
                           "code": "u8",
                           "width": 8,
@@ -46480,7 +46530,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46488,10 +46538,11 @@
                       "ordinal": 9,
                       "name": "Animation Mode",
                       "semantic": "Animation Mode",
+                      "type_id": "AnimationMode.json#",
                       "encode": {
                         "kind": "enum",
                         "semantic": "AnimationMode",
-                        "type_id": "enums/AnimationMode",
+                        "type_id": "AnimationMode.json#",
                         "primitive": {
                           "code": "u8",
                           "width": 8,
@@ -46526,7 +46577,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46547,7 +46598,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46568,7 +46619,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46584,12 +46635,15 @@
                           "signed": false,
                           "zigzag": false,
                           "endianness": "little"
+                        },
+                        "constraints": {
+                          "minimum": 0
                         }
                       },
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     },
@@ -46597,10 +46651,11 @@
                       "ordinal": 13,
                       "name": "Rotation Pivot",
                       "semantic": "Rotation Pivot",
+                      "type_id": "Vec3.json#",
                       "encode": {
                         "kind": "struct",
                         "semantic": "Vec3",
-                        "type_id": "Vec3",
+                        "type_id": "Vec3.json#",
                         "fields": [
                           {
                             "ordinal": 0,
@@ -46619,7 +46674,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           },
@@ -46640,7 +46695,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           },
@@ -46661,7 +46716,7 @@
                             "symmetry": "symmetric",
                             "provenance": {
                               "pins": [
-                                "endstone"
+                                "mojang"
                               ]
                             }
                           }
@@ -46670,7 +46725,7 @@
                       "symmetry": "symmetric",
                       "provenance": {
                         "pins": [
-                          "endstone"
+                          "mojang"
                         ]
                       }
                     }
@@ -46679,18 +46734,19 @@
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               },
               {
-                "ordinal": 7,
+                "ordinal": 6,
                 "name": "Redstone Save Mode",
                 "semantic": "Redstone Save Mode",
+                "type_id": "StructureRedstoneSaveMode.json#",
                 "encode": {
                   "kind": "enum",
                   "semantic": "StructureRedstoneSaveMode",
-                  "type_id": "enums/StructureRedstoneSaveMode",
+                  "type_id": "StructureRedstoneSaveMode.json#",
                   "primitive": {
                     "code": "u8",
                     "width": 8,
@@ -46718,7 +46774,7 @@
                 "symmetry": "symmetric",
                 "provenance": {
                   "pins": [
-                    "endstone"
+                    "mojang"
                   ]
                 }
               }
@@ -46727,31 +46783,8 @@
           "symmetry": "symmetric",
           "provenance": {
             "pins": [
-              "endstone"
-            ],
-            "evidence": [
-              {
-                "source_id": "endstone",
-                "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_block_update.go#L69",
-                "summary": "The protocol 2193 gophertunnel marshal writes the structure name and filtered structure name as two plain strings."
-              },
-              {
-                "source_id": "endstone",
-                "locator": "packets/StructureBlockUpdatePacket.json#/fields/1",
-                "claim_fingerprint": "sha256:f480ef342e127f0fcbb870022471ff8dddc7fe4539191c83cb8ab62cc1293aa3",
-                "summary": "Exact target source claim selected by this reviewed adjudication."
-              },
-              {
-                "source_id": "endstone",
-                "locator": "packets/StructureBlockUpdatePacket.json#/fields/1",
-                "claim_fingerprint": "sha256:f915ea77f6e353cd186c9898b73082c451c5c6b10eca2eecbcea9270a28a7907",
-                "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-              },
-              {
-                "source_id": "mojang",
-                "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/8667debe0adad27de6c692c88942c489a1193206/json",
-                "summary": "The exact 1.26.51 Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
-              }
+              "endstone",
+              "mojang"
             ]
           }
         },
@@ -59587,14 +59620,35 @@
                 "encode": {
                   "kind": "optional",
                   "value": {
-                    "kind": "primitive",
-                    "primitive": {
-                      "code": "bool",
-                      "width": 1,
-                      "signed": false,
-                      "zigzag": false,
-                      "endianness": "none"
-                    }
+                    "kind": "struct",
+                    "semantic": "AgentCapabilities",
+                    "type_id": "AgentCapabilities",
+                    "fields": [
+                      {
+                        "ordinal": 0,
+                        "name": "Can Modify Blocks",
+                        "semantic": "Can Modify Blocks",
+                        "encode": {
+                          "kind": "optional",
+                          "value": {
+                            "kind": "primitive",
+                            "primitive": {
+                              "code": "bool",
+                              "width": 1,
+                              "signed": false,
+                              "zigzag": false,
+                              "endianness": "none"
+                            }
+                          }
+                        },
+                        "symmetry": "symmetric",
+                        "provenance": {
+                          "pins": [
+                            "endstone"
+                          ]
+                        }
+                      }
+                    ]
                   }
                 },
                 "symmetry": "symmetric",
@@ -59750,32 +59804,8 @@
           "symmetry": "symmetric",
           "provenance": {
             "pins": [
-              "endstone"
-            ],
-            "evidence": [
-              {
-                "source_id": "endstone",
-                "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v465/serializer/EducationSettingsSerializer_v465.java",
-                "summary": "The inherited codec writes Agent Capabilities as one optional boolean and External Link Settings as a separate optional boolean; it does not add a nested presence marker."
-              },
-              {
-                "source_id": "endstone",
-                "locator": "packets/EducationSettingsPacket.json#/fields/0",
-                "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
-                "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-              },
-              {
-                "source_id": "endstone",
-                "locator": "packets/EducationSettingsPacket.json#/fields/0",
-                "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
-                "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-              },
-              {
-                "source_id": "endstone",
-                "locator": "packets/EducationSettingsPacket.json#/fields/0",
-                "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
-                "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-              }
+              "endstone",
+              "mojang"
             ]
           }
         }
@@ -118681,48 +118711,6 @@
       "reason": "The serializer inherited by v2225 writes four positional payload variants with registry and time-marker data. Select the fingerprinted endstone claim; other source limitations remain explicit."
     },
     {
-      "id": "protocol-2225-packet-137-field-0",
-      "target": "EducationSettingsPacket.Education Level Settings",
-      "pre_patch_context_sha256": "sha256:fc6e36c32eced32e143bfad319d5a08fad26dbb464465840ebb30947884e4d1f",
-      "claims": [
-        {
-          "source_id": "endstone",
-          "digest": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd"
-        },
-        {
-          "source_id": "mojang",
-          "digest": "sha256:2b0337fb399007b0b3478b338b425f31c25e96367eacd9ff2e02e6069cfcf1e3"
-        }
-      ],
-      "selected_source": "endstone",
-      "evidence": [
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v465/serializer/EducationSettingsSerializer_v465.java",
-          "summary": "The inherited codec writes Agent Capabilities as one optional boolean and External Link Settings as a separate optional boolean; it does not add a nested presence marker."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "packets/EducationSettingsPacket.json#/fields/0",
-          "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
-          "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "packets/EducationSettingsPacket.json#/fields/0",
-          "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
-          "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "packets/EducationSettingsPacket.json#/fields/0",
-          "claim_fingerprint": "sha256:a4445118da474ccfb535171348bba98609abda4317f8ddd86bb08cd30b93b6dd",
-          "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-        }
-      ],
-      "reason": "The exact Cloudburst 1.26.40 serializer agrees with the Endstone claim. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified. Carried forward only after byte-equivalence with the previous canonical field was verified."
-    },
-    {
       "id": "protocol-2225-packet-322-field-0",
       "target": "ClientMovementPredictionSyncPacket.Actor Data Flag",
       "pre_patch_context_sha256": "sha256:c9de3a0b3b2172a6e6f13b1f6f946ca1d2b3ae3afca7cfacfd13a9c834fb8383",
@@ -118814,47 +118802,6 @@
         }
       ],
       "reason": "The serializer inherited by v2225 writes each optional height map as 16 rows, each with a varuint32 length of 16. This corroborates the Endstone row prefixes. Select the fingerprinted endstone claim; other source limitations remain explicit."
-    },
-    {
-      "id": "protocol-2225-retarget-040",
-      "target": "StructureBlockUpdatePacket.Structure Data",
-      "pre_patch_context_sha256": "sha256:673924adbeff04e876047186fe41bd8b61f14cee2b981d6c50cd0a4b061b5df6",
-      "claims": [
-        {
-          "source_id": "endstone",
-          "digest": "sha256:f915ea77f6e353cd186c9898b73082c451c5c6b10eca2eecbcea9270a28a7907"
-        },
-        {
-          "source_id": "mojang",
-          "digest": "sha256:ae73e878c1e9f34661fb6d2e95306aa05999d8171aed980e6e4b244b1f2f90d2"
-        }
-      ],
-      "selected_source": "endstone",
-      "evidence": [
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_block_update.go#L69",
-          "summary": "The protocol 2193 gophertunnel marshal writes the structure name and filtered structure name as two plain strings."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "packets/StructureBlockUpdatePacket.json#/fields/1",
-          "claim_fingerprint": "sha256:f480ef342e127f0fcbb870022471ff8dddc7fe4539191c83cb8ab62cc1293aa3",
-          "summary": "Exact target source claim selected by this reviewed adjudication."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "packets/StructureBlockUpdatePacket.json#/fields/1",
-          "claim_fingerprint": "sha256:f915ea77f6e353cd186c9898b73082c451c5c6b10eca2eecbcea9270a28a7907",
-          "summary": "The exact target source claim is byte-equivalent to the previous canonical wire field."
-        },
-        {
-          "source_id": "mojang",
-          "locator": "https://github.com/Mojang/bedrock-protocol-docs/tree/8667debe0adad27de6c692c88942c489a1193206/json",
-          "summary": "The exact 1.26.51 Mojang schema independently documents the field order and intended semantics; Endstone supplies the complete runtime wire shape."
-        }
-      ],
-      "reason": "Select the complete Endstone claim with the StructureBlockUpdate-scoped correction: the structure name and its filtered form are two always-present strings at this site. Carried forward only after byte-equivalence with the previous canonical field was verified."
     },
     {
       "id": "protocol-2225-reviewed-002",
@@ -119327,21 +119274,6 @@
         }
       ],
       "reason": "The corrected EditorNetwork payload is a required NBT field following the required route flag."
-    },
-    {
-      "id": "education-agent-capabilities-is-an-optional-bool",
-      "target": "types/EducationLevelSettings.json#/fields/6/type",
-      "pre_patch_node_sha256": "sha256:ff6d3bb2021b22e7d0b0a1117b530b0868e3584db36b3a274e6a4d9a2ed80785",
-      "pre_patch_context_sha256": "sha256:1af1078c7282cbb16ad0fda60113aa6fbc493a080294700ebb1ee50246427d16",
-      "post_patch_node_sha256": "sha256:18acea8cf79f4960ffccc6c4e0cfa15a4a56a39187d50923153dc1f657cf9fb2",
-      "evidence": [
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v465/serializer/EducationSettingsSerializer_v465.java",
-          "summary": "The inherited serializer writes one optional presence flag followed by the capability boolean."
-        }
-      ],
-      "reason": "EducationSettings carries Agent Capabilities as one optional boolean. Modeling an optional AgentCapabilities struct containing an optional boolean would emit two presence markers instead of the single marker used by protocol 2168."
     },
     {
       "id": "endstone-crafting-ingredient-aux-unbounded",
@@ -120827,31 +120759,6 @@
         }
       ],
       "reason": "The single action selector is always present; it has no optional presence flag."
-    },
-    {
-      "id": "structure-editor-name-is-two-strings",
-      "target": "types/StructureEditorData.json#/fields",
-      "pre_patch_node_sha256": "sha256:6558e711ad0d689acdfe138572c2f30753666dcb968480fd2171bc982e7d9260",
-      "pre_patch_context_sha256": "sha256:c2b3cd20dd9e358d691586a5da83ee4bc69150ee3c06d15d80b032fbee3e5cb1",
-      "post_patch_node_sha256": "sha256:d2da35835413ad6e77b633708d661c7041c2f08da2c03bebf25cfc327c3ec940",
-      "evidence": [
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/fbbeee7d63f1ea3c586a6d5907bd69196679aee6/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2168/serializer/StructureBlockUpdateSerializer_v2168.java",
-          "summary": "The exact v2168 serializer writes both structure-name strings directly with no optional marker."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/item_stack.go#L296",
-          "summary": "The protocol 2193 gophertunnel ItemStackResponse marshal writes the filtered custom name as an optional, so the shared type keeps its optional member."
-        },
-        {
-          "source_id": "endstone",
-          "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_block_update.go#L69",
-          "summary": "The protocol 2193 gophertunnel StructureBlockUpdate marshal writes the filtered structure name as a plain string."
-        }
-      ],
-      "reason": "StructureBlockUpdate serializes its structure name with a hand-written writer that emits the filtered name as a plain string, so both strings are always present at this site. The shared RedactableString keeps its optional filtered name, which ItemStackResponse writes with a presence marker."
     }
   ]
 }

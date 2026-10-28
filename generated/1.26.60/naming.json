@@ -704,6 +704,11 @@
       "type_id": "persona__PieceType.json#",
       "name": "SkinPieceType",
       "rationale": "Distinguishes this record from the existing shared type with the same short name."
+    },
+    {
+      "type_id": "Bedrock__Safety__RedactableString.json#",
+      "name": "StructureRedactableName",
+      "rationale": "Distinguishes this record from the existing shared type with the same short name."
     }
   ]
 }
