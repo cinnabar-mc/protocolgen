@@ -172,20 +172,6 @@
       "rationale": "Oracle SoundPos converts the block position through a lossy /8*8 float round-trip on decode+encode; generated preserves the raw coordinate varint."
     },
     {
-      "packet": 90,
-      "direction": "client",
-      "input_hex": "",
-      "kind": "decode-success",
-      "rationale": "Oracle reads the structure name's filtered form as a plain string (structure_block_update.go Marshal); 1.26.60 vanilla writes it as an optional string, which generated follows."
-    },
-    {
-      "packet": 90,
-      "direction": "client",
-      "input_hex": "",
-      "kind": "re-encoded-bytes",
-      "rationale": "Oracle reads the structure name's filtered form as a plain string (structure_block_update.go Marshal); 1.26.60 vanilla writes it as an optional string, which generated follows."
-    },
-    {
       "packet": 93,
       "direction": "client",
       "input_hex": "",

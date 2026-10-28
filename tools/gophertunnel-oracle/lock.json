@@ -4,6 +4,6 @@
   "protocol_version": 2225,
   "gophertunnel": {
     "repo": "https://github.com/hashimthearab/gophertunnel.git",
-    "commit": "5f6e839b63c8bf000bca26e8d7cdac2fae8b7604"
+    "commit": "77149b94f8024826e34efda6f625c366596118d2"
   }
 }
