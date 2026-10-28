@@ -22,7 +22,7 @@ type EducationSettings struct {
 	// PostProcessFilter ...
 	PostProcessFilter            string
 	ScreenshotBorderResourcePath string
-	AgentCapabilities            protocol.Optional[bool]
+	AgentCapabilities            protocol.Optional[protocol.AgentCapabilities]
 	LocalSettings                protocol.EducationLocalLevelSettings
 	DeprecatedAlwaysFalse        bool
 	// ExternalLinkSettings ...
@@ -41,7 +41,7 @@ func (pk *EducationSettings) Marshal(io protocol.IO) {
 	io.Bool(&pk.DisableLegacyTitleBar)
 	io.String(&pk.PostProcessFilter)
 	io.String(&pk.ScreenshotBorderResourcePath)
-	protocol.OptionalFunc(io, &pk.AgentCapabilities, io.Bool)
+	protocol.OptionalMarshaler(io, &pk.AgentCapabilities)
 	pk.LocalSettings.Marshal(io)
 	io.Bool(&pk.DeprecatedAlwaysFalse)
 	protocol.OptionalMarshaler(io, &pk.ExternalLinkSettings)

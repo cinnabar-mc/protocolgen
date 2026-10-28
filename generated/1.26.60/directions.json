@@ -482,10 +482,10 @@
     {
       "id": 60,
       "name": "SetDifficultyPacket",
-      "direction": "server",
+      "direction": "both",
       "evidence": {
-        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
-        "summary": "Packet ID 60 is registered in the protocol-2225 direction pool(s)."
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 60 is registered in both direction pools of the locked protocol-2225 fork, as at protocol 2193; vanilla servers also accept it from clients."
       }
     },
     {
@@ -536,10 +536,10 @@
     {
       "id": 66,
       "name": "SpawnExperienceOrbPacket",
-      "direction": "server",
+      "direction": "both",
       "evidence": {
-        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/8c30047d86617a56e1f1871e3a1d47ec4f670d99/minecraft/protocol/packet/pool.go",
-        "summary": "Packet ID 66 is registered in the protocol-2225 direction pool(s)."
+        "locator": "https://github.com/HashimTheArab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/pool.go",
+        "summary": "Packet ID 66 is registered in both direction pools of the locked protocol-2225 fork, as at protocol 2193; vanilla servers also accept it from clients."
       }
     },
     {

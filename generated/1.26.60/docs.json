@@ -6118,76 +6118,76 @@
       "doc": "ShouldTrigger specifies if the structure block should be triggered immediately after this packet\nreaches the server."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "doc": "StructureSettings is a struct holding settings of a structure block. Its fields may be changed using the\nin-game UI on the client-side."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Animation Mode",
       "doc": "AnimationMode ..."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Animation Seconds",
       "doc": "AnimationDuration ..."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Integrity Seed",
       "doc": "Seed is the seed used to omit blocks if Integrity is not equal to one. If the Seed is 0, a random\nseed is selected to omit blocks."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Integrity Value",
       "doc": "Integrity is usually 1, but may be set to a number between 0 and 1 to omit blocks randomly, using\nthe Seed that follows."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Last Edit Player",
       "doc": "LastEditingPlayerUniqueID is the unique ID of the player that last edited the structure block that\nthese settings concern."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Mirror",
       "doc": "Mirror specifies the way the structure should be mirrored. It is either no mirror at all, mirror on the\nx/z axis or both."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Rotation",
       "doc": "Rotation is the rotation that the structure block should obtain. See the constants above for available\noptions."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Rotation Pivot",
       "doc": "Pivot is the pivot around which the structure may be rotated."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Should Allow Non Ticking Player and Ticking Area Chunks",
       "doc": "AllowNonTickingChunks specifies if the structure should allow non-ticking chunks. If set to false, the structure\nwill export non-ticking chunks."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Should ignore blocks?",
       "doc": "IgnoreBlocks specifies if the structure should ignore blocks or include them. If set to false, blocks\nwill show up in the exported structure."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Should ignore entities?",
       "doc": "IgnoreEntities specifies if the structure should ignore entities or include them. If set to false,\nentities will also show up in the exported structure."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Structure Offset",
       "doc": "Offset is the offset position that was set in the structure block. The area exported is offset by this\nposition."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Structure Palette Name",
       "doc": "PaletteName is the name of the palette used in the structure. Currently, it seems that this field is\nalways 'default'."
     },
     {
-      "type_id": "StructureSettings",
+      "type_id": "StructureSettings.json#",
       "field": "Structure Size",
       "doc": "Size is the size of the area that is about to be exported. The area exported will start at the\nPosition + Offset, and will extend as far as Size specifies."
     },

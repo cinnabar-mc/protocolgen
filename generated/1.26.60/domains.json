@@ -1746,14 +1746,9 @@
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
     {
-      "type_id": "StructureEditorData",
+      "type_id": "StructureEditorData.json#",
       "domain": "structure",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
-    },
-    {
-      "type_id": "StructureSettings",
-      "domain": "structure",
-      "rationale": "Matches the gophertunnel protocol domain file layout."
     },
     {
       "type_id": "StructureSettings.json#",
@@ -2047,11 +2042,6 @@
     },
     {
       "type_id": "enums/AnimatePacketPayload::Action",
-      "domain": "misc",
-      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
-    },
-    {
-      "type_id": "enums/AnimationMode",
       "domain": "misc",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
@@ -2361,11 +2351,6 @@
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
     {
-      "type_id": "enums/Mirror",
-      "domain": "misc",
-      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
-    },
-    {
       "type_id": "enums/MobEffectPacketPayload::Event",
       "domain": "misc",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
@@ -2496,11 +2481,6 @@
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
     {
-      "type_id": "enums/Rotation",
-      "domain": "misc",
-      "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
-    },
-    {
       "type_id": "enums/ScoreboardIdentityPacketType",
       "domain": "scoreboard",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
@@ -2596,12 +2576,12 @@
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
     {
-      "type_id": "enums/StructureBlockType",
+      "type_id": "StructureBlockType.json#",
       "domain": "structure",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
     {
-      "type_id": "enums/StructureRedstoneSaveMode",
+      "type_id": "StructureRedstoneSaveMode.json#",
       "domain": "structure",
       "rationale": "Grouped by the generated type-family prefix; no direct gophertunnel counterpart."
     },
@@ -2678,6 +2658,16 @@
     {
       "type_id": "persona__PieceType.json#",
       "domain": "types",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "AgentCapabilities",
+      "domain": "education",
+      "rationale": "Groups this shared type with its protocol domain."
+    },
+    {
+      "type_id": "Bedrock__Safety__RedactableString.json#",
+      "domain": "bedrock_safety",
       "rationale": "Groups this shared type with its protocol domain."
     }
   ]

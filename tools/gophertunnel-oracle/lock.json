@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "minecraft_version": "1.26.51",
-  "protocol_version": 2193,
+  "minecraft_version": "1.26.60",
+  "protocol_version": 2225,
   "gophertunnel": {
     "repo": "https://github.com/hashimthearab/gophertunnel.git",
-    "commit": "8d903c5192f794ca33fea2d84f7afec3e3393bc5"
+    "commit": "5f6e839b63c8bf000bca26e8d7cdac2fae8b7604"
   }
 }

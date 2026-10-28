@@ -9,7 +9,7 @@ one.
 | Path | Contents | Consumed by |
 | --- | --- | --- |
 | `generated/<version>/manifest.json` | Canonical packet and type layouts, with source pins, corrections and adjudications | Every emitter, `verify-gophertunnel`, the BDS capture. Its SHA-256 is `MANIFEST_SHA256` in the contract crate and is pinned by Cinnabar's `assets/bedrock-target.json` |
-| `generated/<version>/go/protocol` | Go codec: shared types grouped by domain, one file per packet under `packet/`, direction-aware packet pools | `differential/` harnesses (1.26.51); `internal/roundtrip` tests (1.26.40 and 1.26.60) |
+| `generated/<version>/go/protocol` | Go codec: shared types grouped by domain, one file per packet under `packet/`, direction-aware packet pools | `differential/` harness (1.26.60) and retail (1.26.51); `internal/roundtrip` tests (1.26.40 and 1.26.60) |
 | `generated/<version>/rust` | Rust crate `bedrock-protocol-<version>` with round-trip tests | CI only (check, clippy, test) |
 | `generated/1.26.51/rust-contract`, `generated/<default>/rust-contract` | The same crate under the [Rust codec contract](rust-codec-contract.md) | Vendored by Cinnabar as `crates/protocol/vendor/bedrock-protocol-1-26-51`; `differential/retail` runner and bench |
 | `generated/<version>/vanilla-data` | Raw packet payloads and NBT registries captured from a pinned BDS, indexed by `capture.json` (1.26.40 and 1.26.44 only) | No current consumer here or in Cinnabar |
@@ -36,7 +36,7 @@ and inputs. It does not relicense the source documents or game-data catalog.
 | `build/gophertunnel-layout` | Current release's Go in gophertunnel's layout, for `diff -r` | `make gophertunnel-layout GOPHERTUNNEL_DIR=…` |
 | `build/retail` | Per-packet verdicts comparing Valentine, the contract crate, generated Go and gophertunnel | `make retail`; CI artifact `retail-verdicts` |
 | `build/bench` | Codec benchmark comparison against gophertunnel | `make bench` |
-| `ORACLE_REPORT` (default `/tmp/protocolgen-gophertunnel-report.json`) | Manifest-to-gophertunnel comparison | `make regen-1.26.51`; CI artifact `gophertunnel-oracle-2193` |
+| `ORACLE_REPORT` (default `/tmp/protocolgen-gophertunnel-report.json`) | Manifest-to-gophertunnel comparison | `make regen-1.26.60`; CI artifact `gophertunnel-oracle-2225` |
 
 ## Regenerating and checking
 

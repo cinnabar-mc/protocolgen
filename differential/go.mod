@@ -15,4 +15,4 @@ require (
 
 replace protocolgen => ..
 
-replace github.com/sandertv/gophertunnel => github.com/hashimthearab/gophertunnel v1.25.3-0.20261019151115-85d4022854e1
+replace github.com/sandertv/gophertunnel => github.com/hashimthearab/gophertunnel v1.25.3-0.20261028154110-5f6e839b63c8

@@ -2,7 +2,7 @@
 
 use bedrock_protocol_1_26_60::wire::{self, Decode, Encode};
 
-mod recursive_value_215 {
+mod recursive_value_216 {
     use super::*;
     use bedrock_protocol_1_26_60::types::DynamicValue as Value;
     const LEAF: i64 = 0;
