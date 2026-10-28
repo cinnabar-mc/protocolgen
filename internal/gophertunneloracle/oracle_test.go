@@ -489,7 +489,7 @@ func (pk *Fixture) Marshal(io protocol.IO) { io.RGB(nil) }
 	if len(unpinned.Packets) != 1 || len(unpinned.Packets[0].Operations) != 1 || unpinned.Packets[0].Operations[0].Kind != "unresolved" {
 		t.Fatalf("unpinned helper was admitted: %#v", unpinned.Packets)
 	}
-	pinned, err := ExtractAtRevision(root, "be6713da4dc051a4197f897d04835e89e9c54321")
+	pinned, err := ExtractAtRevision(root, "5f6e839b63c8bf000bca26e8d7cdac2fae8b7604")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -542,7 +542,7 @@ func TestAcceptedEvidenceMustCiteTheLockedOracle(t *testing.T) {
 // lock and reviewed baseline from drifting away from the manifest without a
 // gophertunnel checkout being available.
 func TestCheckedInOracleBaselineMatchesTheCanonicalManifest(t *testing.T) {
-	canonical, err := manifest.Load(filepath.Join("..", "..", "generated", "1.26.51", "manifest.json"))
+	canonical, err := manifest.Load(filepath.Join("..", "..", "generated", "1.26.60", "manifest.json"))
 	if err != nil {
 		t.Fatal(err)
 	}

@@ -153,9 +153,6 @@ regen-1.26.51:
 		-protocol-import protocolgen/generated/1.26.51/go/protocol
 	$(call emit-rust-snapshot,$(TARGET_12651),rust)
 	$(call emit-rust-contract,$(TARGET_12651))
-	$(PROTOCOLGEN) verify-gophertunnel \
-		-manifest $(TARGET_12651)/manifest.json \
-		-report $(ORACLE_REPORT) $(GOPHER_ARGS)
 	$(GO) test ./generated/1.26.51/go/... -count=1
 	cargo test --manifest-path $(TARGET_12651)/rust/Cargo.toml
 
@@ -186,6 +183,9 @@ regen-1.26.60:
 		-docs $(TARGET_12660)/docs.json \
 		-out $(TARGET_12660)/go \
 		-protocol-import protocolgen/generated/1.26.60/go/protocol
+	$(PROTOCOLGEN) verify-gophertunnel \
+		-manifest $(TARGET_12660)/manifest.json \
+		-report $(ORACLE_REPORT) $(GOPHER_ARGS)
 	$(call emit-rust-snapshot,$(TARGET_12660),rust)
 	$(call emit-rust-contract,$(TARGET_12660))
 	$(GO) test ./generated/1.26.60/go/... -count=1

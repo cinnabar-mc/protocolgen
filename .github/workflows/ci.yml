@@ -181,15 +181,24 @@ jobs:
           git -C "$RUNNER_TEMP/protocolgen-endstone" worktree add --detach "$RUNNER_TEMP/protocolgen-endstone-2193" "$(jq -r '.sources[] | select(.id == "endstone") | .revision' generated/1.26.51/source-lock.json)"
           make verify-1.26.51 \
             GO_CACHE="$RUNNER_TEMP/protocolgen-go-cache" \
-            ORACLE_REPORT="$RUNNER_TEMP/gophertunnel-report.json" \
             MOJANG_DIR="$RUNNER_TEMP/protocolgen-mojang-2193/json" \
             ENDSTONE_DIR="$RUNNER_TEMP/protocolgen-endstone-2193"
+
+      - name: Regenerate and verify 1.26.60
+        run: |
+          git -C "$RUNNER_TEMP/protocolgen-mojang" worktree add --detach "$RUNNER_TEMP/protocolgen-mojang-2225" "$(jq -r '.sources[] | select(.id == "mojang") | .revision' generated/1.26.60/source-lock.json)"
+          git -C "$RUNNER_TEMP/protocolgen-endstone" worktree add --detach "$RUNNER_TEMP/protocolgen-endstone-2225" "$(jq -r '.sources[] | select(.id == "endstone") | .revision' generated/1.26.60/source-lock.json)"
+          make verify-1.26.60 \
+            GO_CACHE="$RUNNER_TEMP/protocolgen-go-cache" \
+            ORACLE_REPORT="$RUNNER_TEMP/gophertunnel-report.json" \
+            MOJANG_DIR="$RUNNER_TEMP/protocolgen-mojang-2225/json" \
+            ENDSTONE_DIR="$RUNNER_TEMP/protocolgen-endstone-2225"
 
       - name: Preserve oracle comparison report
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: gophertunnel-oracle-2193
+          name: gophertunnel-oracle-2225
           path: ${{ runner.temp }}/gophertunnel-report.json
           if-no-files-found: warn
 

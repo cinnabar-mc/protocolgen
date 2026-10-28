@@ -1,41 +1,41 @@
 {
   "schema_version": 1,
-  "minecraft_version": "1.26.51",
-  "protocol_version": 2193,
+  "minecraft_version": "1.26.60",
+  "protocol_version": 2225,
   "divergences": [
     {
       "id": 5,
       "name": "DisconnectPacket",
-      "reason": "Wire conflict: the canonical Messages union uses a var_u32 selector; the protocol 2193 Disconnect marshal uses a HideDisconnectionScreen bool to decide whether the message strings follow.",
-      "what_would_settle_it": "Capture both disconnect screen cases at protocol 2193 to settle the discriminator and message framing.",
+      "reason": "Wire conflict: the canonical Messages union uses a var_u32 selector; the protocol 2225 Disconnect marshal uses a HideDisconnectionScreen bool to decide whether the message strings follow.",
+      "what_would_settle_it": "Capture both disconnect screen cases at protocol 2225 to settle the discriminator and message framing.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/disconnect.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/disconnect.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:28f2dfbb876cca314577e166189b2f6f68444ec29ce953c072ac362770996972"
+      "fingerprint": "sha256:ccccab3210f6f984855714809f51f689b18ac5c578b2bda86f7cc71795a2a133"
     },
     {
       "id": 9,
       "name": "TextPacket",
-      "reason": "Control-layout conflict with identical bytes: both 1.26.51 sources model the category byte as the var_u32 selector of a three-way body union whose cases start with the u8 message type, while the protocol 2193 Text marshal writes the category and type as two u8 bytes and dispatches on the type. Category values 0 to 2 encode as the same single byte either way.",
+      "reason": "Control-layout conflict with identical bytes: both 1.26.60 sources model the category byte as the var_u32 selector of a three-way body union whose cases start with the u8 message type, while the protocol 2225 Text marshal writes the category and type as two u8 bytes and dispatches on the type. Category values 0 to 2 encode as the same single byte either way.",
       "what_would_settle_it": "A capture of each message category, or a per-packet union-control normalization that treats a one-byte selector below 128 as equal to var_u32.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/text.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/text.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:c1236330086cbbef0de112ab50ec5738012e822cd19acaec036ff79dc442a693"
+      "fingerprint": "sha256:aff2cecea2d499cb01a92277454197576e7516e2cbc7bc0d701d68d2c0041cbc"
     },
     {
       "id": 12,
@@ -44,32 +44,32 @@
       "what_would_settle_it": "Fix item-buffer ownership and selector dataflow in the extractor, then capture AbilityData Layers counts to settle the remaining prefix conflict.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/add_player.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/add_player.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:8361a185ee36e63d25b2f1a7944b668c0a028c74ee5a30c35bd3e5bdfc627b87"
+      "fingerprint": "sha256:c7373b97346c94702065ef6b92cc503a6c159ed61ffa226dd6d78e2ec6c6a4ce"
     },
     {
       "id": 13,
       "name": "AddActorPacket",
-      "reason": "Control-layout conflict with identical bytes: both sides write a var_u32 metadata selector and a u8 legacy type byte; the canonical union places its variant marker after the selector and carries the type byte inside each case, while the protocol 2193 EntityMetadata writer dispatches on the value's Go type after both bytes.",
+      "reason": "Control-layout conflict with identical bytes: both sides write a var_u32 metadata selector and a u8 legacy type byte; the canonical union places its variant marker after the selector and carries the type byte inside each case, while the protocol 2225 EntityMetadata writer dispatches on the value's Go type after both bytes.",
       "what_would_settle_it": "Bind source switches to their actual serialized selector and legacy byte, then compare every metadata type against an exact-version capture.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/add_actor.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/add_actor.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:95afe838c843233d8495f664495134d73906f6a6af064a7d82c6f26cdeb090a8"
+      "fingerprint": "sha256:48a47a1da013452c32d1b51a3c918dd52defc90fb45b76e148a1ec7e18adfa00"
     },
     {
       "id": 15,
@@ -78,32 +78,32 @@
       "what_would_settle_it": "Track IO receiver ownership and conditional stack-ID presence; then compare actor metadata with selector-aware extraction.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/add_item_actor.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/add_item_actor.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:3388d04ff945936f12992ea116f7b538e1b1bd11fd171b21bb2ad6a95fb7e104"
+      "fingerprint": "sha256:46b94bf1b9cb7d5a657ad8fe136152814dd55d0c29b8c727b700a794ec772796"
     },
     {
       "id": 30,
       "name": "InventoryTransactionPacket",
-      "reason": "Control-layout and extractor limitation: the protocol 2193 marshal selects the transaction data through a reviewed interface table, so its variant marker follows the actions array rather than the selector. ItemInstance extra-data is decoded from one byte buffer and its canBePlacedOn/canBreak arrays are parsed inside it, so the extractor counts them as outer operations where the canonical manifest has one opaque user-data buffer.",
+      "reason": "Control-layout and extractor limitation: the protocol 2225 marshal selects the transaction data through a reviewed interface table, so its variant marker follows the actions array rather than the selector. ItemInstance extra-data is decoded from one byte buffer and its canBePlacedOn/canBreak arrays are parsed inside it, so the extractor counts them as outer operations where the canonical manifest has one opaque user-data buffer.",
       "what_would_settle_it": "Evidence that the presence marker can be false on the wire, or confirmation from a writer trace that it is a constant.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/inventory_transaction.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/inventory_transaction.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:59ca8026f568fc9b34cedb7958befc20f370dbc1aa9376e66720c87a9128dbd5"
+      "fingerprint": "sha256:b670584cf10b3070f8e9573a93a73641965824e73f6453663ddfe5195f0a04f7"
     },
     {
       "id": 31,
@@ -112,15 +112,15 @@
       "what_would_settle_it": "Track the IO receiver through itemUserData and prove bool-to-optional correspondence before comparing these paths.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/mob_equipment.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/mob_equipment.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:09d6f29081e91319c6a63587d0045d15b734febad5905f2d5b4477080dc887c9"
+      "fingerprint": "sha256:8a7c1434ed874dd425d56e28265207048bbe93559530be57bc7bfae88a6784bb"
     },
     {
       "id": 32,
@@ -129,32 +129,32 @@
       "what_would_settle_it": "Extend the extractor to keep bufReader parsing inside the enclosing byte-slice length rather than in the outer stream.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/mob_armour_equipment.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/mob_armour_equipment.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:f1f2105099400a996ecf166d367682fb6d68a8a2ce02af3ac7819a9788b6451e"
+      "fingerprint": "sha256:d5c417a3d7d0a4cc03d8864f4fb40d99aa70de6ab79fc49ed9f54c17ad66669c"
     },
     {
       "id": 39,
       "name": "SetActorDataPacket",
       "reason": "Extractor/control-layout conflict: EntityMetadata writes its cereal selector and legacy type byte before dispatch, while the canonical union annotates its variant earlier. This is not sufficient evidence of a wire width defect.",
-      "what_would_settle_it": "Model the serialized selector and legacy byte independently and validate each metadata variant using a protocol 2193 capture.",
+      "what_would_settle_it": "Model the serialized selector and legacy byte independently and validate each metadata variant using a protocol 2225 capture.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/set_actor_data.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/set_actor_data.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:fb88e1d7f37bee17ce1ae55cf3fd927c96f47d7ec3cda4eb2fe31e6902b8851b"
+      "fingerprint": "sha256:cbbd31970d89d5d4f3858e949e6feb2a9ea6041c12270744442eeb2457cccff5"
     },
     {
       "id": 49,
@@ -163,49 +163,49 @@
       "what_would_settle_it": "Correct buffered IO ownership and conditional-to-optional extraction, then compare all item paths again.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/inventory_content.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/inventory_content.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:1728e433263aa8863455d2112e5bfab72d67401942c36a6796d467767259aca1"
+      "fingerprint": "sha256:f899f4f7177740f6b367aee254a0f1a28a046123e1908422e1b2d2ceeb229712"
     },
     {
       "id": 50,
       "name": "InventorySlotPacket",
-      "reason": "Wire conflict: Mojang declares Container Id as uint8, and 8- and 16-bit fields are fixed-width regardless of Compression, while the protocol 2193 InventorySlot marshal writes WindowID as var_u32. The encodings agree below 128, so the fork is the suspect side. ItemInstance extra-data also shows the extractor limitation recorded for 12 and 15.",
+      "reason": "Wire conflict: Mojang declares Container Id as uint8, and 8- and 16-bit fields are fixed-width regardless of Compression, while the protocol 2225 InventorySlot marshal writes WindowID as var_u32. The encodings agree below 128, so the fork is the suspect side. ItemInstance extra-data also shows the extractor limitation recorded for 12 and 15.",
       "what_would_settle_it": "A capture of an InventorySlot packet with a container ID of 128 or above.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/inventory_slot.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/inventory_slot.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:81bd78ec47e1559505c86c756d5f8c3531c0e526f5a4b4930e9be7f8ed15627f"
+      "fingerprint": "sha256:3dc7491a58fba53e82919a41fcefee61e4aa1fdb3e43e714a1367658c8aeb42c"
     },
     {
       "id": 52,
       "name": "CraftingDataPacket",
-      "reason": "Modeling limitation: the canonical shaped-recipe ingredient (Endstone cerealizer<RecipeIngredient>::SerializedData) is a var_u32-counted string-to-string map followed by zigzag aux value and count, while the protocol 2193 ItemDescriptorCount and CloudburstMC readIngredient write a var_u32 descriptor kind, a descriptor-name string, a payload chosen by that name, then the zigzag count. The map is byte-identical for the default and invalid descriptors and diverges for molang and item-tag descriptors. A descriptor discriminated by a string is not expressible in the claim format, so no correction is possible without a manifest schema extension.",
-      "what_would_settle_it": "A manifest node kind for string-discriminated unions, or evidence that only default descriptors occur in CraftingData at protocol 2193.",
+      "reason": "Modeling limitation: the canonical shaped-recipe ingredient (Endstone cerealizer<RecipeIngredient>::SerializedData) is a var_u32-counted string-to-string map followed by zigzag aux value and count, while the protocol 2225 ItemDescriptorCount and CloudburstMC readIngredient write a var_u32 descriptor kind, a descriptor-name string, a payload chosen by that name, then the zigzag count. The map is byte-identical for the default and invalid descriptors and diverges for molang and item-tag descriptors. A descriptor discriminated by a string is not expressible in the claim format, so no correction is possible without a manifest schema extension.",
+      "what_would_settle_it": "A manifest node kind for string-discriminated unions, or evidence that only default descriptors occur in CraftingData at protocol 2225.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/crafting_data.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/crafting_data.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:8803d507769716d45c222ac975fd1a9e61710ddfdb989eedf94f9e194b4538d8"
+      "fingerprint": "sha256:0881422a7774ec0eb439f7104090c0459a8c02e2277c6caccfcbd5cd0c892188"
     },
     {
       "id": 63,
@@ -214,100 +214,100 @@
       "what_would_settle_it": "Model branch termination, then test add/remove player lists and settle the same skin-colour endian conflict as packet 93.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/player_list.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/player_list.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:eb36c56ad78521b20535b07f0f1c38913acfdc8d8b10331d9d87ff3fb9beec68"
+      "fingerprint": "sha256:7127aec98e7387753ab85ab2d4b6585eaa43c568b0df78897f6cdfaead0b34cb"
     },
     {
       "id": 65,
       "name": "LegacyTelemetryEventPacket",
-      "reason": "Wire/control conflict: the LegacyTelemetry event union and the protocol 2193 Event marshaler disagree on event discriminants and payload fields, including Contents Color. A packet-level exception does not establish any event as correct.",
-      "what_would_settle_it": "Review each legacy event discriminant and payload against protocol 2193 binary serializers or captures; correct the responsible schema/extractor one event at a time.",
+      "reason": "Wire/control conflict: the LegacyTelemetry event union and the protocol 2225 Event marshaler disagree on event discriminants and payload fields, including Contents Color. A packet-level exception does not establish any event as correct.",
+      "what_would_settle_it": "Review each legacy event discriminant and payload against protocol 2225 binary serializers or captures; correct the responsible schema/extractor one event at a time.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/event.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/event.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:138ccd66a971b41296f8b7bdf7ace39219e725191c96a901bbdfbea096248397"
+      "fingerprint": "sha256:88e0b7c17fd7903124e34f9962703cc0a67780fe12aee0baaabd1c3075a777af"
     },
     {
       "id": 78,
       "name": "CommandBlockUpdatePacket",
-      "reason": "Wire conflict: the canonical Target union uses var_u32, while protocol 2193 CommandBlockUpdate uses a bool to distinguish block and actor targets.",
-      "what_would_settle_it": "Capture both command-block target forms at protocol 2193 and settle their selector encoding.",
+      "reason": "Wire conflict: the canonical Target union uses var_u32, while protocol 2225 CommandBlockUpdate uses a bool to distinguish block and actor targets.",
+      "what_would_settle_it": "Capture both command-block target forms at protocol 2225 and settle their selector encoding.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/command_block_update.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/command_block_update.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:126c7774d8bcb055686ed7121dc5422ff258f8a9efe78d24e65f582da0a1547d"
+      "fingerprint": "sha256:7b07e3f9bccf1a2fde813b1ab4ac51df8ca62bd8b2379dafc01b77f3565e63b7"
+    },
+    {
+      "id": 90,
+      "name": "StructureBlockUpdatePacket",
+      "reason": "Wire conflict: StructureBlockUpdate is serialized only through its reflected schema at protocol 2225, so the structure name is a RedactableString whose filtered name is an optional string; the protocol 2225 StructureBlockUpdate marshal writes the filtered name as a plain string, the protocol 2168 hand-written layout.",
+      "what_would_settle_it": "Update the gophertunnel StructureBlockUpdate marshal to write the filtered structure name as an optional string, or capture a structure block update from a 1.26.60 client.",
+      "evidence": [
+        {
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "Both 1.26.60 sources describe the structure name as a RedactableString with a required name and an optional filtered name."
+        },
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/structure_block_update.go",
+          "summary": "The locked protocol 2225 source writes the structure name and the filtered structure name as two plain strings."
+        }
+      ],
+      "fingerprint": "sha256:413c9e228d23ce6492198de316af632d67413a576e0cea14caf6dbf49b8d518c"
     },
     {
       "id": 108,
       "name": "SetScorePacket",
-      "reason": "Control-layout conflict with identical bytes: both sides now write a var_u32 selector; the canonical union places its variant marker right after the selector, while the protocol 2193 ScoreboardEntry writes the type-name string and entry ID before dispatching.",
+      "reason": "Control-layout conflict with identical bytes: both sides now write a var_u32 selector; the canonical union places its variant marker right after the selector, while the protocol 2225 ScoreboardEntry writes the type-name string and entry ID before dispatching.",
       "what_would_settle_it": "A per-union normalization that lets a type-switch discriminant bind after shared leading fields, or a capture of each score entry kind.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/set_score.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/set_score.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:14a0024a503849404fcea5b1d59ac3da7616b8929fbaa1c7ab7b5979893a0b8a"
-    },
-    {
-      "id": 133,
-      "name": "StructureTemplateDataResponsePacket",
-      "reason": "Wire conflict: the protocol 2193 StructureTemplateDataResponse writes Success bool and conditionally NBT, while the manifest has different presence framing.",
-      "what_would_settle_it": "Capture successful and unsuccessful structure responses to establish the NBT presence boundary, then correct the source claim.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/structure_template_data_response.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:0f1f8e7906937e2665a13aeb637fbeed68553b2c0cae44d63aa7f23a11e4056a"
+      "fingerprint": "sha256:ce4029a8a892f771965d7833d9b89bb331a822161a88ba144af53a9a4b197f4c"
     },
     {
       "id": 144,
       "name": "PlayerAuthInputPacket",
-      "reason": "Control-layout conflict, same as 147: the item stack request action selector, the per-action type byte and the switch annotation appear at different positions. The item-use framing difference recorded at protocol 2168 no longer occurs, because the protocol 2193 fork writes the actions array without the extra presence flag.",
+      "reason": "Control-layout conflict, same as 147: the item stack request action selector, the per-action type byte and the switch annotation appear at different positions. The item-use framing difference recorded at protocol 2168 no longer occurs, because the protocol 2225 fork writes the actions array without the extra presence flag.",
       "what_would_settle_it": "Evidence that either constant marker can be false on the wire, or an ingest rule that lowers a constant-true bool as a fixed byte instead of an optional.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/player_auth_input.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/player_auth_input.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:5b3678a528c00a0bddb49eabbd3776b3ad60011bc4f3e00ba5a7c8d62531ef21"
+      "fingerprint": "sha256:8dd3e927d9d655aa752bf94f9656d77079d42b737fb2bed498cc6b31c6097c71"
     },
     {
       "id": 145,
@@ -316,163 +316,121 @@
       "what_would_settle_it": "Track IO receiver ownership so parsing the already-read item buffer contributes no additional outer operations.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/creative_content.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/creative_content.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:95f9bbf6ee6a51e9fd24556395c05b672e7307efb5c3f2a43fa1f62e340bf5e0"
+      "fingerprint": "sha256:426355b77d77133273502231103e2a3876aeb818295842cfcd1a98f40c908903"
     },
     {
       "id": 147,
       "name": "ItemStackRequestPacket",
       "reason": "Extractor/control-layout conflict: ItemStackRequest cereal action selector, legacy action byte and switch annotation appear at different positions; action-ID mappings also need exact evidence. Removing marker tokens would not prove the cases correspond.",
-      "what_would_settle_it": "Bind action switches to serialized discriminants and validate every action mapping and legacy byte against protocol 2193 source/captures.",
+      "what_would_settle_it": "Bind action switches to serialized discriminants and validate every action mapping and legacy byte against protocol 2225 source/captures.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/item_stack_request.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/item_stack_request.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:2c3ec90a88d7ef8536db4fe23ae65c89715ab8c22510fc1d391c0c908e00ee3b"
-    },
-    {
-      "id": 164,
-      "name": "ClientboundDebugRendererPacket",
-      "reason": "Wire conflict: the manifest adds optional bool presence around DebugMarkerData, while protocol 2193 DebugRenderer includes marker data under its string-type condition without that presence byte.",
-      "what_would_settle_it": "Capture each supported debug-renderer message type and settle whether a separate presence bool exists.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/client_bound_debug_renderer.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:8da7504de4d73d8f5cb390775bc46c15ca0638fef951b72c32a538ce36fec0cd"
+      "fingerprint": "sha256:43c87769e9e876a54b5e508a333e1604b44bb46ff573595d28339a31ab10bcf5"
     },
     {
       "id": 174,
       "name": "SubChunkPacket",
-      "reason": "Modeling difference: 1.26.51 Endstone and the protocol 2193 fork both prefix each height map row with a var_u32 count, but the fork requires the count to be 16 and reads exactly 16 heights, while the canonical row is a general var_u32-counted array. Vanilla always writes 16.",
+      "reason": "Modeling difference: 1.26.60 Endstone and the protocol 2225 fork both prefix each height map row with a var_u32 count, but the fork requires the count to be 16 and reads exactly 16 heights, while the canonical row is a general var_u32-counted array. Vanilla always writes 16.",
       "what_would_settle_it": "A canonical length constraint on the row array, or a capture showing any other row length.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/sub_chunk.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/sub_chunk.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:ffac448b11331df7756668b7e5936f1c64e56125f0220977dab6701df5589fae"
+      "fingerprint": "sha256:ee4c5f2134a1a5be6c30c341144dabe047fa58605586af501f5717ffbec771a9"
     },
     {
       "id": 300,
       "name": "CameraInstructionPacket",
-      "reason": "Wire conflict: the canonical camera spline type and spline identifier are unconditional, while the protocol 2193 CameraInstruction marshal wraps both in optionals. CloudburstMC writeSplineInstruction writes the type byte unconditionally, matching the manifest, so the fork is the suspect side for the type.",
+      "reason": "Wire conflict: the canonical camera spline type and spline identifier are unconditional, while the protocol 2225 CameraInstruction marshal wraps both in optionals. CloudburstMC writeSplineInstruction writes the type byte unconditionally, matching the manifest, so the fork is the suspect side for the type.",
       "what_would_settle_it": "A capture of a spline camera instruction with and without an identifier.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/camera_instruction.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/camera_instruction.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:2a1c6985d046829b5b9cff25f540699c7e169bd4db0b50dc0a7c315cf58072b5"
-    },
-    {
-      "id": 315,
-      "name": "ServerboundDiagnosticsPacket",
-      "reason": "Unsettled: Endstone 1.26.51.1 marks Position and Dimension optional, Mojang 1.26.60 no longer lists them as required, and the LeviLamina 26.51 EntityDiagnosticTimingInfo storage sizes match std::optional<Vec3> and std::optional<std::string>. The packet keeps both a hand-written and a reflection writer, and CloudburstMC ServerboundDiagnosticsSerializer_v2193 writes both unconditionally, as the protocol 2193 fork does.",
-      "what_would_settle_it": "A protocol 2193 ServerboundDiagnostics capture with at least one entity timing entry.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/server_bound_diagnostics.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
-        },
-        {
-          "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/entity/profiling/EntityDiagnosticTimingInfo.h#L15",
-          "summary": "Storage of 16 bytes aligned to 4 and 40 bytes aligned to 8 match std::optional<Vec3> and std::optional<std::string>."
-        },
-        {
-          "locator": "https://github.com/CloudburstMC/Protocol/blob/2bd3ee0baca0f9519bbe230724853f5c43b2f975/bedrock-codec/src/main/java/org/cloudburstmc/protocol/bedrock/codec/v2193/serializer/ServerboundDiagnosticsSerializer_v2193.java#L29",
-          "summary": "The v2193 serializer writes Position and Dimension without presence flags."
-        }
-      ],
-      "fingerprint": "sha256:10360a99add83cdbd711d9a0424a868c3d0c78ae1937f7910346e3c4a6333b83"
+      "fingerprint": "sha256:19166081bca917235c6ed69f8d7829a5df1c9fc454ab744fa8607b1b5617c2ad"
     },
     {
       "id": 324,
       "name": "PlayerVideoCapturePacket",
-      "reason": "Wire conflict: both 1.26.51 sources and LeviLamina order the action union start then stop, so start is selector 0. The protocol 2193 PlayerVideoCapture marshal numbers stop as 0 and start as 1, so it swaps the two actions. The fork is the suspect side; its u8 action and the var_u32 selector are the same byte for these values.",
+      "reason": "Wire conflict: both 1.26.60 sources and LeviLamina order the action union start then stop, so start is selector 0. The protocol 2225 PlayerVideoCapture marshal numbers stop as 0 and start as 1, so it swaps the two actions. The fork is the suspect side; its u8 action and the var_u32 selector are the same byte for these values.",
       "what_would_settle_it": "A capture of a start video capture action.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape."
         },
         {
           "locator": "https://github.com/LiteLDev/LeviLamina/blob/b3ff77f271193b0833294a9a04e4f46fafe90b36/src/mc/network/packet/PlayerVideoCapturePacketPayload.h#L28",
           "summary": "The 26.51 payload is one std::variant<StartVideoCapture, StopVideoCapture>."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/player_video_capture.go#L33",
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/player_video_capture.go#L33",
           "summary": "The locked marshal writes the action byte with stop as 0."
         }
       ],
-      "fingerprint": "sha256:d3860012cc5c439cd34208eb8c562974f0701bea3c56c26b404cdeb12ecfa4b1"
+      "fingerprint": "sha256:841f68f762e8008253b98f8163090714ea0d955b2221b167579912ce5a97b446"
     },
     {
       "id": 338,
       "name": "CameraSplinePacket",
-      "reason": "Wire conflict: canonical spline_type is unconditional but protocol 2193 CameraSpline makes it optional; canonical progress/rotation easing is optional but protocol 2193 code writes strings unconditionally.",
+      "reason": "Wire conflict: canonical spline_type is unconditional but protocol 2225 CameraSpline makes it optional; canonical progress/rotation easing is optional but protocol 2225 code writes strings unconditionally.",
       "what_would_settle_it": "Capture spline variants with absent/present spline_type and easing values or inspect the matching binary serializer to settle each presence boundary.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/camera_spline.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/camera_spline.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:b565b2e7e269828d97bbd828a6dc832968b52c1c4c759b8a272e3649674f7d41"
+      "fingerprint": "sha256:cc94542f45498debbf3c9fde25b8b1708e40b8b341fef83d091788ca3e4d7453"
     },
     {
       "id": 345,
       "name": "ClientboundAttributeLayerSyncPacket",
-      "reason": "Wire conflict: the canonical attribute operation is an unconditional string, while the protocol 2193 ClientBoundAttributeLayerSync wraps BoolOperation in an optional. CloudburstMC readAttributeData (v944, inherited by v2168) reads the operation string unconditionally after the value, matching the manifest, so the protocol 2193 gophertunnel marshal is the suspect side.",
-      "what_would_settle_it": "An attribute layer sync capture at protocol 2193 with a bool attribute, or a writer trace, settles the operation framing.",
+      "reason": "Wire conflict: the canonical attribute operation is an unconditional string, while the protocol 2225 ClientBoundAttributeLayerSync wraps BoolOperation in an optional. CloudburstMC readAttributeData (v944, inherited by v2168) reads the operation string unconditionally after the value, matching the manifest, so the protocol 2225 gophertunnel marshal is the suspect side.",
+      "what_would_settle_it": "An attribute layer sync capture at protocol 2225 with a bool attribute, or a writer trace, settles the operation framing.",
       "evidence": [
         {
-          "locator": "generated/1.26.51/manifest.json",
-          "summary": "The canonical 1.26.51 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
         },
         {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/8d903c5192f794ca33fea2d84f7afec3e3393bc5/minecraft/protocol/packet/clientbound_attribute_layer_sync.go",
-          "summary": "The locked protocol 2193 source operations were compared with the canonical packet, including the differences described above."
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/5f6e839b63c8bf000bca26e8d7cdac2fae8b7604/minecraft/protocol/packet/clientbound_attribute_layer_sync.go",
+          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:69b2e9cf4fe1773e87caa874687f256c72e72a6b70705bc4e8ef511e6fb5c06a"
+      "fingerprint": "sha256:660242c965e311530b6ffbb6a90258a95ca5fb125bd022066cae668e80d1d235"
     }
   ]
 }

@@ -19,8 +19,7 @@ const extractionDepthLimit = 40
 // helper bodies, private writer methods and interface variant tables were
 // reviewed; the extractor expands them only at these commits.
 var reviewedHelperRevisions = map[string]bool{
-	"be6713da4dc051a4197f897d04835e89e9c54321": true, // protocol 2168
-	"8d903c5192f794ca33fea2d84f7afec3e3393bc5": true, // protocol 2193
+	"5f6e839b63c8bf000bca26e8d7cdac2fae8b7604": true, // protocol 2225
 }
 
 type typeRef struct {
@@ -201,8 +200,9 @@ var reviewedInterfaceVariants = map[string][]reviewedInterfaceVariant{
 		{Value: 13, Type: "protocol.CraftRecipeOptionalStackRequestAction"},
 		{Value: 14, Type: "protocol.CraftGrindstoneRecipeStackRequestAction"},
 		{Value: 15, Type: "protocol.CraftLoomRecipeStackRequestAction"},
-		{Value: 16, Type: "protocol.CraftNonImplementedStackRequestAction"},
-		{Value: 17, Type: "protocol.CraftResultsDeprecatedStackRequestAction"},
+		{Value: 16, Type: "protocol.CraftReservedStackRequestAction"},
+		{Value: 17, Type: "protocol.CraftNonImplementedStackRequestAction"},
+		{Value: 18, Type: "protocol.CraftResultsDeprecatedStackRequestAction"},
 	},
 	"protocol.Event": {
 		{Value: 0, Type: "protocol.AchievementAwardedEvent"},

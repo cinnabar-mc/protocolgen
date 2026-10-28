@@ -36,7 +36,7 @@ and inputs. It does not relicense the source documents or game-data catalog.
 | `build/gophertunnel-layout` | Current release's Go in gophertunnel's layout, for `diff -r` | `make gophertunnel-layout GOPHERTUNNEL_DIR=…` |
 | `build/retail` | Per-packet verdicts comparing Valentine, the contract crate, generated Go and gophertunnel | `make retail`; CI artifact `retail-verdicts` |
 | `build/bench` | Codec benchmark comparison against gophertunnel | `make bench` |
-| `ORACLE_REPORT` (default `/tmp/protocolgen-gophertunnel-report.json`) | Manifest-to-gophertunnel comparison | `make regen-1.26.51`; CI artifact `gophertunnel-oracle-2193` |
+| `ORACLE_REPORT` (default `/tmp/protocolgen-gophertunnel-report.json`) | Manifest-to-gophertunnel comparison | `make regen-1.26.60`; CI artifact `gophertunnel-oracle-2225` |
 
 ## Regenerating and checking
 
