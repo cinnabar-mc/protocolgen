@@ -478,10 +478,19 @@ func writeRustDomainHeader(b *strings.Builder, item definition, lastDomain *stri
 	*lastDomain = item.Domain
 }
 
+// rustPackageName keeps the model and codec-contract profiles distinct for Cargo's Git lookup.
+func rustPackageName(m manifest.Manifest, contract int) string {
+	prefix := "bedrock-protocol-"
+	if contract > 0 {
+		prefix = "bedrock-protocol-contract-"
+	}
+	return prefix + strings.NewReplacer(".", "-", "_", "-").Replace(m.Target.MinecraftVersion)
+}
+
 func emitCargo(m manifest.Manifest, g *generator) string {
 	var b strings.Builder
 	b.WriteString("# Code generated from canonical protocol manifest v2. DO NOT EDIT.\n\n")
-	crateName := "bedrock-protocol-" + strings.NewReplacer(".", "-", "_", "-").Replace(m.Target.MinecraftVersion)
+	crateName := rustPackageName(m, g.contract)
 	fmt.Fprintf(&b, "[package]\nname = \"%s\"\nversion = \"0.1.0\"\nedition = \"2024\"\nlicense = %q\npublish = false\n", crateName, licensing.SPDX)
 	// bytes is unconditional: the wire runtime's shared-buffer path is part of
 	// the reader contract, not a per-manifest feature.
