@@ -67,8 +67,22 @@ func TestRunnerTargetsTheCorpusVersion(t *testing.T) {
 		t.Fatal(err)
 	}
 	dashed := "bedrock-protocol-" + strings.ReplaceAll(corpus.MinecraftVersion, ".", "-")
-	if !strings.Contains(string(manifest), dashed+" = { path = ") {
+	_, dependency, found := strings.Cut(string(manifest), dashed+" = {")
+	if !found {
 		t.Fatalf("runner/Cargo.toml does not depend on %s", dashed)
+	}
+	dependency, _, found = strings.Cut(dependency, "}")
+	if !found {
+		t.Fatalf("runner/Cargo.toml has an unterminated dependency for %s", dashed)
+	}
+	contract := "bedrock-protocol-contract-" + strings.ReplaceAll(corpus.MinecraftVersion, ".", "-")
+	for _, field := range []string{
+		`package = "` + contract + `"`,
+		`path = "../../../generated/` + corpus.MinecraftVersion + `/rust-contract"`,
+	} {
+		if !strings.Contains(dependency, field) {
+			t.Fatalf("runner/Cargo.toml dependency %s is missing %s", dashed, field)
+		}
 	}
 	source, err := os.ReadFile(filepath.Join("runner", "src", "contract.rs"))
 	if err != nil {
