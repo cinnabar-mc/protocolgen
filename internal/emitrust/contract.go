@@ -243,7 +243,7 @@ impl Packet {
 // emitContractRoundtripTest checks every packet's default through both the
 // value and frame entry points, plus direction and unknown-id handling.
 func emitContractRoundtripTest(m manifest.Manifest, infos []packetInfo) string {
-	crate := strings.NewReplacer(".", "_", "-", "_").Replace("bedrock-protocol-" + m.Target.MinecraftVersion)
+	crate := strings.ReplaceAll(rustPackageName(m, CodecContractVersion), "-", "_")
 	var b strings.Builder
 	b.WriteString("// Code generated from canonical protocol manifest v2. DO NOT EDIT.\n\n")
 	fmt.Fprintf(&b, "use %s::packets::*;\n", crate)

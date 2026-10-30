@@ -11,7 +11,7 @@ import (
 // decodes what it encodes. It is the cheapest check that the two directions of
 // a generated codec did not drift apart.
 func emitRoundtripTest(m manifest.Manifest, infos []packetInfo) string {
-	crate := strings.NewReplacer(".", "_", "-", "_").Replace("bedrock-protocol-" + m.Target.MinecraftVersion)
+	crate := strings.ReplaceAll(rustPackageName(m, 0), "-", "_")
 	var b strings.Builder
 	b.WriteString("// Code generated from canonical protocol manifest v2. DO NOT EDIT.\n\n")
 	fmt.Fprintf(&b, "use %s::packets::*;\n", crate)

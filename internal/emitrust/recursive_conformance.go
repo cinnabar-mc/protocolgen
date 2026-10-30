@@ -70,7 +70,7 @@ func recursiveValueShape(item definition) (recursiveValueFixture, bool) {
 
 // emitRecursiveValueTests exercises public generated values, with wire tags derived from schema.
 func emitRecursiveValueTests(m manifest.Manifest, definitions []definition, contract int) string {
-	crate := strings.NewReplacer(".", "_", "-", "_").Replace("bedrock-protocol-" + m.Target.MinecraftVersion)
+	crate := strings.ReplaceAll(rustPackageName(m, contract), "-", "_")
 	var b strings.Builder
 	unwrap := ""
 	if contract > 0 {

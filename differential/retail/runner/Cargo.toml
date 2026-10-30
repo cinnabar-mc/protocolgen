@@ -9,7 +9,7 @@ publish = false
 [workspace]
 
 [dependencies]
-bedrock-protocol-1-26-51 = { path = "../../../generated/1.26.51/rust-contract" }
+bedrock-protocol-1-26-51 = { package = "bedrock-protocol-contract-1-26-51", path = "../../../generated/1.26.51/rust-contract" }
 bytes = "1"
 sha2 = "0.10"
 valentine = { path = "../../../build/valentine/crates/protocol/vendor/valentine", default-features = false, features = ["bedrock_1_26_51"] }

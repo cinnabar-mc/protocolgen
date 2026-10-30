@@ -14,7 +14,9 @@ generated code reads, writes, bounds and reports those layouts.
 
 ## Versioning
 
-- There is one crate per game version, named `bedrock-protocol-<version>`.
+- Each game version has a contract crate named `bedrock-protocol-contract-<version>`.
+  The profile-neutral model keeps the separate name `bedrock-protocol-<version>`,
+  so a Cargo Git dependency selects the intended API unambiguously.
   `lib.rs` exports `GAME_VERSION`, `PROTOCOL_VERSION`, `CODEC_CONTRACT` and
   `MANIFEST_SHA256`, the SHA-256 of the stable manifest serialization.
 - Any change a consumer must adapt to bumps the contract version.
