@@ -23,3 +23,14 @@ func TestMapCountsCannotPanicOrAllocateBeforeReading(t *testing.T) {
 		})
 	}
 }
+
+func TestEmptyMapKeepsAnEmptyEntrySlice(t *testing.T) {
+	node := manifest.Map(manifest.Primitive("var_u32"), manifest.Primitive("u8"), manifest.Primitive("u8"))
+	value, err := DecodeAll(node, []byte{0})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if entries, ok := value.([]MapEntry); !ok || entries == nil {
+		t.Fatalf("empty map = %#v", value)
+	}
+}

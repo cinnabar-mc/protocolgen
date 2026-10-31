@@ -398,7 +398,7 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 		if err != nil {
 			return nil, err
 		}
-		var entries []MapEntry
+		entries := make([]MapEntry, 0)
 		for index := uint64(0); index < length; index++ {
 			key, err := d.decodeNode(*node.Key)
 			if err != nil {
