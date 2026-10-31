@@ -129,11 +129,13 @@ func loadDocuments(directory string) (schemaSet, error) {
 			return schemaSet{}, fmt.Errorf("read target schema %s: %w", entry.Name(), err)
 		}
 		var document map[string]any
-		if err := json.Unmarshal(data, &document); err != nil {
+		decoder := json.NewDecoder(bytes.NewReader(data))
+		decoder.UseNumber()
+		if err := decoder.Decode(&document); err != nil {
 			return schemaSet{}, fmt.Errorf("parse target schema %s: %w", entry.Name(), err)
 		}
 		set.byFile[entry.Name()] = document
-		if protocol, ok := document["x-protocol-version"].(float64); ok {
+		if protocol, err := number(document["x-protocol-version"]); err == nil {
 			if set.protocolVersion != 0 && set.protocolVersion != int(protocol) {
 				return schemaSet{}, fmt.Errorf("target schemas mix protocol versions %d and %d", set.protocolVersion, int(protocol))
 			}
@@ -486,8 +488,8 @@ func renderFieldSchema(schema map[string]any, schemas schemaSet, address, qualif
 		}
 		return goType, constrainedStatement(schema, address, method, "number"), false, nil
 	case "array":
-		if min, minOK := schema["minItems"].(float64); minOK {
-			if max, maxOK := schema["maxItems"].(float64); maxOK && min == max {
+		if min, minErr := number(schema["minItems"]); minErr == nil {
+			if max, maxErr := number(schema["maxItems"]); maxErr == nil && min == max {
 				return "", "", false, fmt.Errorf("fixed-length arrays are not supported by the gophertunnel guide")
 			}
 		}
