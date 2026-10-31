@@ -2,6 +2,7 @@
 package naming
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/json"
 	"fmt"
@@ -225,12 +226,41 @@ func UnionIdentity(node manifest.Node) string {
 	return fmt.Sprintf("%x", sha256.Sum256(encoded))
 }
 
-// payloadIdentity preserves shared named types and distinguishes inline layouts.
+// payloadIdentity distinguishes inline layouts without tying them to source pins.
 func payloadIdentity(node manifest.Node) any {
 	if node.TypeID != "" {
 		return node.TypeID
 	}
-	return node
+	data, _ := json.Marshal(node)
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	var identity any
+	_ = decoder.Decode(&identity)
+	return stripIdentityMetadata(identity)
+}
+
+// stripIdentityMetadata retains named references and exact inline wire numbers.
+func stripIdentityMetadata(value any) any {
+	switch value := value.(type) {
+	case map[string]any:
+		if _, node := value["kind"]; node {
+			if id, ok := value["type_id"].(string); ok && id != "" {
+				return id
+			}
+		}
+		delete(value, "provenance")
+		for key, child := range value {
+			value[key] = stripIdentityMetadata(child)
+		}
+		return value
+	case []any:
+		for index, child := range value {
+			value[index] = stripIdentityMetadata(child)
+		}
+		return value
+	default:
+		return value
+	}
 }
 
 // LooksLikeArtifact identifies names that must be explicitly reviewed.

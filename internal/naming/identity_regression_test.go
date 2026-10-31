@@ -66,3 +66,43 @@ func TestDecodeVariantArtifactsRequireReview(t *testing.T) {
 		})
 	}
 }
+
+func TestUnnamedUnionIdentityIgnoresPayloadProvenance(t *testing.T) {
+	makeUnion := func(pin string) manifest.Node {
+		payload := manifest.Struct(manifest.Field{Name: "Value", Encode: manifest.Primitive("u8"), Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{pin}}})
+		return manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 0, Name: "Family::Value", Encode: payload})
+	}
+	first, second := makeUnion("first"), makeUnion("second")
+	if IdentityKey(first) != IdentityKey(second) {
+		t.Fatal("provenance changed the wire identity")
+	}
+	resolver := NewResolver(Overlay{})
+	if _, err := resolver.Resolve(first, "First", PublicTypeName); err != nil {
+		t.Fatal(err)
+	}
+	if _, err := resolver.Resolve(second, "Second", PublicTypeName); err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestUnnamedUnionIdentityPreservesExactPayloadTags(t *testing.T) {
+	makeUnion := func(tag int64) manifest.Node {
+		payload := manifest.Enum("u64le", manifest.EnumValue{Value: tag, Name: "Value"})
+		return manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 0, Name: "Family::Value", Encode: payload})
+	}
+	if IdentityKey(makeUnion(1<<53)) == IdentityKey(makeUnion(1<<53+1)) {
+		t.Fatal("distinct payload tags share an identity")
+	}
+}
+
+func TestUnnamedUnionIdentityKeepsNestedNamedReferences(t *testing.T) {
+	makeUnion := func(value string) manifest.Node {
+		enum := manifest.Enum("u8", manifest.EnumValue{Value: 0, Name: value})
+		enum.TypeID = "Mode"
+		payload := manifest.Struct(manifest.Field{Name: "Mode", Encode: enum, Symmetry: manifest.Symmetric})
+		return manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 0, Name: "Family::Value", Encode: payload})
+	}
+	if IdentityKey(makeUnion("First")) != IdentityKey(makeUnion("Second")) {
+		t.Fatal("a shared named type changed its enclosing identity")
+	}
+}
