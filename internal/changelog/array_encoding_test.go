@@ -26,3 +26,17 @@ func TestGenerateReportsNestedArrayEncodingChanges(t *testing.T) {
 		})
 	}
 }
+
+func TestArrayItemConstraintsDoNotMoveWireLayout(t *testing.T) {
+	from, to := t.TempDir(), t.TempDir()
+	for dir, maximum := range map[string]string{from: "10", to: "20"} {
+		writeSchema(t, dir, "Values", objectSchema("1.0", 1, `"Values":{"type":"array","items":{"type":"integer","x-underlying-type":"int32","maximum":`+maximum+`},"x-ordinal-index":0}`, `"Values"`))
+	}
+	got, err := Generate(Config{FromDir: from, ToDir: to})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if strings.Contains(string(got), "**wire break**") {
+		t.Fatalf("item validation reported as a byte layout change: %s", got)
+	}
+}

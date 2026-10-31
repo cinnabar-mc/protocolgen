@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -291,6 +292,9 @@ func loadDir(dir string) (map[string]*schema, string, int, error) {
 		if err := decoder.Decode(&raw); err != nil {
 			return nil, "", 0, fmt.Errorf("%s: %w", entry.Name(), err)
 		}
+		if len(bytes.TrimSpace(data[decoder.InputOffset():])) != 0 {
+			return nil, "", 0, fmt.Errorf("%s: unexpected trailing JSON data", entry.Name())
+		}
 		var s schema
 		decoder = json.NewDecoder(bytes.NewReader(data))
 		decoder.UseNumber()
@@ -375,12 +379,18 @@ func resolveRoot(s *schema, all map[string]*schema) *schema {
 }
 func refName(ref string) string { return strings.TrimSuffix(filepath.Base(ref), ".json") }
 
-func normalized(v interface{}) interface{} { return normalizeSchema(v, true) }
-func normalizeSchema(v interface{}, schemaKeywords bool) interface{} {
+func normalized(v interface{}) interface{} { return normalizeSchema(v, true, false) }
+func normalizeSchema(v interface{}, schemaKeywords, encodingOnly bool) interface{} {
 	switch x := v.(type) {
 	case map[string]interface{}:
 		out := map[string]interface{}{}
 		for k, child := range x {
+			if encodingOnly && schemaKeywords && slices.Contains(constraintKeywords, k) {
+				fixedArray := x["type"] == "array" && x["minItems"] != nil && number(x["minItems"]) == number(x["maxItems"])
+				if !fixedArray || k != "minItems" && k != "maxItems" {
+					continue
+				}
+			}
 			if schemaKeywords && k == "default" {
 				// Default presence affects wire optionality; its value does not change the codec.
 				out[k] = true
@@ -390,16 +400,16 @@ func normalizeSchema(v interface{}, schemaKeywords bool) interface{} {
 				continue
 			}
 			if k == "properties" {
-				out[k] = normalizeSchema(child, false)
+				out[k] = normalizeSchema(child, false, encodingOnly)
 			} else {
-				out[k] = normalizeSchema(child, true)
+				out[k] = normalizeSchema(child, true, encodingOnly)
 			}
 		}
 		return out
 	case []interface{}:
 		out := make([]interface{}, len(x))
 		for i := range x {
-			out[i] = normalizeSchema(x[i], true)
+			out[i] = normalizeSchema(x[i], true, encodingOnly)
 		}
 		return out
 	default:
@@ -409,6 +419,13 @@ func normalizeSchema(v interface{}, schemaKeywords bool) interface{} {
 func equalWire(a, b map[string]interface{}) bool {
 	aa, _ := json.Marshal(normalized(a))
 	bb, _ := json.Marshal(normalized(b))
+	return bytes.Equal(aa, bb)
+}
+
+// equalEncoding compares byte layouts while ignoring validation-only limits.
+func equalEncoding(a, b map[string]interface{}) bool {
+	aa, _ := json.Marshal(normalizeSchema(a, true, true))
+	bb, _ := json.Marshal(normalizeSchema(b, true, true))
 	return bytes.Equal(aa, bb)
 }
 
@@ -495,7 +512,7 @@ func compareObjects(name, kind string, before, after *schema) change {
 		if bf.Type == af.Type && bf.Raw["type"] == "array" && af.Raw["type"] == "array" {
 			beforeItems, _ := bf.Raw["items"].(map[string]interface{})
 			afterItems, _ := af.Raw["items"].(map[string]interface{})
-			if !equalWire(beforeItems, afterItems) {
+			if !equalEncoding(beforeItems, afterItems) {
 				c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` item encoding changed", af.Name))
 				c.Wire = true
 			}
@@ -522,9 +539,12 @@ func requirement(optional bool) string {
 	}
 	return "required"
 }
+
+var constraintKeywords = []string{"maximum", "minimum", "maxItems", "minItems", "maxLength", "minLength", "pattern"}
+
 func constraints(raw map[string]interface{}) string {
 	var parts []string
-	for _, k := range []string{"maximum", "minimum", "maxItems", "minItems", "maxLength", "minLength"} {
+	for _, k := range constraintKeywords {
 		if v, ok := raw[k]; ok {
 			parts = append(parts, k+"="+number(v))
 		}

@@ -284,6 +284,14 @@ func TestGenerateReportsEffectiveEnumValueChanges(t *testing.T) {
 	}
 }
 
+func TestLoadDirRejectsTrailingJSON(t *testing.T) {
+	directory := t.TempDir()
+	writeSchema(t, directory, "Mode", enumSchema("1.0", 1, `"A"`)+` {}`)
+	if _, _, _, err := loadDir(directory); err == nil {
+		t.Fatal("trailing JSON accepted")
+	}
+}
+
 func TestGenerateRejectsInvalidEnumMappingLength(t *testing.T) {
 	for _, mapping := range []string{"[]", "null", "[1]"} {
 		t.Run(mapping, func(t *testing.T) {

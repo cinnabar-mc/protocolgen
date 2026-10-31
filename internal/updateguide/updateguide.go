@@ -134,6 +134,9 @@ func loadDocuments(directory string) (schemaSet, error) {
 		if err := decoder.Decode(&document); err != nil {
 			return schemaSet{}, fmt.Errorf("parse target schema %s: %w", entry.Name(), err)
 		}
+		if len(bytes.TrimSpace(data[decoder.InputOffset():])) != 0 {
+			return schemaSet{}, fmt.Errorf("parse target schema %s: unexpected trailing JSON data", entry.Name())
+		}
 		set.byFile[entry.Name()] = document
 		if protocol, err := number(document["x-protocol-version"]); err == nil {
 			if set.protocolVersion != 0 && set.protocolVersion != int(protocol) {

@@ -16,3 +16,11 @@ func TestGeneratePreservesLargeEnumIntegers(t *testing.T) {
 		t.Fatalf("enum integer rounded: %s", got)
 	}
 }
+
+func TestLoadDocumentsRejectsTrailingJSON(t *testing.T) {
+	directory := t.TempDir()
+	writeFixture(t, directory, "Mode.json", `{"title":"Mode","x-protocol-version":2} {}`)
+	if _, err := loadDocuments(directory); err == nil {
+		t.Fatal("trailing JSON accepted")
+	}
+}
