@@ -382,7 +382,11 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 	case manifest.KindStruct:
 		object := make(map[string]any, len(node.Fields))
 		for _, field := range node.Fields {
-			value, err := d.decodeNode(field.Encode)
+			shape := field.Encode
+			if field.Decode != nil {
+				shape = *field.Decode
+			}
+			value, err := d.decodeNode(shape)
 			if err != nil {
 				return nil, fmt.Errorf("field %s: %w", field.Name, err)
 			}
@@ -421,7 +425,11 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 		}
 		for _, variant := range node.Variants {
 			if variant.Value == int64(tag) {
-				value, err := d.decodeNode(variant.Encode)
+				shape := variant.Encode
+				if variant.Decode != nil {
+					shape = *variant.Decode
+				}
+				value, err := d.decodeNode(shape)
 				return UnionValue{Tag: int64(tag), Value: value}, err
 			}
 		}
