@@ -6,7 +6,10 @@ package emitgo
 import (
 	"embed"
 	"fmt"
+	"go/ast"
 	"go/format"
+	"go/parser"
+	"go/token"
 	"math"
 	"slices"
 	"sort"
@@ -37,6 +40,7 @@ type typeDefinition struct {
 	Union      []goUnionMember
 	Implements []unionMembership
 	BitLength  uint64
+	Layout     string
 }
 
 // unionMembership records the tag a struct carries when written as a variant
@@ -183,19 +187,22 @@ func GenerateWithOptions(m manifest.Manifest, options Options) (map[string]strin
 		usage:              flatten.Count(m),
 		packetConstants:    map[string][]string{},
 	}
+	if err := g.reserveRuntimeNames(); err != nil {
+		return nil, err
+	}
 	packets := append([]manifest.Packet(nil), m.Packets...)
 	sort.Slice(packets, func(i, j int) bool { return packets[i].ID < packets[j].ID })
 	packetNames := map[uint32]string{}
+	packetResolver := naming.NewResolver(naming.Overlay{})
 	for _, packet := range packets {
 		neutral := naming.PacketTypeName(packet.Name)
 		if reviewed := g.layout.TypeName(packet.Name); reviewed != "" {
 			neutral = reviewed
 		}
 		name := exportName(neutral)
-		if err := g.resolver.Reserve(packet.Name, neutral, exportName); err != nil {
+		if err := packetResolver.Reserve(packet.Name, neutral, exportName); err != nil {
 			return nil, fmt.Errorf("packet %s: %w", packet.Name, err)
 		}
-		g.usedNames[name] = true
 		packetNames[packet.ID] = name
 		usedHints := map[string]bool{}
 		for _, effective := range g.packetFields(packet) {
@@ -592,10 +599,14 @@ func (g *generator) registerStruct(node manifest.Node, hint string) (string, err
 	if err != nil {
 		return "", err
 	}
-	if _, exists := g.definitions[name]; exists {
+	layout := naming.LayoutIdentity(node)
+	if existing, exists := g.definitions[name]; exists {
+		if existing.Layout != layout {
+			return "", fmt.Errorf("struct %s has conflicting wire layouts", name)
+		}
 		return name, nil
 	}
-	g.definitions[name] = typeDefinition{Name: name, TypeID: nodeTypeID(node), Kind: manifest.KindStruct}
+	g.definitions[name] = typeDefinition{Name: name, TypeID: nodeTypeID(node), Kind: manifest.KindStruct, Layout: layout}
 	used, usedHints := map[string]bool{}, map[string]bool{}
 	var fields []typedField
 	for _, field := range node.Fields {
@@ -636,17 +647,42 @@ func (g *generator) registerIdentity(node manifest.Node, hint string) (string, e
 	return name, nil
 }
 
+// reserveRuntimeNames keeps generated declarations out of the embedded runtime namespace.
+func (g *generator) reserveRuntimeNames() error {
+	files, err := emitRuntimeFiles()
+	if err != nil {
+		return err
+	}
+	for _, source := range files {
+		file, err := parser.ParseFile(token.NewFileSet(), "runtime.go", source, 0)
+		if err != nil {
+			return err
+		}
+		for name, object := range file.Scope.Objects {
+			if object.Kind == ast.Pkg {
+				continue
+			}
+			if err := g.resolver.Reserve("runtime:"+name, name, func(name string) string { return name }); err != nil {
+				return err
+			}
+			g.usedNames[name] = true
+		}
+	}
+	return nil
+}
+
+// unique allocates a synthesized name in the same namespace as manifest definitions.
 func (g *generator) unique(base string) string {
 	if base == "" {
 		base = "GeneratedType"
 	}
-	if !g.usedNames[base] {
+	if !g.usedNames[base] && g.resolver.Reserve("synthesized:"+base, base, exportName) == nil {
 		g.usedNames[base] = true
 		return base
 	}
 	for index := 2; ; index++ {
 		candidate := fmt.Sprintf("%s%d", base, index)
-		if !g.usedNames[candidate] {
+		if !g.usedNames[candidate] && g.resolver.Reserve("synthesized:"+candidate, candidate, exportName) == nil {
 			g.usedNames[candidate] = true
 			return candidate
 		}

@@ -226,6 +226,13 @@ func UnionIdentity(node manifest.Node) string {
 	return fmt.Sprintf("%x", sha256.Sum256(encoded))
 }
 
+// LayoutIdentity compares a definition's wire shape while retaining nested named references.
+func LayoutIdentity(node manifest.Node) string {
+	node.TypeID = ""
+	encoded, _ := json.Marshal(payloadIdentity(node))
+	return fmt.Sprintf("%x", sha256.Sum256(encoded))
+}
+
 // payloadIdentity distinguishes inline layouts without tying them to source pins.
 func payloadIdentity(node manifest.Node) any {
 	if node.TypeID != "" {
