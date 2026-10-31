@@ -197,12 +197,13 @@ func GenerateWithOptions(m manifest.Manifest, options Options) (map[string]strin
 		}
 		g.usedNames[name] = true
 		packetNames[packet.ID] = name
+		usedHints := map[string]bool{}
 		for _, effective := range g.packetFields(packet) {
 			field := effective.Field
 			if err := ensureCodecSymmetric(field); err != nil {
 				return nil, fmt.Errorf("packet %s field %s: %w", packet.Name, field.Name, err)
 			}
-			if _, err := g.goType(g.semantics.Apply(effective.Owner, field), name+exportName(field.Name)); err != nil {
+			if _, err := g.goType(g.semantics.Apply(effective.Owner, field), name+g.packetFieldHint(field, usedHints)); err != nil {
 				return nil, fmt.Errorf("packet %s field %s: %w", packet.Name, field.Name, err)
 			}
 		}
@@ -279,6 +280,10 @@ func (g *generator) goType(node manifest.Node, hint string) (string, error) {
 		return "[]byte", nil
 	case manifest.KindBitset:
 		name := fmt.Sprintf("Bitset%d", node.Length)
+		if err := g.resolver.Reserve("bitset:"+name, name, exportName); err != nil {
+			return "", err
+		}
+		g.usedNames[name] = true
 		if _, exists := g.definitions[name]; !exists {
 			g.definitions[name] = typeDefinition{Name: name, Kind: manifest.KindBitset, BitLength: node.Length}
 		}
@@ -933,16 +938,13 @@ func (g *generator) emitPacket(packet manifest.Packet, packetName string, consta
 	fields := make([]packetField, 0, len(effective))
 	for _, item := range effective {
 		field := item.Field
-		baseName, hintBase := g.fieldName(item.Owner, field.Name), exportName(field.Name)
+		baseName := g.fieldName(item.Owner, field.Name)
 		if g.emitPacketRuntime && baseName == "ID" {
 			// ID is reserved by the generated packet runtime method. Keep the
 			// wire field explicit without making the struct fail to compile.
 			baseName = "IDValue"
 		}
-		if g.emitPacketRuntime && hintBase == "ID" {
-			hintBase = "IDValue"
-		}
-		name, hint := uniqueFieldName(baseName, used), uniqueFieldName(hintBase, usedHints)
+		name, hint := uniqueFieldName(baseName, used), g.packetFieldHint(field, usedHints)
 		encode := g.semantics.Apply(item.Owner, field)
 		typ := mustGoType(g, encode, packetName+hint)
 		fields = append(fields, packetField{name: name, hint: hint, wireName: field.Name, owner: item.Owner, typ: qualifyGoType(typ, g.definitions), node: encode})
@@ -1877,4 +1879,13 @@ func uniqueFieldName(base string, used map[string]bool) string {
 			return candidate
 		}
 	}
+}
+
+// packetFieldHint uses the same anonymous identity during discovery and emission.
+func (g *generator) packetFieldHint(field manifest.Field, used map[string]bool) string {
+	hint := exportName(field.Name)
+	if g.emitPacketRuntime && hint == "ID" {
+		hint = "IDValue"
+	}
+	return uniqueFieldName(hint, used)
 }
