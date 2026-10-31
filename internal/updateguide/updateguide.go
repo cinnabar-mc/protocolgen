@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"go/format"
 	"maps"
+	"math/big"
 	"os"
 	"path/filepath"
 	"sort"
@@ -771,7 +772,11 @@ func number(value any) (int64, error) {
 	case int64:
 		return value, nil
 	case json.Number:
-		return value.Int64()
+		rational, ok := new(big.Rat).SetString(value.String())
+		if !ok || !rational.IsInt() || !rational.Num().IsInt64() {
+			return 0, fmt.Errorf("not a signed 64-bit integer: %s", value)
+		}
+		return rational.Num().Int64(), nil
 	case string:
 		return strconv.ParseInt(value, 10, 64)
 	default:

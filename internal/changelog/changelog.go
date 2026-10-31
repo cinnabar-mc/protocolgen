@@ -6,6 +6,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"os"
 	"path/filepath"
 	"slices"
@@ -361,16 +362,11 @@ func packetID(s *schema) int {
 	return id
 }
 func packetIDValue(s *schema) (int, bool) {
-	switch v := s.Meta["[cereal:packet]"].(type) {
-	case json.Number:
-		id, err := strconv.Atoi(v.String())
-		return id, err == nil && id >= 0
-	case float64:
-		return int(v), v == float64(int(v)) && v >= 0
-	default:
-		return 0, false
-	}
+	value, exists := s.Meta["[cereal:packet]"]
+	id, err := strconv.Atoi(number(value))
+	return id, exists && err == nil && id >= 0
 }
+
 func resolveRoot(s *schema, all map[string]*schema) *schema {
 	if target := all[refName(s.Ref)]; target != nil {
 		return target
@@ -382,6 +378,8 @@ func refName(ref string) string { return strings.TrimSuffix(filepath.Base(ref), 
 func normalized(v interface{}) interface{} { return normalizeSchema(v, true, false) }
 func normalizeSchema(v interface{}, schemaKeywords, encodingOnly bool) interface{} {
 	switch x := v.(type) {
+	case json.Number:
+		return json.Number(number(x))
 	case map[string]interface{}:
 		out := map[string]interface{}{}
 		for k, child := range x {
@@ -552,6 +550,12 @@ func constraints(raw map[string]interface{}) string {
 	return strings.Join(parts, ", ")
 }
 func number(v interface{}) string {
+	if value, ok := v.(json.Number); ok {
+		if rational, ok := new(big.Rat).SetString(value.String()); ok && rational.IsInt() {
+			return rational.Num().String()
+		}
+		return value.String()
+	}
 	if f, ok := v.(float64); ok {
 		return strconv.FormatFloat(f, 'f', -1, 64)
 	}

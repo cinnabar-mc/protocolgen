@@ -292,6 +292,21 @@ func TestLoadDirRejectsTrailingJSON(t *testing.T) {
 	}
 }
 
+func TestGenerateTreatsEquivalentIntegerLiteralsEqually(t *testing.T) {
+	from, to := t.TempDir(), t.TempDir()
+	for dir, value := range map[string]string{from: "7", to: "7.0e0"} {
+		writeSchema(t, dir, "Mode", `{"title":"Mode","x-minecraft-version":"1.0","x-protocol-version":1,"enum":["A"],"x-enum-binary-value":[`+value+`]}`)
+		writeSchema(t, dir, "Packet", `{"title":"Packet","x-minecraft-version":"1.0","x-protocol-version":1,"$metaProperties":{"[cereal:packet]":`+value+`},"type":"object","properties":{}}`)
+	}
+	got, err := Generate(Config{FromDir: from, ToDir: to})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(got), "**0** modified") {
+		t.Fatalf("equivalent numbers changed: %s", got)
+	}
+}
+
 func TestGenerateRejectsInvalidEnumMappingLength(t *testing.T) {
 	for _, mapping := range []string{"[]", "null", "[1]"} {
 		t.Run(mapping, func(t *testing.T) {
