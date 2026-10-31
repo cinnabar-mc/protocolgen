@@ -286,11 +286,15 @@ func loadDir(dir string) (map[string]*schema, string, int, error) {
 			return nil, "", 0, err
 		}
 		var raw map[string]interface{}
-		if err := json.Unmarshal(data, &raw); err != nil {
+		decoder := json.NewDecoder(bytes.NewReader(data))
+		decoder.UseNumber()
+		if err := decoder.Decode(&raw); err != nil {
 			return nil, "", 0, fmt.Errorf("%s: %w", entry.Name(), err)
 		}
 		var s schema
-		if err := json.Unmarshal(data, &s); err != nil {
+		decoder = json.NewDecoder(bytes.NewReader(data))
+		decoder.UseNumber()
+		if err := decoder.Decode(&s); err != nil {
 			return nil, "", 0, fmt.Errorf("%s: %w", entry.Name(), err)
 		}
 		s.Name = strings.TrimSuffix(entry.Name(), ".json")
@@ -353,8 +357,15 @@ func packetID(s *schema) int {
 	return id
 }
 func packetIDValue(s *schema) (int, bool) {
-	v, ok := s.Meta["[cereal:packet]"].(float64)
-	return int(v), ok && v == float64(int(v)) && v >= 0
+	switch v := s.Meta["[cereal:packet]"].(type) {
+	case json.Number:
+		id, err := strconv.Atoi(v.String())
+		return id, err == nil && id >= 0
+	case float64:
+		return int(v), v == float64(int(v)) && v >= 0
+	default:
+		return 0, false
+	}
 }
 func resolveRoot(s *schema, all map[string]*schema) *schema {
 	if target := all[refName(s.Ref)]; target != nil {
@@ -548,7 +559,6 @@ func compareEnums(name string, before, after *schema) change {
 	}
 	if len(c.Bullets) == 0 && !equalStringSlices(before.Enum, after.Enum) {
 		c.Bullets = append(c.Bullets, fmt.Sprintf("value order changed from %s to %s", quotedList(before.Enum), quotedList(after.Enum)))
-		c.Wire = true
 	}
 	if before.Underlying != after.Underlying {
 		c.Bullets = append(c.Bullets, fmt.Sprintf("underlying type changed from %s to %s", before.Underlying, after.Underlying))
@@ -559,18 +569,16 @@ func compareEnums(name string, before, after *schema) change {
 	} else if len(before.EnumValues) != 0 && len(after.EnumValues) == 0 {
 		c.Bullets = append(c.Bullets, "explicit binary enum values removed")
 	}
-	if len(before.EnumValues) != 0 && len(after.EnumValues) != 0 {
-		beforeIndexes := enumIndexes(before.Enum)
-		for afterIndex, name := range after.Enum {
-			beforeIndex, exists := beforeIndexes[name]
-			if !exists {
-				continue
-			}
-			oldValue, newValue := enumValue(before, beforeIndex), enumValue(after, afterIndex)
-			if oldValue != newValue {
-				c.Bullets = append(c.Bullets, fmt.Sprintf("value `%s` changed from %s to %s", name, oldValue, newValue))
-				c.Wire = true
-			}
+	beforeIndexes := enumIndexes(before.Enum)
+	for afterIndex, name := range after.Enum {
+		beforeIndex, exists := beforeIndexes[name]
+		if !exists {
+			continue
+		}
+		oldValue, newValue := enumValue(before, beforeIndex), enumValue(after, afterIndex)
+		if oldValue != newValue {
+			c.Bullets = append(c.Bullets, fmt.Sprintf("value `%s` changed from %s to %s", name, oldValue, newValue))
+			c.Wire = true
 		}
 	}
 	return c
