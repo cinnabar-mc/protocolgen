@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"math/big"
 	"os"
 	"path/filepath"
 	"sort"
@@ -90,8 +91,14 @@ func asInt(value any) (int64, bool) {
 	case float64:
 		return int64(number), number == float64(int64(number))
 	case json.Number:
-		parsed, err := number.Int64()
-		return parsed, err == nil
+		if parsed, err := number.Int64(); err == nil {
+			return parsed, true
+		}
+		rational, ok := new(big.Rat).SetString(string(number))
+		if !ok || !rational.IsInt() || !rational.Num().IsInt64() {
+			return 0, false
+		}
+		return rational.Num().Int64(), true
 	case string:
 		var parsed int64
 		_, err := fmt.Sscanf(number, "%d", &parsed)
@@ -195,8 +202,34 @@ func replaceAt(root any, pointer string, replacement any) error {
 	return fmt.Errorf("invalid empty pointer %s", pointer)
 }
 
+// canonicalNumbers stabilizes numeric spellings without rounding int64 values.
+func canonicalNumbers(value any) any {
+	switch typed := value.(type) {
+	case json.Number:
+		if integer, ok := asInt(typed); ok {
+			return integer
+		}
+		if number, err := typed.Float64(); err == nil {
+			return number
+		}
+	case map[string]any:
+		result := make(map[string]any, len(typed))
+		for key, child := range typed {
+			result[key] = canonicalNumbers(child)
+		}
+		return result
+	case []any:
+		result := make([]any, len(typed))
+		for index, child := range typed {
+			result[index] = canonicalNumbers(child)
+		}
+		return result
+	}
+	return value
+}
+
 func canonicalDigest(value any) (string, error) {
-	data, err := json.Marshal(value)
+	data, err := json.Marshal(canonicalNumbers(value))
 	if err != nil {
 		return "", err
 	}

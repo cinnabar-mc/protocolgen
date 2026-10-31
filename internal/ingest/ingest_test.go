@@ -1022,3 +1022,43 @@ func TestCorrectionsRetainPrePatchContextAndExactNumbers(t *testing.T) {
 		})
 	}
 }
+
+func TestCorrectionDigestsCanonicalizeExactNumberSpellings(t *testing.T) {
+	for _, literal := range []string{"1.0", "1e0", "1", "9007199254740993"} {
+		var value any
+		if err := decodeJSONNumbers([]byte(literal), &value); err != nil {
+			t.Fatal(err)
+		}
+		want := any(int64(1))
+		if literal == "9007199254740993" {
+			want = int64(9007199254740993)
+		}
+		got, err := canonicalDigest(value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expected, err := canonicalDigest(want)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != expected {
+			t.Errorf("number %s has noncanonical digest", literal)
+		}
+	}
+}
+
+func TestJSONIntegerValuesRemainExactAcrossSpellings(t *testing.T) {
+	for _, tc := range []struct {
+		literal string
+		want    int64
+		valid   bool
+	}{
+		{"1.0", 1, true}, {"1e0", 1, true}, {"9007199254740993.0", 9007199254740993, true},
+		{"9223372036854775807", 9223372036854775807, true}, {"9223372036854775808", 0, false}, {"1.5", 0, false},
+	} {
+		got, ok := asInt(json.Number(tc.literal))
+		if ok != tc.valid || ok && got != tc.want {
+			t.Errorf("asInt(%s) = %d, %v", tc.literal, got, ok)
+		}
+	}
+}
