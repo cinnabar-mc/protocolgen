@@ -123,6 +123,7 @@ func TestGenerateRendersAddedRemovedAndRenamedDefinitions(t *testing.T) {
 	text := string(got)
 	for _, want := range []string{
 		"**1** new, **1** removed, **1** renamed, **1** modified",
+		"**1** packet(s) touched",
 		"## Added Packets\n\n### NewPacket",
 		"## Added Types\n\n### NewType",
 		"## Removed Packets\n\n### OldPacket",

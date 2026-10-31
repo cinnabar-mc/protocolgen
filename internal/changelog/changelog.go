@@ -173,6 +173,28 @@ func Generate(cfg Config) ([]byte, error) {
 			sort.Strings((*group)[i].Affected)
 		}
 	}
+	// Payload schemas are shown under their packets, but remain shared dependencies.
+	for i := range packetChanges {
+		after := toPackets[packetChanges[i].Name]
+		before := fromPackets[packetChanges[i].Name]
+		if before == nil {
+			before = fromPackets[reverseRenames[packetChanges[i].Name]]
+		}
+		if equalWire(resolveRoot(before, from).Raw, resolveRoot(after, to).Raw) {
+			continue
+		}
+		payload := refName(toPackets[packetChanges[i].Name].Ref)
+		if payload == "" {
+			payload = packetChanges[i].Name
+		}
+		for packet, references := range deps {
+			if packet != packetChanges[i].Name && references[payload] {
+				packetChanges[i].Affected = append(packetChanges[i].Affected, packet)
+				modifiedPackets[packet] = true
+			}
+		}
+		sort.Strings(packetChanges[i].Affected)
+	}
 	sort.Slice(packetChanges, func(i, j int) bool {
 		if packetChanges[i].PacketID != packetChanges[j].PacketID {
 			return packetChanges[i].PacketID < packetChanges[j].PacketID
@@ -218,8 +240,8 @@ func Generate(cfg Config) ([]byte, error) {
 			modifiedPackets[d.Name] = true
 		}
 	}
-	for old, name := range renames {
-		modifiedPackets[old+"→"+name] = true
+	for _, name := range renames {
+		modifiedPackets[name] = true
 	}
 
 	var out bytes.Buffer
@@ -507,13 +529,19 @@ func compareObjects(name, kind string, before, after *schema) change {
 			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` type changed from %s to %s", af.Name, bf.Type, af.Type))
 			c.Wire = true
 		}
-		if bf.Type == af.Type && bf.Raw["type"] == "array" && af.Raw["type"] == "array" {
-			beforeItems, _ := bf.Raw["items"].(map[string]interface{})
-			afterItems, _ := af.Raw["items"].(map[string]interface{})
-			if !equalEncoding(beforeItems, afterItems) {
-				c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` item encoding changed", af.Name))
-				c.Wire = true
+		if bf.Type == af.Type && !equalEncoding(bf.Raw, af.Raw) {
+			detail := "encoding changed"
+			if bf.Raw["type"] == "array" && af.Raw["type"] == "array" {
+				beforeItems, _ := bf.Raw["items"].(map[string]interface{})
+				afterItems, _ := af.Raw["items"].(map[string]interface{})
+				if !equalEncoding(beforeItems, afterItems) {
+					detail = "item encoding changed"
+				} else {
+					detail = "collection encoding changed (framing or length prefix)"
+				}
 			}
+			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` %s", af.Name, detail))
+			c.Wire = true
 		}
 		if bf.Optional != af.Optional {
 			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` changed from %s to %s", af.Name, requirement(bf.Optional), requirement(af.Optional)))
