@@ -270,6 +270,9 @@ func knownEnumsAndFields(m manifest.Manifest) (map[string]map[string]bool, map[s
 		}
 		for _, variant := range node.Variants {
 			walk(variant.Encode)
+			if variant.Decode != nil {
+				walk(*variant.Decode)
+			}
 		}
 		for _, child := range []*manifest.Node{node.Prefix, node.Element, node.Value, node.Key, node.Control, node.Default} {
 			if child != nil {
@@ -290,6 +293,9 @@ func knownEnumsAndFields(m manifest.Manifest) (map[string]map[string]bool, map[s
 		for _, field := range packet.Fields {
 			owner[field.Name] = true
 			walk(field.Encode)
+			if field.Decode != nil {
+				walk(*field.Decode)
+			}
 		}
 		fields[packet.Name] = owner
 	}

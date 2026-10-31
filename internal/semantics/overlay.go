@@ -140,9 +140,15 @@ func knownFields(m manifest.Manifest) map[string]manifest.Node {
 		}
 		for _, field := range node.Fields {
 			walk(field.Encode)
+			if field.Decode != nil {
+				walk(*field.Decode)
+			}
 		}
 		for _, variant := range node.Variants {
 			walk(variant.Encode)
+			if variant.Decode != nil {
+				walk(*variant.Decode)
+			}
 		}
 		for _, child := range []*manifest.Node{node.Prefix, node.Element, node.Value, node.Key, node.Control, node.Default} {
 			if child != nil {
@@ -162,6 +168,9 @@ func knownFields(m manifest.Manifest) map[string]manifest.Node {
 		for _, field := range packet.Fields {
 			fields[FieldKey(packet.Name, field.Name)] = field.Encode
 			walk(field.Encode)
+			if field.Decode != nil {
+				walk(*field.Decode)
+			}
 		}
 	}
 	return fields
