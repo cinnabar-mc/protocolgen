@@ -112,19 +112,29 @@ func ValidateOverlay(m manifest.Manifest, document Document) error {
 			return fmt.Errorf("semantics overlay repeats %s.%s", entry.TypeID, entry.Field)
 		}
 		seen[key] = true
-		node, ok := fields[key]
+		nodes, ok := fields[key]
 		if !ok {
 			return fmt.Errorf("semantics overlay field %s.%s does not exist in the manifest", entry.TypeID, entry.Field)
 		}
-		if node.Kind != manifest.KindPrimitive || node.Primitive == nil || !Carries(entry.Semantic, node.Primitive.Code) {
-			return fmt.Errorf("semantics overlay field %s.%s cannot carry %s", entry.TypeID, entry.Field, entry.Semantic)
+		for _, node := range nodes {
+			if node.Kind != manifest.KindPrimitive || node.Primitive == nil || !Carries(entry.Semantic, node.Primitive.Code) {
+				return fmt.Errorf("semantics overlay field %s.%s cannot carry %s", entry.TypeID, entry.Field, entry.Semantic)
+			}
 		}
 	}
 	return nil
 }
 
-func knownFields(m manifest.Manifest) map[string]manifest.Node {
-	fields := map[string]manifest.Node{}
+// knownFields indexes every encode and decode occurrence without changing the manifest.
+func knownFields(m manifest.Manifest) map[string][]manifest.Node {
+	fields := map[string][]manifest.Node{}
+	add := func(owner string, field manifest.Field) {
+		key := FieldKey(owner, field.Name)
+		fields[key] = append(fields[key], field.Encode)
+		if field.Decode != nil {
+			fields[key] = append(fields[key], *field.Decode)
+		}
+	}
 	var walk func(node manifest.Node)
 	walk = func(node manifest.Node) {
 		if node.Kind == manifest.KindStruct {
@@ -134,7 +144,7 @@ func knownFields(m manifest.Manifest) map[string]manifest.Node {
 			}
 			if typeID != "" {
 				for _, field := range node.Fields {
-					fields[FieldKey(typeID, field.Name)] = field.Encode
+					add(typeID, field)
 				}
 			}
 		}
@@ -159,14 +169,17 @@ func knownFields(m manifest.Manifest) map[string]manifest.Node {
 			walk(child)
 		}
 		for _, oneCase := range node.Cases {
-			for _, child := range append(oneCase.Encode, oneCase.Decode...) {
+			for _, child := range oneCase.Encode {
+				walk(child)
+			}
+			for _, child := range oneCase.Decode {
 				walk(child)
 			}
 		}
 	}
 	for _, packet := range m.Packets {
 		for _, field := range packet.Fields {
-			fields[FieldKey(packet.Name, field.Name)] = field.Encode
+			add(packet.Name, field)
 			walk(field.Encode)
 			if field.Decode != nil {
 				walk(*field.Decode)

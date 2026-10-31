@@ -25,3 +25,12 @@ func TestRecursivePayloadKeepsDefinition(t *testing.T) {
 		}
 	}
 }
+
+func TestCountPreservesSharedCaseSlices(t *testing.T) {
+	nodes := []manifest.Node{manifest.Primitive("u8"), manifest.Primitive("u16le")}
+	conditional := manifest.Node{Kind: manifest.KindConditional, Cases: []manifest.Case{{Encode: nodes[:1], Decode: []manifest.Node{manifest.Primitive("u32le")}}, {Encode: nodes[1:2]}}}
+	Count(manifest.Manifest{Packets: []manifest.Packet{{Fields: []manifest.Field{{Encode: conditional}}}}})
+	if got := nodes[1].Primitive.Code; got != "u16le" {
+		t.Fatalf("Count changed shared branch to %s", got)
+	}
+}

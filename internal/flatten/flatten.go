@@ -62,7 +62,10 @@ func Count(m manifest.Manifest) Usage {
 			walk(child)
 		}
 		for _, oneCase := range node.Cases {
-			for _, child := range append(oneCase.Encode, oneCase.Decode...) {
+			for _, child := range oneCase.Encode {
+				walk(child)
+			}
+			for _, child := range oneCase.Decode {
 				walk(child)
 			}
 		}
