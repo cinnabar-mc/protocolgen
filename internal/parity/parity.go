@@ -159,7 +159,7 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 		if node.Primitive == nil {
 			return nil, fmt.Errorf("primitive has no code")
 		}
-		return []normalizedOp{{Kind: "primitive", Path: path, Code: node.Primitive.Code}}, nil
+		return []normalizedOp{{Kind: "primitive", Path: path, Code: node.Primitive.Code, Encoding: node.Encoding}}, nil
 	case manifest.KindString:
 		prefix, err := prefixCode(node.Prefix)
 		if err != nil {
@@ -191,7 +191,7 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 		} else {
 			op.Length = node.Length
 		}
-		return []normalizedOp{op}, nil
+		return []normalizedOp{normalizeByteArray(op)}, nil
 	case manifest.KindSequence:
 		var result []normalizedOp
 		for _, element := range node.Elements {
@@ -214,6 +214,9 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 	case manifest.KindStruct:
 		var result []normalizedOp
 		for _, field := range node.Fields {
+			if field.Decode != nil {
+				return nil, fmt.Errorf("Axolotl v1 parity cannot represent decode override at %s.%s", path, field.Name)
+			}
 			children, err := normalizeNode(path+"."+field.Name, field.Encode)
 			if err != nil {
 				return nil, err
@@ -230,6 +233,9 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 		}
 		variants := make([]normalizedVariant, 0, len(node.Variants))
 		for _, variant := range node.Variants {
+			if variant.Decode != nil {
+				return nil, fmt.Errorf("Axolotl v1 parity cannot represent variant decode override at %s", path)
+			}
 			children, err := normalizeNode(path, variant.Encode)
 			if err != nil {
 				return nil, err
@@ -240,6 +246,9 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 	case manifest.KindConditional:
 		cases := make([]normalizedCase, 0, len(node.Cases))
 		for _, oneCase := range node.Cases {
+			if oneCase.Decode != nil {
+				return nil, fmt.Errorf("Axolotl v1 parity cannot represent case decode override at %s", path)
+			}
 			var children []normalizedOp
 			for _, child := range oneCase.Encode {
 				ops, err := normalizeNode(path, child)
@@ -289,11 +298,15 @@ func normalizeAxolotl(source axolotlManifest) ([]normalizedPacket, error) {
 }
 
 func normalizeAxolotlOps(input []axolotlOp) ([]normalizedOp, error) {
-	result := make([]normalizedOp, 0, len(input))
+	var result []normalizedOp
 	for _, op := range input {
 		switch op.Kind {
 		case "primitive":
-			result = append(result, normalizedOp{Kind: "primitive", Path: op.Field, Code: primitiveCodeName(op.Op)})
+			encoding := ""
+			if op.Op == "Nbt" {
+				encoding = string(manifest.NBTNetwork)
+			}
+			result = append(result, normalizedOp{Kind: "primitive", Path: op.Field, Code: primitiveCodeName(op.Op), Encoding: encoding})
 		case "string":
 			result = append(result, normalizedOp{Kind: "string", Path: op.Field, Prefix: prefixCodeName(op.Prefix), Encoding: op.Encoding})
 		case "encapsulated":
@@ -307,7 +320,7 @@ func normalizeAxolotlOps(input []axolotlOp) ([]normalizedOp, error) {
 			if err != nil {
 				return nil, err
 			}
-			result = append(result, normalizedOp{Kind: "array", Path: op.Field, Prefix: prefixCodeName(op.Prefix), Children: children})
+			result = append(result, normalizeByteArray(normalizedOp{Kind: "array", Path: op.Field, Prefix: prefixCodeName(op.Prefix), Children: children}))
 		case "fixed_array":
 			children, err := normalizeAxolotlOps(op.Element)
 			if err != nil {
@@ -355,6 +368,14 @@ func normalizeAxolotlOps(input []axolotlOp) ([]normalizedOp, error) {
 		}
 	}
 	return result, nil
+}
+
+// normalizeByteArray uses one shape for counted raw bytes and plain u8 arrays.
+func normalizeByteArray(op normalizedOp) normalizedOp {
+	if op.Kind == "array" && len(op.Children) == 1 && reflect.DeepEqual(op.Children[0], normalizedOp{Kind: "primitive", Path: op.Path + "[]", Code: "u8"}) {
+		return normalizedOp{Kind: "bytes", Path: op.Path, Prefix: op.Prefix}
+	}
+	return op
 }
 
 func prefixCode(node *manifest.Node) (string, error) {
