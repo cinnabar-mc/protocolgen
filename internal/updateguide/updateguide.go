@@ -359,8 +359,14 @@ func renderEnum(document map[string]any) (string, error) {
 	name := schemaName(document)
 	var output strings.Builder
 	fmt.Fprintln(&output, "const (")
+	names := map[string]string{}
 	for index, rawValue := range values {
-		valueName := naming.GoExportName(fmt.Sprint(rawValue))
+		rawName := fmt.Sprint(rawValue)
+		valueName := naming.GoExportName(rawName)
+		if previous, exists := names[valueName]; exists {
+			return "", fmt.Errorf("Go name collision %q between %q and %q", valueName, previous, rawName)
+		}
+		names[valueName] = rawName
 		value := int64(index)
 		if index < len(explicit) {
 			parsed, err := number(explicit[index])
@@ -398,6 +404,7 @@ func schemaFields(document map[string]any, schemas schemaSet, qualifier string) 
 		}
 	}
 	fields := make([]renderedField, 0, len(properties))
+	names := map[string]string{}
 	for rawName, rawSchema := range properties {
 		schema, ok := rawSchema.(map[string]any)
 		if !ok {
@@ -408,6 +415,10 @@ func schemaFields(document map[string]any, schemas schemaSet, qualifier string) 
 			return nil, fmt.Errorf("field %s has no ordinal", rawName)
 		}
 		name := naming.GoExportName(rawName)
+		if previous, exists := names[name]; exists {
+			return nil, fmt.Errorf("Go name collision %q between %q and %q", name, previous, rawName)
+		}
+		names[name] = rawName
 		goType, marshal, marshaler, err := renderFieldSchema(schema, schemas, "&pk."+name, qualifier)
 		if err != nil {
 			return nil, fmt.Errorf("field %s: %w", rawName, err)
