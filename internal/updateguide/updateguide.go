@@ -7,6 +7,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/format"
+	"maps"
+	"math/big"
 	"os"
 	"path/filepath"
 	"sort"
@@ -128,11 +130,16 @@ func loadDocuments(directory string) (schemaSet, error) {
 			return schemaSet{}, fmt.Errorf("read target schema %s: %w", entry.Name(), err)
 		}
 		var document map[string]any
-		if err := json.Unmarshal(data, &document); err != nil {
+		decoder := json.NewDecoder(bytes.NewReader(data))
+		decoder.UseNumber()
+		if err := decoder.Decode(&document); err != nil {
 			return schemaSet{}, fmt.Errorf("parse target schema %s: %w", entry.Name(), err)
 		}
+		if len(bytes.TrimSpace(data[decoder.InputOffset():])) != 0 {
+			return schemaSet{}, fmt.Errorf("parse target schema %s: unexpected trailing JSON data", entry.Name())
+		}
 		set.byFile[entry.Name()] = document
-		if protocol, ok := document["x-protocol-version"].(float64); ok {
+		if protocol, err := number(document["x-protocol-version"]); err == nil {
 			if set.protocolVersion != 0 && set.protocolVersion != int(protocol) {
 				return schemaSet{}, fmt.Errorf("target schemas mix protocol versions %d and %d", set.protocolVersion, int(protocol))
 			}
@@ -356,8 +363,14 @@ func renderEnum(document map[string]any) (string, error) {
 	name := schemaName(document)
 	var output strings.Builder
 	fmt.Fprintln(&output, "const (")
+	names := map[string]string{}
 	for index, rawValue := range values {
-		valueName := naming.GoExportName(fmt.Sprint(rawValue))
+		rawName := fmt.Sprint(rawValue)
+		valueName := naming.GoExportName(rawName)
+		if previous, exists := names[valueName]; exists {
+			return "", fmt.Errorf("Go name collision %q between %q and %q", valueName, previous, rawName)
+		}
+		names[valueName] = rawName
 		value := int64(index)
 		if index < len(explicit) {
 			parsed, err := number(explicit[index])
@@ -395,6 +408,7 @@ func schemaFields(document map[string]any, schemas schemaSet, qualifier string) 
 		}
 	}
 	fields := make([]renderedField, 0, len(properties))
+	names := map[string]string{}
 	for rawName, rawSchema := range properties {
 		schema, ok := rawSchema.(map[string]any)
 		if !ok {
@@ -405,6 +419,10 @@ func schemaFields(document map[string]any, schemas schemaSet, qualifier string) 
 			return nil, fmt.Errorf("field %s has no ordinal", rawName)
 		}
 		name := naming.GoExportName(rawName)
+		if previous, exists := names[name]; exists {
+			return nil, fmt.Errorf("Go name collision %q between %q and %q", name, previous, rawName)
+		}
+		names[name] = rawName
 		goType, marshal, marshaler, err := renderFieldSchema(schema, schemas, "&pk."+name, qualifier)
 		if err != nil {
 			return nil, fmt.Errorf("field %s: %w", rawName, err)
@@ -464,10 +482,14 @@ func renderFieldSchema(schema map[string]any, schemas schemaSet, address, qualif
 			return "", "", false, err
 		}
 		if _, enum := target["enum"]; enum {
-			goType, method, err := primitive(target)
+			effective := maps.Clone(target)
+			if options, exists := schema["x-serialization-options"]; exists {
+				effective["x-serialization-options"] = options
+			}
+			goType, method, err := primitive(effective)
 			return goType, chooseStatement(address, method), false, err
 		}
-		return schemaName(target), qualifier + "Single(io, " + address + ")", true, nil
+		return qualifier + schemaName(target), qualifier + "Single(io, " + address + ")", true, nil
 	}
 	switch schema["type"] {
 	case "string":
@@ -481,8 +503,8 @@ func renderFieldSchema(schema map[string]any, schemas schemaSet, address, qualif
 		}
 		return goType, constrainedStatement(schema, address, method, "number"), false, nil
 	case "array":
-		if min, minOK := schema["minItems"].(float64); minOK {
-			if max, maxOK := schema["maxItems"].(float64); maxOK && min == max {
+		if min, minErr := number(schema["minItems"]); minErr == nil {
+			if max, maxErr := number(schema["maxItems"]); maxErr == nil && min == max {
 				return "", "", false, fmt.Errorf("fixed-length arrays are not supported by the gophertunnel guide")
 			}
 		}
@@ -750,7 +772,11 @@ func number(value any) (int64, error) {
 	case int64:
 		return value, nil
 	case json.Number:
-		return value.Int64()
+		rational, ok := new(big.Rat).SetString(value.String())
+		if !ok || !rational.IsInt() || !rational.Num().IsInt64() {
+			return 0, fmt.Errorf("not a signed 64-bit integer: %s", value)
+		}
+		return rational.Num().Int64(), nil
 	case string:
 		return strconv.ParseInt(value, 10, 64)
 	default:

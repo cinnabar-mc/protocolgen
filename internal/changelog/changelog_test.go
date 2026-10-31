@@ -60,7 +60,7 @@ func TestGenerateReportsWireConstraintAndEnumChanges(t *testing.T) {
 		"# Bedrock protocol changes — 2168 to 2169",
 		"1.26.40-beta.0 → 1.26.50",
 		"**0** new, **0** removed, **0** renamed, **3** modified",
-		"**1** type(s) change the bytes on the wire",
+		"**2** type(s) change the bytes on the wire",
 		"**3** packet(s) touched, counting those that only embed a changed type",
 		"constraints changed from maximum=2168, minimum=2168 to maximum=2169, minimum=2169",
 		"### TextDataPayload\nstruct · **wire break**",
@@ -251,13 +251,59 @@ func TestGenerateReportsOfficialEnumValues(t *testing.T) {
 
 func TestEnumMetadataAdditionDoesNotInventWireChanges(t *testing.T) {
 	before := &schema{Enum: []string{"A", "B"}, Underlying: "int32"}
-	after := &schema{Enum: []string{"A", "B"}, Underlying: "int32", EnumValues: []interface{}{float64(-1), float64(7)}}
+	after := &schema{Enum: []string{"A", "B"}, Underlying: "int32", EnumValues: []interface{}{float64(0), float64(1)}}
 	got := compareEnums("Mode", before, after)
 	if got.Wire || strings.Contains(strings.Join(got.Bullets, " "), "changed from") {
 		t.Fatalf("metadata addition invented a wire change: %+v", got)
 	}
 	if len(got.Bullets) != 1 || got.Bullets[0] != "explicit binary enum values added" {
 		t.Fatalf("metadata addition missing: %+v", got)
+	}
+}
+
+func TestGenerateReportsEffectiveEnumValueChanges(t *testing.T) {
+	for _, tc := range []struct{ name, before, after, want string }{
+		{"implicit insertion", `"enum":["A","B"]`, `"enum":["X","A","B"]`, "value `B` changed from 1 to 2"},
+		{"explicit added", `"enum":["A","B"]`, `"enum":["A","B"],"x-enum-binary-value":[-1,7]`, "value `B` changed from 1 to 7"},
+		{"explicit removed", `"enum":["A","B"],"x-enum-binary-value":[-1,7]`, `"enum":["A","B"]`, "value `B` changed from 7 to 1"},
+		{"large integer", `"enum":["A"],"x-enum-binary-value":[9007199254740992]`, `"enum":["A"],"x-enum-binary-value":[9007199254740993]`, "value `A` changed from 9007199254740992 to 9007199254740993"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			from, to := t.TempDir(), t.TempDir()
+			for dir, values := range map[string]string{from: tc.before, to: tc.after} {
+				writeSchema(t, dir, "Mode", `{"title":"Mode","x-minecraft-version":"1.0","x-protocol-version":1,"type":"string","x-underlying-type":"int64",`+values+`}`)
+			}
+			got, err := Generate(Config{FromDir: from, ToDir: to})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if !strings.Contains(string(got), tc.want) || !strings.Contains(string(got), "enum · **wire break**") {
+				t.Fatalf("missing effective enum change %q: %s", tc.want, got)
+			}
+		})
+	}
+}
+
+func TestLoadDirRejectsTrailingJSON(t *testing.T) {
+	directory := t.TempDir()
+	writeSchema(t, directory, "Mode", enumSchema("1.0", 1, `"A"`)+` {}`)
+	if _, _, _, err := loadDir(directory); err == nil {
+		t.Fatal("trailing JSON accepted")
+	}
+}
+
+func TestGenerateTreatsEquivalentIntegerLiteralsEqually(t *testing.T) {
+	from, to := t.TempDir(), t.TempDir()
+	for dir, value := range map[string]string{from: "7", to: "7.0e0"} {
+		writeSchema(t, dir, "Mode", `{"title":"Mode","x-minecraft-version":"1.0","x-protocol-version":1,"enum":["A"],"x-enum-binary-value":[`+value+`]}`)
+		writeSchema(t, dir, "Packet", `{"title":"Packet","x-minecraft-version":"1.0","x-protocol-version":1,"$metaProperties":{"[cereal:packet]":`+value+`},"type":"object","properties":{}}`)
+	}
+	got, err := Generate(Config{FromDir: from, ToDir: to})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if !strings.Contains(string(got), "**0** modified") {
+		t.Fatalf("equivalent numbers changed: %s", got)
 	}
 }
 

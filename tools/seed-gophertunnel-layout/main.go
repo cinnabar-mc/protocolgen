@@ -8,15 +8,17 @@ import (
 	"flag"
 	"fmt"
 	"go/ast"
+	"go/constant"
 	"go/format"
+	"go/importer"
 	"go/parser"
 	"go/token"
+	"go/types"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"regexp"
 	"sort"
-	"strconv"
 	"strings"
 	"unicode"
 
@@ -137,10 +139,10 @@ func buildIndex(m manifest.Manifest, overlay naming.Overlay) (index, error) {
 	usage := flatten.Count(m)
 	native := func(node manifest.Node) bool { return nativeTypeIDs[node.TypeID] }
 	for _, packet := range m.Packets {
-		for _, item := range usage.PacketFields(packet, native) {
-			if item.Owner != packet.Name {
-				seenOwner[item.Owner] = true
-			}
+		fields := packet.Fields
+		for len(fields) == 1 && usage.Inlined(fields[0], native) {
+			seenOwner[flatten.TypeID(fields[0].Encode)] = true
+			fields = fields[0].Encode.Fields
 		}
 	}
 	var walk func(node manifest.Node) error
@@ -311,7 +313,10 @@ func parseFork(root string) (forkIndex, error) {
 			files = append(files, file)
 			stems[file] = strings.TrimSuffix(filepath.Base(path), ".go")
 		}
-		evaluator := newConstEvaluator(files)
+		if len(files) == 0 {
+			return forkIndex{}, fmt.Errorf("no non-test %s source files in %s", pkg, directory)
+		}
+		evaluator := newConstEvaluator(fset, files)
 		for _, file := range files {
 			for _, declaration := range file.Decls {
 				if fn, ok := declaration.(*ast.FuncDecl); ok && fn.Name.Name == "Marshal" && fn.Recv != nil && len(fn.Recv.List) == 1 {
@@ -442,130 +447,42 @@ func identifierFields(fn *ast.FuncDecl) map[string]string {
 	return result
 }
 
-// constEvaluator resolves integer constant blocks, including iota, shifts,
-// and references to other constants in the package.
+// constEvaluator stores the exact integer constants Go can resolve in a package.
 type constEvaluator struct {
 	values map[string]int64
-	exprs  map[string]ast.Expr
-	iotas  map[string]int
 }
 
-func newConstEvaluator(files []*ast.File) *constEvaluator {
-	e := &constEvaluator{values: map[string]int64{}, exprs: map[string]ast.Expr{}, iotas: map[string]int{}}
-	for _, file := range files {
-		for _, declaration := range file.Decls {
-			gen, ok := declaration.(*ast.GenDecl)
-			if !ok || gen.Tok != token.CONST {
-				continue
-			}
-			var last []ast.Expr
-			for iota, spec := range gen.Specs {
-				valueSpec := spec.(*ast.ValueSpec)
-				if len(valueSpec.Values) > 0 {
-					last = valueSpec.Values
-				}
-				for i, name := range valueSpec.Names {
-					if name.Name == "_" || i >= len(last) {
-						continue
-					}
-					e.exprs[name.Name] = last[i]
-					e.iotas[name.Name] = iota
-				}
-			}
+// newConstEvaluator uses Go's type checker so conversions and typed arithmetic
+// keep their declared widths. Unsupported constants are omitted.
+func newConstEvaluator(fset *token.FileSet, files []*ast.File) *constEvaluator {
+	e := &constEvaluator{values: map[string]int64{}}
+	info := &types.Info{Defs: map[*ast.Ident]types.Object{}}
+	cfg := types.Config{Importer: importer.Default(), IgnoreFuncBodies: true, Error: func(error) {}}
+	// Unrelated unresolved types must not hide successfully checked constants.
+	_, _ = cfg.Check(files[0].Name.Name, fset, files, info)
+	for ident, object := range info.Defs {
+		value, ok := object.(*types.Const)
+		if !ok || ident.Name == "_" || value.Val().Kind() != constant.Int {
+			continue
+		}
+		if integer, exact := constant.Int64Val(value.Val()); exact {
+			e.values[ident.Name] = integer
 		}
 	}
 	return e
 }
 
+// group returns the supported integer constants declared in one const block.
 func (e *constEvaluator) group(gen *ast.GenDecl) []forkConst {
 	var result []forkConst
 	for _, spec := range gen.Specs {
 		for _, name := range spec.(*ast.ValueSpec).Names {
-			if name.Name == "_" {
-				continue
-			}
-			if value, ok := e.resolve(name.Name, 0); ok {
+			if value, ok := e.values[name.Name]; ok {
 				result = append(result, forkConst{Name: name.Name, Value: value})
 			}
 		}
 	}
 	return result
-}
-
-func (e *constEvaluator) resolve(name string, depth int) (int64, bool) {
-	if value, ok := e.values[name]; ok {
-		return value, true
-	}
-	expr, ok := e.exprs[name]
-	if !ok || depth > 8 {
-		return 0, false
-	}
-	value, ok := e.eval(expr, e.iotas[name], depth)
-	if ok {
-		e.values[name] = value
-	}
-	return value, ok
-}
-
-func (e *constEvaluator) eval(expr ast.Expr, iota int, depth int) (int64, bool) {
-	switch value := expr.(type) {
-	case *ast.BasicLit:
-		if value.Kind != token.INT {
-			return 0, false
-		}
-		n, err := strconv.ParseInt(value.Value, 0, 64)
-		return n, err == nil
-	case *ast.Ident:
-		if value.Name == "iota" {
-			return int64(iota), true
-		}
-		return e.resolve(value.Name, depth+1)
-	case *ast.ParenExpr:
-		return e.eval(value.X, iota, depth)
-	case *ast.CallExpr:
-		if len(value.Args) == 1 {
-			return e.eval(value.Args[0], iota, depth)
-		}
-	case *ast.UnaryExpr:
-		operand, ok := e.eval(value.X, iota, depth)
-		if !ok {
-			return 0, false
-		}
-		switch value.Op {
-		case token.SUB:
-			return -operand, true
-		case token.ADD:
-			return operand, true
-		case token.XOR:
-			return ^operand, true
-		}
-	case *ast.BinaryExpr:
-		left, ok := e.eval(value.X, iota, depth)
-		if !ok {
-			return 0, false
-		}
-		right, ok := e.eval(value.Y, iota, depth)
-		if !ok {
-			return 0, false
-		}
-		switch value.Op {
-		case token.ADD:
-			return left + right, true
-		case token.SUB:
-			return left - right, true
-		case token.MUL:
-			return left * right, true
-		case token.SHL:
-			return left << uint(right), true
-		case token.SHR:
-			return left >> uint(right), true
-		case token.OR:
-			return left | right, true
-		case token.AND:
-			return left & right, true
-		}
-	}
-	return 0, false
 }
 
 func commentText(group *ast.CommentGroup) string {
