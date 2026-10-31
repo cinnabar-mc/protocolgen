@@ -34,3 +34,29 @@ func TestPortDocsUsesSharedGoCasing(t *testing.T) {
 		t.Fatalf("domain = %q, direct = %v", domain, direct)
 	}
 }
+
+func TestSourceResolutionRejectsAmbiguousSuffixes(t *testing.T) {
+	sources := map[string]sourceType{"Entry": {Name: "Entry", File: "one"}, "EntryInfoData": {Name: "EntryInfoData", File: "two"}}
+	for range 100 {
+		if _, ok := sourceTypeForName("EntryInfo", sources); ok {
+			t.Fatal("ambiguous source resolved")
+		}
+		if _, direct := domainForName("EntryInfo", sources); direct {
+			t.Fatal("ambiguous domain resolved")
+		}
+	}
+	sources["EntryInfo"] = sourceType{Name: "EntryInfo", File: "exact"}
+	if source, ok := sourceTypeForName("EntryInfo", sources); !ok || source.File != "exact" {
+		t.Fatal("exact match lost")
+	}
+}
+
+func TestUndocumentedFieldsStillDisableReorderedFallback(t *testing.T) {
+	fields := []manifest.Field{{Name: "b", Encode: manifest.Primitive("u32le")}, {Name: "renamed_a", Encode: manifest.Primitive("u32le")}}
+	source := sourceType{Fields: []sourceField{{Name: "OldA", Type: "uint32", Doc: "OldA describes A."}, {Name: "B", Type: "uint32"}}}
+	overlay := docs.Overlay{Fields: map[string]string{}}
+	portFieldDocs("Owner", fields, source, overlay)
+	if len(overlay.Fields) != 0 {
+		t.Fatalf("copied reordered documentation: %+v", overlay)
+	}
+}

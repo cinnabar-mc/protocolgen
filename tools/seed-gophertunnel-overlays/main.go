@@ -343,23 +343,23 @@ func portFieldDocs(owner string, fields []manifest.Field, source sourceType, ove
 	usedSources := map[int]bool{}
 	positionalAligned := true
 	for sourceIndex, sourceField := range source.Fields {
-		if sourceField.Doc == "" {
-			continue
-		}
 		matches := []int{}
 		for index, field := range fields {
 			if !used[field.Name] && normalize(sourceField.Name) == normalize(field.Name) {
 				matches = append(matches, index)
 			}
 		}
+		if len(matches) == 1 && matches[0] != sourceIndex {
+			positionalAligned = false
+		}
+		if sourceField.Doc == "" {
+			continue
+		}
 		if len(matches) == 1 {
 			field := fields[matches[0]]
 			overlay.Fields[docs.FieldKey(owner, field.Name)] = docs.LeadWith(sourceField.Doc, sourceField.Name, naming.GoExportName(field.Name))
 			used[field.Name] = true
 			usedSources[sourceIndex] = true
-			if matches[0] != sourceIndex {
-				positionalAligned = false
-			}
 			ported++
 			continue
 		}
@@ -482,15 +482,10 @@ func writeJSON(path string, value any) error {
 }
 
 func domainForName(name string, sourceTypes map[string]sourceType) (string, bool) {
-	if source, ok := sourceTypes[name]; ok {
+	if source, ok := sourceTypeForName(name, sourceTypes); ok {
 		return source.File, true
 	}
-	normalized := normalize(name)
-	for sourceName, source := range sourceTypes {
-		if normalized == normalize(sourceName+"Data") || normalized == normalize(sourceName+"Info") || normalized == normalize(sourceName+"Type") || normalize(sourceName) == normalize(name+"Data") {
-			return source.File, true
-		}
-	}
+
 	snake := snake(name)
 	for _, prefix := range []string{
 		"bedrock_ddui", "bedrock_profile", "bedrock_safety", "sync_world_clocks", "attribute_layer", "available_commands", "legacy_telemetry", "telemetry", "item_stack", "stack_request", "resource_pack", "server_join", "player", "biome", "camera", "command", "inventory", "recipe", "shape", "entity", "sub_chunk", "scoreboard", "text", "memory", "structure", "waypoint", "world", "block", "chunk", "education", "enchant", "creative", "data_store", "trim", "skin", "sound", "voxel", "actor", "attribute", "container", "experiment", "game_rule", "map", "npc", "pack", "position_tracking", "settings", "item", "events",
@@ -508,17 +503,23 @@ func domainForName(name string, sourceTypes map[string]sourceType) (string, bool
 	return "misc", false
 }
 
+// sourceTypeForName accepts exact names or a single unambiguous suffix match.
 func sourceTypeForName(name string, sourceTypes map[string]sourceType) (sourceType, bool) {
 	if source, ok := sourceTypes[name]; ok {
 		return source, true
 	}
 	normalized := normalize(name)
+	var match sourceType
+	found := false
 	for sourceName, source := range sourceTypes {
 		if normalized == normalize(sourceName+"Data") || normalized == normalize(sourceName+"Info") || normalized == normalize(sourceName+"Type") || normalize(sourceName) == normalize(name+"Data") {
-			return source, true
+			if found {
+				return sourceType{}, false
+			}
+			match, found = source, true
 		}
 	}
-	return sourceType{}, false
+	return match, found
 }
 
 func normalize(value string) string {
