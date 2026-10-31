@@ -35,6 +35,8 @@ func (a *wireAutomaton) state() int {
 
 func (a *wireAutomaton) add(expression shapeExpr) (int, int) {
 	switch expression.kind {
+	case "reject":
+		return a.state(), a.state()
 	case "token":
 		start, end := a.state(), a.state()
 		a.edges[start] = append(a.edges[start], wireEdge{atom: expression.atom, to: end})

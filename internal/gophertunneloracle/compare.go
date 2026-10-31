@@ -74,6 +74,9 @@ func Compare(canonical manifest.Manifest, source extraction, lock Lock, accepted
 	}
 	sourceByID := make(map[uint32]sourcePacket, len(source.Packets))
 	for _, packet := range source.Packets {
+		if _, exists := sourceByID[packet.ID]; exists {
+			packet.Operations = []sourceOperation{{Kind: "unresolved", Reason: fmt.Sprintf("duplicate oracle packet ID %d", packet.ID)}}
+		}
 		sourceByID[packet.ID] = packet
 	}
 	canonicalIDs := make(map[uint32]bool, len(canonical.Packets))

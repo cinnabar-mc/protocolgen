@@ -24,6 +24,9 @@ type shapeExpr struct {
 // sides before the remaining recursion is compared as one RECURSE atom.
 const recursionUnroll = 2
 
+// rejectExpr represents an impossible path, distinct from an empty successful path.
+func rejectExpr() shapeExpr { return shapeExpr{kind: "reject"} }
+
 func emptyExpr() shapeExpr { return shapeExpr{kind: "empty"} }
 
 func atomExpr(a atom) shapeExpr { return shapeExpr{kind: "token", atom: a} }
@@ -41,6 +44,8 @@ func concatExpr(expressions ...shapeExpr) shapeExpr {
 	parts := make([]shapeExpr, 0, len(expressions))
 	for _, expression := range expressions {
 		switch expression.kind {
+		case "reject":
+			return rejectExpr()
 		case "unknown":
 			reasons = append(reasons, expression.reasons...)
 		case "empty":
@@ -71,6 +76,9 @@ func altExpr(expressions ...shapeExpr) shapeExpr {
 	for len(pending) > 0 {
 		expression := pending[0]
 		pending = pending[1:]
+		if expression.kind == "reject" {
+			continue
+		}
 		if expression.kind == "unknown" {
 			reasons = append(reasons, expression.reasons...)
 			continue
@@ -92,7 +100,7 @@ func altExpr(expressions ...shapeExpr) shapeExpr {
 	sort.SliceStable(alts, func(i, j int) bool { return expressionKey(alts[i]) < expressionKey(alts[j]) })
 	switch len(alts) {
 	case 0:
-		return emptyExpr()
+		return rejectExpr()
 	case 1:
 		return alts[0]
 	default:
@@ -118,6 +126,8 @@ func expressionKey(expression shapeExpr) string {
 	switch expression.kind {
 	case "empty":
 		return "e"
+	case "reject":
+		return "r"
 	case "unknown":
 		return "u:" + strings.Join(expression.reasons, ";")
 	case "token":
@@ -183,7 +193,7 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 			return unknownExpr("manifest: primitive at " + path + " has no shape")
 		}
 		if node.Primitive.Code == "uuid" {
-			return atomExpr(atom{Token: "UUID16", Field: path, Display: "uuid(16 bytes)"})
+			return repeatExpr(atomExpr(primitiveAtom("u8", path, "uuid byte")), 16)
 		}
 		if node.Primitive.Code == "nbt_le" {
 			return nbtExpr(node.Encoding, path, "manifest")
@@ -228,9 +238,6 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 	case manifest.KindFixedArray:
 		if node.Element == nil || node.Length == 0 {
 			return unknownExpr("manifest: fixed array at " + path + " is incomplete")
-		}
-		if node.Length == 16 && isManifestU8(*node.Element) {
-			return atomExpr(atom{Token: "UUID16", Field: path, Display: "uuid(16 bytes)"})
 		}
 		return repeatExpr(ctx.node(path+"[]", *node.Element), node.Length)
 	case manifest.KindSequence:
@@ -415,10 +422,14 @@ func hoistedExpr(operations []sourceOperation, control int) shapeExpr {
 	branches := make([]shapeExpr, 0, len(values)+1)
 	for _, value := range values {
 		handled = append(handled, strconv.FormatInt(value, 10))
-		branches = append(branches, concatExpr(atomExpr(variantAtom(value, field)), sourceSequenceExpr(resolveDiscriminant(tail, field, value, false))))
+		if resolved, ok := resolveDiscriminant(tail, field, value, false); ok {
+			branches = append(branches, concatExpr(atomExpr(variantAtom(value, field)), sourceSequenceExpr(resolved)))
+		}
 	}
 	if allowsOtherDiscriminants(tail, field) {
-		branches = append(branches, concatExpr(atomExpr(wildcardAtom(handled, field)), sourceSequenceExpr(resolveDiscriminant(tail, field, 0, true))))
+		if resolved, ok := resolveDiscriminant(tail, field, 0, true); ok {
+			branches = append(branches, concatExpr(atomExpr(wildcardAtom(handled, field)), sourceSequenceExpr(resolved)))
+		}
 	}
 	return concatExpr(sourceSequenceExpr(operations[:control+1]), altExpr(branches...))
 }
@@ -446,8 +457,8 @@ func variantValues(variant sourceVariant) []int64 {
 }
 
 // resolveDiscriminant replaces every conditional on field with the branch
-// taken for value (or for any unhandled value when wildcard is set).
-func resolveDiscriminant(operations []sourceOperation, field string, value int64, wildcard bool) []sourceOperation {
+// taken for value, reporting closed selectors that reject that path.
+func resolveDiscriminant(operations []sourceOperation, field string, value int64, wildcard bool) ([]sourceOperation, bool) {
 	var result []sourceOperation
 	for _, operation := range operations {
 		if !testsField(operation, field) {
@@ -471,9 +482,16 @@ func resolveDiscriminant(operations []sourceOperation, field string, value int64
 		if !matched && operation.HasDefault {
 			chosen = operation.Default
 		}
-		result = append(result, resolveDiscriminant(chosen, field, value, wildcard)...)
+		if !matched && !operation.HasDefault && operation.Kind == "switch" {
+			return nil, false
+		}
+		resolved, ok := resolveDiscriminant(chosen, field, value, wildcard)
+		if !ok {
+			return nil, false
+		}
+		result = append(result, resolved...)
 	}
-	return result
+	return result, true
 }
 
 // coalesceLengthPrefixes drops a primitive that is only the explicit runtime
@@ -571,7 +589,9 @@ func sourceOperationExpr(operation sourceOperation) shapeExpr {
 	case "string", "bytes":
 		return atomExpr(atom{Token: "LEN:" + canonicalPrimitive(operation.Prefix), Field: path, Display: operation.Kind + "(prefix=" + operation.Prefix + ")", Site: operation.Site})
 	case "uuid":
-		return atomExpr(atom{Token: "UUID16", Field: path, Display: "uuid(16 bytes)", Site: operation.Site})
+		byteAtom := primitiveAtom("u8", path, "uuid byte")
+		byteAtom.Site = operation.Site
+		return repeatExpr(atomExpr(byteAtom), 16)
 	case "bitset":
 		if operation.Length == 0 {
 			return unknownExpr("gophertunnel: bitset at " + path + " has no static length")
@@ -591,9 +611,6 @@ func sourceOperationExpr(operation sourceOperation) shapeExpr {
 	case "fixed_array":
 		if operation.Length == 0 {
 			return unknownExpr("gophertunnel: fixed array at " + path + " has no length")
-		}
-		if operation.Length == 16 && isSourceU8(operation.Element) {
-			return atomExpr(atom{Token: "UUID16", Field: path, Display: "uuid(16 bytes)", Site: operation.Site})
 		}
 		return repeatExpr(sourceSequenceExpr(operation.Element), operation.Length)
 	case "optional":
