@@ -292,3 +292,27 @@ func TestMergeEnumVariantsRejectsConflictingName(t *testing.T) {
 		t.Fatalf("error = %v, want name conflict", err)
 	}
 }
+
+func TestSchemaPatternsRequireEveryAlternativeToBeAnchored(t *testing.T) {
+	for _, tc := range []struct {
+		pattern string
+		valid   bool
+	}{
+		{`^foo|bar$`, false}, {`^(foo|bar)$`, true}, {`^foo\\$`, true}, {`^foo\$`, false},
+		{`(?m)^foo$`, false}, {`(?i)^foo$`, true}, {`\A(foo|bar)\z`, true}, {`^foo$|^bar$`, true},
+		{`(^foo$)?`, false}, {`(^foo$)+`, true}, {`(^foo$){0,2}`, false},
+	} {
+		t.Run(tc.pattern, func(t *testing.T) {
+			if got := IsSchemaPattern(tc.pattern); got != tc.valid {
+				t.Errorf("IsSchemaPattern = %t, want %t", got, tc.valid)
+			}
+			value := adjudicatedFixture()
+			node := String(Primitive("var_u32"))
+			node.Constraints = &Constraints{Pattern: tc.pattern}
+			value.Packets[0].Fields[0].Encode = node
+			if err := Validate(value); (err == nil) != tc.valid {
+				t.Errorf("Validate = %v", err)
+			}
+		})
+	}
+}

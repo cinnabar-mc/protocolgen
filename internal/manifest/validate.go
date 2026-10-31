@@ -9,6 +9,7 @@ import (
 	"net/url"
 	"reflect"
 	"regexp"
+	"regexp/syntax"
 	"sort"
 	"strings"
 )
@@ -396,11 +397,35 @@ func validateConstraints(node Node, path string) error {
 // IsSchemaPattern reports whether value is a regular expression anchored to
 // the whole string. Source docs also carry prose in pattern fields; it is not.
 func IsSchemaPattern(value string) bool {
-	if !strings.HasPrefix(value, "^") || !strings.HasSuffix(value, "$") || strings.HasSuffix(value, `\$`) {
-		return false
+	expression, err := syntax.Parse(value, syntax.Perl)
+	return err == nil && requiresBoundary(expression, syntax.OpBeginText) && requiresBoundary(expression, syntax.OpEndText)
+}
+
+// requiresBoundary reports whether every match must pass the given string anchor.
+func requiresBoundary(expression *syntax.Regexp, boundary syntax.Op) bool {
+	if expression.Op == boundary {
+		return true
 	}
-	_, err := regexp.Compile(value)
-	return err == nil
+	switch expression.Op {
+	case syntax.OpCapture, syntax.OpPlus:
+		return requiresBoundary(expression.Sub[0], boundary)
+	case syntax.OpRepeat:
+		return expression.Min > 0 && requiresBoundary(expression.Sub[0], boundary)
+	case syntax.OpConcat:
+		for _, child := range expression.Sub {
+			if requiresBoundary(child, boundary) {
+				return true
+			}
+		}
+	case syntax.OpAlternate:
+		for _, child := range expression.Sub {
+			if !requiresBoundary(child, boundary) {
+				return false
+			}
+		}
+		return true
+	}
+	return false
 }
 
 func validatePrefix(node Node, path string) error {
