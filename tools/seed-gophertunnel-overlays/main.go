@@ -181,6 +181,7 @@ func parseTypes(directory, packageName string) (map[string]sourceType, error) {
 	}
 	sort.Strings(paths)
 	result := map[string]sourceType{}
+	sourceFiles := 0
 	fset := token.NewFileSet()
 	for _, path := range paths {
 		if strings.HasSuffix(path, "_test.go") {
@@ -193,6 +194,7 @@ func parseTypes(directory, packageName string) (map[string]sourceType, error) {
 		if file.Name.Name != packageName {
 			continue
 		}
+		sourceFiles++
 		for _, declaration := range file.Decls {
 			gen, ok := declaration.(*ast.GenDecl)
 			if !ok || gen.Tok.String() != "type" {
@@ -213,6 +215,9 @@ func parseTypes(directory, packageName string) (map[string]sourceType, error) {
 				}
 			}
 		}
+	}
+	if sourceFiles == 0 {
+		return nil, fmt.Errorf("no non-test %s source files in %s", packageName, directory)
 	}
 	return result, nil
 }

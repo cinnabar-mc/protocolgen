@@ -311,6 +311,9 @@ func parseFork(root string) (forkIndex, error) {
 			files = append(files, file)
 			stems[file] = strings.TrimSuffix(filepath.Base(path), ".go")
 		}
+		if len(files) == 0 {
+			return forkIndex{}, fmt.Errorf("no non-test %s source files in %s", pkg, directory)
+		}
 		evaluator := newConstEvaluator(files)
 		for _, file := range files {
 			for _, declaration := range file.Decls {
