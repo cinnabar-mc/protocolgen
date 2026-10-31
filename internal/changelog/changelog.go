@@ -716,11 +716,13 @@ func fieldLabel(f field) string {
 func packetRenames(from, to map[string]*schema) map[string]string {
 	byID := map[int]string{}
 	for n, p := range from {
-		byID[packetID(p)] = n
+		if to[n] == nil {
+			byID[packetID(p)] = n
+		}
 	}
 	out := map[string]string{}
 	for n, p := range to {
-		if old := byID[packetID(p)]; old != "" && old != n {
+		if old := byID[packetID(p)]; old != "" && from[n] == nil {
 			out[old] = n
 		}
 	}
