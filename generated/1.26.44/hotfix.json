@@ -5,7 +5,7 @@
     "protocol_version": 2168,
     "build": "hotfix4"
   },
-  "base_manifest_sha256": "sha256:f8e3474916fc0bfabec2e4bbebd08a394f3c4374cd87a6fe5fd7fe66d68c0ce1",
+  "base_manifest_sha256": "sha256:7e61ed562afdba8000d48630b04d643161367224a69c403a238d30aeece03891",
   "sources": [
     {
       "id": "cloudburst-2168-hotfix4",

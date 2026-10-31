@@ -118821,7 +118821,7 @@
       "id": "mojang-cameraaimassistcategorypriorities-root",
       "target": "CameraAimAssistCategoryPriorities.json##",
       "pre_patch_node_sha256": "sha256:2e6ab78858d86aaba6d93c211c00c37e620390e9180015576ba32e52d966e986",
-      "pre_patch_context_sha256": "sha256:a844ed86945083cba9789dd63d808c19771d81336cfe0887c18da8e0f57309ea",
+      "pre_patch_context_sha256": "sha256:3787fc4ca6441e6de1d0e5e8b7f1c60e700c123a2c2735e5239163573215a5e0",
       "post_patch_node_sha256": "sha256:063af753a15e364680612e89c1f60882891130b959306907b5f3f4aa7a9ce6e1",
       "evidence": [
         {
@@ -118851,7 +118851,7 @@
       "id": "mojang-cameraaimassistpresetexclusiondefinition-root",
       "target": "CameraAimAssistPresetExclusionDefinition.json##",
       "pre_patch_node_sha256": "sha256:04257b002f9f517ab440f1be93c4d51b7c4e7b8ce3f45be3c87ccc7bb9597fa6",
-      "pre_patch_context_sha256": "sha256:c79fe7ba5497c4dbb0be9dde2f5a16a23ea1dfb4a378c9b99e932631483551c0",
+      "pre_patch_context_sha256": "sha256:0a9f52e3f77bdca1d857c815e3173f32a1b4d04f3ce826a83f236b3113c6f2b9",
       "post_patch_node_sha256": "sha256:2c9523a6268364f5aa35d1b9ff9c31ca6dad55f204c2e3402dac8e089b13f36f",
       "evidence": [
         {
@@ -118926,7 +118926,7 @@
       "id": "mojang-data-store-update-properties-data",
       "target": "Data_Store_Update.json#/properties/Data",
       "pre_patch_node_sha256": "sha256:f63d6e76ae379a1f5fada41e6063c72201a45807a1d886cecabe88261dc20833",
-      "pre_patch_context_sha256": "sha256:6003b5c25ac1afbf46a791557dbc80fd9a5832c8d48364d9f8af8377c4507907",
+      "pre_patch_context_sha256": "sha256:9076e3fb0b741f2ca55f9f08c274eec0838a97ae7ed3e8e34b7ffe3768153c28",
       "post_patch_node_sha256": "sha256:d622abba50520a186ebb8a58d62370db3bc776b1a253a7e57b7af0dc40c35d70",
       "evidence": [
         {
@@ -118941,7 +118941,7 @@
       "id": "mojang-disconnectpacketpayload-properties-messages",
       "target": "DisconnectPacketPayload.json#/properties/Messages",
       "pre_patch_node_sha256": "sha256:b858aa8418438e011c586b202be7e3b65e3286d49278ebaa17731a0219bb59c8",
-      "pre_patch_context_sha256": "sha256:88ef92f87b7d65fc7f0eabdfc30e945c4bcf47e3e7655b804f12e2de0ffb9f34",
+      "pre_patch_context_sha256": "sha256:a4c9221cf942eb15cbaaa597d5142bea6beb267a8dd987e24030db84f1256293",
       "post_patch_node_sha256": "sha256:2eebbfe9e461abc5679ed64bf122cafcee38cdccbe0f4b691c69d18f877a8125",
       "evidence": [
         {
@@ -118971,7 +118971,7 @@
       "id": "mojang-gamerule-properties-rule-value",
       "target": "GameRule.json#/properties/Rule Value",
       "pre_patch_node_sha256": "sha256:3ec146b427c7d7b2419fe74db8dbd5c7a48562aeb55309f2b054831e416ff896",
-      "pre_patch_context_sha256": "sha256:637bb48da521d5323e1f0008459c0f3d88025862b21316c11445008682178d4d",
+      "pre_patch_context_sha256": "sha256:816413fa456c4d550d124baf71084bd4e96d88434ed562614797eb0b0a43f7a3",
       "post_patch_node_sha256": "sha256:bd93aebc4e5d13ef251f34dcfb77c689dc38317a328dffb3f2adb6ce939ee49c",
       "evidence": [
         {
@@ -119016,7 +119016,7 @@
       "id": "mojang-itemstackresponseinfo-properties-containers",
       "target": "ItemStackResponseInfo.json#/properties/Containers",
       "pre_patch_node_sha256": "sha256:414932827aed900315abc889b650fdbe70f96bdc369d30ecfe621a055bf3c486",
-      "pre_patch_context_sha256": "sha256:99ea12f644b4af10abf2cb2616d7d729bca576ed39eb2dd1bd2fd0cd56a4f980",
+      "pre_patch_context_sha256": "sha256:e5588f13a339fd89531ad0be7e9e01da6c321e464037a622b234474fb32f282d",
       "post_patch_node_sha256": "sha256:7fe9754207977809f5a78c7d4709912509e58b0b2ddf90291a14c124f7c32f76",
       "evidence": [
         {
@@ -119031,7 +119031,7 @@
       "id": "mojang-itemstackresponseslotinfo-properties-item-stack-net-id",
       "target": "ItemStackResponseSlotInfo.json#/properties/Item Stack Net Id",
       "pre_patch_node_sha256": "sha256:6d50333c448f1f8afc1eb8055c85bb0ebfadae3376840e5b4d8d4060eafd6d06",
-      "pre_patch_context_sha256": "sha256:b0a48ec26eebe6eab0aef6422566258a35380497f3bfaae38e2506b3693dabea",
+      "pre_patch_context_sha256": "sha256:4203fc975905d1a02b17e94f86674ddf8ff0ca278af3f337aced2f30fe313915",
       "post_patch_node_sha256": "sha256:307f12c82325f5f94f742be55eae1d23b12b511887a5c584c1c1d69405236a8d",
       "evidence": [
         {
@@ -119166,7 +119166,7 @@
       "id": "mojang-playerauthinputpacketpayload-properties-client-predicted-vehicle",
       "target": "PlayerAuthInputPacketPayload.json#/properties/Client Predicted Vehicle",
       "pre_patch_node_sha256": "sha256:b09b7e9909414032858561822088d7ab2fe78dfd43b5a1d7f96083f318e308d9",
-      "pre_patch_context_sha256": "sha256:b8cf229ec3aa119891e65682a3da0f798bc7da4f7e1358780e85fa5d93bc8b8b",
+      "pre_patch_context_sha256": "sha256:bdca43e82fc9e42a820aa33f1662802c8851ade0b07bed684dd64706233a9293",
       "post_patch_node_sha256": "sha256:84eb2a03141aa9f51bb6c16cb8ec9abf4fe3c5801c9f7df0f54efcf5fb15ffc9",
       "evidence": [
         {
@@ -119181,7 +119181,7 @@
       "id": "mojang-playerauthinputpacketpayload-properties-item-stack-request",
       "target": "PlayerAuthInputPacketPayload.json#/properties/Item Stack Request",
       "pre_patch_node_sha256": "sha256:74831bdb459262f108fec7e1e9dbc4ba2dea839c1e5cd40e435fc232ede9801c",
-      "pre_patch_context_sha256": "sha256:319e1989a31a450fee8b2b90ecee7563cdbf4422ee84d44a2389d743ae445fcc",
+      "pre_patch_context_sha256": "sha256:37b5173b95b14a0d7da2ccfeb8bbc0390c1c680e93ffbc52c78e228c5ed5ef29",
       "post_patch_node_sha256": "sha256:f71a7064abb7dedbb7e2a29a0607702e2e4570d3788f2e25926c4e6086c8ffa4",
       "evidence": [
         {
@@ -119196,7 +119196,7 @@
       "id": "mojang-playerauthinputpacketpayload-properties-item-use-transaction",
       "target": "PlayerAuthInputPacketPayload.json#/properties/Item Use Transaction",
       "pre_patch_node_sha256": "sha256:5ed346352ba63dc284ad2ea518de6d9dd020c48604616fcda91fe1adfd8a7b24",
-      "pre_patch_context_sha256": "sha256:d21f1b31b9b11c3b4d53a0145efc1a6967c3eaabcac5898b701fe3b7f19d3805",
+      "pre_patch_context_sha256": "sha256:0a649701f8203f39314329214db353b0901d0834817c792c6b314cdb73ebc9ad",
       "post_patch_node_sha256": "sha256:6c116234b0068ba51c18548a8e5aea9b1ebf704539354a4787661fd7cb675270",
       "evidence": [
         {
@@ -119211,7 +119211,7 @@
       "id": "mojang-playerauthinputpacketpayload-properties-player-block-actions",
       "target": "PlayerAuthInputPacketPayload.json#/properties/Player Block Actions",
       "pre_patch_node_sha256": "sha256:80097f290c8eac8159a098bdc93637415bb543fd4364edc86441b43169b36623",
-      "pre_patch_context_sha256": "sha256:c3ab3398fbab21b949f774e2b6a5bb27a852b2120809ab097f9fe217ab94b2fd",
+      "pre_patch_context_sha256": "sha256:32757a74434c9bb1c5b20b9e2bca5435a05910ecbbae4ac19083783078abba69",
       "post_patch_node_sha256": "sha256:78f172d6cc41d342c879512ff04df15dee87cca4e871038ecacbb9ab3a30390c",
       "evidence": [
         {
@@ -119226,7 +119226,7 @@
       "id": "mojang-playerauthinputpacketpayload-properties-vehicle-rotation",
       "target": "PlayerAuthInputPacketPayload.json#/properties/Vehicle Rotation",
       "pre_patch_node_sha256": "sha256:6d4094ac41b2d14240473ff43311ebcfdf2f781bd53bccc4c510be3dccb1880e",
-      "pre_patch_context_sha256": "sha256:c4714ebd6370301c50baeb995f483a4f7c2181fa2c10a5e8f73296d56dde9e37",
+      "pre_patch_context_sha256": "sha256:83314a9c56c9b3a98dbab2680889811d5e23ca8ac6b6c304fd6fb8e4abfcc609",
       "post_patch_node_sha256": "sha256:45ef8aba7da0c0330f21f5d2600add71795086c58d538e920bf0d7a393bebbe0",
       "evidence": [
         {
@@ -119256,7 +119256,7 @@
       "id": "mojang-playerlistpacketpayload-root",
       "target": "PlayerListPacketPayload.json##",
       "pre_patch_node_sha256": "sha256:e0c184a451ee898c4e237d05db4e81de550e46c35ed82829c2eddade94de0737",
-      "pre_patch_context_sha256": "sha256:5c3ff4f9c20a7e85dcc1717499324037b8d71d9ba9557e5cc6ed6a96f9530218",
+      "pre_patch_context_sha256": "sha256:1677de5aeaacf08f8da7f20d0d4a4f33917941506063a1afea743190674831e6",
       "post_patch_node_sha256": "sha256:c53df4dbff07c9dabf9d07da5be747135b4bdbd1adc11a7aaea476ea1bb0cf9c",
       "evidence": [
         {
@@ -119271,7 +119271,7 @@
       "id": "mojang-primitiveshapedatapayload-properties-extra-shape-data",
       "target": "PrimitiveShapeDataPayload.json#/properties/Extra Shape Data",
       "pre_patch_node_sha256": "sha256:94e60fda94c37a0c8aca4da1a17aff6d3e31f46ca7538085510ffd65f46e87e4",
-      "pre_patch_context_sha256": "sha256:84b9c6b33102f64679d9dc23ea10835a4b746cdff97635465b0780b4450526e1",
+      "pre_patch_context_sha256": "sha256:87daab6f211cec92f53ff91143dd7c8755c3945e9b9a2255eab49ba437e33e0f",
       "post_patch_node_sha256": "sha256:f892b5a735aa2df145a1408a3c2be1b25fcb0a119830c3d4bc1dacdc713cdd0e",
       "evidence": [
         {
@@ -119346,7 +119346,7 @@
       "id": "mojang-serverboundpacksettingchangepacketpayload-properties-packsettingvalue",
       "target": "ServerboundPackSettingChangePacketPayload.json#/properties/PackSettingValue",
       "pre_patch_node_sha256": "sha256:e0ccd17f7a9b8819eab8c784e6d303d15bec5ef4b8f854a143e3a2460207c4b8",
-      "pre_patch_context_sha256": "sha256:9561b88158496c6eb1db4e304ce2d5ebfc1861b15496c12cf4866723f28685ac",
+      "pre_patch_context_sha256": "sha256:989e46c13fa8e285b7f28a24bd56b3d5d669e2ce35b875e879d42602aba1e0b8",
       "post_patch_node_sha256": "sha256:21945856ad9639d3635d959b2cbadcc3e9c01a6a3a9e40ae92765b89d3bb8e99",
       "evidence": [
         {
@@ -119391,7 +119391,7 @@
       "id": "mojang-setscorepacketpayload-root",
       "target": "SetScorePacketPayload.json##",
       "pre_patch_node_sha256": "sha256:4a07bca50348d3e97b09f92c2aa23bb17b8220f97665d85848adf7dd2d4e44d0",
-      "pre_patch_context_sha256": "sha256:5052618626a8be96900213baa3d613089ec1305cd442f04f84e9b56c089bf946",
+      "pre_patch_context_sha256": "sha256:4e887f6c6d4d8170155f44f6a9d5cc55161b994ad89058373a56e97a5fcaa454",
       "post_patch_node_sha256": "sha256:962a6330b11c796990c041520d4ef5c568e0b31819620e311e764daef779c81c",
       "evidence": [
         {
@@ -119536,7 +119536,7 @@
       "id": "player-video-capture-action-is-required",
       "target": "PlayerVideoCapturePacketPayload.json##",
       "pre_patch_node_sha256": "sha256:41fa5e9e7b44bf1d445a6a2d3130d23f25787fe625419c4f579f1579f4a93926",
-      "pre_patch_context_sha256": "sha256:34ae048b3a340a4e57a7379f4085b1547aa02cd20a70f96015bf7af23e756f6c",
+      "pre_patch_context_sha256": "sha256:de5ae59f800c668e17fb0c6f591b9740b0a27cc6e5483e57994f94e3ab15fc38",
       "post_patch_node_sha256": "sha256:22cb39a0e2838a3d4d5f1fb29e795ecc88bebf62cea9d1c3182fb7087b9f37c6",
       "evidence": [
         {

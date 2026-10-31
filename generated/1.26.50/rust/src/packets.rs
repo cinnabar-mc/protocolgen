@@ -5822,8 +5822,10 @@ impl wire::Decode for PlayerAuthInput {
 /// this packet. Every item must be part of a group, any items that are not part of a group will need to
 /// reference an "anonymous group" which has an empty name OR no icon. The order of Groups and Items is how
 /// the client will render items in the creative inventory compared to the previous, hard coded order.
+///
 /// Below is an example of defining 2 ungrouped items, 2 grouped items and then another 2 ungrouped items, all
 /// in the nature category.
+///
 /// CreativeContent{ Groups: []protocol.CreativeGroup{ {Category: 1}, // No name or icon, this is the
 /// "anonymous group" {Category: 1, Name: "itemGroup.name.planks", Icon: protocol.ItemStack{...}}, // A
 /// "planks" group {Category: 1}, // Another "anonymous group" }, Items: []protocol.CreativeItem{
