@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/fs"
 	"os"
 	"path/filepath"
@@ -87,7 +88,7 @@ func VerifyDirectory(root string, pin manifest.SourcePin) error {
 func DigestDirectory(root string) (string, error) {
 	type entry struct {
 		path string
-		data []byte
+		size int64
 	}
 	var entries []entry
 	root = filepath.Clean(root)
@@ -124,11 +125,11 @@ func DigestDirectory(root string) (string, error) {
 		if !directoryEntry.Type().IsRegular() {
 			return fmt.Errorf("source tree contains unsupported file type %s: %s", rel, directoryEntry.Type())
 		}
-		data, err := os.ReadFile(path)
+		info, err := directoryEntry.Info()
 		if err != nil {
 			return err
 		}
-		entries = append(entries, entry{path: filepath.ToSlash(rel), data: data})
+		entries = append(entries, entry{path: filepath.ToSlash(rel), size: info.Size()})
 		return nil
 	})
 	if err != nil {
@@ -136,10 +137,29 @@ func DigestDirectory(root string) (string, error) {
 	}
 	sort.Slice(entries, func(i, j int) bool { return entries[i].path < entries[j].path })
 	hash := sha256.New()
+	buffer := make([]byte, 32*1024)
 	for _, item := range entries {
-		fmt.Fprintf(hash, "%d:%s\n", len(item.path), item.path)
-		fmt.Fprintf(hash, "%d:", len(item.data))
-		_, _ = hash.Write(item.data)
+		file, err := os.Open(filepath.Join(root, filepath.FromSlash(item.path)))
+		if err != nil {
+			return "", fmt.Errorf("open source file %s: %w", item.path, err)
+		}
+		info, err := file.Stat()
+		if err != nil || !info.Mode().IsRegular() || info.Size() != item.size {
+			file.Close()
+			return "", fmt.Errorf("source file %s changed while hashing", item.path)
+		}
+		fmt.Fprintf(hash, "%d:%s\n%d:", len(item.path), item.path, item.size)
+		count, copyErr := io.CopyBuffer(hash, io.LimitReader(file, item.size+1), buffer)
+		closeErr := file.Close()
+		if copyErr != nil {
+			return "", fmt.Errorf("hash source file %s: %w", item.path, copyErr)
+		}
+		if closeErr != nil {
+			return "", fmt.Errorf("close source file %s: %w", item.path, closeErr)
+		}
+		if count != item.size {
+			return "", fmt.Errorf("source file %s changed while hashing: read %d bytes, expected %d", item.path, count, item.size)
+		}
 		_, _ = hash.Write([]byte{'\n'})
 	}
 	return "sha256:" + hex.EncodeToString(hash.Sum(nil)), nil
