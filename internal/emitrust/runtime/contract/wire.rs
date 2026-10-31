@@ -401,7 +401,7 @@ impl<'a> Reader<'a> {
         limit: usize,
     ) -> DecodeResult<usize> {
         let remaining = self.remaining();
-        let needed = declared.saturating_mul(min_element_size.max(1) as u64);
+        let needed = declared.saturating_mul(min_element_size as u64);
         if needed > remaining as u64 {
             return Err(DecodeError::LengthNotRepresentable {
                 field,
@@ -1213,4 +1213,28 @@ impl Decode for bytes::Bytes {
     fn decode(reader: &mut Reader<'_>) -> DecodeResult<Self> {
         reader.read_shared_bytes(FieldId::NONE)
     }
+}
+
+/// Writes a fixed-width length and a schema-bounded string.
+pub fn encode_string_u32le(writer: &mut Writer<'_>, value: &Str, minimum: u64, maximum: u64) -> EncodeResult<()> {
+    encode_bytes_u32le(writer, value.as_bytes(), minimum, maximum)
+}
+
+/// Reads a fixed-width string length under byte and schema bounds.
+pub fn decode_string_u32le(reader: &mut Reader<'_>, field: FieldId, minimum: u64, maximum: u64) -> DecodeResult<Str> {
+    Ok(Str(decode_bytes_u32le(reader, field, minimum, maximum)?))
+}
+
+/// Writes a fixed-width length and a schema-bounded byte buffer.
+pub fn encode_bytes_u32le(writer: &mut Writer<'_>, value: &[u8], minimum: u64, maximum: u64) -> EncodeResult<()> {
+    check_length(value.len(), minimum, maximum)?;
+    writer.write_len_u32le(value.len())?;
+    writer.write_all(value)
+}
+
+/// Reads a fixed-width buffer length under byte and schema bounds.
+pub fn decode_bytes_u32le(reader: &mut Reader<'_>, field: FieldId, minimum: u64, maximum: u64) -> DecodeResult<bytes::Bytes> {
+    let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+    let count = reader.checked_byte_bounds(field, declared, minimum, maximum)?;
+    reader.take_shared(count)
 }

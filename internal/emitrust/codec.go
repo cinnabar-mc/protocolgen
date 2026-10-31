@@ -30,7 +30,7 @@ func (e *codecEmitter) nativeCall(node manifest.Node) (string, bool, error) {
 // minWireSize reports the smallest number of bytes a value of this shape can
 // occupy. Collection decoding uses it to reject a declared count that the
 // remaining input could not possibly cover, before reserving.
-func minWireSize(node manifest.Node, visiting map[string]bool) int {
+func (g *generator) minWireSize(node manifest.Node, visiting map[string]bool) int {
 	switch node.Kind {
 	case manifest.KindPrimitive:
 		if node.Primitive == nil {
@@ -55,7 +55,7 @@ func minWireSize(node manifest.Node, visiting map[string]bool) int {
 		if node.Element == nil {
 			return 0
 		}
-		return int(node.Length) * minWireSize(*node.Element, visiting)
+		return int(node.Length) * g.minWireSize(*node.Element, visiting)
 	case manifest.KindStruct:
 		if node.TypeID != "" {
 			if visiting[node.TypeID] {
@@ -66,18 +66,27 @@ func minWireSize(node manifest.Node, visiting map[string]bool) int {
 		}
 		total := 0
 		for _, field := range node.Fields {
-			total += minWireSize(field.Encode, visiting)
+			total += g.minWireSize(field.Encode, visiting)
 		}
 		return total
 	case manifest.KindEnum:
 		if node.Primitive == nil {
 			return 1
 		}
-		return minWireSize(manifest.Node{Kind: manifest.KindPrimitive, Primitive: node.Primitive}, visiting)
+		return g.minWireSize(manifest.Node{Kind: manifest.KindPrimitive, Primitive: node.Primitive}, visiting)
 	case manifest.KindUnion:
 		best := -1
 		for _, variant := range node.Variants {
-			size := minWireSize(variant.Encode, visiting)
+			payload := variant.Encode
+			if g.inlineRustVariant(payload) && node.Control != nil {
+				payload.Fields = nil
+				for _, field := range variant.Encode.Fields {
+					if !isUnionDiscriminantField(field, *node.Control) {
+						payload.Fields = append(payload.Fields, field)
+					}
+				}
+			}
+			size := g.minWireSize(payload, visiting)
 			if best < 0 || size < best {
 				best = size
 			}
@@ -87,11 +96,11 @@ func minWireSize(node manifest.Node, visiting map[string]bool) int {
 		}
 		control := 1
 		if node.Control != nil {
-			control = minWireSize(*node.Control, visiting)
+			control = g.minWireSize(*node.Control, visiting)
 		}
 		return control + best
 	case manifest.KindRecursive:
-		return 1
+		return 0
 	case manifest.KindVoid:
 		return 0
 	default:
@@ -99,12 +108,9 @@ func minWireSize(node manifest.Node, visiting map[string]bool) int {
 	}
 }
 
-func minSizeOf(node manifest.Node) int {
-	size := minWireSize(node, map[string]bool{})
-	if size < 1 {
-		return 1
-	}
-	return size
+// minSizeOf keeps zero-byte payloads valid; reader limits bound their counts.
+func (g *generator) minSizeOf(node manifest.Node) int {
+	return g.minWireSize(node, map[string]bool{})
 }
 
 // encode writes the statements that serialise expr, which already has the Rust
@@ -123,6 +129,11 @@ func (e *codecEmitter) encode(b *strings.Builder, node manifest.Node, expr, inde
 		return e.encodeNumberConstraints(b, node, expr, indent)
 
 	case manifest.KindString:
+		if code, err := prefixCode(node); err != nil {
+			return err
+		} else if code != "var_u32" {
+			return e.encodeBuffer(b, node, expr, indent)
+		}
 		reference := rustStringReference(expr)
 		if min, max, ok := stringBounds(node); ok {
 			e.stmt(b, indent, fmt.Sprintf("wire::encode_string_limits(writer, %s, %d, %d)", reference, min, max))
@@ -139,6 +150,11 @@ func (e *codecEmitter) encode(b *strings.Builder, node manifest.Node, expr, inde
 		return nil
 
 	case manifest.KindBytes:
+		if code, err := prefixCode(node); err != nil {
+			return err
+		} else if code != "var_u32" {
+			return e.encodeBuffer(b, node, expr, indent)
+		}
 		if min, max, ok := stringBounds(node); ok {
 			e.stmt(b, indent, fmt.Sprintf("wire::encode_bytes_limits(writer, %s.as_ref(), %d, %d)", expr, min, max))
 		} else {
@@ -206,7 +222,9 @@ func (e *codecEmitter) encode(b *strings.Builder, node manifest.Node, expr, inde
 		if node.Key == nil || node.Value == nil {
 			return fmt.Errorf("map has no key/value")
 		}
-		if e.directlyEncodable(*node.Key) && e.directlyEncodable(*node.Value) {
+		if code, err := prefixCode(node); err != nil {
+			return err
+		} else if code == "var_u32" && e.directlyEncodable(*node.Key) && e.directlyEncodable(*node.Value) {
 			if min, max, ok := mapBounds(node); ok {
 				e.stmt(b, indent, fmt.Sprintf("wire::encode_map_limits(writer, %s.as_slice(), %d, %d)", expr, min, max))
 			} else {
@@ -215,7 +233,9 @@ func (e *codecEmitter) encode(b *strings.Builder, node manifest.Node, expr, inde
 			return nil
 		}
 		e.encodeLengthAssertion(b, node, expr, indent)
-		e.writeLenVarU32(b, expr, indent)
+		if err := e.writeCollectionPrefix(b, node, expr, indent); err != nil {
+			return err
+		}
 		fmt.Fprintf(b, "%sfor (key, value) in %s.iter() {\n", indent, expr)
 		if err := e.encode(b, *node.Key, "key", indent+"    "); err != nil {
 			return err
@@ -336,6 +356,14 @@ func (e *codecEmitter) encodeOptional(b *strings.Builder, node manifest.Node, ex
 // Decode on its own, so a generic collection helper can be used instead of an
 // emitted loop.
 func (e *codecEmitter) directlyEncodable(node manifest.Node) bool {
+	if node.Constraints != nil {
+		return false
+	}
+	if node.Kind == manifest.KindString || node.Kind == manifest.KindBytes {
+		if code, err := prefixCode(node); err != nil || code != "var_u32" {
+			return false
+		}
+	}
 	if _, matched, err := e.nativeCall(node); err == nil && matched {
 		return true
 	}
@@ -405,6 +433,11 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		return fmt.Sprintf("{ let value = %s; wire::validate_number_limits(%s, %s, %s)?; value }", decoded, raw, rustOptionNumber(node, node.Constraints.Minimum), rustOptionNumber(node, node.Constraints.Maximum)), nil
 
 	case manifest.KindString:
+		if code, err := prefixCode(node); err != nil {
+			return "", err
+		} else if code != "var_u32" {
+			return e.decodeBuffer(node, site)
+		}
 		decoded := decodeCall("String")
 		if e.g.contract > 0 {
 			decoded = fmt.Sprintf("reader.read_str(%s)?", e.field(site))
@@ -418,6 +451,11 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		return decoded, nil
 
 	case manifest.KindBytes:
+		if code, err := prefixCode(node); err != nil {
+			return "", err
+		} else if code != "var_u32" {
+			return e.decodeBuffer(node, site)
+		}
 		if min, max, ok := stringBounds(node); ok {
 			return fmt.Sprintf("wire::decode_bytes_limits(reader, %s%d, %d)?", e.fieldArg(site), min, max), nil
 		}
@@ -484,12 +522,12 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		if err != nil {
 			return "", err
 		}
-		min := minSizeOf(*node.Element)
+		min := e.g.minSizeOf(*node.Element)
 		element, err := e.g.rustType(*node.Element, hint+"Item")
 		if err != nil {
 			return "", err
 		}
-		if e.directlyDecodable(*node.Element) {
+		if _, _, bounded := arrayBounds(node); e.directlyDecodable(*node.Element) && !(bounded && helper != "decode_collection") {
 			if lower, upper, ok := arrayBounds(node); ok && helper == "decode_collection" {
 				return fmt.Sprintf("wire::decode_collection_limits::<%s>(reader, %s%d, %d, %d)?", element, e.fieldArg(site), min, lower, upper), nil
 			}
@@ -501,7 +539,7 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		if node.Key == nil || node.Value == nil {
 			return "", fmt.Errorf("map has no key/value")
 		}
-		min := minSizeOf(*node.Key) + minSizeOf(*node.Value)
+		min := e.g.minSizeOf(*node.Key) + e.g.minSizeOf(*node.Value)
 		keyType, err := e.g.rustType(*node.Key, hint+"Key")
 		if err != nil {
 			return "", err
@@ -510,7 +548,9 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		if err != nil {
 			return "", err
 		}
-		if e.directlyDecodable(*node.Key) && e.directlyDecodable(*node.Value) {
+		if code, err := prefixCode(node); err != nil {
+			return "", err
+		} else if code == "var_u32" && e.directlyDecodable(*node.Key) && e.directlyDecodable(*node.Value) {
 			if lower, upper, ok := mapBounds(node); ok {
 				return fmt.Sprintf("wire::decode_map_limits::<%s, %s>(reader, %s%d, %d, %d)?", keyType, valueType, e.fieldArg(site), min, lower, upper), nil
 			}
@@ -526,7 +566,9 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		}
 		var b strings.Builder
 		fmt.Fprintf(&b, "{\n")
-		fmt.Fprintf(&b, "%s    let declared = u64::from(reader.read_var_u32()?);\n", indent)
+		if err := e.readCollectionPrefix(&b, node, indent+"    "); err != nil {
+			return "", err
+		}
 		if lower, upper, ok := mapBounds(node); ok {
 			fmt.Fprintf(&b, "%s    let count = reader.checked_count_limits(%sdeclared, %d, %d, %d)?;\n", indent, e.fieldArg(site), min, lower, upper)
 		} else {
@@ -552,19 +594,10 @@ func (e *codecEmitter) decodeCollectionLoop(node manifest.Node, element string, 
 	if err != nil {
 		return "", err
 	}
-	code, err := prefixCode(node)
-	if err != nil {
-		return "", err
-	}
 	var b strings.Builder
 	fmt.Fprintf(&b, "{\n")
-	switch code {
-	case "var_u32":
-		fmt.Fprintf(&b, "%s    let declared = u64::from(reader.read_var_u32()?);\n", indent)
-	case "u32le":
-		fmt.Fprintf(&b, "%s    let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));\n", indent)
-	default:
-		return "", fmt.Errorf("unsupported collection prefix %q", code)
+	if err := e.readCollectionPrefix(&b, node, indent+"    "); err != nil {
+		return "", err
 	}
 	if lower, upper, ok := arrayBounds(node); ok {
 		fmt.Fprintf(&b, "%s    let count = reader.checked_count_limits(%sdeclared, %d, %d, %d)?;\n", indent, e.fieldArg(site), min, lower, upper)
@@ -694,4 +727,71 @@ func decodeCall(typ string) string {
 
 func (e *codecEmitter) bitsetName(node manifest.Node) string {
 	return fmt.Sprintf("Bitset%d", node.Length)
+}
+
+// readCollectionPrefix reads the declared count using its manifest codec.
+func (e *codecEmitter) readCollectionPrefix(b *strings.Builder, node manifest.Node, indent string) error {
+	code, err := prefixCode(node)
+	if err != nil {
+		return err
+	}
+	switch code {
+	case "var_u32":
+		fmt.Fprintf(b, "%slet declared = u64::from(reader.read_var_u32()?);\n", indent)
+	case "u32le":
+		fmt.Fprintf(b, "%slet declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));\n", indent)
+	default:
+		return fmt.Errorf("unsupported collection prefix %q", code)
+	}
+	return nil
+}
+
+// encodeBuffer selects the explicit fixed-width buffer prefix and its bounds.
+func (e *codecEmitter) encodeBuffer(b *strings.Builder, node manifest.Node, expr, indent string) error {
+	helper, err := collectionHelper(node, "encode_bytes")
+	if err != nil {
+		return err
+	}
+	reference := expr + ".as_ref()"
+	if node.Kind == manifest.KindString {
+		helper, err = collectionHelper(node, "encode_string")
+		reference = rustStringReference(expr)
+	}
+	if err != nil {
+		return err
+	}
+	min, max, _ := stringBounds(node)
+	if node.Constraints == nil || node.Constraints.MaxLength == nil {
+		max = ^uint64(0)
+	}
+	e.stmt(b, indent, fmt.Sprintf("wire::%s(writer, %s, %d, %d)", helper, reference, min, max))
+	if node.Constraints != nil && node.Constraints.Pattern != "" {
+		check := "assert_pattern"
+		if e.g.contract > 0 {
+			check = "check_pattern"
+		}
+		e.stmt(b, indent, fmt.Sprintf("wire::%s(%s, %q)", check, reference, node.Constraints.Pattern))
+	}
+	return nil
+}
+
+// decodeBuffer retains byte limits and field sites for a fixed-width prefix.
+func (e *codecEmitter) decodeBuffer(node manifest.Node, site string) (string, error) {
+	base := "decode_bytes"
+	if node.Kind == manifest.KindString {
+		base = "decode_string"
+	}
+	helper, err := collectionHelper(node, base)
+	if err != nil {
+		return "", err
+	}
+	min, max, _ := stringBounds(node)
+	if node.Constraints == nil || node.Constraints.MaxLength == nil {
+		max = ^uint64(0)
+	}
+	decoded := fmt.Sprintf("wire::%s(reader, %s%d, %d)?", helper, e.fieldArg(site), min, max)
+	if node.Constraints != nil && node.Constraints.Pattern != "" {
+		decoded = fmt.Sprintf("{ let value = %s; wire::validate_pattern(&value, %q)?; value }", decoded, node.Constraints.Pattern)
+	}
+	return decoded, nil
 }

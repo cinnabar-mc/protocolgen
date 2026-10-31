@@ -7,6 +7,25 @@
 mod runtime_tests {
     use super::*;
 
+    /// Empty values consume no payload bytes but still obey the element limit.
+    #[test]
+    fn zero_byte_collections_obey_element_limits() {
+        let mut reader = Reader::new(&[]);
+        assert_eq!(reader.checked_count(3, 0), Ok(3));
+        reader.set_collection_limit(2);
+        assert!(matches!(reader.checked_count(3, 0), Err(DecodeError::LengthLimitExceeded { .. })));
+    }
+
+    /// Fixed-width strings and buffers preserve their declared prefix bytes.
+    #[test]
+    fn fixed_width_buffers_round_trip() {
+        let mut writer = Writer::new();
+        encode_string_u32le(&mut writer, "hi", 0, 2);
+        assert_eq!(writer.as_slice(), [2, 0, 0, 0, b'h', b'i']);
+        assert_eq!(decode_string_u32le(&mut Reader::new(writer.as_slice()), 0, 2).unwrap(), "hi");
+        assert!(decode_bytes_u32le(&mut Reader::new(writer.as_slice()), 0, 1).is_err());
+    }
+
     #[test]
     fn varint_rejects_overlong_encodings() {
         // 0x80 0x00 encodes 0 in two bytes; the canonical form is one byte.

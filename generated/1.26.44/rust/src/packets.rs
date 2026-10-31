@@ -3131,7 +3131,15 @@ impl wire::Encode for MapInfoRequest {
 impl wire::Decode for MapInfoRequest {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
         let map_unique_id = <ActorUniqueID as wire::Decode>::decode(reader)?;
-        let client_pixels_list = wire::decode_collection_u32le::<PixelRequest>(reader, 6)?;
+        let client_pixels_list = {
+            let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+            let count = reader.checked_count_limits(declared, 6, 0, 16384)?;
+            let mut out: Vec<PixelRequest> = Vec::with_capacity(count);
+            for _ in 0..count {
+                out.push(<PixelRequest as wire::Decode>::decode(reader)?);
+            }
+            out
+        };
         Ok(Self {
             map_unique_id,
             client_pixels_list,
@@ -5302,7 +5310,15 @@ impl wire::Decode for NetworkChunkPublisherUpdate {
             wire::validate_number_limits(value.0, Some(0), None)?;
             value
         };
-        let server_built_chunks_list = wire::decode_collection_u32le::<ChunkPos>(reader, 2)?;
+        let server_built_chunks_list = {
+            let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+            let count = reader.checked_count_limits(declared, 2, 0, 9216)?;
+            let mut out: Vec<ChunkPos> = Vec::with_capacity(count);
+            for _ in 0..count {
+                out.push(<ChunkPos as wire::Decode>::decode(reader)?);
+            }
+            out
+        };
         Ok(Self {
             new_position_for_view,
             new_radius_for_view,
@@ -7412,13 +7428,27 @@ impl DimensionData {
 }
 impl wire::Encode for DimensionData {
     fn encode(&self, writer: &mut wire::Writer) {
-        wire::encode_map(writer, self.definitions.as_slice());
+        writer.write_var_u32(self.definitions.len() as u32);
+        for (key, value) in self.definitions.iter() {
+            wire::encode_string_limits(writer, key, 0, 256);
+            value.encode(writer);
+        }
     }
 }
 
 impl wire::Decode for DimensionData {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
-        let definitions = wire::decode_map::<String, DimensionDefinition>(reader, 21)?;
+        let definitions = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 21)?;
+            let mut out: Vec<(String, DimensionDefinition)> = Vec::with_capacity(count);
+            for _ in 0..count {
+                let key = wire::decode_string_limits(reader, 0, 256)?;
+                let value = <DimensionDefinition as wire::Decode>::decode(reader)?;
+                out.push((key, value));
+            }
+            out
+        };
         Ok(Self { definitions })
     }
 }

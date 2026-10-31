@@ -303,7 +303,7 @@ impl<'a> Reader<'a> {
             });
         }
         let count = declared as usize;
-        let needed = count.saturating_mul(min_element_size.max(1));
+        let needed = count.saturating_mul(min_element_size);
         if needed > self.remaining() {
             return Err(DecodeError::LengthNotRepresentable {
                 needed,
@@ -726,6 +726,45 @@ pub fn validate_number_limits<T: PartialOrd + Copy>(
         return Err(DecodeError::SchemaConstraint("number above maximum"));
     }
     Ok(())
+}
+
+/// Writes a fixed-width length and a schema-bounded string.
+pub fn encode_string_u32le(writer: &mut Writer, value: &str, minimum: u64, maximum: u64) {
+    encode_bytes_u32le(writer, value.as_bytes(), minimum, maximum);
+}
+
+/// Reads a fixed-width string length under byte and schema bounds.
+pub fn decode_string_u32le(
+    reader: &mut Reader<'_>,
+    minimum: u64,
+    maximum: u64,
+) -> DecodeResult<String> {
+    let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+    validate_length(declared, minimum, maximum)?;
+    let count = reader.checked_count_with(declared, 1, reader.byte_buffer_limit())?;
+    std::str::from_utf8(reader.take(count)?)
+        .map(str::to_owned)
+        .map_err(|_| DecodeError::InvalidUtf8)
+}
+
+/// Writes a fixed-width length and a schema-bounded byte buffer.
+pub fn encode_bytes_u32le(writer: &mut Writer, value: &[u8], minimum: u64, maximum: u64) {
+    assert_length(value.len(), minimum, maximum);
+    let count = u32::try_from(value.len()).expect("buffer length exceeds u32");
+    writer.write_all(&count.to_le_bytes());
+    writer.write_all(value);
+}
+
+/// Reads a fixed-width buffer length under byte and schema bounds.
+pub fn decode_bytes_u32le(
+    reader: &mut Reader<'_>,
+    minimum: u64,
+    maximum: u64,
+) -> DecodeResult<bytes::Bytes> {
+    let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+    validate_length(declared, minimum, maximum)?;
+    let count = reader.checked_count_with(declared, 1, reader.byte_buffer_limit())?;
+    reader.take_shared(count)
 }
 /// Client-owned ceiling on recursive schema edges along a decoded value's path.
 /// This bounds decoder stack use and the resulting owned tree's clone/drop depth;
@@ -1311,6 +1350,31 @@ mod pattern_tests {
 #[cfg(test)]
 mod runtime_tests {
     use super::*;
+
+    /// Empty values consume no payload bytes but still obey the element limit.
+    #[test]
+    fn zero_byte_collections_obey_element_limits() {
+        let mut reader = Reader::new(&[]);
+        assert_eq!(reader.checked_count(3, 0), Ok(3));
+        reader.set_collection_limit(2);
+        assert!(matches!(
+            reader.checked_count(3, 0),
+            Err(DecodeError::LengthLimitExceeded { .. })
+        ));
+    }
+
+    /// Fixed-width strings and buffers preserve their declared prefix bytes.
+    #[test]
+    fn fixed_width_buffers_round_trip() {
+        let mut writer = Writer::new();
+        encode_string_u32le(&mut writer, "hi", 0, 2);
+        assert_eq!(writer.as_slice(), [2, 0, 0, 0, b'h', b'i']);
+        assert_eq!(
+            decode_string_u32le(&mut Reader::new(writer.as_slice()), 0, 2).unwrap(),
+            "hi"
+        );
+        assert!(decode_bytes_u32le(&mut Reader::new(writer.as_slice()), 0, 1).is_err());
+    }
 
     #[test]
     fn varint_rejects_overlong_encodings() {

@@ -338,7 +338,11 @@ impl wire::Encode for AttributeLayerSyncData {
             } => {
                 wire::encode_string_limits(writer, attribute_layer_name, 0, 128);
                 attribute_layer_dimension.encode(writer);
-                wire::encode_collection_limits(writer, attributes.as_slice(), 0, 1024);
+                wire::assert_length(attributes.len(), 0, 1024);
+                writer.write_var_u32(attributes.len() as u32);
+                for item in attributes.iter() {
+                    wire::encode_string_limits(writer, item, 0, 128);
+                }
             }
         }
     }
@@ -379,7 +383,15 @@ impl wire::Decode for AttributeLayerSyncData {
             3 => {
                 let attribute_layer_name = wire::decode_string_limits(reader, 0, 128)?;
                 let attribute_layer_dimension = <DimensionType as wire::Decode>::decode(reader)?;
-                let attributes = wire::decode_collection_limits::<String>(reader, 1, 0, 1024)?;
+                let attributes = {
+                    let declared = u64::from(reader.read_var_u32()?);
+                    let count = reader.checked_count_limits(declared, 1, 0, 1024)?;
+                    let mut out: Vec<String> = Vec::with_capacity(count);
+                    for _ in 0..count {
+                        out.push(wire::decode_string_limits(reader, 0, 128)?);
+                    }
+                    out
+                };
                 Self::RemoveEnvironmentAttributesData {
                     attribute_layer_name,
                     attribute_layer_dimension,
@@ -2141,10 +2153,30 @@ pub struct CameraAimAssistCategoryPriorities {
 
 impl wire::Encode for CameraAimAssistCategoryPriorities {
     fn encode(&self, writer: &mut wire::Writer) {
-        wire::encode_map(writer, self.entities.as_slice());
-        wire::encode_map(writer, self.blocks.as_slice());
-        wire::encode_map(writer, self.block_tags.as_slice());
-        wire::encode_map(writer, self.entity_type_families.as_slice());
+        writer.write_var_u32(self.entities.len() as u32);
+        for (key, value) in self.entities.iter() {
+            key.encode(writer);
+            value.encode(writer);
+            wire::assert_number_limits(value.0, Some(0), Some(100));
+        }
+        writer.write_var_u32(self.blocks.len() as u32);
+        for (key, value) in self.blocks.iter() {
+            key.encode(writer);
+            value.encode(writer);
+            wire::assert_number_limits(value.0, Some(0), Some(100));
+        }
+        writer.write_var_u32(self.block_tags.len() as u32);
+        for (key, value) in self.block_tags.iter() {
+            key.encode(writer);
+            value.encode(writer);
+            wire::assert_number_limits(value.0, Some(0), Some(100));
+        }
+        writer.write_var_u32(self.entity_type_families.len() as u32);
+        for (key, value) in self.entity_type_families.iter() {
+            key.encode(writer);
+            value.encode(writer);
+            wire::assert_number_limits(value.0, Some(0), Some(100));
+        }
         match &self.entity_default {
             Some(value) => {
                 writer.write_u8(1);
@@ -2166,10 +2198,66 @@ impl wire::Encode for CameraAimAssistCategoryPriorities {
 
 impl wire::Decode for CameraAimAssistCategoryPriorities {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
-        let entities = wire::decode_map::<String, wire::I32LE>(reader, 5)?;
-        let blocks = wire::decode_map::<String, wire::I32LE>(reader, 5)?;
-        let block_tags = wire::decode_map::<String, wire::I32LE>(reader, 5)?;
-        let entity_type_families = wire::decode_map::<String, wire::I32LE>(reader, 5)?;
+        let entities = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 5)?;
+            let mut out: Vec<(String, wire::I32LE)> = Vec::with_capacity(count);
+            for _ in 0..count {
+                let key = <String as wire::Decode>::decode(reader)?;
+                let value = {
+                    let value = <wire::I32LE as wire::Decode>::decode(reader)?;
+                    wire::validate_number_limits(value.0, Some(0), Some(100))?;
+                    value
+                };
+                out.push((key, value));
+            }
+            out
+        };
+        let blocks = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 5)?;
+            let mut out: Vec<(String, wire::I32LE)> = Vec::with_capacity(count);
+            for _ in 0..count {
+                let key = <String as wire::Decode>::decode(reader)?;
+                let value = {
+                    let value = <wire::I32LE as wire::Decode>::decode(reader)?;
+                    wire::validate_number_limits(value.0, Some(0), Some(100))?;
+                    value
+                };
+                out.push((key, value));
+            }
+            out
+        };
+        let block_tags = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 5)?;
+            let mut out: Vec<(String, wire::I32LE)> = Vec::with_capacity(count);
+            for _ in 0..count {
+                let key = <String as wire::Decode>::decode(reader)?;
+                let value = {
+                    let value = <wire::I32LE as wire::Decode>::decode(reader)?;
+                    wire::validate_number_limits(value.0, Some(0), Some(100))?;
+                    value
+                };
+                out.push((key, value));
+            }
+            out
+        };
+        let entity_type_families = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 5)?;
+            let mut out: Vec<(String, wire::I32LE)> = Vec::with_capacity(count);
+            for _ in 0..count {
+                let key = <String as wire::Decode>::decode(reader)?;
+                let value = {
+                    let value = <wire::I32LE as wire::Decode>::decode(reader)?;
+                    wire::validate_number_limits(value.0, Some(0), Some(100))?;
+                    value
+                };
+                out.push((key, value));
+            }
+            out
+        };
         let entity_default = {
             if reader.read_u8()? == 0 {
                 None
@@ -7079,7 +7167,10 @@ impl wire::Encode for ItemStackRequestData {
     fn encode(&self, writer: &mut wire::Writer) {
         self.client_request_id.encode(writer);
         wire::encode_collection_limits(writer, self.actions.as_slice(), 1, 100);
-        wire::encode_collection(writer, self.strings_to_filter.as_slice());
+        writer.write_var_u32(self.strings_to_filter.len() as u32);
+        for item in self.strings_to_filter.iter() {
+            wire::encode_string_limits(writer, item, 0, 1000);
+        }
         self.strings_to_filter_origin.encode(writer);
     }
 }
@@ -7088,7 +7179,15 @@ impl wire::Decode for ItemStackRequestData {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
         let client_request_id = <ItemStackRequestID as wire::Decode>::decode(reader)?;
         let actions = wire::decode_collection_limits::<StackRequestAction>(reader, 2, 1, 100)?;
-        let strings_to_filter = wire::decode_collection::<String>(reader, 1)?;
+        let strings_to_filter = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 1)?;
+            let mut out: Vec<String> = Vec::with_capacity(count);
+            for _ in 0..count {
+                out.push(wire::decode_string_limits(reader, 0, 1000)?);
+            }
+            out
+        };
         let strings_to_filter_origin = <TextProcessingEventOrigin as wire::Decode>::decode(reader)?;
         Ok(Self {
             client_request_id,
@@ -7126,7 +7225,10 @@ impl wire::Encode for ItemStackRequestPacketData {
     fn encode(&self, writer: &mut wire::Writer) {
         self.client_request_id.encode(writer);
         wire::encode_collection_limits(writer, self.actions.as_slice(), 1, 100);
-        wire::encode_collection(writer, self.strings_to_filter.as_slice());
+        writer.write_var_u32(self.strings_to_filter.len() as u32);
+        for item in self.strings_to_filter.iter() {
+            wire::encode_string_limits(writer, item, 0, 1000);
+        }
         self.strings_to_filter_origin.encode(writer);
     }
 }
@@ -7135,7 +7237,15 @@ impl wire::Decode for ItemStackRequestPacketData {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
         let client_request_id = <ItemStackRequestID as wire::Decode>::decode(reader)?;
         let actions = wire::decode_collection_limits::<StackRequestAction>(reader, 2, 1, 100)?;
-        let strings_to_filter = wire::decode_collection::<String>(reader, 1)?;
+        let strings_to_filter = {
+            let declared = u64::from(reader.read_var_u32()?);
+            let count = reader.checked_count(declared, 1)?;
+            let mut out: Vec<String> = Vec::with_capacity(count);
+            for _ in 0..count {
+                out.push(wire::decode_string_limits(reader, 0, 1000)?);
+            }
+            out
+        };
         let strings_to_filter_origin = <TextProcessingEventOrigin as wire::Decode>::decode(reader)?;
         Ok(Self {
             client_request_id,
@@ -8447,7 +8557,7 @@ impl wire::Decode for DynamicValue {
             4 => Self::String(<String as wire::Decode>::decode(reader)?),
             5 => Self::List({
                 let declared = u64::from(reader.read_var_u32()?);
-                let count = reader.checked_count(declared, 1)?;
+                let count = reader.checked_count(declared, 0)?;
                 let mut out: Vec<DynamicValue> = Vec::with_capacity(count);
                 for _ in 0..count {
                     out.push(reader.with_recursive_value(|reader| {
@@ -8458,7 +8568,7 @@ impl wire::Decode for DynamicValue {
             }),
             6 => Self::Map({
                 let declared = u64::from(reader.read_var_u32()?);
-                let count = reader.checked_count(declared, 2)?;
+                let count = reader.checked_count(declared, 1)?;
                 let mut out: Vec<(String, DynamicValue)> = Vec::with_capacity(count);
                 for _ in 0..count {
                     let key = <String as wire::Decode>::decode(reader)?;
@@ -11207,7 +11317,7 @@ impl wire::Encode for SynchedActorDataCopyableDataList {
 
 impl wire::Decode for SynchedActorDataCopyableDataList {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
-        let data = wire::decode_collection::<DataItemEntry>(reader, 4)?;
+        let data = wire::decode_collection::<DataItemEntry>(reader, 3)?;
         Ok(Self { data })
     }
 }

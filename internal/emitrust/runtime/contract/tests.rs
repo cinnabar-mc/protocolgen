@@ -13,6 +13,24 @@ mod runtime_tests {
         out
     }
 
+    /// Empty values consume no payload bytes but still obey the element limit.
+    #[test]
+    fn zero_byte_collections_obey_element_limits() {
+        assert_eq!(Reader::new(&[]).checked_count(FieldId(0), 3, 0), Ok(3));
+        let limits = Limits::unbounded().with_field(FieldId(0), 2);
+        assert!(matches!(Reader::new(&[]).with_limits(&limits).checked_count(FieldId(0), 3, 0), Err(DecodeError::LengthLimitExceeded { .. })));
+    }
+
+    /// Fixed-width strings and buffers preserve their declared prefix bytes.
+    #[test]
+    fn fixed_width_buffers_round_trip() {
+        let mut out = Vec::new();
+        encode_string_u32le(&mut Writer::new(&mut out), &Str::from("hi"), 0, 2).unwrap();
+        assert_eq!(out, [2, 0, 0, 0, b'h', b'i']);
+        assert_eq!(decode_string_u32le(&mut Reader::new(&out), FieldId(0), 0, 2).unwrap(), "hi");
+        assert!(decode_bytes_u32le(&mut Reader::new(&out), FieldId(0), 0, 1).is_err());
+    }
+
     #[test]
     fn varint_rejects_overlong_encodings() {
         assert_eq!(Reader::new(&[0x80, 0x00]).read_var_u32(), Err(DecodeError::VarIntOverlong));
