@@ -95,3 +95,44 @@ func TestWriteFilesRejectsParentTraversal(t *testing.T) {
 		t.Fatal("WriteFiles accepted parent traversal")
 	}
 }
+
+func TestWriteFilesPreservesOutputOnParentConflict(t *testing.T) {
+	directory := t.TempDir()
+	for name, text := range map[string]string{"stale.rs": "// Code generated from canonical protocol manifest v2. DO NOT EDIT.\n", "packets": "handwritten"} {
+		if err := os.WriteFile(filepath.Join(directory, name), []byte(text), 0o644); err != nil {
+			t.Fatal(err)
+		}
+	}
+	if err := WriteFiles(directory, map[string]string{"packets/login.rs": "generated"}); err == nil {
+		t.Fatal("accepted parent-file conflict")
+	}
+	if data, err := os.ReadFile(filepath.Join(directory, "stale.rs")); err != nil || len(data) == 0 {
+		t.Fatalf("lost previous output: %q, %v", data, err)
+	}
+	if data, err := os.ReadFile(filepath.Join(directory, "packets")); err != nil || string(data) != "handwritten" {
+		t.Fatalf("changed handwritten file: %q, %v", data, err)
+	}
+}
+
+func TestWriteFilesCannotFollowExternalSymlinks(t *testing.T) {
+	for _, parent := range []bool{false, true} {
+		directory, external := t.TempDir(), t.TempDir()
+		victim := filepath.Join(external, "victim.rs")
+		if err := os.WriteFile(victim, []byte("original"), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		link, target, name := filepath.Join(directory, "victim.rs"), victim, "victim.rs"
+		if parent {
+			link, target, name = filepath.Join(directory, "link"), external, "link/victim.rs"
+		}
+		if err := os.Symlink(target, link); err != nil {
+			t.Fatal(err)
+		}
+		if err := WriteFiles(directory, map[string]string{name: "replacement"}); err == nil {
+			t.Error("accepted escaping symlink")
+		}
+		if data, err := os.ReadFile(victim); err != nil || string(data) != "original" {
+			t.Fatalf("external file changed: %q, %v", data, err)
+		}
+	}
+}

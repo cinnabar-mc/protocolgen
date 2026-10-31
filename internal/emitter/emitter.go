@@ -4,7 +4,9 @@
 package emitter
 
 import (
+	"crypto/rand"
 	"fmt"
+	"io/fs"
 	"os"
 	"path/filepath"
 	"sort"
@@ -119,56 +121,79 @@ func loadOptionalOverlay[T any](manifestPath, explicitPath, defaultName, label s
 	return load(path)
 }
 
+// WriteFiles stages every replacement before changing generated output. Each
+// rename is atomic, and all filesystem access stays within the output root.
 func WriteFiles(directory string, files map[string]string) error {
 	if err := os.MkdirAll(directory, 0o755); err != nil {
 		return err
 	}
+	root, err := os.OpenRoot(directory)
+	if err != nil {
+		return err
+	}
+	defer root.Close()
 	desired := make(map[string]bool, len(files))
 	names := make([]string, 0, len(files))
 	for name := range files {
 		clean := filepath.Clean(name)
-		if clean == "." || filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) {
-			return fmt.Errorf("emitter returned unsafe filename %q", name)
+		if clean == "." || filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) || desired[clean] {
+			return fmt.Errorf("emitter returned unsafe or duplicate filename %q", name)
 		}
 		desired[clean] = true
 		names = append(names, name)
 	}
-	if err := removeStaleGeneratedFiles(directory, desired); err != nil {
+	sort.Strings(names)
+	stage := ".protocolgen-" + rand.Text()
+	if err := root.Mkdir(stage, 0o700); err != nil {
 		return err
 	}
-	sort.Strings(names)
+	defer root.RemoveAll(stage)
 	for _, name := range names {
-		path := filepath.Join(directory, filepath.Clean(name))
-		if err := os.MkdirAll(filepath.Dir(path), 0o755); err != nil {
+		clean := filepath.Clean(name)
+		if err := root.MkdirAll(filepath.Dir(clean), 0o755); err != nil {
 			return err
 		}
-		if err := os.WriteFile(path, []byte(files[name]), 0o644); err != nil {
+		if info, err := root.Lstat(clean); err == nil {
+			if !info.Mode().IsRegular() {
+				return fmt.Errorf("output %q is not a regular file", name)
+			}
+		} else if !os.IsNotExist(err) {
+			return err
+		}
+		staged := filepath.Join(stage, clean)
+		if err := root.MkdirAll(filepath.Dir(staged), 0o755); err != nil {
+			return err
+		}
+		if err := root.WriteFile(staged, []byte(files[name]), 0o644); err != nil {
 			return err
 		}
 	}
-	return nil
+	for _, name := range names {
+		clean := filepath.Clean(name)
+		if err := root.Rename(filepath.Join(stage, clean), clean); err != nil {
+			return err
+		}
+	}
+	return removeStaleGeneratedFiles(root, desired)
 }
 
-func removeStaleGeneratedFiles(directory string, desired map[string]bool) error {
+// removeStaleGeneratedFiles removes only obsolete regular generated files.
+func removeStaleGeneratedFiles(root *os.Root, desired map[string]bool) error {
 	const generatedHeader = "Code generated from canonical protocol manifest v2. DO NOT EDIT."
-	return filepath.WalkDir(directory, func(path string, entry os.DirEntry, err error) error {
+	return fs.WalkDir(root.FS(), ".", func(path string, entry fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
-		if entry.IsDir() {
+		if !entry.Type().IsRegular() || desired[filepath.FromSlash(path)] {
 			return nil
 		}
-		relative, err := filepath.Rel(directory, path)
-		if err != nil || desired[relative] {
-			return err
-		}
-		data, err := os.ReadFile(path)
+		data, err := root.ReadFile(path)
 		if err != nil {
 			return err
 		}
 		contents := strings.TrimLeft(string(data), "/# ")
 		if strings.HasPrefix(contents, generatedHeader) {
-			return os.Remove(path)
+			return root.Remove(path)
 		}
 		return nil
 	})
