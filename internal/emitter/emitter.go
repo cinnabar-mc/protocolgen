@@ -139,6 +139,9 @@ func WriteFiles(directory string, files map[string]string) error {
 		if clean == "." || filepath.IsAbs(clean) || clean == ".." || strings.HasPrefix(clean, ".."+string(filepath.Separator)) || desired[clean] {
 			return fmt.Errorf("emitter returned unsafe or duplicate filename %q", name)
 		}
+		if err := validateOutputParents(root, clean); err != nil {
+			return err
+		}
 		desired[clean] = true
 		names = append(names, name)
 	}
@@ -175,6 +178,23 @@ func WriteFiles(directory string, files map[string]string) error {
 		}
 	}
 	return removeStaleGeneratedFiles(root, desired)
+}
+
+// validateOutputParents rejects aliases so cleanup sees the same paths as the writer.
+func validateOutputParents(root *os.Root, name string) error {
+	for parent := filepath.Dir(name); parent != "."; parent = filepath.Dir(parent) {
+		info, err := root.Lstat(parent)
+		if os.IsNotExist(err) {
+			continue
+		}
+		if err != nil {
+			return err
+		}
+		if info.Mode()&os.ModeSymlink != 0 {
+			return fmt.Errorf("output %q has symlinked parent %q", name, parent)
+		}
+	}
+	return nil
 }
 
 // removeStaleGeneratedFiles removes only obsolete regular generated files.

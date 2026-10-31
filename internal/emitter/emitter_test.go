@@ -136,3 +136,24 @@ func TestWriteFilesCannotFollowExternalSymlinks(t *testing.T) {
 		}
 	}
 }
+
+func TestWriteFilesRejectsInternalParentSymlinks(t *testing.T) {
+	directory := t.TempDir()
+	if err := os.Mkdir(filepath.Join(directory, "actual"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	if err := os.Symlink("actual", filepath.Join(directory, "alias")); err != nil {
+		t.Fatal(err)
+	}
+	original := "// Code generated from canonical protocol manifest v2. DO NOT EDIT.\noriginal\n"
+	path := filepath.Join(directory, "actual", "packet.rs")
+	if err := os.WriteFile(path, []byte(original), 0o644); err != nil {
+		t.Fatal(err)
+	}
+	if err := WriteFiles(directory, map[string]string{"alias/packet.rs": "// Code generated from canonical protocol manifest v2. DO NOT EDIT.\nnew\n"}); err == nil {
+		t.Fatal("accepted a symlinked output parent")
+	}
+	if data, err := os.ReadFile(path); err != nil || string(data) != original {
+		t.Fatalf("changed existing output: %q, %v", data, err)
+	}
+}
