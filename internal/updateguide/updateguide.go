@@ -319,6 +319,11 @@ func renderSnippet(document map[string]any, schemas schemaSet, kind string, newD
 	if err != nil {
 		return "", err
 	}
+	for _, field := range fields {
+		if field.name == "Marshal" || kind == "packet" && field.name == "ID" {
+			return "", fmt.Errorf("Go field %q collides with generated method", field.name)
+		}
+	}
 	var output strings.Builder
 	if kind == "packet" && newDefinition {
 		meta, ok := document["$metaProperties"].(map[string]any)
@@ -491,10 +496,20 @@ func renderFieldSchema(schema map[string]any, schemas schemaSet, address, qualif
 		}
 		return qualifier + schemaName(target), qualifier + "Single(io, " + address + ")", true, nil
 	}
+	if _, enum := schema["enum"]; enum {
+		goType, method, err := primitive(schema)
+		return goType, chooseStatement(address, method), false, err
+	}
 	switch schema["type"] {
 	case "string":
+		if err := validateOptions(schema, map[string]bool{}); err != nil {
+			return "", "", false, err
+		}
 		return "string", constrainedStatement(schema, address, "io.String", "string"), false, nil
 	case "boolean":
+		if err := validateOptions(schema, map[string]bool{}); err != nil {
+			return "", "", false, err
+		}
 		return "bool", chooseStatement(address, "io.Bool"), false, nil
 	case "integer", "number":
 		goType, method, err := primitive(schema)
