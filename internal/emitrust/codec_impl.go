@@ -65,11 +65,11 @@ func (e *codecEmitter) emitStructCodec(b *strings.Builder, item definition) erro
 		if _, boxed := boxedInner(field.Type); boxed {
 			expr = "Box::new(" + expr + ")"
 		}
-		fmt.Fprintf(b, "        let %s = %s;\n", field.Name, expr)
+		fmt.Fprintf(b, "        let %s = %s;\n", codecBinding(field.Name), expr)
 	}
 	b.WriteString("        Ok(Self {\n")
 	for _, field := range item.Fields {
-		fmt.Fprintf(b, "            %s,\n", field.Name)
+		fmt.Fprintf(b, "            %s,\n", codecField(field.Name))
 	}
 	b.WriteString("        })\n    }\n}\n\n")
 	return nil
@@ -89,11 +89,11 @@ func (e *codecEmitter) emitUnionCodec(b *strings.Builder, item definition) error
 		case len(variant.Fields) != 0:
 			names := make([]string, 0, len(variant.Fields))
 			for _, field := range variant.Fields {
-				names = append(names, field.Name)
+				names = append(names, codecField(field.Name))
 			}
 			fmt.Fprintf(b, "            Self::%s { %s } => {\n", variant.Name, strings.Join(names, ", "))
 			for _, field := range variant.Fields {
-				if err := e.encode(b, field.Node, field.Name, "                "); err != nil {
+				if err := e.encode(b, field.Node, codecBinding(field.Name), "                "); err != nil {
 					return fmt.Errorf("%s::%s.%s: %w", item.Name, variant.Name, field.Name, err)
 				}
 			}
@@ -127,8 +127,8 @@ func (e *codecEmitter) emitUnionCodec(b *strings.Builder, item definition) error
 				if _, boxed := boxedInner(field.Type); boxed {
 					expr = "Box::new(" + expr + ")"
 				}
-				fmt.Fprintf(b, "                let %s = %s;\n", field.Name, expr)
-				names = append(names, field.Name)
+				fmt.Fprintf(b, "                let %s = %s;\n", codecBinding(field.Name), expr)
+				names = append(names, codecField(field.Name))
 			}
 			fmt.Fprintf(b, "                Self::%s { %s }\n", variant.Name, strings.Join(names, ", "))
 			b.WriteString("            }\n")
@@ -197,11 +197,11 @@ func (e *codecEmitter) emitPacketCodec(b *strings.Builder, info packetInfo) erro
 		if err != nil {
 			return fmt.Errorf("%s.%s: %w", info.name, field.name, err)
 		}
-		fmt.Fprintf(b, "        let %s = %s;\n", field.name, expr)
+		fmt.Fprintf(b, "        let %s = %s;\n", codecBinding(field.name), expr)
 	}
 	b.WriteString("        Ok(Self {\n")
 	for _, field := range info.fields {
-		fmt.Fprintf(b, "            %s,\n", field.name)
+		fmt.Fprintf(b, "            %s,\n", codecField(field.name))
 	}
 	b.WriteString("        })\n    }\n}\n\n")
 	return nil
@@ -318,4 +318,20 @@ pub enum Peer {
 		fmt.Fprintf(b, "            PacketId::%s => Self::%s(%s),\n", info.name, info.name, decoded)
 	}
 	b.WriteString("        })\n    }\n}\n")
+}
+
+// codecBinding avoids parameter shadowing with names that fieldName cannot produce.
+func codecBinding(name string) string {
+	if name == "reader" || name == "writer" {
+		return "__" + name
+	}
+	return name
+}
+
+// codecField maps a public field to its local binding in patterns and initializers.
+func codecField(name string) string {
+	if binding := codecBinding(name); binding != name {
+		return name + ": " + binding
+	}
+	return name
 }

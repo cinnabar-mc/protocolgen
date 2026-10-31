@@ -458,7 +458,13 @@ func (g *generator) emitRustTypes(definitions []definition) (string, error) {
 				fmt.Fprintf(&b, "%s\n", doc)
 			}
 			fmt.Fprintf(&b, "/// Stores the %d-bit value used by the wire bitset encoding.\n", item.BitLength)
-			fmt.Fprintf(&b, "#[derive(Clone, Debug, Default, PartialEq, Eq)]\npub struct %s(pub [u64; %d]);\n\n", item.Name, (item.BitLength+63)/64)
+			words := (item.BitLength + 63) / 64
+			if words <= 32 {
+				fmt.Fprintf(&b, "#[derive(Clone, Debug, Default, PartialEq, Eq)]\npub struct %s(pub [u64; %d]);\n\n", item.Name, words)
+			} else {
+				fmt.Fprintf(&b, "#[derive(Clone, Debug, PartialEq, Eq)]\npub struct %s(pub [u64; %d]);\n\n", item.Name, words)
+				fmt.Fprintf(&b, "impl Default for %s {\n    fn default() -> Self { Self([0; %d]) }\n}\n\n", item.Name, words)
+			}
 		}
 		switch item.Kind {
 		case manifest.KindStruct, manifest.KindUnion, manifest.KindBitset:

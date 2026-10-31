@@ -116,6 +116,11 @@ func (g *generator) minSizeOf(node manifest.Node) int {
 // encode writes the statements that serialise expr, which already has the Rust
 // type rustType assigned to this node.
 func (e *codecEmitter) encode(b *strings.Builder, node manifest.Node, expr, indent string) error {
+	var err error
+	node, err = withPrefixBounds(node)
+	if err != nil {
+		return err
+	}
 	if _, matched, err := e.nativeCall(node); err != nil {
 		return err
 	} else if matched {
@@ -356,7 +361,7 @@ func (e *codecEmitter) encodeOptional(b *strings.Builder, node manifest.Node, ex
 // Decode on its own, so a generic collection helper can be used instead of an
 // emitted loop.
 func (e *codecEmitter) directlyEncodable(node manifest.Node) bool {
-	if node.Constraints != nil {
+	if node.Constraints != nil || hasPrefixBounds(node) {
 		return false
 	}
 	if node.Kind == manifest.KindString || node.Kind == manifest.KindBytes {
@@ -410,6 +415,11 @@ func collectionHelper(node manifest.Node, base string) (string, error) {
 // expression may be a block, so it is always safe to use in value position.
 // site names the field for per-field limits under the codec contract.
 func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (string, error) {
+	var err error
+	node, err = withPrefixBounds(node)
+	if err != nil {
+		return "", err
+	}
 	if typ, matched, err := e.nativeCall(node); err != nil {
 		return "", err
 	} else if matched {
