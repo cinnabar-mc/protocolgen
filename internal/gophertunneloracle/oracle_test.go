@@ -137,8 +137,14 @@ func TestDiscriminantConditionalHoistsToTheControlRead(t *testing.T) {
 		variants = append(variants, manifest.Variant{Value: value, Name: "V", Encode: payload})
 	}
 	want := manifestExpr(manifest.Union(manifest.Primitive("var_u32"), variants...))
+	cases := make([]sourceVariant, len(variants))
+	for index, variant := range variants {
+		cases[index] = sourceVariant{Value: variant.Value, Discriminant: true}
+	}
+	closedSelector := sourceOperation{Kind: "switch", CompareTo: "Field.Type", Variants: cases}
 	got := sourceSequenceExpr([]sourceOperation{
 		{Kind: "primitive", Code: "var_u32", Field: "Field.Type"},
+		closedSelector,
 		{Kind: "primitive", Code: "u16le", Field: "Field.Value"},
 		{Kind: "conditional", CompareTo: "Field.Type", Variants: []sourceVariant{{Values: []int64{3}, Discriminant: true, Ops: []sourceOperation{{Kind: "primitive", Code: "bool"}}}}, HasDefault: true},
 	})
@@ -147,6 +153,7 @@ func TestDiscriminantConditionalHoistsToTheControlRead(t *testing.T) {
 	}
 	negated := sourceSequenceExpr([]sourceOperation{
 		{Kind: "primitive", Code: "var_u32", Field: "Field.Type"},
+		closedSelector,
 		{Kind: "primitive", Code: "u16le", Field: "Field.Value"},
 		{Kind: "conditional", CompareTo: "Field.Type", Variants: []sourceVariant{{Values: []int64{3}, Discriminant: true, Negated: true}}, Default: []sourceOperation{{Kind: "primitive", Code: "bool"}}, HasDefault: true},
 	})
@@ -155,6 +162,7 @@ func TestDiscriminantConditionalHoistsToTheControlRead(t *testing.T) {
 	}
 	if compareLanguages(want, sourceSequenceExpr([]sourceOperation{
 		{Kind: "primitive", Code: "var_u32", Field: "Field.Type"},
+		closedSelector,
 		{Kind: "primitive", Code: "u16le", Field: "Field.Value"},
 		{Kind: "conditional", CompareTo: "Field.Type", Variants: []sourceVariant{{Values: []int64{2}, Discriminant: true, Ops: []sourceOperation{{Kind: "primitive", Code: "bool"}}}}, HasDefault: true},
 	})) == nil {
