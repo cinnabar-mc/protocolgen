@@ -252,7 +252,7 @@ func (l *mojangLowerer) lowerSchema(schema map[string]any, file, hint string) ma
 	}
 	if allOf, ok := asArray(schema["allOf"]); ok && len(allOf) == 1 {
 		if branch, ok := asMap(allOf[0]); ok {
-			return l.lowerSchema(branch, file, hint)
+			return mergeMojangConstraints(l.lowerSchema(branch, file, hint), schema)
 		}
 	}
 	if _, ok := schema["enum"]; ok {

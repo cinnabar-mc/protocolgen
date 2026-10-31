@@ -1,10 +1,12 @@
 package ingest
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 	"path/filepath"
 	"sort"
@@ -14,6 +16,23 @@ import (
 	"protocolgen/internal/claims"
 	"protocolgen/internal/manifest"
 )
+
+// decodeJSONNumbers retains exact integer values and rejects trailing JSON values.
+func decodeJSONNumbers(data []byte, value any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := decoder.Decode(value); err != nil {
+		return err
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("unexpected trailing JSON value")
+	}
+	return nil
+}
 
 func loadJSONFiles(root string) (map[string]any, error) {
 	entries, err := os.ReadDir(root)
@@ -34,7 +53,7 @@ func loadJSONFiles(root string) (map[string]any, error) {
 			return nil, fmt.Errorf("read %s: %w", name, err)
 		}
 		var value any
-		if err := json.Unmarshal(data, &value); err != nil {
+		if err := decodeJSONNumbers(data, &value); err != nil {
 			return nil, fmt.Errorf("parse %s: %w", name, err)
 		}
 		documents[name] = value
@@ -215,7 +234,7 @@ func applyCorrections(documents map[string]any, directory string, pin manifest.S
 			return nil, err
 		}
 		var patchFile map[string]any
-		if err := json.Unmarshal(data, &patchFile); err != nil {
+		if err := decodeJSONNumbers(data, &patchFile); err != nil {
 			return nil, fmt.Errorf("parse correction %s: %w", name, err)
 		}
 		operations, ok := asArray(patchFile["operations"])
@@ -250,6 +269,10 @@ func applyCorrections(documents map[string]any, directory string, pin manifest.S
 			if before != pre {
 				return nil, fmt.Errorf("stale correction %s: %s#%s pre-patch fingerprint is %s, current node is %s", id, file, pointer, pre, before)
 			}
+			context, err := correctionContextDigest(pin, file+"#"+pointer, node)
+			if err != nil {
+				return nil, err
+			}
 			if replacement, ok := operation["replace"]; ok {
 				if err := replaceAt(document, pointer, replacement); err != nil {
 					return nil, fmt.Errorf("apply correction %s: %w", id, err)
@@ -270,10 +293,6 @@ func applyCorrections(documents map[string]any, directory string, pin manifest.S
 			}
 			afterNode, _ := valueAt(document, pointer)
 			after, err := canonicalDigest(afterNode)
-			if err != nil {
-				return nil, err
-			}
-			context, err := correctionContextDigest(pin, file+"#"+pointer, node)
 			if err != nil {
 				return nil, err
 			}
