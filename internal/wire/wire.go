@@ -394,7 +394,7 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 		if err != nil {
 			return nil, err
 		}
-		entries := make([]MapEntry, 0, length)
+		var entries []MapEntry
 		for index := uint64(0); index < length; index++ {
 			key, err := d.decodeNode(*node.Key)
 			if err != nil {
@@ -724,6 +724,10 @@ func (d *decoder) decodeLength(node *manifest.Node) (uint64, error) {
 	value, err := d.decodeNode(*node)
 	if err != nil {
 		return 0, err
+	}
+	rv := reflect.ValueOf(value)
+	if rv.IsValid() && rv.CanInt() && rv.Int() < 0 {
+		return 0, fmt.Errorf("negative collection length %d", rv.Int())
 	}
 	return integerValue(value)
 }
