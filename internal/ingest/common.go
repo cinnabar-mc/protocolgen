@@ -108,24 +108,6 @@ func asInt(value any) (int64, bool) {
 	}
 }
 
-func asFloat(value any) (float64, bool) {
-	switch number := value.(type) {
-	case int:
-		return float64(number), true
-	case int64:
-		return float64(number), true
-	case uint64:
-		return float64(number), true
-	case float64:
-		return number, true
-	case json.Number:
-		parsed, err := number.Float64()
-		return parsed, err == nil
-	default:
-		return 0, false
-	}
-}
-
 func asString(value any) string {
 	valueString, _ := value.(string)
 	return valueString
@@ -202,12 +184,12 @@ func replaceAt(root any, pointer string, replacement any) error {
 	return fmt.Errorf("invalid empty pointer %s", pointer)
 }
 
-// canonicalNumbers stabilizes numeric spellings without rounding int64 values.
+// canonicalNumbers stabilizes numeric spellings without rounding integers.
 func canonicalNumbers(value any) any {
 	switch typed := value.(type) {
 	case json.Number:
-		if integer, ok := asInt(typed); ok {
-			return integer
+		if rational, ok := new(big.Rat).SetString(string(typed)); ok && rational.IsInt() {
+			return json.Number(rational.Num().String())
 		}
 		if number, err := typed.Float64(); err == nil {
 			return number

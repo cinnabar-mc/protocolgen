@@ -1,6 +1,7 @@
 package ingest
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -330,9 +331,15 @@ func withMojangConstraints(node manifest.Node, schema map[string]any) manifest.N
 			*target = &converted
 		}
 	}
-	setFloat := func(key string, target **float64) {
-		if value, ok := asFloat(schema[key]); ok {
-			*target = &value
+	setNumber := func(key string, target **json.Number) {
+		if raw, ok := schema[key]; ok && raw != nil {
+			data, err := json.Marshal(canonicalNumbers(raw))
+			if err == nil && json.Valid(data) {
+				var value json.Number
+				if json.Unmarshal(data, &value) == nil {
+					*target = &value
+				}
+			}
 		}
 	}
 	setUint("minLength", &constraints.MinLength)
@@ -345,8 +352,8 @@ func withMojangConstraints(node manifest.Node, schema map[string]any) manifest.N
 		setUint("minProperties", &constraints.MinProperties)
 		setUint("maxProperties", &constraints.MaxProperties)
 	}
-	setFloat("minimum", &constraints.Minimum)
-	setFloat("maximum", &constraints.Maximum)
+	setNumber("minimum", &constraints.Minimum)
+	setNumber("maximum", &constraints.Maximum)
 	// Both sources also put prose descriptions in "pattern"; only a whole-string
 	// regular expression constrains the wire value.
 	if pattern := asString(schema["pattern"]); manifest.IsSchemaPattern(pattern) {

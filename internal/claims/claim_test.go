@@ -1,6 +1,7 @@
 package claims
 
 import (
+	"encoding/json"
 	"testing"
 
 	"protocolgen/internal/manifest"
@@ -28,7 +29,7 @@ func TestFingerprintIncludesCompleteClaimContext(t *testing.T) {
 }
 
 func TestWireFingerprintIgnoresSourceMetadataAndConstraints(t *testing.T) {
-	minimum := 1.0
+	minimum := json.Number("1")
 	left := Claim{
 		SourceID: "mojang",
 		Locator:  "old.json",

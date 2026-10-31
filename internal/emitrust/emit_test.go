@@ -1,6 +1,7 @@
 package emitrust
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -82,11 +83,11 @@ func TestGenerateRustEmitsSchemaConstraintChecks(t *testing.T) {
 	raw := manifest.Array(manifest.Primitive("var_u32"), manifest.Primitive("u8"))
 	raw.Constraints = &manifest.Constraints{MaxItems: pointerTo(uint64(4))}
 	number := manifest.Primitive("zigzag_i32")
-	number.Constraints = &manifest.Constraints{Minimum: pointerTo(-1.0), Maximum: pointerTo(64.0)}
+	number.Constraints = &manifest.Constraints{Minimum: pointerTo(json.Number("-1")), Maximum: pointerTo(json.Number("64"))}
 	decimal := manifest.Primitive("f32le")
-	decimal.Constraints = &manifest.Constraints{Minimum: pointerTo(0.0), Maximum: pointerTo(1.0)}
+	decimal.Constraints = &manifest.Constraints{Minimum: pointerTo(json.Number("0")), Maximum: pointerTo(json.Number("1"))}
 	largeInteger := manifest.Primitive("u32le")
-	largeInteger.Constraints = &manifest.Constraints{Maximum: pointerTo(4294967294.0)}
+	largeInteger.Constraints = &manifest.Constraints{Maximum: pointerTo(json.Number("4294967294"))}
 	m := manifest.Manifest{SchemaVersion: 2, Target: manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 1}, Sources: []manifest.SourcePin{{ID: "fixture", Kind: "synthetic", Revision: "1", Digest: "fixture", MinecraftVersion: "fixture", ProtocolVersion: 1}}, Packets: []manifest.Packet{{ID: 1, Name: "LimitsPacket", Direction: manifest.DirectionClientbound, Fields: []manifest.Field{
 		{Ordinal: 0, Name: "Text", Encode: text, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}},
 		{Ordinal: 1, Name: "Values", Encode: count, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}},

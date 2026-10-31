@@ -216,7 +216,7 @@ func (x *BedrockDDUIDataStoreChange) Marshal(io IO) {
 	io.StringLimits(&x.DataStoreName, 1, 1000)
 	io.StringLimits(&x.Property, 1, 1000)
 	io.Uint32(&x.UpdateCount)
-	Maximum(io, &x.UpdateCount, 4.294967294e+09)
+	Maximum(io, &x.UpdateCount, 4294967294)
 	MarshalDynamicValue(io, &x.TheNewPropertyValue)
 }
 
@@ -249,9 +249,9 @@ func (x *BedrockDDUIDataStoreUpdate) Marshal(io IO) {
 	io.StringLimits(&x.Path, 0, 1000)
 	MarshalBedrockDDUIDataStoreUpdateData(io, &x.Data)
 	io.Uint32(&x.PropertyUpdateCount)
-	Maximum(io, &x.PropertyUpdateCount, 4.294967294e+09)
+	Maximum(io, &x.PropertyUpdateCount, 4294967294)
 	io.Uint32(&x.PathUpdateCount)
-	Maximum(io, &x.PathUpdateCount, 4.294967294e+09)
+	Maximum(io, &x.PathUpdateCount, 4294967294)
 }
 
 type BellUsed struct {

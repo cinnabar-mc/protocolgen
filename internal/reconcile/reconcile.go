@@ -4,7 +4,9 @@
 package reconcile
 
 import (
+	"encoding/json"
 	"fmt"
+	"math/big"
 	"reflect"
 	"sort"
 	"strings"
@@ -684,31 +686,28 @@ func mergeConstraints(left, right *manifest.Constraints) (*manifest.Constraints,
 	mergeUint(&result.MaxItems, right.MaxItems, maximum)
 	mergeUint(&result.MinProperties, right.MinProperties, minimum)
 	mergeUint(&result.MaxProperties, right.MaxProperties, maximum)
-	mergeFloat := func(dst **float64, value *float64, choose func(float64, float64) float64) {
+	mergeNumber := func(dst **json.Number, value *json.Number, minimum bool) bool {
 		if value == nil {
-			return
+			return true
 		}
 		if *dst == nil {
 			*dst = value
-			return
+			return true
 		}
-		selected := choose(**dst, *value)
-		*dst = &selected
-	}
-	minimumFloat := func(left, right float64) float64 {
-		if left < right {
-			return left
+		leftValue, leftOK := new(big.Rat).SetString(string(**dst))
+		rightValue, rightOK := new(big.Rat).SetString(string(*value))
+		if !leftOK || !rightOK {
+			return false
 		}
-		return right
-	}
-	maximumFloat := func(left, right float64) float64 {
-		if left > right {
-			return left
+		comparison := rightValue.Cmp(leftValue)
+		if minimum && comparison < 0 || !minimum && comparison > 0 {
+			*dst = value
 		}
-		return right
+		return true
 	}
-	mergeFloat(&result.Minimum, right.Minimum, minimumFloat)
-	mergeFloat(&result.Maximum, right.Maximum, maximumFloat)
+	if !mergeNumber(&result.Minimum, right.Minimum, true) || !mergeNumber(&result.Maximum, right.Maximum, false) {
+		return nil, false
+	}
 	if result.Pattern != "" && right.Pattern != "" && result.Pattern != right.Pattern {
 		return nil, false
 	}

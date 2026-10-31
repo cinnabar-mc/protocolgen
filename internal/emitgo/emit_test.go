@@ -1,6 +1,7 @@
 package emitgo
 
 import (
+	"encoding/json"
 	"go/format"
 	"os"
 	"regexp"
@@ -89,7 +90,7 @@ func TestGenerateEmitsSchemaConstraintChecks(t *testing.T) {
 	raw := manifest.Array(manifest.Primitive("var_u32"), manifest.Primitive("u8"))
 	raw.Constraints = &manifest.Constraints{MaxItems: pointerTo(uint64(4))}
 	number := manifest.Primitive("zigzag_i32")
-	number.Constraints = &manifest.Constraints{Minimum: pointerTo(-1.0), Maximum: pointerTo(64.0)}
+	number.Constraints = &manifest.Constraints{Minimum: pointerTo(json.Number("-1")), Maximum: pointerTo(json.Number("64"))}
 	m := manifest.Manifest{SchemaVersion: 2, Target: manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 1}, Sources: []manifest.SourcePin{{ID: "fixture", Kind: "synthetic", Revision: "1", Digest: "fixture", MinecraftVersion: "fixture", ProtocolVersion: 1}}, Packets: []manifest.Packet{{ID: 1, Name: "LimitsPacket", Direction: manifest.DirectionClientbound, Fields: []manifest.Field{
 		{Ordinal: 0, Name: "Text", Encode: text, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}},
 		{Ordinal: 1, Name: "Values", Encode: count, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}},
