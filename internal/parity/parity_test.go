@@ -125,3 +125,65 @@ func TestNormalizationMatchesEmptyAndCountedBytes(t *testing.T) {
 		}
 	}
 }
+
+func TestRecursiveIdentityUsesTypeIDFallback(t *testing.T) {
+	want, err := normalizeAxolotlOps([]axolotlOp{{Kind: "recursive_reference", Field: "Value", TypeName: "Tree"}})
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, node := range []manifest.Node{{Kind: manifest.KindRecursive, TypeID: "Tree"}, {Kind: manifest.KindRecursive, Target: "Tree"}} {
+		got, err := normalizeNode("Value", node)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(want, got) {
+			t.Fatalf("recursive identity lost: %+v", got)
+		}
+	}
+}
+
+func TestBranchOrderDoesNotChangeParity(t *testing.T) {
+	primitive := manifest.Primitive("u8")
+	for _, conditional := range []bool{false, true} {
+		node := manifest.Union(primitive, manifest.Variant{Value: 1, Name: "One", Encode: primitive}, manifest.Variant{Value: 2, Name: "Two", Encode: manifest.Void()})
+		op := axolotlOp{Kind: "union", Field: "Value", Control: "U8", Variants: []axolotlVariant{{Value: 2, Name: "Two"}, {Value: 1, Name: "One", Operations: []axolotlOp{{Kind: "primitive", Field: "Value", Op: "U8"}}}}}
+		if conditional {
+			node = manifest.Node{Kind: manifest.KindConditional, CompareTo: "Mode", Cases: []manifest.Case{{Value: "1", Encode: []manifest.Node{primitive}}, {Value: "2"}}}
+			op = axolotlOp{Kind: "conditional", Field: "Value", CompareTo: "Mode", Cases: []axolotlCase{{Value: "2"}, {Value: "1", Operations: []axolotlOp{{Kind: "primitive", Field: "Value", Op: "U8"}}}}}
+		}
+		want, err := normalizeNode("Value", node)
+		if err != nil {
+			t.Fatal(err)
+		}
+		got, err := normalizeAxolotlOps([]axolotlOp{op})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if !reflect.DeepEqual(want, got) {
+			t.Errorf("branch order changed parity: %+v != %+v", want, got)
+		}
+		if conditional {
+			op.Cases[0].Value = "3"
+		} else {
+			op.Variants[0].Value = 3
+		}
+		changed, err := normalizeAxolotlOps([]axolotlOp{op})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if reflect.DeepEqual(want, changed) {
+			t.Fatal("changed discriminant was ignored")
+		}
+	}
+}
+
+func TestNormalizationRejectsDuplicateConditionalValues(t *testing.T) {
+	_, err := normalizeNode("Value", manifest.Node{Kind: manifest.KindConditional, CompareTo: "Mode", Cases: []manifest.Case{{Value: "1"}, {Value: "1"}}})
+	if err == nil {
+		t.Error("canonical duplicate conditional accepted")
+	}
+	_, err = normalizeAxolotlOps([]axolotlOp{{Kind: "conditional", Cases: []axolotlCase{{Value: "1"}, {Value: "1"}}}})
+	if err == nil {
+		t.Error("source duplicate conditional accepted")
+	}
+}
