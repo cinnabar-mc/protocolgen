@@ -21,6 +21,23 @@
       "fingerprint": "sha256:52d73bde7d7dbda537f82fed6dd9fa52d8c50976786245ff588e3e0e8fc4132e"
     },
     {
+      "id": 8,
+      "name": "ResourcePackClientResponsePacket",
+      "reason": "Extractor limitation: the canonical Response union accepts tags 0 through 3. The pinned marshal also rejects other tags through resourcePackResponseToString before writing the response name, but the extractor does not model the lookup-table bounds and leaves those tags in its default branch.",
+      "what_would_settle_it": "Retain the response-name lookup bounds in source extraction so tags outside the four-entry table do not become wire paths.",
+      "evidence": [
+        {
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical union lists the reviewed finite selector domain."
+        },
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/resource_pack_client_response.go",
+          "summary": "The pinned marshal and its selector checks establish the source-language comparison described above."
+        }
+      ],
+      "fingerprint": "sha256:5721b28a9240c2c5701b9f7ffae5f1c49895837868c08511aed5d3510d4cf37c"
+    },
+    {
       "id": 9,
       "name": "TextPacket",
       "reason": "Control-layout conflict with identical bytes: both 1.26.60 sources model the category byte as the var_u32 selector of a three-way body union whose cases start with the u8 message type, while the protocol 2225 Text marshal writes the category and type as two u8 bytes and dispatches on the type. Category values 0 to 2 encode as the same single byte either way.",
@@ -274,6 +291,23 @@
         }
       ],
       "fingerprint": "sha256:f30fde5f186926320c02bf569c192a436932023ab51a8cfd32100369c5dfbb95"
+    },
+    {
+      "id": 324,
+      "name": "PlayerVideoCapturePacket",
+      "reason": "Selector-domain conflict: the canonical Action union accepts only StartVideoCapture (0) and StopVideoCapture (1). The pinned marshal writes FrameRate and FilePrefix for action 0 and no payload for every other action, so its source language also includes action 2 and other unknown values.",
+      "what_would_settle_it": "Review the Action selector domain independently and either constrain the oracle marshal or represent the additional accepted tags in the canonical contract.",
+      "evidence": [
+        {
+          "locator": "generated/1.26.60/manifest.json",
+          "summary": "The canonical union lists the reviewed finite selector domain."
+        },
+        {
+          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/player_video_capture.go",
+          "summary": "The pinned marshal and its selector checks establish the source-language comparison described above."
+        }
+      ],
+      "fingerprint": "sha256:a0d1e3a5d6b5ffceb7edf715df11687a26b64a84af767a28fd796c69af340a0f"
     },
     {
       "id": 345,

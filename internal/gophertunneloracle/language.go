@@ -197,11 +197,71 @@ func variantMatches(manifestToken, sourceToken string) bool {
 	return true
 }
 
+// partitionVariantEdges gives both automata disjoint tag classes, including
+// the portion of each default branch beyond every explicitly mentioned tag.
+func partitionVariantEdges(automata ...*wireAutomaton) {
+	values := map[string]bool{}
+	hasWildcard := false
+	for _, automaton := range automata {
+		for _, edges := range automaton.edges {
+			for _, edge := range edges {
+				token := edge.atom.Token
+				if strings.HasPrefix(token, wildcardVariantPrefix) {
+					hasWildcard = true
+					for _, excluded := range strings.Split(strings.TrimPrefix(token, wildcardVariantPrefix), ",") {
+						if excluded != "" {
+							values["VARIANT:"+excluded] = true
+						}
+					}
+				} else if strings.HasPrefix(token, "VARIANT:") {
+					values[token] = true
+				}
+			}
+		}
+	}
+	if !hasWildcard {
+		return
+	}
+	tokens := make([]string, 0, len(values))
+	for token := range values {
+		tokens = append(tokens, token)
+	}
+	sort.Strings(tokens)
+	excluded := make([]string, len(tokens))
+	for index, token := range tokens {
+		excluded[index] = strings.TrimPrefix(token, "VARIANT:")
+	}
+	remaining := wildcardAtom(excluded, "")
+	for _, automaton := range automata {
+		for state, edges := range automaton.edges {
+			var partitioned []wireEdge
+			for _, edge := range edges {
+				if !strings.HasPrefix(edge.atom.Token, wildcardVariantPrefix) {
+					partitioned = append(partitioned, edge)
+					continue
+				}
+				for _, token := range tokens {
+					if variantMatches(token, edge.atom.Token) {
+						concrete := edge
+						concrete.atom.Token = token
+						concrete.atom.Display = "variant(" + strings.TrimPrefix(token, "VARIANT:") + ")"
+						partitioned = append(partitioned, concrete)
+					}
+				}
+				edge.atom.Token, edge.atom.Display = remaining.Token, remaining.Display
+				partitioned = append(partitioned, edge)
+			}
+			automaton.edges[state] = partitioned
+		}
+	}
+}
+
 // compareLanguages decides whether two wire languages are equal and returns a
 // deterministic witness when they are not.
 func compareLanguages(want, got shapeExpr) *languageWitness {
 	manifest := buildAutomaton(want)
 	source := buildAutomaton(got)
+	partitionVariantEdges(manifest, source)
 	type pair struct {
 		manifest []int
 		source   []int
@@ -238,35 +298,23 @@ func compareLanguages(want, got shapeExpr) *languageWitness {
 		}
 		var unmatchedManifest, unmatchedSource []outgoingToken
 		for _, token := range sortedTokens(manifestOut) {
-			matched := false
-			for _, sourceToken := range sortedTokens(sourceOut) {
-				if !variantMatches(token, sourceToken) {
-					continue
-				}
-				matched = true
-				nextManifest := manifest.closure(manifestOut[token].targets)
-				nextSource := source.closure(sourceOut[sourceToken].targets)
-				key := stateKey(nextManifest) + "|" + stateKey(nextSource)
-				if seen[key] {
-					continue
-				}
-				seen[key] = true
-				queue = append(queue, pair{manifest: nextManifest, source: nextSource, parent: index, atom: manifestOut[token].atom})
-			}
+			sourceEdge, matched := sourceOut[token]
 			if !matched {
 				unmatchedManifest = append(unmatchedManifest, manifestOut[token])
+				continue
 			}
+			nextManifest := manifest.closure(manifestOut[token].targets)
+			nextSource := source.closure(sourceEdge.targets)
+			key := stateKey(nextManifest) + "|" + stateKey(nextSource)
+			if seen[key] {
+				continue
+			}
+			seen[key] = true
+			queue = append(queue, pair{manifest: nextManifest, source: nextSource, parent: index, atom: manifestOut[token].atom})
 		}
-		for _, sourceToken := range sortedTokens(sourceOut) {
-			matched := false
-			for _, token := range sortedTokens(manifestOut) {
-				if variantMatches(token, sourceToken) {
-					matched = true
-					break
-				}
-			}
-			if !matched {
-				unmatchedSource = append(unmatchedSource, sourceOut[sourceToken])
+		for _, token := range sortedTokens(sourceOut) {
+			if _, matched := manifestOut[token]; !matched {
+				unmatchedSource = append(unmatchedSource, sourceOut[token])
 			}
 		}
 		if len(unmatchedManifest) == 0 && len(unmatchedSource) == 0 {
