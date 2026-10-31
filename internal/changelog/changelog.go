@@ -442,18 +442,11 @@ func fieldType(p property) string {
 		base = "float"
 	}
 	if p.Type == "array" {
-		if r, ok := p.Items["$ref"].(string); ok {
-			base = "array of " + refName(r)
-		} else {
-			itemType, _ := p.Items["x-underlying-type"].(string)
-			if itemType == "" {
-				itemType, _ = p.Items["type"].(string)
-			}
-			base = "array"
-			if itemType != "" {
-				base += " of " + itemType
-			}
-		}
+		itemType, _ := p.Items["type"].(string)
+		itemUnderlying, _ := p.Items["x-underlying-type"].(string)
+		itemRef, _ := p.Items["$ref"].(string)
+		itemItems, _ := p.Items["items"].(map[string]interface{})
+		base = "array of " + fieldType(property{Type: itemType, Underlying: itemUnderlying, Ref: itemRef, Items: itemItems, Raw: p.Items})
 	}
 	if base == "" {
 		base = "untyped"
@@ -498,6 +491,14 @@ func compareObjects(name, kind string, before, after *schema) change {
 		if bf.Type != af.Type {
 			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` type changed from %s to %s", af.Name, bf.Type, af.Type))
 			c.Wire = true
+		}
+		if bf.Type == af.Type && bf.Raw["type"] == "array" && af.Raw["type"] == "array" {
+			beforeItems, _ := bf.Raw["items"].(map[string]interface{})
+			afterItems, _ := af.Raw["items"].(map[string]interface{})
+			if !equalWire(beforeItems, afterItems) {
+				c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` item encoding changed", af.Name))
+				c.Wire = true
+			}
 		}
 		if bf.Optional != af.Optional {
 			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` changed from %s to %s", af.Name, requirement(bf.Optional), requirement(af.Optional)))
