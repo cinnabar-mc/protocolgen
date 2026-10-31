@@ -521,16 +521,16 @@ func (d *decoder) decodePrimitive(code string) (any, error) {
 			return value, nil
 		}
 	case "var_i32":
-		value, err := d.readUvarint()
+		value, err := d.readUvarint32()
 		return int32(value), err
 	case "var_u32":
-		value, err := d.readUvarint()
+		value, err := d.readUvarint32()
 		return uint32(value), err
 	case "var_i64":
 		value, err := d.readUvarint()
 		return int64(value), err
 	case "zigzag_i32":
-		value, err := d.readUvarint()
+		value, err := d.readUvarint32()
 		return int32((value >> 1) ^ uint64(-int64(value&1))), err
 	case "zigzag_i64":
 		value, err := d.readUvarint()
@@ -739,19 +739,26 @@ func (d *decoder) take(length uint64) ([]byte, error) {
 
 func (d *decoder) remaining() int { return len(d.data) - d.off }
 
-func (d *decoder) readUvarint() (uint64, error) {
+// readUvarint32 applies the 32-bit payload and encoded-width limits.
+func (d *decoder) readUvarint32() (uint64, error) { return d.readUvarintBits(32) }
+
+// readUvarint applies the 64-bit payload and encoded-width limits.
+func (d *decoder) readUvarint() (uint64, error) { return d.readUvarintBits(64) }
+
+// readUvarintBits rejects payload bits and continuation beyond the target width.
+func (d *decoder) readUvarintBits(width uint) (uint64, error) {
 	var value uint64
-	for index := 0; index < 10; index++ {
+	for shift := uint(0); shift < width; shift += 7 {
 		data, err := d.take(1)
 		if err != nil {
 			return 0, err
 		}
-		byteValue := data[0]
-		if index == 9 && byteValue > 1 {
+		b := data[0]
+		if width-shift < 7 && b>>(width-shift) != 0 {
 			return 0, fmt.Errorf("varint overflow")
 		}
-		value |= uint64(byteValue&0x7f) << (7 * index)
-		if byteValue&0x80 == 0 {
+		value |= uint64(b&0x7f) << shift
+		if b&0x80 == 0 {
 			return value, nil
 		}
 	}
