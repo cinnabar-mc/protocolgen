@@ -168,6 +168,9 @@ func nodePointerWithoutValidationConstraints(node *manifest.Node) *manifest.Node
 func wireNode(node manifest.Node) manifest.Node {
 	node = nodeWithoutValidationConstraints(node)
 	node.Semantic = ""
+	if node.Kind == manifest.KindRecursive && node.Target == "" {
+		node.Target = node.TypeID
+	}
 	node.TypeID = ""
 	node.Reason = ""
 	node.Prefix = wireNodePointer(node.Prefix)
