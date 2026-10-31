@@ -165,7 +165,7 @@ func defaultNormalization() Normalization {
 		Strings:       "A length-prefixed UTF-8 string and a length-prefixed byte slice with the same prefix are wire-equivalent.",
 		ByteArrays:    "A prefixed array of single u8 elements is equivalent to a byte slice with the same prefix.",
 		UUID:          "UUID is compared as 16 bytes at its wire position; gophertunnel's internal UUID byte ordering is intentionally not validated.",
-		PreencodedNBT: "RawBytes named SerialisedOffers, SerialisedInventoryData, SerialisedEntityIdentifiers, or SerialisedEventData normalize to nbt_le.",
+		PreencodedNBT: "RawBytes remain unresolved unless their encoding can be established from source.",
 		Colour:        "A little-endian 32-bit colour int and gophertunnel's BEARGB (channels swapped, then big-endian) are the same four bytes.",
 		Preserved: []string{
 			"integer width",
@@ -224,15 +224,6 @@ func isManifestU8(node manifest.Node) bool {
 
 func isSourceU8(operations []sourceOperation) bool {
 	return len(operations) == 1 && operations[0].Kind == "primitive" && operations[0].Code == "u8"
-}
-
-func isPreencodedNBTField(field string) bool {
-	for _, suffix := range []string{"SerialisedOffers", "SerialisedInventoryData", "SerialisedEntityIdentifiers", "SerialisedEventData"} {
-		if strings.HasSuffix(field, suffix) {
-			return true
-		}
-	}
-	return false
 }
 
 func atomDisplays(atoms []atom) []string {

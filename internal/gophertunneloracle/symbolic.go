@@ -111,7 +111,7 @@ func repeatExpr(expression shapeExpr, count uint64) shapeExpr {
 // optionalExpr is the wire shape shared by manifest optionals and bool-guarded
 // gophertunnel fields: the presence flag followed by the value or nothing.
 func optionalExpr(presence atom, value shapeExpr) shapeExpr {
-	return concatExpr(atomExpr(presence), altExpr(emptyExpr(), value))
+	return concatExpr(atomExpr(presence), altExpr(atomExpr(variantAtom(0, presence.Field)), concatExpr(atomExpr(variantAtom(1, presence.Field)), value)))
 }
 
 func expressionKey(expression shapeExpr) string {
@@ -153,6 +153,9 @@ func canonicalPacketExpr(packet manifest.Packet) shapeExpr {
 	ctx := &canonicalContext{ancestors: map[string]manifest.Node{}, depth: map[string]int{}}
 	parts := make([]shapeExpr, 0, len(fields))
 	for _, field := range fields {
+		if field.Decode != nil {
+			return unknownExpr("manifest: decode override at " + field.Name + " is not verified by the writer oracle")
+		}
 		parts = append(parts, ctx.node(field.Name, field.Encode))
 	}
 	return concatExpr(parts...)
@@ -181,6 +184,9 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 		}
 		if node.Primitive.Code == "uuid" {
 			return atomExpr(atom{Token: "UUID16", Field: path, Display: "uuid(16 bytes)"})
+		}
+		if node.Primitive.Code == "nbt_le" {
+			return nbtExpr(node.Encoding, path, "manifest")
 		}
 		return atomExpr(primitiveAtom(node.Primitive.Code, path, node.Primitive.Code))
 	case manifest.KindEnum:
@@ -243,6 +249,9 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 		sort.SliceStable(fields, func(i, j int) bool { return fields[i].Ordinal < fields[j].Ordinal })
 		parts := make([]shapeExpr, 0, len(fields))
 		for _, field := range fields {
+			if field.Decode != nil {
+				return unknownExpr("manifest: decode override at " + path + "." + field.Name + " is not verified by the writer oracle")
+			}
 			parts = append(parts, ctx.node(path+"."+field.Name, field.Encode))
 		}
 		return concatExpr(parts...)
@@ -267,6 +276,9 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 		}
 		branches := make([]shapeExpr, 0, len(node.Variants))
 		for _, variant := range node.Variants {
+			if variant.Decode != nil {
+				return unknownExpr("manifest: variant decode override at " + path + " is not verified by the writer oracle")
+			}
 			branches = append(branches, concatExpr(atomExpr(variantAtom(variant.Value, path)), ctx.node(path+".variant", variant.Encode)))
 		}
 		if len(branches) == 0 {
@@ -274,21 +286,7 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 		}
 		return concatExpr(atomExpr(primitiveAtom(control, path, "union(control="+control+")")), altExpr(branches...))
 	case manifest.KindConditional:
-		branches := make([]shapeExpr, 0, len(node.Cases)+1)
-		for index, oneCase := range node.Cases {
-			parts := make([]shapeExpr, 0, len(oneCase.Encode))
-			for childIndex, child := range oneCase.Encode {
-				parts = append(parts, ctx.node(fmt.Sprintf("%s.case[%d].%d", path, index, childIndex), child))
-			}
-			branches = append(branches, concatExpr(parts...))
-		}
-		if node.Default != nil {
-			branches = append(branches, ctx.node(path+".default", *node.Default))
-		}
-		if len(branches) == 0 {
-			return unknownExpr("manifest: conditional at " + path + " has no finite cases")
-		}
-		return altExpr(branches...)
+		return unknownExpr("manifest: conditional predicate at " + path + " cannot yet be bound to its controlling field " + node.CompareTo)
 	case manifest.KindReserved, manifest.KindIgnored:
 		if node.Element == nil {
 			return unknownExpr("manifest: compatibility node at " + path + " has no element")
@@ -318,7 +316,7 @@ func (ctx *canonicalContext) node(path string, node manifest.Node) shapeExpr {
 // after other fields compares as the union variant the manifest annotates on
 // the control read.
 func sourceSequenceExpr(operations []sourceOperation) shapeExpr {
-	operations = coalesceLengthPrefixes(operations)
+	operations = bindBooleanGuards(coalesceLengthPrefixes(operations))
 	if control, ok := earliestControl(operations); ok {
 		return hoistedExpr(operations, control)
 	}
@@ -327,6 +325,48 @@ func sourceSequenceExpr(operations []sourceOperation) shapeExpr {
 		parts = append(parts, sourceOperationExpr(operation))
 	}
 	return concatExpr(parts...)
+}
+
+// bindBooleanGuards retains both flag values before hoisting dependent payloads.
+func bindBooleanGuards(operations []sourceOperation) []sourceOperation {
+	result := append([]sourceOperation(nil), operations...)
+	for index, read := range result {
+		if read.Kind != "primitive" || read.Code != "bool" || read.Field == "" {
+			continue
+		}
+		for later := index + 1; later < len(result); later++ {
+			guard := result[later]
+			if guard.Kind != "conditional" || guard.CompareTo != read.Field || len(guard.Variants) != 1 {
+				continue
+			}
+			branch := guard.Variants[0]
+			if branch.Value != 0 && branch.Value != 1 {
+				continue
+			}
+			if len(branch.Values) > 1 {
+				continue
+			}
+			variants := make([]sourceVariant, 0, 2)
+			for value := int64(0); value <= 1; value++ {
+				ops := guard.Default
+				if (value == branch.Value) != branch.Negated {
+					ops = branch.Ops
+				}
+				variants = append(variants, sourceVariant{Value: value, Values: []int64{value}, Discriminant: true, Ops: ops})
+			}
+			guard.Kind, guard.Variants, guard.HasDefault, guard.Default = "switch", variants, false, nil
+			result[later] = guard
+		}
+	}
+	return result
+}
+
+// nbtExpr compares the encoding as well as the NBT primitive family.
+func nbtExpr(encoding, path, source string) shapeExpr {
+	if !manifest.ValidNBTEncoding(encoding) {
+		return unknownExpr(source + ": unknown NBT encoding at " + path)
+	}
+	return atomExpr(atom{Token: "P:nbt_le:" + encoding, Field: path, Display: "nbt(" + encoding + ")"})
 }
 
 // earliestControl finds the first primitive read that a later discriminated
@@ -521,8 +561,11 @@ func sourceOperationExpr(operation sourceOperation) shapeExpr {
 	switch operation.Kind {
 	case "primitive":
 		code := operation.Code
-		if code == "raw_bytes" && isPreencodedNBTField(path) {
-			code = "nbt_le"
+		if code == "raw_bytes" {
+			return unknownExpr("gophertunnel: raw byte encoding is not established at " + path)
+		}
+		if code == "nbt_le" {
+			return nbtExpr(operation.Encoding, path, "gophertunnel")
 		}
 		return atomExpr(primitiveAtom(code, path, code))
 	case "string", "bytes":
@@ -579,6 +622,9 @@ func sourceOperationExpr(operation sourceOperation) shapeExpr {
 				alternatives = append(alternatives, concatExpr(atomExpr(branch.marker), sourceSequenceExpr(branch.ops)))
 			}
 			return altExpr(alternatives...)
+		}
+		if operation.Kind == "conditional" {
+			return unknownExpr("gophertunnel: conditional predicate cannot be bound at " + operation.CompareTo)
 		}
 		branches := make([]shapeExpr, 0, len(operation.Variants)+1)
 		for _, variant := range operation.Variants {
