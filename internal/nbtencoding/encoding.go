@@ -6,7 +6,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 
 	"protocolgen/internal/manifest"
@@ -73,7 +72,7 @@ func (t Table) Apply(value *manifest.Manifest) error {
 				if entry.PacketID != packet.ID || entry.FieldOrdinal != field.Ordinal {
 					continue
 				}
-				node, err := nodeAt(&field.Encode, entry.Path)
+				node, err := nbtNodeAt(field, entry.Path)
 				if err != nil {
 					return fmt.Errorf("NBT field %d.%d path %q: %w", packet.ID, field.Ordinal, entry.Path, err)
 				}
@@ -118,7 +117,7 @@ func (t Table) Validate(target manifest.Target, packets []manifest.Packet) error
 		if field.Name != entry.FieldName {
 			return fmt.Errorf("NBT encoding table field %d.%d names %q, manifest names %q", entry.PacketID, entry.FieldOrdinal, entry.FieldName, field.Name)
 		}
-		node, err := nodeAt(&field.Encode, entry.Path)
+		node, err := nbtNodeAt(&field, entry.Path)
 		if err != nil {
 			return fmt.Errorf("NBT encoding table field %d.%d path %q: %w", entry.PacketID, entry.FieldOrdinal, entry.Path, err)
 		}
@@ -134,9 +133,7 @@ func (t Table) Validate(target manifest.Target, packets []manifest.Packet) error
 
 	for _, packet := range packets {
 		for _, field := range packet.Fields {
-			var nbtPaths []string
-			walkNBT(field.Encode, "encode", &nbtPaths)
-			for _, path := range nbtPaths {
+			for path := range nbtNodes(&field) {
 				key := fmt.Sprintf("%d/%d/%s", packet.ID, field.Ordinal, path)
 				if !seen[key] {
 					return fmt.Errorf("missing NBT encoding entry for packet %d field %d path %q", packet.ID, field.Ordinal, path)
@@ -177,147 +174,57 @@ func (t Table) validateShape() error {
 	return nil
 }
 
-func nodeAt(root *manifest.Node, path string) (*manifest.Node, error) {
-	if path == "encode" {
-		return root, nil
-	}
-	if !strings.HasPrefix(path, "encode.") {
-		return nil, fmt.Errorf("path must start with encode")
-	}
-	path = strings.TrimPrefix(path, "encode.")
-	node := root
-	for path != "" {
-		part, rest := nextPathPart(path)
-		switch {
-		case part == "prefix", part == "element", part == "value", part == "key", part == "control", part == "default":
-			child := childNode(*node, part)
-			if child == nil {
-				return nil, fmt.Errorf("node has no %s child", part)
-			}
-			node = child
-		case strings.HasPrefix(part, "fields["):
-			index, err := indexedPart(part, "fields")
-			if err != nil || index < 0 || index >= len(node.Fields) {
-				return nil, fmt.Errorf("invalid field selector %q", part)
-			}
-			if !strings.HasPrefix(rest, ".encode") {
-				return nil, fmt.Errorf("field selector %q must select encode", part)
-			}
-			node = &node.Fields[index].Encode
-			rest = strings.TrimPrefix(rest, ".encode")
-		case strings.HasPrefix(part, "elements["):
-			index, err := indexedPart(part, "elements")
-			if err != nil || index < 0 || index >= len(node.Elements) {
-				return nil, fmt.Errorf("invalid element selector %q", part)
-			}
-			node = &node.Elements[index]
-		case strings.HasPrefix(part, "variants["):
-			index, err := indexedPart(part, "variants")
-			if err != nil || index < 0 || index >= len(node.Variants) {
-				return nil, fmt.Errorf("invalid variant selector %q", part)
-			}
-			if !strings.HasPrefix(rest, ".encode") {
-				return nil, fmt.Errorf("variant selector %q must select encode", part)
-			}
-			node = &node.Variants[index].Encode
-			rest = strings.TrimPrefix(rest, ".encode")
-		case strings.HasPrefix(part, "cases["):
-			caseIndex, err := indexedPart(part, "cases")
-			if err != nil || caseIndex < 0 || caseIndex >= len(node.Cases) {
-				return nil, fmt.Errorf("invalid case selector %q", part)
-			}
-			if !strings.HasPrefix(rest, ".encode[") {
-				return nil, fmt.Errorf("case selector %q must select encode", part)
-			}
-			rest = strings.TrimPrefix(rest, ".encode[")
-			close := strings.IndexByte(rest, ']')
-			if close < 0 {
-				return nil, fmt.Errorf("invalid case encode selector in %q", part)
-			}
-			nodeIndex, err := strconv.Atoi(rest[:close])
-			if err != nil || nodeIndex < 0 || nodeIndex >= len(node.Cases[caseIndex].Encode) {
-				return nil, fmt.Errorf("invalid case encode selector in %q", part)
-			}
-			node = &node.Cases[caseIndex].Encode[nodeIndex]
-			rest = rest[close+1:]
-		default:
-			return nil, fmt.Errorf("unknown path component %q", part)
-		}
-		path = strings.TrimPrefix(rest, ".")
+// nbtNodeAt accepts only canonical paths produced by the coverage traversal.
+func nbtNodeAt(field *manifest.Field, path string) (*manifest.Node, error) {
+	node, ok := nbtNodes(field)[path]
+	if !ok {
+		return nil, fmt.Errorf("path %q does not name an NBT node", path)
 	}
 	return node, nil
 }
 
-func nextPathPart(path string) (string, string) {
-	if dot := strings.IndexByte(path, '.'); dot >= 0 {
-		return path[:dot], path[dot:]
-	}
-	return path, ""
-}
-
-func indexedPart(part, name string) (int, error) {
-	prefix := name + "["
-	if !strings.HasPrefix(part, prefix) || !strings.HasSuffix(part, "]") {
-		return 0, fmt.Errorf("invalid selector")
-	}
-	return strconv.Atoi(part[len(prefix) : len(part)-1])
-}
-
-func childNode(node manifest.Node, name string) *manifest.Node {
-	switch name {
-	case "prefix":
-		return node.Prefix
-	case "element":
-		return node.Element
-	case "value":
-		return node.Value
-	case "key":
-		return node.Key
-	case "control":
-		return node.Control
-	case "default":
-		return node.Default
-	default:
-		return nil
-	}
-}
-
-func walkNBT(node manifest.Node, path string, result *[]string) {
-	if manifest.IsNBT(node) {
-		*result = append(*result, path)
-	}
-	if node.Prefix != nil {
-		walkNBT(*node.Prefix, path+".prefix", result)
-	}
-	if node.Element != nil {
-		walkNBT(*node.Element, path+".element", result)
-	}
-	if node.Value != nil {
-		walkNBT(*node.Value, path+".value", result)
-	}
-	if node.Key != nil {
-		walkNBT(*node.Key, path+".key", result)
-	}
-	if node.Control != nil {
-		walkNBT(*node.Control, path+".control", result)
-	}
-	if node.Default != nil {
-		walkNBT(*node.Default, path+".default", result)
-	}
-	for index := range node.Elements {
-		walkNBT(node.Elements[index], fmt.Sprintf("%s.elements[%d]", path, index), result)
-	}
-	for index := range node.Fields {
-		walkNBT(node.Fields[index].Encode, fmt.Sprintf("%s.fields[%d].encode", path, index), result)
-	}
-	for index := range node.Variants {
-		walkNBT(node.Variants[index].Encode, fmt.Sprintf("%s.variants[%d].encode", path, index), result)
-	}
-	for caseIndex := range node.Cases {
-		for nodeIndex := range node.Cases[caseIndex].Encode {
-			walkNBT(node.Cases[caseIndex].Encode[nodeIndex], fmt.Sprintf("%s.cases[%d].encode[%d]", path, caseIndex, nodeIndex), result)
+// nbtNodes indexes encode and explicit decode nodes with the same path grammar.
+func nbtNodes(field *manifest.Field) map[string]*manifest.Node {
+	result := map[string]*manifest.Node{}
+	var walk func(*manifest.Node, string)
+	walk = func(node *manifest.Node, path string) {
+		if node == nil {
+			return
+		}
+		if manifest.IsNBT(*node) {
+			result[path] = node
+		}
+		for _, child := range []struct {
+			name string
+			node *manifest.Node
+		}{
+			{"prefix", node.Prefix}, {"element", node.Element}, {"value", node.Value}, {"key", node.Key}, {"control", node.Control}, {"default", node.Default},
+		} {
+			walk(child.node, path+"."+child.name)
+		}
+		for i := range node.Elements {
+			walk(&node.Elements[i], fmt.Sprintf("%s.elements[%d]", path, i))
+		}
+		for i := range node.Fields {
+			walk(&node.Fields[i].Encode, fmt.Sprintf("%s.fields[%d].encode", path, i))
+			walk(node.Fields[i].Decode, fmt.Sprintf("%s.fields[%d].decode", path, i))
+		}
+		for i := range node.Variants {
+			walk(&node.Variants[i].Encode, fmt.Sprintf("%s.variants[%d].encode", path, i))
+			walk(node.Variants[i].Decode, fmt.Sprintf("%s.variants[%d].decode", path, i))
+		}
+		for i := range node.Cases {
+			for j := range node.Cases[i].Encode {
+				walk(&node.Cases[i].Encode[j], fmt.Sprintf("%s.cases[%d].encode[%d]", path, i, j))
+			}
+			for j := range node.Cases[i].Decode {
+				walk(&node.Cases[i].Decode[j], fmt.Sprintf("%s.cases[%d].decode[%d]", path, i, j))
+			}
 		}
 	}
+	walk(&field.Encode, "encode")
+	walk(field.Decode, "decode")
+	return result
 }
 
 func isHex(value string) bool {
