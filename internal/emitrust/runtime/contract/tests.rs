@@ -14,6 +14,15 @@ mod runtime_tests {
     }
 
     /// Empty values consume no payload bytes but still obey the element limit.
+    /// Fixed-width counts enforce the same schema bounds as varints.
+    #[test]
+    fn fixed_width_collections_reject_excess_items() {
+        let input = [2, 0, 0, 0, 5, 0, 6, 0];
+        assert!(decode_collection_u32le_limits::<U16LE>(&mut Reader::new(&input), FieldId(0), 2, 0, 1).is_err());
+        let valid = [1, 0, 0, 0, 5, 0];
+        assert_eq!(decode_collection_u32le_limits::<U16LE>(&mut Reader::new(&valid), FieldId(0), 2, 0, 1).unwrap(), vec![U16LE(5)]);
+    }
+
     #[test]
     fn zero_byte_collections_obey_element_limits() {
         assert_eq!(Reader::new(&[]).checked_count(FieldId(0), 3, 0), Ok(3));

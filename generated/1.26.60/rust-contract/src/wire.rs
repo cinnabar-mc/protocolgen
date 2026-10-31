@@ -1176,6 +1176,19 @@ pub fn decode_collection_u32le<T: Decode>(
     decode_elements(reader, count)
 }
 
+/// Reads a fixed-width collection count under schema and reader bounds.
+pub fn decode_collection_u32le_limits<T: Decode>(
+    reader: &mut Reader<'_>,
+    field: FieldId,
+    min_element_size: usize,
+    minimum: u64,
+    maximum: u64,
+) -> DecodeResult<Vec<T>> {
+    let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+    let count = reader.checked_count_limits(field, declared, min_element_size, minimum, maximum)?;
+    decode_elements(reader, count)
+}
+
 /// Writes a `VarUInt`-prefixed map as ordered key/value pairs.
 pub fn encode_map<K: Encode, V: Encode>(
     writer: &mut Writer<'_>,
@@ -2058,6 +2071,22 @@ mod runtime_tests {
     }
 
     /// Empty values consume no payload bytes but still obey the element limit.
+    /// Fixed-width counts enforce the same schema bounds as varints.
+    #[test]
+    fn fixed_width_collections_reject_excess_items() {
+        let input = [2, 0, 0, 0, 5, 0, 6, 0];
+        assert!(
+            decode_collection_u32le_limits::<U16LE>(&mut Reader::new(&input), FieldId(0), 2, 0, 1)
+                .is_err()
+        );
+        let valid = [1, 0, 0, 0, 5, 0];
+        assert_eq!(
+            decode_collection_u32le_limits::<U16LE>(&mut Reader::new(&valid), FieldId(0), 2, 0, 1)
+                .unwrap(),
+            vec![U16LE(5)]
+        );
+    }
+
     #[test]
     fn zero_byte_collections_obey_element_limits() {
         assert_eq!(Reader::new(&[]).checked_count(FieldId(0), 3, 0), Ok(3));

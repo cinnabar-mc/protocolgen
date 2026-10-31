@@ -527,9 +527,9 @@ func (e *codecEmitter) decode(node manifest.Node, hint, site, indent string) (st
 		if err != nil {
 			return "", err
 		}
-		if _, _, bounded := arrayBounds(node); e.directlyDecodable(*node.Element) && !(bounded && helper != "decode_collection") {
-			if lower, upper, ok := arrayBounds(node); ok && helper == "decode_collection" {
-				return fmt.Sprintf("wire::decode_collection_limits::<%s>(reader, %s%d, %d, %d)?", element, e.fieldArg(site), min, lower, upper), nil
+		if e.directlyDecodable(*node.Element) {
+			if lower, upper, ok := arrayBounds(node); ok {
+				return fmt.Sprintf("wire::%s_limits::<%s>(reader, %s%d, %d, %d)?", helper, element, e.fieldArg(site), min, lower, upper), nil
 			}
 			return fmt.Sprintf("wire::%s::<%s>(reader, %s%d)?", helper, element, e.fieldArg(site), min), nil
 		}

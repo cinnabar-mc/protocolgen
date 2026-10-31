@@ -49,7 +49,7 @@ func TestCollectionConstraintsReachElementCodecs(t *testing.T) {
 			{"map-key", manifest.Map(manifest.Primitive("var_u32"), number, manifest.Primitive("u8")), "validate_number_limits"},
 			{"map-value", manifest.Map(manifest.Primitive("var_u32"), manifest.Primitive("u8"), number), "validate_number_limits"},
 			{"string", manifest.Array(manifest.Primitive("var_u32"), text), "decode_string_limits"},
-			{"fixed-prefix", fixed, "checked_count_limits"},
+			{"fixed-prefix", fixed, "decode_collection_u32le_limits"},
 		} {
 			t.Run(fmt.Sprintf("%d/%s", contract, tc.name), func(t *testing.T) {
 				files, err := GenerateFilesWithOptions(collectionFixture(tc.node), Options{CodecContract: contract})

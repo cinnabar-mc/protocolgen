@@ -1080,6 +1080,19 @@ pub fn decode_collection_u32le<T: Decode>(
     decode_elements(reader, count)
 }
 
+/// Reads a fixed-width collection count under schema and reader bounds.
+pub fn decode_collection_u32le_limits<T: Decode>(
+    reader: &mut Reader<'_>,
+    field: FieldId,
+    min_element_size: usize,
+    minimum: u64,
+    maximum: u64,
+) -> DecodeResult<Vec<T>> {
+    let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
+    let count = reader.checked_count_limits(field, declared, min_element_size, minimum, maximum)?;
+    decode_elements(reader, count)
+}
+
 /// Writes a `VarUInt`-prefixed map as ordered key/value pairs.
 pub fn encode_map<K: Encode, V: Encode>(
     writer: &mut Writer<'_>,

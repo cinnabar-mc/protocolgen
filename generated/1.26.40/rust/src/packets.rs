@@ -2877,15 +2877,8 @@ impl wire::Encode for MapInfoRequest {
 impl wire::Decode for MapInfoRequest {
     fn decode(reader: &mut wire::Reader<'_>) -> wire::DecodeResult<Self> {
         let map_unique_id = <ActorUniqueID as wire::Decode>::decode(reader)?;
-        let client_pixels_list = {
-            let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
-            let count = reader.checked_count_limits(declared, 6, 0, 16384)?;
-            let mut out: Vec<PixelRequest> = Vec::with_capacity(count);
-            for _ in 0..count {
-                out.push(<PixelRequest as wire::Decode>::decode(reader)?);
-            }
-            out
-        };
+        let client_pixels_list =
+            wire::decode_collection_u32le_limits::<PixelRequest>(reader, 6, 0, 16384)?;
         Ok(Self {
             map_unique_id,
             client_pixels_list,
@@ -4946,15 +4939,8 @@ impl wire::Decode for NetworkChunkPublisherUpdate {
             wire::validate_number_limits(value.0, Some(0), None)?;
             value
         };
-        let server_built_chunks_list = {
-            let declared = u64::from(u32::from_le_bytes(reader.read_bytes::<4>()?));
-            let count = reader.checked_count_limits(declared, 2, 0, 9216)?;
-            let mut out: Vec<ChunkPos> = Vec::with_capacity(count);
-            for _ in 0..count {
-                out.push(<ChunkPos as wire::Decode>::decode(reader)?);
-            }
-            out
-        };
+        let server_built_chunks_list =
+            wire::decode_collection_u32le_limits::<ChunkPos>(reader, 2, 0, 9216)?;
         Ok(Self {
             new_position_for_view,
             new_radius_for_view,
