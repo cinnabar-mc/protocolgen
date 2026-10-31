@@ -29,14 +29,23 @@ bool exportHeadlessVanillaData(const fs::path &base_path)
     const auto save_json = [&](const nlohmann::json &value, const char *name) {
         std::ofstream file(base_path / name);
         file << value;
+        file.close();
         return file.good();
     };
     const auto save_nbt = [&](const CompoundTag &value, const char *name) {
         std::string buffer;
         BigEndianStringByteOutput output(buffer);
         NbtIo::writeNamedTag("", value, output);
-        zstr::ofstream file((base_path / name).string(), std::ios::out | std::ios::binary);
-        file << buffer;
+        std::ofstream file(base_path / name, std::ios::out | std::ios::binary);
+        try {
+            zstr::ostream compressed(file);
+            compressed << buffer;
+            compressed.flush();
+        }
+        catch (const std::ios_base::failure &) {
+            return false;
+        }
+        file.close();
         return file.good();
     };
 
