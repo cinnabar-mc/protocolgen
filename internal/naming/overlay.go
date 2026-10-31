@@ -76,6 +76,9 @@ func ValidateRequiredEntries(m manifest.Manifest, overlay Overlay) error {
 	for _, packet := range m.Packets {
 		for _, field := range packet.Fields {
 			collectVariantArtifacts(field.Encode, "", overlay, seen)
+			if field.Decode != nil {
+				collectVariantArtifacts(*field.Decode, "", overlay, seen)
+			}
 		}
 	}
 	for typeID := range seen {
@@ -97,9 +100,15 @@ func collectVariantArtifacts(node manifest.Node, owner string, overlay Overlay, 
 			offenders[owner+" (variant "+variant.Name+")"] = true
 		}
 		collectVariantArtifacts(variant.Encode, owner, overlay, offenders)
+		if variant.Decode != nil {
+			collectVariantArtifacts(*variant.Decode, owner, overlay, offenders)
+		}
 	}
 	for _, field := range node.Fields {
 		collectVariantArtifacts(field.Encode, owner, overlay, offenders)
+		if field.Decode != nil {
+			collectVariantArtifacts(*field.Decode, owner, overlay, offenders)
+		}
 	}
 	for _, child := range []*manifest.Node{node.Prefix, node.Element, node.Value, node.Key, node.Control, node.Default} {
 		if child != nil {
@@ -110,7 +119,7 @@ func collectVariantArtifacts(node manifest.Node, owner string, overlay Overlay, 
 		collectVariantArtifacts(child, owner, overlay, offenders)
 	}
 	for _, oneCase := range node.Cases {
-		for _, child := range oneCase.Encode {
+		for _, child := range append(oneCase.Encode, oneCase.Decode...) {
 			collectVariantArtifacts(child, owner, overlay, offenders)
 		}
 	}

@@ -2,6 +2,7 @@
 package naming
 
 import (
+	"crypto/sha256"
 	"encoding/json"
 	"fmt"
 	"strings"
@@ -203,7 +204,8 @@ func UnionIdentity(node manifest.Node) string {
 	type variantIdentity struct {
 		Value  int64  `json:"value"`
 		Name   string `json:"name"`
-		TypeID string `json:"type_id,omitempty"`
+		Encode any    `json:"encode"`
+		Decode any    `json:"decode,omitempty"`
 	}
 	identity := struct {
 		Control  string            `json:"control"`
@@ -213,10 +215,22 @@ func UnionIdentity(node manifest.Node) string {
 		identity.Control = node.Control.Primitive.Code
 	}
 	for _, variant := range node.Variants {
-		identity.Variants = append(identity.Variants, variantIdentity{Value: variant.Value, Name: variant.Name, TypeID: variant.Encode.TypeID})
+		payload := variantIdentity{Value: variant.Value, Name: variant.Name, Encode: payloadIdentity(variant.Encode)}
+		if variant.Decode != nil {
+			payload.Decode = payloadIdentity(*variant.Decode)
+		}
+		identity.Variants = append(identity.Variants, payload)
 	}
 	encoded, _ := json.Marshal(identity)
-	return string(encoded)
+	return fmt.Sprintf("%x", sha256.Sum256(encoded))
+}
+
+// payloadIdentity preserves shared named types and distinguishes inline layouts.
+func payloadIdentity(node manifest.Node) any {
+	if node.TypeID != "" {
+		return node.TypeID
+	}
+	return node
 }
 
 // LooksLikeArtifact identifies names that must be explicitly reviewed.
@@ -224,12 +238,14 @@ func LooksLikeArtifact(value string) bool {
 	if strings.ContainsAny(value, "<>") {
 		return true
 	}
-	for _, word := range camelWords(value) {
-		if strings.HasPrefix(word, "Empty") && allDigits(word[len("Empty"):]) {
-			return true
-		}
-		if strings.HasPrefix(word, "T") && len(word) > 1 && allDigits(word[1:]) {
-			return true
+	for _, token := range strings.FieldsFunc(value, func(r rune) bool { return !unicode.IsLetter(r) && !unicode.IsDigit(r) }) {
+		for _, word := range camelWords(token) {
+			if strings.HasPrefix(word, "Empty") && allDigits(word[len("Empty"):]) {
+				return true
+			}
+			if strings.HasPrefix(word, "T") && len(word) > 1 && allDigits(word[1:]) {
+				return true
+			}
 		}
 	}
 	return false
