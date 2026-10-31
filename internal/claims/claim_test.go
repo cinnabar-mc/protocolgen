@@ -1,6 +1,7 @@
 package claims
 
 import (
+	"encoding/json"
 	"testing"
 
 	"protocolgen/internal/manifest"
@@ -28,7 +29,7 @@ func TestFingerprintIncludesCompleteClaimContext(t *testing.T) {
 }
 
 func TestWireFingerprintIgnoresSourceMetadataAndConstraints(t *testing.T) {
-	minimum := 1.0
+	minimum := json.Number("1")
 	left := Claim{
 		SourceID: "mojang",
 		Locator:  "old.json",
@@ -86,5 +87,33 @@ func TestWireFingerprintRetainsRecursiveReferences(t *testing.T) {
 		if leftField == rightField {
 			t.Fatal("field recursive references collapsed")
 		}
+	}
+}
+
+func TestWireFingerprintPreservesConditionalBindings(t *testing.T) {
+	node := manifest.Struct(
+		manifest.Field{Ordinal: 0, Name: "a", Encode: manifest.Primitive("u8")},
+		manifest.Field{Ordinal: 1, Name: "b", Encode: manifest.Primitive("u8")},
+		manifest.Field{Ordinal: 2, Name: "value", Encode: manifest.Node{Kind: manifest.KindConditional, CompareTo: "a", Cases: []manifest.Case{{Value: "1", Encode: []manifest.Node{manifest.Primitive("u16le")}}}}},
+	)
+	left, err := WireFingerprint(Claim{Encode: node})
+	if err != nil {
+		t.Fatal(err)
+	}
+	node.Fields[0].Name, node.Fields[1].Name = "b", "a"
+	swapped, err := WireFingerprint(Claim{Encode: node})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if left == swapped {
+		t.Fatal("discriminator rebinding did not change fingerprint")
+	}
+	node.Fields[2].Encode.CompareTo = "b"
+	renamed, err := WireFingerprint(Claim{Encode: node})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if left != renamed {
+		t.Fatal("consistent renaming changed fingerprint")
 	}
 }

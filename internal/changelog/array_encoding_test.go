@@ -40,3 +40,32 @@ func TestArrayItemConstraintsDoNotMoveWireLayout(t *testing.T) {
 		t.Fatalf("item validation reported as a byte layout change: %s", got)
 	}
 }
+
+func TestGenerateReportsOuterFieldEncodings(t *testing.T) {
+	for _, tc := range []struct {
+		name, before, after string
+		wire                bool
+	}{
+		{"fixed count", `"type":"array","minItems":2,"maxItems":2,"items":{"type":"boolean"}`, `"type":"array","minItems":3,"maxItems":3,"items":{"type":"boolean"}`, true},
+		{"prefix", `"type":"array","items":{"type":"boolean"}`, `"type":"array","x-valentine-array-count-type":"u32le","items":{"type":"boolean"}`, true},
+		{"validation", `"type":"array","maxItems":2,"items":{"type":"boolean"}`, `"type":"array","maxItems":3,"items":{"type":"boolean"}`, false},
+		{"object", `"type":"object","properties":{"Child":{"type":"boolean","x-ordinal-index":0}},"required":["Child"]`, `"type":"object","properties":{"Child":{"type":"string","x-ordinal-index":0}},"required":["Child"]`, true},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			from, to := t.TempDir(), t.TempDir()
+			for dir, field := range map[string]string{from: tc.before, to: tc.after} {
+				writeSchema(t, dir, "Example", objectSchema("1.0", 1, `"Value":{`+field+`,"x-ordinal-index":0}`, `"Value"`))
+			}
+			got, err := Generate(Config{FromDir: from, ToDir: to})
+			if err != nil {
+				t.Fatal(err)
+			}
+			if strings.Contains(string(got), "**wire break**") != tc.wire {
+				t.Fatalf("wire classification: %s", got)
+			}
+			if tc.wire && !strings.Contains(string(got), "encoding changed") {
+				t.Fatalf("missing encoding explanation: %s", got)
+			}
+		})
+	}
+}

@@ -69,7 +69,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:801de634955588d7dcce949014380dcde1cee24808967295b9685053502a0758"
+      "fingerprint": "sha256:2e10047fc52dcf8e6f0946c872d6a8972df33503f054584b3bf05ba4b2921c48"
     },
     {
       "id": 13,
@@ -222,7 +222,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:4442468209c94984e3a0656b57d96a8a5d56265d2e2aaed8d8659baad7c5eb6f"
+      "fingerprint": "sha256:0034c4fa3400aef919fb75ad22334e23a06319604e132a0238ce8cc5d8fed1e7"
     },
     {
       "id": 65,

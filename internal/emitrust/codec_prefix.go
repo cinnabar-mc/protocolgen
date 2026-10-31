@@ -1,8 +1,10 @@
 package emitrust
 
 import (
+	"encoding/json"
 	"fmt"
 	"math"
+	"math/big"
 
 	"protocolgen/internal/manifest"
 )
@@ -48,18 +50,34 @@ func withPrefixBounds(node manifest.Node) (manifest.Node, error) {
 		maximum = min(maximum, **upper)
 	}
 	prefix := node.Prefix.Constraints
-	if prefix.Minimum != nil && *prefix.Minimum > 0 {
-		if *prefix.Minimum > math.MaxUint32 {
-			return node, fmt.Errorf("prefix minimum exceeds %s range", code)
+	for _, bound := range []struct {
+		value   *json.Number
+		minimum bool
+	}{{prefix.Minimum, true}, {prefix.Maximum, false}} {
+		if bound.value == nil {
+			continue
 		}
-		minimum = max(minimum, uint64(*prefix.Minimum))
-	}
-	if prefix.Maximum != nil {
-		if *prefix.Maximum < 0 {
+		number, ok := new(big.Rat).SetString(string(*bound.value))
+		if !ok || !number.IsInt() {
+			return node, fmt.Errorf("prefix length bound must be an integer")
+		}
+		if number.Sign() < 0 {
+			if bound.minimum {
+				continue
+			}
 			return node, fmt.Errorf("prefix maximum is negative")
 		}
-		if *prefix.Maximum < math.MaxUint32 {
-			maximum = min(maximum, uint64(*prefix.Maximum))
+		if number.Cmp(big.NewRat(math.MaxUint32, 1)) > 0 {
+			if bound.minimum {
+				return node, fmt.Errorf("prefix minimum exceeds %s range", code)
+			}
+			continue
+		}
+		value := number.Num().Uint64()
+		if bound.minimum {
+			minimum = max(minimum, value)
+		} else {
+			maximum = min(maximum, value)
 		}
 	}
 	if minimum > maximum {

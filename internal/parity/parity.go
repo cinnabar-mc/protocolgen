@@ -242,6 +242,7 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 			}
 			variants = append(variants, normalizedVariant{Value: variant.Value, Name: variant.Name, Ops: children})
 		}
+		sort.Slice(variants, func(i, j int) bool { return variants[i].Value < variants[j].Value })
 		return []normalizedOp{{Kind: "union", Path: path, Code: control, Variants: variants}}, nil
 	case manifest.KindConditional:
 		cases := make([]normalizedCase, 0, len(node.Cases))
@@ -267,6 +268,9 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 				return nil, err
 			}
 		}
+		if err := normalizeCases(cases); err != nil {
+			return nil, err
+		}
 		return []normalizedOp{{Kind: "conditional", Path: path, CompareTo: node.CompareTo, Cases: cases, Default: defaultOps}}, nil
 	case manifest.KindEnum:
 		return []normalizedOp{{Kind: "primitive", Path: path, Code: node.Primitive.Code}}, nil
@@ -276,7 +280,7 @@ func normalizeNode(path string, node manifest.Node) ([]normalizedOp, error) {
 		}
 		return normalizeNode(path, *node.Element)
 	case manifest.KindRecursive:
-		return []normalizedOp{{Kind: "recursive", Path: path, Target: node.Target}}, nil
+		return []normalizedOp{{Kind: "recursive", Path: path, Target: recursiveTarget(node)}}, nil
 	case manifest.KindOpaque, manifest.KindUnresolved:
 		return nil, fmt.Errorf("%s node blocks parity: %s", node.Kind, node.Reason)
 	default:
@@ -346,6 +350,7 @@ func normalizeAxolotlOps(input []axolotlOp) ([]normalizedOp, error) {
 			if control == "" {
 				control = op.Op
 			}
+			sort.Slice(variants, func(i, j int) bool { return variants[i].Value < variants[j].Value })
 			result = append(result, normalizedOp{Kind: "union", Path: op.Field, Code: primitiveCodeName(control), Variants: variants})
 		case "conditional":
 			cases := make([]normalizedCase, 0, len(op.Cases))
@@ -358,6 +363,9 @@ func normalizeAxolotlOps(input []axolotlOp) ([]normalizedOp, error) {
 			}
 			defaultOps, err := normalizeAxolotlOps(op.Default)
 			if err != nil {
+				return nil, err
+			}
+			if err := normalizeCases(cases); err != nil {
 				return nil, err
 			}
 			result = append(result, normalizedOp{Kind: "conditional", Path: op.Field, CompareTo: op.CompareTo, Cases: cases, Default: defaultOps})
@@ -413,4 +421,23 @@ func prefixCodeName(name string) string {
 	default:
 		return primitiveCodeName(name)
 	}
+}
+
+// recursiveTarget follows the same identity fallback as manifest validation.
+func recursiveTarget(node manifest.Node) string {
+	if node.Target != "" {
+		return node.Target
+	}
+	return node.TypeID
+}
+
+// normalizeCases orders distinct discriminator values without changing branch operations.
+func normalizeCases(cases []normalizedCase) error {
+	sort.Slice(cases, func(i, j int) bool { return cases[i].Value < cases[j].Value })
+	for index := 1; index < len(cases); index++ {
+		if cases[index-1].Value == cases[index].Value {
+			return fmt.Errorf("duplicate conditional value %q", cases[index].Value)
+		}
+	}
+	return nil
 }

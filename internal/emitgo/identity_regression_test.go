@@ -1,6 +1,7 @@
 package emitgo
 
 import (
+	"encoding/json"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -131,7 +132,7 @@ func TestStructLayoutReuseIgnoresNonWireMetadata(t *testing.T) {
 	first.TypeID = "Shared"
 	second := manifest.Struct(manifest.Field{Name: "Value", Encode: manifest.Primitive("var_u32"), Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}})
 	second.TypeID = "Shared"
-	first.Fields[0].Encode.Constraints = &manifest.Constraints{Minimum: pointerTo(0.0)}
+	first.Fields[0].Encode.Constraints = &manifest.Constraints{Minimum: pointerTo(json.Number("0"))}
 	if _, err := Generate(identityFixture(first, second), "wiregen"); err != nil {
 		t.Fatal(err)
 	}

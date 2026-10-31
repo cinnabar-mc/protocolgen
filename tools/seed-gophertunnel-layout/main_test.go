@@ -61,3 +61,46 @@ const Bad = missing(1)
 		t.Fatalf("unsupported call accepted as %d", value)
 	}
 }
+
+func TestBuildIndexIncludesDecodeOnlyIdentities(t *testing.T) {
+	enumeration := manifest.Enum("u8", manifest.EnumValue{Name: "One", Value: 1})
+	enumeration.TypeID = "DecodeMode"
+	nested := manifest.Node{Kind: manifest.KindStruct, TypeID: "DecodeBody", Fields: []manifest.Field{{Name: "Mode", Encode: manifest.Primitive("u8"), Decode: &enumeration}}}
+	union := manifest.Node{Kind: manifest.KindUnion, Control: &enumeration, Variants: []manifest.Variant{{Name: "One", Value: 1, Encode: manifest.Void(), Decode: &nested}}}
+	m := manifest.Manifest{Packets: []manifest.Packet{{Name: "FixturePacket", Fields: []manifest.Field{{Name: "Value", Encode: manifest.Primitive("u8"), Decode: &union}}}}}
+	got, err := buildIndex(m, naming.Overlay{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	found := false
+	for _, owner := range got.owners {
+		found = found || owner.TypeID == "DecodeBody"
+	}
+	if !found || len(got.enums) != 1 {
+		t.Fatalf("decode identities missing: %+v", got)
+	}
+}
+
+func TestIdentifierFieldsIgnoresCallFormatting(t *testing.T) {
+	source := `package packet
+func (p *Fixture) Marshal(io IO) {
+ io.ActorRuntimeID( // runtime identity
+ &(p.Entity),
+ )
+ OptionalFunc(io,
+ &p.Unique,
+ io.ActorUniqueID,
+ )
+ io.ActorUniqueID(&p.Other)
+}`
+	file, err := parser.ParseFile(token.NewFileSet(), "fixture.go", source, 0)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := identifierFields(file.Decls[0].(*ast.FuncDecl))
+	for field, want := range map[string]string{"Fixture.Entity": "ActorRuntimeID", "Fixture.Unique": "ActorUniqueID", "Fixture.Other": "ActorUniqueID"} {
+		if got[field] != want {
+			t.Errorf("%s = %q, want %s", field, got[field], want)
+		}
+	}
+}

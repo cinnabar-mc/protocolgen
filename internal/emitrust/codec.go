@@ -1,7 +1,9 @@
 package emitrust
 
 import (
+	"encoding/json"
 	"fmt"
+	"math/big"
 	"strconv"
 	"strings"
 
@@ -636,14 +638,20 @@ func rustNumberExpression(node manifest.Node, expr string) (string, error) {
 	return expr + ".0", nil
 }
 
-func rustOptionNumber(node manifest.Node, value *float64) string {
+// rustOptionNumber preserves exact integer bounds in Rust numeric literals.
+func rustOptionNumber(node manifest.Node, value *json.Number) string {
 	if value == nil {
 		return "None"
 	}
-	literal := strconv.FormatFloat(*value, 'f', -1, 64)
+	literal := string(*value)
+	if rational, ok := new(big.Rat).SetString(literal); ok && rational.IsInt() {
+		literal = rational.Num().String()
+	}
 	if node.Primitive != nil {
 		switch node.Primitive.Code {
 		case "f32le", "f32be", "f64le", "f64be":
+			number, _ := value.Float64()
+			literal = strconv.FormatFloat(number, 'f', -1, 64)
 			if !strings.Contains(literal, ".") {
 				literal += ".0"
 			}

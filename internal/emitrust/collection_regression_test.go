@@ -1,6 +1,7 @@
 package emitrust
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
@@ -34,7 +35,7 @@ func TestCollectionMinimumUsesUnionPayload(t *testing.T) {
 
 func TestCollectionConstraintsReachElementCodecs(t *testing.T) {
 	number := manifest.Primitive("u16le")
-	number.Constraints = &manifest.Constraints{Maximum: pointerTo(4.0)}
+	number.Constraints = &manifest.Constraints{Maximum: pointerTo(json.Number("4"))}
 	text := manifest.String(manifest.Primitive("var_u32"))
 	text.Constraints = &manifest.Constraints{MaxLength: pointerTo(uint64(1))}
 	fixed := manifest.Array(manifest.Primitive("u32le"), manifest.Primitive("u16le"))
@@ -91,6 +92,15 @@ func TestUnsupportedCollectionPrefixesFailGeneration(t *testing.T) {
 			if _, err := GenerateFilesWithOptions(collectionFixture(node), Options{CodecContract: contract}); err == nil {
 				t.Errorf("%d/%s silently substitutes a prefix", contract, node.Kind)
 			}
+		}
+	}
+}
+
+func TestFloatBoundsNormalizeExponentNotation(t *testing.T) {
+	value := json.Number("1e-5")
+	for _, code := range []string{"f32le", "f64le"} {
+		if got := rustOptionNumber(manifest.Primitive(code), &value); got != "Some(0.00001)" {
+			t.Fatalf("%s bound = %s", code, got)
 		}
 	}
 }

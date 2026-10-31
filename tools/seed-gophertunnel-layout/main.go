@@ -17,7 +17,6 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
-	"regexp"
 	"sort"
 	"strings"
 	"unicode"
@@ -194,10 +193,20 @@ func buildIndex(m manifest.Manifest, overlay naming.Overlay) (index, error) {
 			if err := walk(field.Encode); err != nil {
 				return err
 			}
+			if field.Decode != nil {
+				if err := walk(*field.Decode); err != nil {
+					return err
+				}
+			}
 		}
 		for _, variant := range node.Variants {
 			if err := walk(variant.Encode); err != nil {
 				return err
+			}
+			if variant.Decode != nil {
+				if err := walk(*variant.Decode); err != nil {
+					return err
+				}
 			}
 		}
 		for _, child := range []*manifest.Node{node.Prefix, node.Element, node.Value, node.Key, node.Control, node.Default} {
@@ -236,6 +245,11 @@ func buildIndex(m manifest.Manifest, overlay naming.Overlay) (index, error) {
 		for _, field := range packet.Fields {
 			if err := walk(field.Encode); err != nil {
 				return index{}, err
+			}
+			if field.Decode != nil {
+				if err := walk(*field.Decode); err != nil {
+					return index{}, err
+				}
 			}
 		}
 	}
@@ -394,8 +408,6 @@ func parseFork(root string) (forkIndex, error) {
 	return result, nil
 }
 
-var identifierUse = regexp.MustCompile(`&(\w+)\.(\w+)`)
-
 // identifierFields finds the struct fields a function passes to an actor
 // identifier IO operation, keyed "Type.Field", through the function's
 // receiver and pointer parameters (Marshal methods and the Reader/Writer
@@ -426,24 +438,46 @@ func identifierFields(fn *ast.FuncDecl) map[string]string {
 	for _, field := range fn.Type.Params.List {
 		bind(field.Names, field.Type)
 	}
-	var body strings.Builder
-	_ = format.Node(&body, token.NewFileSet(), fn.Body)
-	for _, line := range strings.Split(body.String(), "\n") {
-		semantic := ""
-		switch {
-		case strings.Contains(line, "ActorUniqueID"):
-			semantic = semantics.ActorUniqueID
-		case strings.Contains(line, "ActorRuntimeID"):
-			semantic = semantics.ActorRuntimeID
-		default:
-			continue
+	ast.Inspect(fn.Body, func(node ast.Node) bool {
+		call, ok := node.(*ast.CallExpr)
+		if !ok {
+			return true
 		}
-		for _, match := range identifierUse.FindAllStringSubmatch(line, -1) {
-			if typ, ok := variables[match[1]]; ok {
-				result[typ+"."+match[2]] = semantic
+		semantic := ""
+		operation := func(expr ast.Expr) {
+			if selector, ok := ast.Unparen(expr).(*ast.SelectorExpr); ok {
+				switch selector.Sel.Name {
+				case semantics.ActorUniqueID, semantics.ActorRuntimeID:
+					semantic = selector.Sel.Name
+				}
 			}
 		}
-	}
+		operation(call.Fun)
+		for _, argument := range call.Args {
+			operation(argument)
+		}
+		if semantic == "" {
+			return true
+		}
+		for _, argument := range call.Args {
+			address, ok := ast.Unparen(argument).(*ast.UnaryExpr)
+			if !ok || address.Op != token.AND {
+				continue
+			}
+			selector, ok := ast.Unparen(address.X).(*ast.SelectorExpr)
+			if !ok {
+				continue
+			}
+			variable, ok := ast.Unparen(selector.X).(*ast.Ident)
+			if !ok {
+				continue
+			}
+			if typ, ok := variables[variable.Name]; ok {
+				result[typ+"."+selector.Sel.Name] = semantic
+			}
+		}
+		return true
+	})
 	return result
 }
 

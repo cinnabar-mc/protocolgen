@@ -1,6 +1,7 @@
 package reconcile
 
 import (
+	"encoding/json"
 	"strings"
 	"testing"
 
@@ -72,8 +73,10 @@ func TestReconcileWithDirectionsAppliesReviewedOverlay(t *testing.T) {
 			Evidence: direction.Evidence{Locator: "https://github.com/example/gophertunnel/blob/0123456789012345678901234567890123456789/minecraft/protocol/packet/pool.go", Summary: "The packet ID is registered in both direction pools."},
 		}},
 	}
+	unknown := testClaim("endstone", manifest.Primitive("u8"))
+	unknown.Direction = manifest.DirectionUnknown
 	m, err := ReconcileWithDirections(target, []claims.Result{
-		{Pin: sourcePin("endstone"), Target: target, Claims: []claims.Claim{testClaim("endstone", manifest.Primitive("u8"))}},
+		{Pin: sourcePin("endstone"), Target: target, Claims: []claims.Claim{unknown}},
 		{Pin: sourcePin("mojang"), Target: target, Claims: []claims.Claim{testClaim("mojang", manifest.Primitive("u8"))}},
 	}, nil, table)
 	if err != nil {
@@ -457,5 +460,78 @@ func TestReconcileAppliesNBTEncodingToAsymmetricDecode(t *testing.T) {
 	}
 	if m.Packets[0].Fields[0].Decode.Encoding != string(manifest.NBTNetwork) {
 		t.Fatal("decode encoding was not applied")
+	}
+}
+
+func TestReconcileResolvesUnknownFieldDirections(t *testing.T) {
+	target := manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 2168}
+	left, right := testClaim("endstone", manifest.Primitive("u8")), testClaim("mojang", manifest.Primitive("u8"))
+	left.Direction = manifest.DirectionUnknown
+	m, err := Reconcile(target, []claims.Result{{Pin: sourcePin("endstone"), Target: target, Claims: []claims.Claim{left}}, {Pin: sourcePin("mojang"), Target: target, Claims: []claims.Claim{right}}}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if m.Packets[0].Direction != right.Direction || len(m.Packets[0].Fields[0].Provenance.Pins) != 2 {
+		t.Fatalf("unknown direction lost agreement: %+v", m.Packets[0])
+	}
+}
+
+func TestNBTOverlayDoesNotAliasSourceClaims(t *testing.T) {
+	target := manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 2168}
+	var results []claims.Result
+	var fingerprints []string
+	for _, source := range []string{"endstone", "mojang"} {
+		nbt := manifest.Primitive("nbt_le")
+		encode := manifest.Array(manifest.Primitive("var_u32"), nbt)
+		decode := manifest.Array(manifest.Primitive("u16le"), nbt)
+		decode.Element = encode.Element
+		claim := testClaim(source, encode)
+		claim.Decode = &decode
+		claim.Symmetry = manifest.Asymmetric
+		fingerprints = append(fingerprints, mustFingerprint(t, claim))
+		results = append(results, claims.Result{Pin: sourcePin(source), Target: target, Claims: []claims.Claim{claim}})
+	}
+	encodings := nbtencoding.Table{SchemaVersion: nbtencoding.SchemaVersion, Target: target, Source: nbtencoding.Source{Repository: "https://example.invalid/oracle", Revision: strings.Repeat("a", 40), Locator: "fixture://encoding", SHA256: "sha256:" + strings.Repeat("b", 64)}}
+	for path, encoding := range map[string]manifest.NBTEncoding{"encode.element": manifest.NBTNetwork, "decode.element": manifest.NBTPersistent} {
+		encodings.Fields = append(encodings.Fields, nbtencoding.Entry{PacketID: 1, PacketName: "Vocabulary", FieldOrdinal: 0, FieldName: "Value", Path: path, Encoding: encoding, Evidence: nbtencoding.Evidence{Locator: "fixture://encoding", Summary: "explicit encoding"}})
+	}
+	m, err := reconcile(target, results, nil, nil, &encodings)
+	if err != nil {
+		t.Fatal(err)
+	}
+	field := m.Packets[0].Fields[0]
+	if field.Encode.Element.Encoding != string(manifest.NBTNetwork) || field.Decode.Element.Encoding != string(manifest.NBTPersistent) {
+		t.Fatalf("NBT encodings coupled: %+v / %+v", field.Encode.Element, field.Decode.Element)
+	}
+	for index, result := range results {
+		if mustFingerprint(t, result.Claims[0]) != fingerprints[index] {
+			t.Fatal("source claim mutated")
+		}
+	}
+}
+
+func TestReconcilePreservesConditionalSelectorBindings(t *testing.T) {
+	node := manifest.Struct(manifest.Field{Ordinal: 0, Name: "a", Encode: manifest.Primitive("u8")}, manifest.Field{Ordinal: 1, Name: "b", Encode: manifest.Primitive("u8")}, manifest.Field{Ordinal: 2, Name: "value", Encode: manifest.Node{Kind: manifest.KindConditional, CompareTo: "a", Cases: []manifest.Case{{Value: "1", Encode: []manifest.Node{manifest.Primitive("u16le")}}}}})
+	left := testClaim("endstone", node)
+	right := testClaim("mojang", node)
+	right.Encode.Fields = append([]manifest.Field(nil), node.Fields...)
+	right.Encode.Fields[0].Name, right.Encode.Fields[1].Name = "b", "a"
+	if _, pins, ok := mergeClaimGroupCandidate([]claims.Claim{left, right}); ok && len(pins) >= 2 {
+		t.Fatal("different selector bindings reached consensus")
+	}
+	right.Encode.Fields[2].Encode.CompareTo = "b"
+	if _, pins, ok := mergeClaimGroupCandidate([]claims.Claim{left, right}); !ok || len(pins) != 2 {
+		t.Fatal("consistent selector renaming did not merge")
+	}
+}
+
+func TestReconcileMergesExactNumericConstraints(t *testing.T) {
+	minimum, maximum := json.Number("0"), json.Number("64")
+	node := manifest.Primitive("var_u32")
+	node.Constraints = &manifest.Constraints{Minimum: &minimum, Maximum: &maximum}
+	left, right := testClaim("endstone", node), testClaim("mojang", node)
+	merged, pins, ok := mergeClaimGroupCandidate([]claims.Claim{left, right})
+	if !ok || len(pins) != 2 {
+		t.Fatalf("numeric agreement lost: merged=%+v, pins=%v, ok=%v", merged, pins, ok)
 	}
 }

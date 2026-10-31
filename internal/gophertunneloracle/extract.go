@@ -292,6 +292,7 @@ func ExtractAtRevision(root, revision string) (extraction, error) {
 	}
 	sort.Strings(keys)
 	packets := make([]sourcePacket, 0, len(keys))
+	seenIDs := map[uint32]string{}
 	for _, key := range keys {
 		idName := packetTypes[key]
 		id, ok := ids[idName]
@@ -300,6 +301,13 @@ func ExtractAtRevision(root, revision string) (extraction, error) {
 			e.addDiagnostic(nil, key, "", "packet ID constant could not be evaluated", idName)
 			continue
 		}
+		if id < 0 || uint64(id) > 1<<32-1 {
+			return extraction{}, fmt.Errorf("invalid packet ID %d for %s", id, key)
+		}
+		if previous, ok := seenIDs[uint32(id)]; ok {
+			return extraction{}, fmt.Errorf("duplicate packet ID %d for %s and %s", id, previous, key)
+		}
+		seenIDs[uint32(id)] = key
 		e.packet = shortType(key)
 		ops := e.expandType(key, e.packet, 0, map[string]bool{})
 		packets = append(packets, sourcePacket{ID: uint32(id), Name: e.packet, Operations: ops})
@@ -370,21 +378,20 @@ func (e *extractor) collectConstants(sf *sourceFile) {
 		if !ok || gen.Tok != token.CONST {
 			continue
 		}
-		var previous ast.Expr
+		var previous []ast.Expr
 		for i, spec := range gen.Specs {
 			valueSpec, ok := spec.(*ast.ValueSpec)
 			if !ok {
 				continue
 			}
 			if len(valueSpec.Values) > 0 {
-				previous = valueSpec.Values[0]
+				previous = valueSpec.Values
 			}
-			value, ok := e.evalConst(previous, i, sf.Pkg)
-			if !ok {
-				continue
-			}
-			for _, name := range valueSpec.Names {
-				if name.Name != "_" {
+			for index, name := range valueSpec.Names {
+				if name.Name == "_" || index >= len(previous) {
+					continue
+				}
+				if value, ok := e.evalConst(previous[index], i, sf.Pkg); ok {
 					e.consts[sf.Pkg+"."+name.Name] = value
 				}
 			}
@@ -609,7 +616,11 @@ func (e *extractor) expandType(key, field string, depth int, stack map[string]bo
 		return []sourceOperation{e.unresolved(nil, key, field, "recursion depth limit exceeded", key)}
 	}
 	if stack[key] {
-		return []sourceOperation{{Kind: "recursive", Field: field, TypeName: key, Reason: "recursive reference"}}
+		if e.recursion[key] >= recursionUnroll {
+			return []sourceOperation{{Kind: "recursive", Field: field, TypeName: key, Reason: "recursive reference"}}
+		}
+		e.recursion[key]++
+		defer func() { e.recursion[key]-- }()
 	}
 	method := e.marshalForType(key, map[string]bool{})
 	if method == nil {

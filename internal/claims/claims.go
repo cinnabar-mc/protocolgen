@@ -9,6 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"sort"
+	"strconv"
 
 	"protocolgen/internal/manifest"
 )
@@ -64,9 +65,9 @@ func WireFingerprint(claim Claim) (string, error) {
 	claim.Name = ""
 	claim.Semantic = ""
 	claim.TypeID = ""
-	claim.Encode = wireNode(claim.Encode)
+	claim.Encode = NormalizeWireNode(claim.Encode)
 	if claim.Decode != nil {
-		decoded := wireNode(*claim.Decode)
+		decoded := NormalizeWireNode(*claim.Decode)
 		claim.Decode = &decoded
 	}
 	return digest(claim)
@@ -164,23 +165,39 @@ func nodePointerWithoutValidationConstraints(node *manifest.Node) *manifest.Node
 	return &updated
 }
 
-// wireNode removes recursive source-facing metadata while retaining every byte-affecting node property.
-func wireNode(node manifest.Node) manifest.Node {
+// NormalizeWireNode removes source metadata while preserving wire properties and selector bindings.
+func NormalizeWireNode(node manifest.Node) manifest.Node { return wireNodeInScope(node, nil, "") }
+
+// wireNodeInScope binds conditional selectors to sibling ordinals before removing names.
+func wireNodeInScope(node manifest.Node, bindings map[string]string, path string) manifest.Node {
 	node = nodeWithoutValidationConstraints(node)
+	if node.Kind == manifest.KindStruct {
+		scope := make(map[string]string, len(bindings)+len(node.Fields))
+		for name, ordinal := range bindings {
+			scope[name] = ordinal
+		}
+		for _, field := range node.Fields {
+			scope[field.Name] = "#" + path + "/" + strconv.Itoa(field.Ordinal)
+		}
+		bindings = scope
+	}
+	if ordinal, ok := bindings[node.CompareTo]; ok && node.Kind == manifest.KindConditional {
+		node.CompareTo = ordinal
+	}
 	node.Semantic = ""
 	if node.Kind == manifest.KindRecursive && node.Target == "" {
 		node.Target = node.TypeID
 	}
 	node.TypeID = ""
 	node.Reason = ""
-	node.Prefix = wireNodePointer(node.Prefix)
-	node.Element = wireNodePointer(node.Element)
-	node.Value = wireNodePointer(node.Value)
-	node.Key = wireNodePointer(node.Key)
-	node.Control = wireNodePointer(node.Control)
-	node.Default = wireNodePointer(node.Default)
+	node.Prefix = wireNodePointerInScope(node.Prefix, bindings, path)
+	node.Element = wireNodePointerInScope(node.Element, bindings, path)
+	node.Value = wireNodePointerInScope(node.Value, bindings, path)
+	node.Key = wireNodePointerInScope(node.Key, bindings, path)
+	node.Control = wireNodePointerInScope(node.Control, bindings, path)
+	node.Default = wireNodePointerInScope(node.Default, bindings, path)
 	for index := range node.Elements {
-		node.Elements[index] = wireNode(node.Elements[index])
+		node.Elements[index] = wireNodeInScope(node.Elements[index], bindings, path)
 	}
 	for index := range node.Fields {
 		field := &node.Fields[index]
@@ -188,31 +205,31 @@ func wireNode(node manifest.Node) manifest.Node {
 		field.Semantic = ""
 		field.TypeID = ""
 		field.Provenance = manifest.Provenance{}
-		field.Encode = wireNode(field.Encode)
-		field.Decode = wireNodePointer(field.Decode)
+		field.Encode = wireNodeInScope(field.Encode, bindings, path+"/"+strconv.Itoa(field.Ordinal))
+		field.Decode = wireNodePointerInScope(field.Decode, bindings, path+"/"+strconv.Itoa(field.Ordinal))
 	}
 	for index := range node.Variants {
 		node.Variants[index].Name = ""
-		node.Variants[index].Encode = wireNode(node.Variants[index].Encode)
-		node.Variants[index].Decode = wireNodePointer(node.Variants[index].Decode)
+		node.Variants[index].Encode = wireNodeInScope(node.Variants[index].Encode, bindings, path)
+		node.Variants[index].Decode = wireNodePointerInScope(node.Variants[index].Decode, bindings, path)
 	}
 	for caseIndex := range node.Cases {
 		for index := range node.Cases[caseIndex].Encode {
-			node.Cases[caseIndex].Encode[index] = wireNode(node.Cases[caseIndex].Encode[index])
+			node.Cases[caseIndex].Encode[index] = wireNodeInScope(node.Cases[caseIndex].Encode[index], bindings, path)
 		}
 		for index := range node.Cases[caseIndex].Decode {
-			node.Cases[caseIndex].Decode[index] = wireNode(node.Cases[caseIndex].Decode[index])
+			node.Cases[caseIndex].Decode[index] = wireNodeInScope(node.Cases[caseIndex].Decode[index], bindings, path)
 		}
 	}
 	return node
 }
 
-// wireNodePointer strips metadata from an optional recursive node pointer.
-func wireNodePointer(node *manifest.Node) *manifest.Node {
+// wireNodePointerInScope strips metadata while retaining selector bindings.
+func wireNodePointerInScope(node *manifest.Node, bindings map[string]string, path string) *manifest.Node {
 	if node == nil {
 		return nil
 	}
-	updated := wireNode(*node)
+	updated := wireNodeInScope(*node, bindings, path)
 	return &updated
 }
 

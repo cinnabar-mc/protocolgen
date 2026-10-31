@@ -5,7 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	"math"
+	"math/big"
 	"net/url"
 	"reflect"
 	"regexp"
@@ -349,11 +349,21 @@ func validateConstraints(node Node, path string) error {
 	if err := checkBounds("properties", constraints.MinProperties, constraints.MaxProperties); err != nil {
 		return err
 	}
-	if constraints.Minimum != nil && (math.IsNaN(*constraints.Minimum) || math.IsInf(*constraints.Minimum, 0)) || constraints.Maximum != nil && (math.IsNaN(*constraints.Maximum) || math.IsInf(*constraints.Maximum, 0)) {
-		return fmt.Errorf("%s numeric constraints must be finite", path)
+	var minimum, maximum *big.Rat
+	for _, bound := range []struct {
+		value  *json.Number
+		target **big.Rat
+	}{{constraints.Minimum, &minimum}, {constraints.Maximum, &maximum}} {
+		if bound.value != nil {
+			parsed, ok := new(big.Rat).SetString(string(*bound.value))
+			if !ok || !json.Valid([]byte(*bound.value)) {
+				return fmt.Errorf("%s numeric constraints must be finite JSON numbers", path)
+			}
+			*bound.target = parsed
+		}
 	}
-	if constraints.Minimum != nil && constraints.Maximum != nil && *constraints.Minimum > *constraints.Maximum {
-		return fmt.Errorf("%s numeric minimum %g exceeds maximum %g", path, *constraints.Minimum, *constraints.Maximum)
+	if minimum != nil && maximum != nil && minimum.Cmp(maximum) > 0 {
+		return fmt.Errorf("%s numeric minimum %s exceeds maximum %s", path, *constraints.Minimum, *constraints.Maximum)
 	}
 	allowed := func(values ...*uint64) bool {
 		for _, value := range values {
@@ -391,7 +401,7 @@ func validateConstraints(node Node, path string) error {
 			return fmt.Errorf("%s numeric constraints require a numeric primitive", path)
 		}
 		if node.Primitive.Code != "f32le" && node.Primitive.Code != "f32be" && node.Primitive.Code != "f64le" && node.Primitive.Code != "f64be" {
-			if constraints.Minimum != nil && math.Trunc(*constraints.Minimum) != *constraints.Minimum || constraints.Maximum != nil && math.Trunc(*constraints.Maximum) != *constraints.Maximum {
+			if minimum != nil && !minimum.IsInt() || maximum != nil && !maximum.IsInt() {
 				return fmt.Errorf("%s integer constraints must use integral bounds", path)
 			}
 		}

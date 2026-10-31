@@ -1,6 +1,7 @@
 package emitrust
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"os/exec"
@@ -45,7 +46,7 @@ func TestGeneratedCodecRegressions(t *testing.T) {
 			fmt.Fprintf(&tests, "let data = %s;\nassert_eq!(Fixture::decode_exact(&data).unwrap(), value);\n}\n", encoded)
 			for _, code := range []string{"var_u32", "u32le"} {
 				prefix := manifest.Primitive(code)
-				prefix.Constraints = &manifest.Constraints{Minimum: pointerTo(2.0), Maximum: pointerTo(64.0)}
+				prefix.Constraints = &manifest.Constraints{Minimum: pointerTo(json.Number("2e0")), Maximum: pointerTo(json.Number("6.4e1"))}
 				for _, kind := range []string{"String", "Bytes", "ByteArray", "Array", "Map", "NestedString"} {
 					name := typeName(code) + kind
 					node := manifest.String(prefix)

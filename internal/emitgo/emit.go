@@ -5,14 +5,15 @@ package emitgo
 
 import (
 	"embed"
+	"encoding/json"
 	"fmt"
 	"go/format"
 	"go/parser"
 	"go/token"
 	"math"
+	"math/big"
 	"slices"
 	"sort"
-	"strconv"
 	"strings"
 	"unicode"
 
@@ -1485,11 +1486,32 @@ func (e *marshalEmitter) numberConstraints(b *strings.Builder, node manifest.Nod
 		return nil
 	}
 	low, high, bounded := wireRange(node)
-	if minimum := node.Constraints.Minimum; minimum != nil && !(bounded && *minimum <= low) {
-		fmt.Fprintf(b, "%s%s(io, %s, %s)\n", indent, e.runtime("Minimum"), address.address(expression), strconv.FormatFloat(*minimum, 'g', -1, 64))
-	}
-	if maximum := node.Constraints.Maximum; maximum != nil && !(bounded && *maximum >= high) {
-		fmt.Fprintf(b, "%s%s(io, %s, %s)\n", indent, e.runtime("Maximum"), address.address(expression), strconv.FormatFloat(*maximum, 'g', -1, 64))
+	for _, bound := range []struct {
+		value   *json.Number
+		helper  string
+		limit   float64
+		minimum bool
+	}{
+		{node.Constraints.Minimum, "Minimum", low, true}, {node.Constraints.Maximum, "Maximum", high, false},
+	} {
+		if bound.value == nil {
+			continue
+		}
+		number, ok := new(big.Rat).SetString(string(*bound.value))
+		if !ok {
+			return fmt.Errorf("invalid numeric bound %q", *bound.value)
+		}
+		if bounded {
+			comparison := number.Cmp(new(big.Rat).SetFloat64(bound.limit))
+			if bound.minimum && comparison <= 0 || !bound.minimum && comparison >= 0 {
+				continue
+			}
+		}
+		literal := string(*bound.value)
+		if number.IsInt() {
+			literal = number.Num().String()
+		}
+		fmt.Fprintf(b, "%s%s(io, %s, %s)\n", indent, e.runtime(bound.helper), address.address(expression), literal)
 	}
 	return nil
 }

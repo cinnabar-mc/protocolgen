@@ -22,9 +22,13 @@ checkout() {
   shift 2
   if [[ ! -d "$dir/.git" ]]; then
     git init --quiet "$dir"
-    git -C "$dir" remote add origin "$repository"
     git -C "$dir" config remote.origin.promisor true
     git -C "$dir" config remote.origin.partialclonefilter blob:none
+  fi
+  if git -C "$dir" remote get-url origin >/dev/null 2>&1; then
+    git -C "$dir" remote set-url origin "$repository"
+  else
+    git -C "$dir" remote add origin "$repository"
   fi
   git -C "$dir" sparse-checkout set --no-cone "$@"
   if [[ "$(git -C "$dir" rev-parse --verify --quiet HEAD 2>/dev/null || true)" == "$commit" ]]; then

@@ -1,6 +1,7 @@
 package ingest
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -53,7 +54,7 @@ func ParseMojang(root string, pin manifest.SourcePin, corrections string) (claim
 			continue
 		}
 		idValue, ok := asInt(meta["[cereal:packet]"])
-		if !ok || idValue < 0 {
+		if !ok || idValue < 0 || idValue > 1<<32-1 {
 			return claims.Result{}, fmt.Errorf("Mojang packet %s has invalid cereal packet id", file)
 		}
 		packets = append(packets, packetDoc{file: file, id: uint32(idValue)})
@@ -330,9 +331,15 @@ func withMojangConstraints(node manifest.Node, schema map[string]any) manifest.N
 			*target = &converted
 		}
 	}
-	setFloat := func(key string, target **float64) {
-		if value, ok := asFloat(schema[key]); ok {
-			*target = &value
+	setNumber := func(key string, target **json.Number) {
+		if raw, ok := schema[key]; ok && raw != nil {
+			data, err := json.Marshal(canonicalNumbers(raw))
+			if err == nil && json.Valid(data) {
+				var value json.Number
+				if json.Unmarshal(data, &value) == nil {
+					*target = &value
+				}
+			}
 		}
 	}
 	setUint("minLength", &constraints.MinLength)
@@ -341,12 +348,12 @@ func withMojangConstraints(node manifest.Node, schema map[string]any) manifest.N
 	setUint("maxItems", &constraints.MaxItems)
 	// JSON Schema property bounds do not constrain arrays. Some published
 	// packet schemas put maxProperties on an array; do not invent a wire bound.
-	if kind := asString(schema["type"]); kind == "object" || kind == "" {
+	if node.Kind == manifest.KindMap {
 		setUint("minProperties", &constraints.MinProperties)
 		setUint("maxProperties", &constraints.MaxProperties)
 	}
-	setFloat("minimum", &constraints.Minimum)
-	setFloat("maximum", &constraints.Maximum)
+	setNumber("minimum", &constraints.Minimum)
+	setNumber("maximum", &constraints.Maximum)
 	// Both sources also put prose descriptions in "pattern"; only a whole-string
 	// regular expression constrains the wire value.
 	if pattern := asString(schema["pattern"]); manifest.IsSchemaPattern(pattern) {
@@ -392,7 +399,7 @@ func (l *mojangLowerer) lowerReference(reference, file, hint string, context map
 		}
 	}
 	targetType := asString(targetObject["type"])
-	if targetType == "integer" || targetType == "number" || hasOption(context, "Enum-as-Value") || hasOption(targetObject, "Enum-as-Value") {
+	if targetType == "integer" || targetType == "number" || targetType == "array" || hasOption(context, "Enum-as-Value") || hasOption(targetObject, "Enum-as-Value") {
 		copyOfTarget := cloneMap(targetObject)
 		if underlying := asString(context["x-underlying-type"]); underlying != "" {
 			copyOfTarget["x-underlying-type"] = underlying
@@ -414,7 +421,7 @@ func (l *mojangLowerer) lowerReference(reference, file, hint string, context map
 }
 
 func mergeMojangConstraints(node manifest.Node, schema map[string]any) manifest.Node {
-	overlay := withMojangConstraints(manifest.Node{}, schema).Constraints
+	overlay := withMojangConstraints(manifest.Node{Kind: node.Kind}, schema).Constraints
 	if overlay == nil {
 		return node
 	}

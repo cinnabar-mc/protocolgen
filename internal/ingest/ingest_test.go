@@ -65,7 +65,7 @@ func TestMojangIngestionRetainsValidationConstraints(t *testing.T) {
 	}{
 		{"string", map[string]any{"type": "string", "minLength": 1, "maxLength": 65536, "pattern": "^[a-z]+$"}, manifest.Constraints{MinLength: pointerTo(uint64(1)), MaxLength: pointerTo(uint64(65536)), Pattern: "^[a-z]+$"}},
 		{"array", map[string]any{"type": "array", "items": map[string]any{"type": "integer", "x-underlying-type": "uint8"}, "minItems": 1, "maxItems": 4}, manifest.Constraints{MinItems: pointerTo(uint64(1)), MaxItems: pointerTo(uint64(4))}},
-		{"number", map[string]any{"type": "integer", "x-underlying-type": "int32", "minimum": -1.0, "maximum": 64.0}, manifest.Constraints{Minimum: pointerTo(-1.0), Maximum: pointerTo(64.0)}},
+		{"number", map[string]any{"type": "integer", "x-underlying-type": "int32", "minimum": -1.0, "maximum": 64.0}, manifest.Constraints{Minimum: pointerTo(json.Number("-1")), Maximum: pointerTo(json.Number("64"))}},
 		{"map", map[string]any{"type": "object", "additionalProperties": map[string]any{"type": "integer", "x-underlying-type": "uint8"}, "minProperties": 2, "maxProperties": 8}, manifest.Constraints{MinProperties: pointerTo(uint64(2)), MaxProperties: pointerTo(uint64(8))}},
 	}
 	for _, test := range tests {
@@ -381,7 +381,7 @@ func TestEndstoneFieldRetainsNestedValidationConstraints(t *testing.T) {
 			"additional_properties": map[string]any{"minimum": 0, "maximum": 100},
 		},
 	})
-	if mapNode.Constraints == nil || mapNode.Constraints.MaxProperties == nil || *mapNode.Constraints.MaxProperties != 255 || mapNode.Key == nil || mapNode.Key.Constraints == nil || mapNode.Key.Constraints.MaxLength == nil || *mapNode.Key.Constraints.MaxLength != 64 || mapNode.Value == nil || mapNode.Value.Constraints == nil || mapNode.Value.Constraints.Minimum == nil || *mapNode.Value.Constraints.Minimum != 0 || mapNode.Value.Constraints.Maximum == nil || *mapNode.Value.Constraints.Maximum != 100 {
+	if mapNode.Constraints == nil || mapNode.Constraints.MaxProperties == nil || *mapNode.Constraints.MaxProperties != 255 || mapNode.Key == nil || mapNode.Key.Constraints == nil || mapNode.Key.Constraints.MaxLength == nil || *mapNode.Key.Constraints.MaxLength != 64 || mapNode.Value == nil || mapNode.Value.Constraints == nil || mapNode.Value.Constraints.Minimum == nil || *mapNode.Value.Constraints.Minimum != "0" || mapNode.Value.Constraints.Maximum == nil || *mapNode.Value.Constraints.Maximum != "100" {
 		t.Fatalf("map constraints = %#v, key = %#v, value = %#v", mapNode.Constraints, mapNode.Key, mapNode.Value)
 	}
 }
