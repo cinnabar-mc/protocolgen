@@ -6,8 +6,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"math/big"
 	"os"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -286,11 +288,18 @@ func loadDir(dir string) (map[string]*schema, string, int, error) {
 			return nil, "", 0, err
 		}
 		var raw map[string]interface{}
-		if err := json.Unmarshal(data, &raw); err != nil {
+		decoder := json.NewDecoder(bytes.NewReader(data))
+		decoder.UseNumber()
+		if err := decoder.Decode(&raw); err != nil {
 			return nil, "", 0, fmt.Errorf("%s: %w", entry.Name(), err)
 		}
+		if len(bytes.TrimSpace(data[decoder.InputOffset():])) != 0 {
+			return nil, "", 0, fmt.Errorf("%s: unexpected trailing JSON data", entry.Name())
+		}
 		var s schema
-		if err := json.Unmarshal(data, &s); err != nil {
+		decoder = json.NewDecoder(bytes.NewReader(data))
+		decoder.UseNumber()
+		if err := decoder.Decode(&s); err != nil {
 			return nil, "", 0, fmt.Errorf("%s: %w", entry.Name(), err)
 		}
 		s.Name = strings.TrimSuffix(entry.Name(), ".json")
@@ -353,9 +362,11 @@ func packetID(s *schema) int {
 	return id
 }
 func packetIDValue(s *schema) (int, bool) {
-	v, ok := s.Meta["[cereal:packet]"].(float64)
-	return int(v), ok && v == float64(int(v)) && v >= 0
+	value, exists := s.Meta["[cereal:packet]"]
+	id, err := strconv.Atoi(number(value))
+	return id, exists && err == nil && id >= 0
 }
+
 func resolveRoot(s *schema, all map[string]*schema) *schema {
 	if target := all[refName(s.Ref)]; target != nil {
 		return target
@@ -364,12 +375,20 @@ func resolveRoot(s *schema, all map[string]*schema) *schema {
 }
 func refName(ref string) string { return strings.TrimSuffix(filepath.Base(ref), ".json") }
 
-func normalized(v interface{}) interface{} { return normalizeSchema(v, true) }
-func normalizeSchema(v interface{}, schemaKeywords bool) interface{} {
+func normalized(v interface{}) interface{} { return normalizeSchema(v, true, false) }
+func normalizeSchema(v interface{}, schemaKeywords, encodingOnly bool) interface{} {
 	switch x := v.(type) {
+	case json.Number:
+		return json.Number(number(x))
 	case map[string]interface{}:
 		out := map[string]interface{}{}
 		for k, child := range x {
+			if encodingOnly && schemaKeywords && slices.Contains(constraintKeywords, k) {
+				fixedArray := x["type"] == "array" && x["minItems"] != nil && number(x["minItems"]) == number(x["maxItems"])
+				if !fixedArray || k != "minItems" && k != "maxItems" {
+					continue
+				}
+			}
 			if schemaKeywords && k == "default" {
 				// Default presence affects wire optionality; its value does not change the codec.
 				out[k] = true
@@ -379,16 +398,16 @@ func normalizeSchema(v interface{}, schemaKeywords bool) interface{} {
 				continue
 			}
 			if k == "properties" {
-				out[k] = normalizeSchema(child, false)
+				out[k] = normalizeSchema(child, false, encodingOnly)
 			} else {
-				out[k] = normalizeSchema(child, true)
+				out[k] = normalizeSchema(child, true, encodingOnly)
 			}
 		}
 		return out
 	case []interface{}:
 		out := make([]interface{}, len(x))
 		for i := range x {
-			out[i] = normalizeSchema(x[i], true)
+			out[i] = normalizeSchema(x[i], true, encodingOnly)
 		}
 		return out
 	default:
@@ -398,6 +417,13 @@ func normalizeSchema(v interface{}, schemaKeywords bool) interface{} {
 func equalWire(a, b map[string]interface{}) bool {
 	aa, _ := json.Marshal(normalized(a))
 	bb, _ := json.Marshal(normalized(b))
+	return bytes.Equal(aa, bb)
+}
+
+// equalEncoding compares byte layouts while ignoring validation-only limits.
+func equalEncoding(a, b map[string]interface{}) bool {
+	aa, _ := json.Marshal(normalizeSchema(a, true, true))
+	bb, _ := json.Marshal(normalizeSchema(b, true, true))
 	return bytes.Equal(aa, bb)
 }
 
@@ -431,18 +457,11 @@ func fieldType(p property) string {
 		base = "float"
 	}
 	if p.Type == "array" {
-		if r, ok := p.Items["$ref"].(string); ok {
-			base = "array of " + refName(r)
-		} else {
-			itemType, _ := p.Items["x-underlying-type"].(string)
-			if itemType == "" {
-				itemType, _ = p.Items["type"].(string)
-			}
-			base = "array"
-			if itemType != "" {
-				base += " of " + itemType
-			}
-		}
+		itemType, _ := p.Items["type"].(string)
+		itemUnderlying, _ := p.Items["x-underlying-type"].(string)
+		itemRef, _ := p.Items["$ref"].(string)
+		itemItems, _ := p.Items["items"].(map[string]interface{})
+		base = "array of " + fieldType(property{Type: itemType, Underlying: itemUnderlying, Ref: itemRef, Items: itemItems, Raw: p.Items})
 	}
 	if base == "" {
 		base = "untyped"
@@ -488,6 +507,14 @@ func compareObjects(name, kind string, before, after *schema) change {
 			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` type changed from %s to %s", af.Name, bf.Type, af.Type))
 			c.Wire = true
 		}
+		if bf.Type == af.Type && bf.Raw["type"] == "array" && af.Raw["type"] == "array" {
+			beforeItems, _ := bf.Raw["items"].(map[string]interface{})
+			afterItems, _ := af.Raw["items"].(map[string]interface{})
+			if !equalEncoding(beforeItems, afterItems) {
+				c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` item encoding changed", af.Name))
+				c.Wire = true
+			}
+		}
 		if bf.Optional != af.Optional {
 			c.Bullets = append(c.Bullets, fmt.Sprintf("`%s` changed from %s to %s", af.Name, requirement(bf.Optional), requirement(af.Optional)))
 			c.Wire = true
@@ -510,9 +537,12 @@ func requirement(optional bool) string {
 	}
 	return "required"
 }
+
+var constraintKeywords = []string{"maximum", "minimum", "maxItems", "minItems", "maxLength", "minLength", "pattern"}
+
 func constraints(raw map[string]interface{}) string {
 	var parts []string
-	for _, k := range []string{"maximum", "minimum", "maxItems", "minItems", "maxLength", "minLength"} {
+	for _, k := range constraintKeywords {
 		if v, ok := raw[k]; ok {
 			parts = append(parts, k+"="+number(v))
 		}
@@ -520,6 +550,12 @@ func constraints(raw map[string]interface{}) string {
 	return strings.Join(parts, ", ")
 }
 func number(v interface{}) string {
+	if value, ok := v.(json.Number); ok {
+		if rational, ok := new(big.Rat).SetString(value.String()); ok && rational.IsInt() {
+			return rational.Num().String()
+		}
+		return value.String()
+	}
 	if f, ok := v.(float64); ok {
 		return strconv.FormatFloat(f, 'f', -1, 64)
 	}
@@ -548,7 +584,6 @@ func compareEnums(name string, before, after *schema) change {
 	}
 	if len(c.Bullets) == 0 && !equalStringSlices(before.Enum, after.Enum) {
 		c.Bullets = append(c.Bullets, fmt.Sprintf("value order changed from %s to %s", quotedList(before.Enum), quotedList(after.Enum)))
-		c.Wire = true
 	}
 	if before.Underlying != after.Underlying {
 		c.Bullets = append(c.Bullets, fmt.Sprintf("underlying type changed from %s to %s", before.Underlying, after.Underlying))
@@ -559,18 +594,16 @@ func compareEnums(name string, before, after *schema) change {
 	} else if len(before.EnumValues) != 0 && len(after.EnumValues) == 0 {
 		c.Bullets = append(c.Bullets, "explicit binary enum values removed")
 	}
-	if len(before.EnumValues) != 0 && len(after.EnumValues) != 0 {
-		beforeIndexes := enumIndexes(before.Enum)
-		for afterIndex, name := range after.Enum {
-			beforeIndex, exists := beforeIndexes[name]
-			if !exists {
-				continue
-			}
-			oldValue, newValue := enumValue(before, beforeIndex), enumValue(after, afterIndex)
-			if oldValue != newValue {
-				c.Bullets = append(c.Bullets, fmt.Sprintf("value `%s` changed from %s to %s", name, oldValue, newValue))
-				c.Wire = true
-			}
+	beforeIndexes := enumIndexes(before.Enum)
+	for afterIndex, name := range after.Enum {
+		beforeIndex, exists := beforeIndexes[name]
+		if !exists {
+			continue
+		}
+		oldValue, newValue := enumValue(before, beforeIndex), enumValue(after, afterIndex)
+		if oldValue != newValue {
+			c.Bullets = append(c.Bullets, fmt.Sprintf("value `%s` changed from %s to %s", name, oldValue, newValue))
+			c.Wire = true
 		}
 	}
 	return c
@@ -602,7 +635,7 @@ func packetDependencies(ps, all map[string]*schema) map[string]set {
 	out := map[string]set{}
 	for name, p := range ps {
 		seen := set{}
-		walkRefs(refName(p.Ref), all, seen)
+		walkRawRefs(p.Raw, func(ref string) { walkRefs(refName(ref), all, seen) })
 		out[name] = seen
 	}
 	return out
@@ -708,11 +741,13 @@ func fieldLabel(f field) string {
 func packetRenames(from, to map[string]*schema) map[string]string {
 	byID := map[int]string{}
 	for n, p := range from {
-		byID[packetID(p)] = n
+		if to[n] == nil {
+			byID[packetID(p)] = n
+		}
 	}
 	out := map[string]string{}
 	for n, p := range to {
-		if old := byID[packetID(p)]; old != "" && old != n {
+		if old := byID[packetID(p)]; old != "" && from[n] == nil {
 			out[old] = n
 		}
 	}
