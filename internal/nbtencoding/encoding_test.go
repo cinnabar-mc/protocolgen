@@ -76,3 +76,45 @@ func validSource() Source {
 func validEvidence() Evidence {
 	return Evidence{Locator: "packet/value.go", Summary: "network NBT"}
 }
+
+func TestApplyCoversDecodeOverridesAtEveryLevel(t *testing.T) {
+	for _, path := range []string{"decode", "encode.fields[0].decode", "encode.variants[0].decode", "encode.cases[0].decode[0]"} {
+		t.Run(path, func(t *testing.T) {
+			nbt := manifest.Primitive("nbt_le")
+			plain := manifest.Primitive("u8")
+			field := manifest.Field{Ordinal: 0, Name: "Value", Encode: plain, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}}
+			switch path {
+			case "decode":
+				field.Decode = &nbt
+				field.Symmetry = manifest.Asymmetric
+			case "encode.fields[0].decode":
+				inner := field
+				inner.Decode = &nbt
+				inner.Symmetry = manifest.Asymmetric
+				field.Encode = manifest.Struct(inner)
+			case "encode.variants[0].decode":
+				field.Encode = manifest.Union(plain, manifest.Variant{Value: 1, Name: "One", Encode: plain, Decode: &nbt})
+			case "encode.cases[0].decode[0]":
+				field.Encode = manifest.Node{Kind: manifest.KindConditional, CompareTo: "Mode", Cases: []manifest.Case{{Value: "1", Encode: []manifest.Node{plain}, Decode: []manifest.Node{nbt}}}}
+			}
+			target := manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 2168}
+			m := manifest.Manifest{SchemaVersion: manifest.SchemaVersion, Target: target, Sources: []manifest.SourcePin{{ID: "fixture", Kind: "synthetic", Revision: "fixture", Digest: "sha256:fixture"}}, Packets: []manifest.Packet{{ID: 1, Name: "Packet", Direction: manifest.DirectionClientbound, Fields: []manifest.Field{field}}}}
+			table := Table{SchemaVersion: SchemaVersion, Target: target, Source: validSource()}
+			if err := table.Validate(target, m.Packets); err == nil || !strings.Contains(err.Error(), "missing NBT encoding entry") {
+				t.Errorf("missing decode coverage error = %v", err)
+			}
+			table.Fields = []Entry{{PacketID: 1, PacketName: "Packet", FieldOrdinal: 0, FieldName: "Value", Path: path, Encoding: manifest.NBTNetwork, Evidence: validEvidence()}}
+			if err := table.Apply(&m); err != nil {
+				t.Fatal(err)
+			}
+			var paths []string
+			walkNBT(m.Packets[0].Fields[0].Encode, "encode", &paths)
+			if m.Packets[0].Fields[0].Decode != nil {
+				walkNBT(*m.Packets[0].Fields[0].Decode, "decode", &paths)
+			}
+			if len(paths) != 1 || paths[0] != path {
+				t.Fatalf("NBT paths = %v", paths)
+			}
+		})
+	}
+}

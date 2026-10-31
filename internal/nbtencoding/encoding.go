@@ -73,7 +73,7 @@ func (t Table) Apply(value *manifest.Manifest) error {
 				if entry.PacketID != packet.ID || entry.FieldOrdinal != field.Ordinal {
 					continue
 				}
-				node, err := nodeAt(&field.Encode, entry.Path)
+				node, err := nodeAt(field, entry.Path)
 				if err != nil {
 					return fmt.Errorf("NBT field %d.%d path %q: %w", packet.ID, field.Ordinal, entry.Path, err)
 				}
@@ -118,7 +118,7 @@ func (t Table) Validate(target manifest.Target, packets []manifest.Packet) error
 		if field.Name != entry.FieldName {
 			return fmt.Errorf("NBT encoding table field %d.%d names %q, manifest names %q", entry.PacketID, entry.FieldOrdinal, entry.FieldName, field.Name)
 		}
-		node, err := nodeAt(&field.Encode, entry.Path)
+		node, err := nodeAt(&field, entry.Path)
 		if err != nil {
 			return fmt.Errorf("NBT encoding table field %d.%d path %q: %w", entry.PacketID, entry.FieldOrdinal, entry.Path, err)
 		}
@@ -136,6 +136,9 @@ func (t Table) Validate(target manifest.Target, packets []manifest.Packet) error
 		for _, field := range packet.Fields {
 			var nbtPaths []string
 			walkNBT(field.Encode, "encode", &nbtPaths)
+			if field.Decode != nil {
+				walkNBT(*field.Decode, "decode", &nbtPaths)
+			}
 			for _, path := range nbtPaths {
 				key := fmt.Sprintf("%d/%d/%s", packet.ID, field.Ordinal, path)
 				if !seen[key] {
@@ -177,69 +180,77 @@ func (t Table) validateShape() error {
 	return nil
 }
 
-func nodeAt(root *manifest.Node, path string) (*manifest.Node, error) {
-	if path == "encode" {
-		return root, nil
+// selectShape consumes an explicit encode or decode path component.
+func selectShape(encode, decode *manifest.Node, path string) (*manifest.Node, string, error) {
+	part, rest := nextPathPart(path)
+	switch part {
+	case "encode":
+		return encode, strings.TrimPrefix(rest, "."), nil
+	case "decode":
+		if decode != nil {
+			return decode, strings.TrimPrefix(rest, "."), nil
+		}
+		return nil, "", fmt.Errorf("node has no decode override")
+	default:
+		return nil, "", fmt.Errorf("path must select encode or decode")
 	}
-	if !strings.HasPrefix(path, "encode.") {
-		return nil, fmt.Errorf("path must start with encode")
+}
+
+// nodeAt resolves an overlay path through explicit field and branch directions.
+func nodeAt(field *manifest.Field, path string) (*manifest.Node, error) {
+	node, path, err := selectShape(&field.Encode, field.Decode, path)
+	if err != nil {
+		return nil, err
 	}
-	path = strings.TrimPrefix(path, "encode.")
-	node := root
 	for path != "" {
 		part, rest := nextPathPart(path)
 		switch {
 		case part == "prefix", part == "element", part == "value", part == "key", part == "control", part == "default":
-			child := childNode(*node, part)
-			if child == nil {
+			node = childNode(*node, part)
+			if node == nil {
 				return nil, fmt.Errorf("node has no %s child", part)
 			}
-			node = child
-		case strings.HasPrefix(part, "fields["):
-			index, err := indexedPart(part, "fields")
-			if err != nil || index < 0 || index >= len(node.Fields) {
-				return nil, fmt.Errorf("invalid field selector %q", part)
+		case strings.HasPrefix(part, "fields["), strings.HasPrefix(part, "variants["):
+			var encode, decode *manifest.Node
+			if strings.HasPrefix(part, "fields[") {
+				index, err := indexedPart(part, "fields")
+				if err != nil || index < 0 || index >= len(node.Fields) {
+					return nil, fmt.Errorf("invalid field selector %q", part)
+				}
+				encode, decode = &node.Fields[index].Encode, node.Fields[index].Decode
+			} else {
+				index, err := indexedPart(part, "variants")
+				if err != nil || index < 0 || index >= len(node.Variants) {
+					return nil, fmt.Errorf("invalid variant selector %q", part)
+				}
+				encode, decode = &node.Variants[index].Encode, node.Variants[index].Decode
 			}
-			if !strings.HasPrefix(rest, ".encode") {
-				return nil, fmt.Errorf("field selector %q must select encode", part)
+			node, rest, err = selectShape(encode, decode, strings.TrimPrefix(rest, "."))
+			if err != nil {
+				return nil, err
 			}
-			node = &node.Fields[index].Encode
-			rest = strings.TrimPrefix(rest, ".encode")
 		case strings.HasPrefix(part, "elements["):
 			index, err := indexedPart(part, "elements")
 			if err != nil || index < 0 || index >= len(node.Elements) {
 				return nil, fmt.Errorf("invalid element selector %q", part)
 			}
 			node = &node.Elements[index]
-		case strings.HasPrefix(part, "variants["):
-			index, err := indexedPart(part, "variants")
-			if err != nil || index < 0 || index >= len(node.Variants) {
-				return nil, fmt.Errorf("invalid variant selector %q", part)
-			}
-			if !strings.HasPrefix(rest, ".encode") {
-				return nil, fmt.Errorf("variant selector %q must select encode", part)
-			}
-			node = &node.Variants[index].Encode
-			rest = strings.TrimPrefix(rest, ".encode")
 		case strings.HasPrefix(part, "cases["):
-			caseIndex, err := indexedPart(part, "cases")
-			if err != nil || caseIndex < 0 || caseIndex >= len(node.Cases) {
+			index, err := indexedPart(part, "cases")
+			if err != nil || index < 0 || index >= len(node.Cases) {
 				return nil, fmt.Errorf("invalid case selector %q", part)
 			}
-			if !strings.HasPrefix(rest, ".encode[") {
-				return nil, fmt.Errorf("case selector %q must select encode", part)
+			selector, remaining := nextPathPart(strings.TrimPrefix(rest, "."))
+			children := node.Cases[index].Encode
+			direction := "encode"
+			if strings.HasPrefix(selector, "decode[") {
+				children, direction = node.Cases[index].Decode, "decode"
 			}
-			rest = strings.TrimPrefix(rest, ".encode[")
-			close := strings.IndexByte(rest, ']')
-			if close < 0 {
-				return nil, fmt.Errorf("invalid case encode selector in %q", part)
+			childIndex, err := indexedPart(selector, direction)
+			if err != nil || childIndex < 0 || childIndex >= len(children) {
+				return nil, fmt.Errorf("invalid case direction selector %q", selector)
 			}
-			nodeIndex, err := strconv.Atoi(rest[:close])
-			if err != nil || nodeIndex < 0 || nodeIndex >= len(node.Cases[caseIndex].Encode) {
-				return nil, fmt.Errorf("invalid case encode selector in %q", part)
-			}
-			node = &node.Cases[caseIndex].Encode[nodeIndex]
-			rest = rest[close+1:]
+			node, rest = &children[childIndex], remaining
 		default:
 			return nil, fmt.Errorf("unknown path component %q", part)
 		}
@@ -309,11 +320,20 @@ func walkNBT(node manifest.Node, path string, result *[]string) {
 	}
 	for index := range node.Fields {
 		walkNBT(node.Fields[index].Encode, fmt.Sprintf("%s.fields[%d].encode", path, index), result)
+		if node.Fields[index].Decode != nil {
+			walkNBT(*node.Fields[index].Decode, fmt.Sprintf("%s.fields[%d].decode", path, index), result)
+		}
 	}
 	for index := range node.Variants {
 		walkNBT(node.Variants[index].Encode, fmt.Sprintf("%s.variants[%d].encode", path, index), result)
+		if node.Variants[index].Decode != nil {
+			walkNBT(*node.Variants[index].Decode, fmt.Sprintf("%s.variants[%d].decode", path, index), result)
+		}
 	}
 	for caseIndex := range node.Cases {
+		for nodeIndex, child := range node.Cases[caseIndex].Decode {
+			walkNBT(child, fmt.Sprintf("%s.cases[%d].decode[%d]", path, caseIndex, nodeIndex), result)
+		}
 		for nodeIndex := range node.Cases[caseIndex].Encode {
 			walkNBT(node.Cases[caseIndex].Encode[nodeIndex], fmt.Sprintf("%s.cases[%d].encode[%d]", path, caseIndex, nodeIndex), result)
 		}
