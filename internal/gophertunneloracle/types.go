@@ -312,27 +312,45 @@ func resolveCheckout(lock Lock, requested, cacheDir string) (string, error) {
 	}
 	target := filepath.Join(cacheDir, lock.Gophertunnel.Commit)
 	if _, err := os.Stat(target); err == nil {
-		if err := verifyCheckout(target, lock.Gophertunnel.Commit); err != nil {
-			return "", fmt.Errorf("cached gophertunnel checkout %s: %w", target, err)
+		if verificationErr := verifyCheckout(target, lock.Gophertunnel.Commit); verificationErr == nil {
+			return target, nil
+		} else {
+			// Older failed clones left only Git metadata, with no source checkout to preserve.
+			entries, err := os.ReadDir(target)
+			if err != nil || len(entries) != 1 || entries[0].Name() != ".git" {
+				return "", fmt.Errorf("cached gophertunnel checkout %s: %w", target, verificationErr)
+			}
+			if err := os.RemoveAll(target); err != nil {
+				return "", fmt.Errorf("remove incomplete oracle cache: %w", err)
+			}
 		}
-		return target, nil
 	} else if !os.IsNotExist(err) {
 		return "", fmt.Errorf("inspect gophertunnel cache: %w", err)
 	}
 	if err := os.MkdirAll(cacheDir, 0o755); err != nil {
 		return "", fmt.Errorf("create gophertunnel cache: %w", err)
 	}
-	if err := runGit("clone", "--no-checkout", "--filter=blob:none", lock.Gophertunnel.Repo, target); err != nil {
+	temporary, err := os.MkdirTemp(cacheDir, "."+lock.Gophertunnel.Commit+"-")
+	if err != nil {
+		return "", fmt.Errorf("create temporary oracle checkout: %w", err)
+	}
+	defer os.RemoveAll(temporary)
+	if err := runGit("clone", "--no-checkout", "--filter=blob:none", lock.Gophertunnel.Repo, temporary); err != nil {
 		return "", fmt.Errorf("clone gophertunnel %s: %w", lock.Gophertunnel.Repo, err)
 	}
-	if err := runGitAt(target, "fetch", "--depth=1", "origin", lock.Gophertunnel.Commit); err != nil {
+	if err := runGitAt(temporary, "fetch", "--depth=1", "origin", lock.Gophertunnel.Commit); err != nil {
 		return "", fmt.Errorf("fetch pinned gophertunnel commit %s: %w", lock.Gophertunnel.Commit, err)
 	}
-	if err := runGitAt(target, "checkout", "--detach", lock.Gophertunnel.Commit); err != nil {
+	if err := runGitAt(temporary, "checkout", "--detach", lock.Gophertunnel.Commit); err != nil {
 		return "", fmt.Errorf("checkout gophertunnel %s: %w", lock.Gophertunnel.Commit, err)
 	}
-	if err := verifyCheckout(target, lock.Gophertunnel.Commit); err != nil {
+	if err := verifyCheckout(temporary, lock.Gophertunnel.Commit); err != nil {
 		return "", err
+	}
+	if err := os.Rename(temporary, target); err != nil {
+		if verificationErr := verifyCheckout(target, lock.Gophertunnel.Commit); verificationErr != nil {
+			return "", fmt.Errorf("publish oracle checkout: %w", err)
+		}
 	}
 	return target, nil
 }
@@ -349,6 +367,13 @@ func verifyCheckout(path, wanted string) error {
 	got = strings.ToLower(strings.TrimSpace(got))
 	if got != strings.ToLower(wanted) {
 		return fmt.Errorf("gophertunnel checkout is %s, lock requires %s", got, wanted)
+	}
+	status, err := gitOutput(path, "status", "--porcelain", "--untracked-files=all", "--ignored", "--", "minecraft/protocol")
+	if err != nil {
+		return fmt.Errorf("inspect oracle source tree: %w", err)
+	}
+	if strings.TrimSpace(status) != "" {
+		return fmt.Errorf("gophertunnel checkout has modified or untracked protocol sources")
 	}
 	return nil
 }

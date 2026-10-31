@@ -54,6 +54,11 @@ func Apply(base manifest.Manifest, baseBytes []byte, spec Spec) (manifest.Manife
 	if got := bytesDigest(baseBytes); got != spec.BaseManifestSHA256 {
 		return manifest.Manifest{}, fmt.Errorf("base manifest fingerprint is %s, spec requires %s", got, spec.BaseManifestSHA256)
 	}
+	var authoritative manifest.Manifest
+	if err := json.Unmarshal(baseBytes, &authoritative); err != nil {
+		return manifest.Manifest{}, fmt.Errorf("parse base manifest: %w", err)
+	}
+	base = authoritative
 	if base.Derivation != nil {
 		return manifest.Manifest{}, fmt.Errorf("cannot derive a hotfix from an already derived manifest")
 	}
@@ -69,12 +74,8 @@ func Apply(base manifest.Manifest, baseBytes []byte, spec Spec) (manifest.Manife
 		}
 	}
 
-	data, err := json.Marshal(base)
-	if err != nil {
-		return manifest.Manifest{}, err
-	}
-	var result manifest.Manifest
-	if err := json.Unmarshal(data, &result); err != nil {
+	result := authoritative
+	if err := manifest.Validate(result); err != nil {
 		return manifest.Manifest{}, err
 	}
 	result.Target = spec.Target

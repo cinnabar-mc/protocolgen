@@ -157,8 +157,10 @@ func comments(text, prefix string) []string {
 	for _, paragraph := range strings.Split(text, "\n\n") {
 		paragraph = strings.TrimSpace(strings.ReplaceAll(paragraph, "\n", " "))
 		if paragraph == "" {
-			result = append(result, strings.TrimRight(prefix, " "))
 			continue
+		}
+		if len(result) > 0 {
+			result = append(result, strings.TrimRight(prefix, " "))
 		}
 		words := strings.Fields(paragraph)
 		line := prefix

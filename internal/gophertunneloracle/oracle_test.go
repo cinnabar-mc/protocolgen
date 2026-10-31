@@ -175,7 +175,7 @@ func TestLanguageWitnessNamesTheFirstDivergingAtom(t *testing.T) {
 	if witness == nil {
 		t.Fatal("different optional payload widths compared equal")
 	}
-	if len(witness.prefix) != 2 || witness.manifest[0].Token != "P:FIXED16LE" || witness.gophertunnel[0].Token != "P:FIXED32LE" {
+	if len(witness.prefix) != 3 || witness.manifest[0].Token != "P:FIXED16LE" || witness.gophertunnel[0].Token != "P:FIXED32LE" {
 		t.Fatalf("witness = %#v", witness)
 	}
 }
@@ -230,7 +230,7 @@ func (pk *Fixture) Marshal(io protocol.IO) {
 	}
 }
 
-func TestExtractBuildsFinitePathsForSwitchAndConditional(t *testing.T) {
+func TestExtractLeavesPartiallyBoundBooleanGuardUnresolved(t *testing.T) {
 	root := t.TempDir()
 	packetDir := filepath.Join(root, "minecraft", "protocol", "packet")
 	if err := os.MkdirAll(packetDir, 0o755); err != nil {
@@ -274,14 +274,8 @@ func (pk *Fixture) Marshal(io protocol.IO) {
 		t.Fatalf("packets = %#v", result.Packets)
 	}
 	got := sourceSequenceExpr(result.Packets[0].Operations)
-	value := atomExpr(atom{Token: "P:FIXED16LE"})
-	tail := altExpr(emptyExpr(), value)
-	want := concatExpr(atomExpr(atom{Token: "P:FIXED8"}), altExpr(
-		concatExpr(atomExpr(atom{Token: "VARIANT:1"}), value, tail),
-		concatExpr(atomExpr(atom{Token: "VARIANT:2"}), atomExpr(atom{Token: "P:bool"}), tail),
-	))
-	if witness := compareLanguages(want, got); witness != nil {
-		t.Fatalf("switch and conditional did not resolve to variants: %#v\n%s", witness, expressionKey(got))
+	if got.kind != "unknown" {
+		t.Fatalf("partially bound boolean guard was accepted: %s", expressionKey(got))
 	}
 }
 
@@ -600,4 +594,109 @@ func fixtureLock() Lock {
 	lock.Gophertunnel.Repo = "fixture"
 	lock.Gophertunnel.Commit = "0123456789012345678901234567890123456789"
 	return lock
+}
+
+func TestNBTEncodingIsPartOfTheWireLanguage(t *testing.T) {
+	for _, encoding := range []manifest.NBTEncoding{manifest.NBTNetwork, manifest.NBTPersistent, manifest.NBTNetworkCompound} {
+		want := manifestExpr(manifest.NBT(encoding))
+		for _, sourceEncoding := range []manifest.NBTEncoding{manifest.NBTNetwork, manifest.NBTPersistent, manifest.NBTNetworkCompound} {
+			got := sourceOperationExpr(sourceOperation{Kind: "primitive", Code: "nbt_le", Encoding: string(sourceEncoding)})
+			if (compareLanguages(want, got) == nil) != (encoding == sourceEncoding) {
+				t.Errorf("%s compared with %s", encoding, sourceEncoding)
+			}
+		}
+	}
+	for _, op := range []sourceOperation{{Kind: "primitive", Code: "nbt_le"}, {Kind: "primitive", Code: "raw_bytes", Field: "Field.SerialisedOffers"}} {
+		if got := sourceOperationExpr(op); got.kind != "unknown" {
+			t.Errorf("unknown NBT encoding accepted: %#v", got)
+		}
+	}
+}
+
+func TestDecodeOverridesCannotReceiveAgreement(t *testing.T) {
+	decode := manifest.Primitive("u16le")
+	plain := manifest.Primitive("u8")
+	for _, node := range []manifest.Node{
+		manifest.Struct(manifest.Field{Name: "Nested", Encode: plain, Decode: &decode, Symmetry: manifest.Asymmetric}),
+		manifest.Union(plain, manifest.Variant{Value: 1, Name: "One", Encode: plain, Decode: &decode}),
+	} {
+		if got := manifestExpr(node); got.kind != "unknown" {
+			t.Errorf("nested decode override accepted: %#v", got)
+		}
+	}
+	m := fixtureManifest(plain)
+	m.Packets[0].Fields[0].Decode = &decode
+	m.Packets[0].Fields[0].Symmetry = manifest.Asymmetric
+	source := extraction{Packets: []sourcePacket{{ID: 1, Operations: []sourceOperation{{Kind: "primitive", Code: "u8"}}}}}
+	report := Compare(m, source, fixtureLock(), AcceptedFile{}, "fixture.json")
+	if report.Counts.Unresolved != 1 {
+		t.Fatalf("decode override classified as %#v", report.Counts)
+	}
+}
+
+func TestBooleanGuardPolarityAffectsAgreement(t *testing.T) {
+	want := manifestExpr(manifest.Optional(manifest.Primitive("u16le")))
+	for _, tc := range []struct {
+		value   int64
+		negated bool
+		matches bool
+	}{{1, false, true}, {0, false, false}, {1, true, false}, {0, true, true}} {
+		got := sourceSequenceExpr([]sourceOperation{
+			{Kind: "primitive", Code: "bool", Field: "Has"},
+			{Kind: "conditional", CompareTo: "Has", Variants: []sourceVariant{{Value: tc.value, Values: []int64{tc.value}, Negated: tc.negated, Ops: []sourceOperation{{Kind: "primitive", Code: "u16le"}}}}, HasDefault: true},
+		})
+		if got.kind == "unknown" || (compareLanguages(want, got) == nil) != tc.matches {
+			t.Errorf("guard %d negated=%v: %#v", tc.value, tc.negated, got)
+		}
+	}
+	conditional := manifest.Node{Kind: manifest.KindConditional, CompareTo: "Mode", Cases: []manifest.Case{{Value: "1", Encode: []manifest.Node{manifest.Primitive("u8")}}, {Value: "2", Encode: []manifest.Node{manifest.Primitive("u16le")}}}}
+	before := manifestExpr(conditional)
+	conditional.Cases[0].Value, conditional.Cases[1].Value = "2", "1"
+	after := manifestExpr(conditional)
+	if before.kind != "unknown" && after.kind != "unknown" && compareLanguages(before, after) == nil {
+		t.Fatal("conditional case values were discarded")
+	}
+	if got := sourceOperationExpr(sourceOperation{Kind: "conditional", CompareTo: "Missing", HasDefault: true, Variants: []sourceVariant{{Value: 1, Ops: []sourceOperation{{Kind: "primitive", Code: "u8"}}}}}); got.kind != "unknown" {
+		t.Fatal("unbound predicate accepted")
+	}
+}
+
+func TestExtractPreservesBooleanPredicatesAndNBTEncodings(t *testing.T) {
+	for _, tc := range []struct {
+		predicate string
+		matches   bool
+	}{{"pk.Flag", true}, {"!pk.Flag", false}, {"pk.Flag == false", false}, {"pk.Flag != false", true}, {"pk.Flag && pk.Other", false}} {
+		t.Run(tc.predicate, func(t *testing.T) {
+			root := t.TempDir()
+			dir := filepath.Join(root, "minecraft/protocol/packet")
+			if err := os.MkdirAll(dir, 0o755); err != nil {
+				t.Fatal(err)
+			}
+			source := `package packet
+import "github.com/sandertv/gophertunnel/minecraft/protocol"
+import "github.com/sandertv/gophertunnel/minecraft/nbt"
+const IDFixture = 1
+type Fixture struct { Flag, Other bool; Value uint16; Data map[string]any }
+func (*Fixture) ID() uint32 { return IDFixture }
+func (pk *Fixture) Marshal(io protocol.IO) {
+ io.Bool(&pk.Flag)
+ if ` + tc.predicate + ` { io.Uint16(&pk.Value) }
+ io.NBT(&pk.Data, nbt.NetworkLittleEndian)
+ io.NBT(&pk.Data, nbt.LittleEndian)
+}`
+			if err := os.WriteFile(filepath.Join(dir, "fixture.go"), []byte(source), 0o644); err != nil {
+				t.Fatal(err)
+			}
+			result, err := Extract(root)
+			if err != nil {
+				t.Fatal(err)
+			}
+			want := canonicalPacketExpr(fixtureManifest(manifest.Optional(manifest.Primitive("u16le")), manifest.NBT(manifest.NBTNetwork), manifest.NBT(manifest.NBTPersistent)).Packets[0])
+			got := sourceSequenceExpr(result.Packets[0].Operations)
+			matches := got.kind != "unknown" && compareLanguages(want, got) == nil
+			if matches != tc.matches {
+				t.Fatalf("predicate comparison = %v, want %v: %s", matches, tc.matches, expressionKey(got))
+			}
+		})
+	}
 }

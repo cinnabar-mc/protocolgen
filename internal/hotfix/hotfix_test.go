@@ -32,6 +32,11 @@ func TestApplyWrapsOnlyTheFingerprintedOptionalNode(t *testing.T) {
 			Evidence: []manifest.Evidence{{SourceID: "hotfix", Locator: "fixture://hotfix"}},
 		}},
 	}
+	mutated := testManifest()
+	mutated.Packets[0].Direction = manifest.DirectionServerbound
+	if got, err := Apply(mutated, baseBytes, spec); err == nil && got.Packets[0].Direction != base.Packets[0].Direction {
+		t.Fatal("Apply retained changes outside fingerprinted bytes")
+	}
 	got, err := Apply(base, baseBytes, spec)
 	if err != nil {
 		t.Fatalf("Apply: %v", err)

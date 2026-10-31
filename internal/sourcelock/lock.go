@@ -91,7 +91,14 @@ func DigestDirectory(root string) (string, error) {
 	}
 	var entries []entry
 	root = filepath.Clean(root)
-	err := filepath.WalkDir(root, func(path string, directoryEntry fs.DirEntry, err error) error {
+	info, err := os.Lstat(root)
+	if err != nil {
+		return "", fmt.Errorf("inspect source directory: %w", err)
+	}
+	if !info.IsDir() {
+		return "", fmt.Errorf("source root %s must be a directory, got %s", root, info.Mode().Type())
+	}
+	err = filepath.WalkDir(root, func(path string, directoryEntry fs.DirEntry, err error) error {
 		if err != nil {
 			return err
 		}
@@ -113,6 +120,9 @@ func DigestDirectory(root string) (string, error) {
 		}
 		if directoryEntry.IsDir() {
 			return nil
+		}
+		if !directoryEntry.Type().IsRegular() {
+			return fmt.Errorf("source tree contains unsupported file type %s: %s", rel, directoryEntry.Type())
 		}
 		data, err := os.ReadFile(path)
 		if err != nil {

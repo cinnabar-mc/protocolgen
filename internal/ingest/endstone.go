@@ -68,6 +68,7 @@ func ParseEndstone(root string, pin manifest.SourcePin, corrections string) (cla
 	}
 	lowerer := &endstoneLowerer{types: typeDocs, enums: enumDocs, active: map[string]bool{}, source: pin}
 	type packetDoc struct {
+		file string
 		name string
 		id   uint32
 	}
@@ -85,7 +86,7 @@ func ParseEndstone(root string, pin manifest.SourcePin, corrections string) (cla
 		if name == "" {
 			name = strings.TrimSuffix(file, filepath.Ext(file))
 		}
-		packets = append(packets, packetDoc{name: name, id: uint32(idValue)})
+		packets = append(packets, packetDoc{file: file, name: name, id: uint32(idValue)})
 	}
 	sort.Slice(packets, func(i, j int) bool {
 		if packets[i].id != packets[j].id {
@@ -98,17 +99,7 @@ func ParseEndstone(root string, pin manifest.SourcePin, corrections string) (cla
 	}
 	result := claims.Result{Pin: pin, Target: target, Overrides: proofs}
 	for _, packet := range packets {
-		document := packetDocs[packet.name+".json"]
-		if document == nil {
-			for file, candidate := range packetDocs {
-				object, _ := asMap(candidate)
-				if asString(object["name"]) == packet.name {
-					document = candidate
-					_ = file
-					break
-				}
-			}
-		}
+		document := packetDocs[packet.file]
 		object, ok := asMap(document)
 		if !ok {
 			return claims.Result{}, fmt.Errorf("Endstone packet %s document disappeared", packet.name)
@@ -122,7 +113,7 @@ func ParseEndstone(root string, pin manifest.SourcePin, corrections string) (cla
 			return claims.Result{}, err
 		}
 		direction := parseDirection(object)
-		result.Packets = append(result.Packets, claims.PacketClaim{SourceID: pin.ID, Locator: "packets/" + packet.name + ".json", ID: packet.id, Name: packet.name, Direction: direction})
+		result.Packets = append(result.Packets, claims.PacketClaim{SourceID: pin.ID, Locator: "packets/" + packet.file, ID: packet.id, Name: packet.name, Direction: direction})
 		for index, canonicalField := range fields {
 			field := canonicalField.object
 			name := asString(field["name"])
@@ -142,7 +133,7 @@ func ParseEndstone(root string, pin manifest.SourcePin, corrections string) (cla
 			if ignored {
 				node = manifest.Ignored(node)
 			}
-			claim := makeClaim(pin, packet.id, packet.name, direction, index, name, field, node, "packets/"+packet.name+".json#/fields/"+fmt.Sprint(canonicalField.sourceIndex))
+			claim := makeClaim(pin, packet.id, packet.name, direction, index, name, field, node, "packets/"+packet.file+"#/fields/"+fmt.Sprint(canonicalField.sourceIndex))
 			claim.Reserved, claim.Ignored, claim.Compatibility = reserved, ignored, compatibility
 			result.Claims = append(result.Claims, claim)
 		}

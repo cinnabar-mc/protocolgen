@@ -338,6 +338,7 @@ func enrichNodeMetadata(selected, other manifest.Node) manifest.Node {
 	}
 	switch {
 	case selected.Kind == manifest.KindStruct && other.Kind == manifest.KindStruct:
+		selected.Fields = append([]manifest.Field(nil), selected.Fields...)
 		for i := range selected.Fields {
 			for j := range other.Fields {
 				if selected.Fields[i].Ordinal != other.Fields[j].Ordinal {
@@ -366,12 +367,14 @@ func enrichNodeMetadata(selected, other manifest.Node) manifest.Node {
 		selected.Key = enrichNodeMetadataPointer(selected.Key, other.Key)
 		selected.Value = enrichNodeMetadataPointer(selected.Value, other.Value)
 	case selected.Kind == manifest.KindSequence && other.Kind == manifest.KindSequence:
+		selected.Elements = append([]manifest.Node(nil), selected.Elements...)
 		for i := range selected.Elements {
 			if i < len(other.Elements) {
 				selected.Elements[i] = enrichNodeMetadata(selected.Elements[i], other.Elements[i])
 			}
 		}
 	case selected.Kind == manifest.KindUnion && other.Kind == manifest.KindUnion:
+		selected.Variants = append([]manifest.Variant(nil), selected.Variants...)
 		for i := range selected.Variants {
 			for j := range other.Variants {
 				if selected.Variants[i].Value == other.Variants[j].Value {
@@ -597,6 +600,20 @@ func mergeNode(left, right manifest.Node) (manifest.Node, bool) {
 			result.Variants[index].Encode, ok = mergeNode(left.Variants[index].Encode, right.Variants[index].Encode)
 			if !ok {
 				return manifest.Node{}, false
+			}
+			leftDecode, rightDecode := left.Variants[index].Encode, right.Variants[index].Encode
+			if left.Variants[index].Decode != nil {
+				leftDecode = *left.Variants[index].Decode
+			}
+			if right.Variants[index].Decode != nil {
+				rightDecode = *right.Variants[index].Decode
+			}
+			decode, compatible := mergeNode(leftDecode, rightDecode)
+			if !compatible {
+				return manifest.Node{}, false
+			}
+			if left.Variants[index].Decode != nil || right.Variants[index].Decode != nil {
+				result.Variants[index].Decode = &decode
 			}
 		}
 	case manifest.KindString, manifest.KindBytes:

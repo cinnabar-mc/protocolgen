@@ -54,3 +54,37 @@ func TestWireFingerprintIgnoresSourceMetadataAndConstraints(t *testing.T) {
 		t.Fatalf("wire fingerprints differ: %s != %s", leftFingerprint, rightFingerprint)
 	}
 }
+
+func TestWireFingerprintRetainsRecursiveReferences(t *testing.T) {
+	for _, nested := range []bool{false, true} {
+		makeClaim := func(target string) Claim {
+			node := manifest.Node{Kind: manifest.KindRecursive, TypeID: target}
+			if nested {
+				node = manifest.Optional(node)
+			}
+			return Claim{Encode: node}
+		}
+		left, err := WireFingerprint(makeClaim("A"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		right, err := WireFingerprint(makeClaim("B"))
+		if err != nil {
+			t.Fatal(err)
+		}
+		if left == right {
+			t.Fatalf("recursive references collapsed (nested=%v)", nested)
+		}
+		leftField, err := FieldWireFingerprint(1, manifest.DirectionClientbound, manifest.Field{Encode: makeClaim("A").Encode})
+		if err != nil {
+			t.Fatal(err)
+		}
+		rightField, err := FieldWireFingerprint(1, manifest.DirectionClientbound, manifest.Field{Encode: makeClaim("B").Encode})
+		if err != nil {
+			t.Fatal(err)
+		}
+		if leftField == rightField {
+			t.Fatal("field recursive references collapsed")
+		}
+	}
+}

@@ -7,6 +7,7 @@ import (
 	"protocolgen/internal/claims"
 	"protocolgen/internal/direction"
 	"protocolgen/internal/manifest"
+	"protocolgen/internal/nbtencoding"
 )
 
 func TestReconcileRejectsUnfingerprintedSourceDisagreement(t *testing.T) {
@@ -378,5 +379,83 @@ func TestMergeOptionalWrapperAroundComplementaryConcreteShape(t *testing.T) {
 	merged, ok := mergeNode(partial, concrete)
 	if !ok || merged.Kind != manifest.KindOptional || merged.Value == nil || merged.Value.Kind != manifest.KindUnion {
 		t.Fatalf("mergeNode = %#v, %v; want optional concrete union", merged, ok)
+	}
+}
+
+func TestReconcileRequiresAdjudicationForVariantDecodeDisagreement(t *testing.T) {
+	target := manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 2168}
+	var results []claims.Result
+	for i, source := range []string{"first", "second", "third"} {
+		decode := manifest.Primitive("u16le")
+		if i == 2 {
+			decode = manifest.Primitive("u32le")
+		}
+		node := manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 1, Name: "One", Encode: manifest.Primitive("u8"), Decode: &decode})
+		results = append(results, claims.Result{Pin: sourcePin(source), Target: target, Claims: []claims.Claim{testClaim(source, node)}})
+	}
+	if _, err := Reconcile(target, results, nil); err == nil || !strings.Contains(err.Error(), "adjudication") {
+		t.Fatalf("Reconcile error = %v", err)
+	}
+	left := manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 1, Name: "One", Encode: manifest.Primitive("u8")})
+	decode := manifest.Primitive("u8")
+	decode.Semantic = "Payload"
+	right := manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 1, Name: "One", Encode: manifest.Primitive("u8"), Decode: &decode})
+	merged, ok := mergeNode(left, right)
+	if !ok || merged.Variants[0].Decode == nil || merged.Variants[0].Decode.Semantic != "Payload" {
+		t.Fatalf("compatible decode metadata was lost: %#v, %v", merged, ok)
+	}
+}
+
+func TestReconcileNestedEnrichmentDoesNotMutateClaims(t *testing.T) {
+	target := manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 2168}
+	wrap := func(node manifest.Node) manifest.Node {
+		return manifest.Struct(manifest.Field{Ordinal: 0, Name: "Nested", Encode: node, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"endstone"}}})
+	}
+	left := testClaim("endstone", wrap(manifest.Bytes(manifest.Primitive("var_u32"))))
+	text := manifest.String(manifest.Primitive("var_u32"))
+	text.TypeID = "Payload"
+	right := testClaim("mojang", wrap(text))
+	group := []claims.Claim{left, right}
+	context, err := claims.ContextFingerprint(target, group)
+	if err != nil {
+		t.Fatal(err)
+	}
+	adj := manifest.Adjudication{ID: "binary", Target: left.FieldPath, PrePatchContextSHA256: context,
+		Claims:         []manifest.ClaimFingerprint{{SourceID: left.SourceID, Digest: mustFingerprint(t, left)}, {SourceID: right.SourceID, Digest: mustFingerprint(t, right)}},
+		SelectedSource: left.SourceID, Evidence: []manifest.Evidence{{SourceID: left.SourceID, Locator: "fixture://serializer"}}, Reason: "binary payload"}
+	results := []claims.Result{{Pin: sourcePin("endstone"), Target: target, Claims: []claims.Claim{left}}, {Pin: sourcePin("mojang"), Target: target, Claims: []claims.Claim{right}}}
+	for range 2 {
+		if _, err := Reconcile(target, results, []manifest.Adjudication{adj}); err != nil {
+			t.Fatal(err)
+		}
+		got, err := claims.ContextFingerprint(target, group)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != context {
+			t.Error("reconciliation mutated input claim fingerprints")
+		}
+	}
+}
+
+func TestReconcileAppliesNBTEncodingToAsymmetricDecode(t *testing.T) {
+	target := manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 2168}
+	var results []claims.Result
+	for _, source := range []string{"endstone", "mojang"} {
+		claim := testClaim(source, manifest.Primitive("u8"))
+		decode := manifest.Primitive("nbt_le")
+		claim.Decode = &decode
+		claim.Symmetry = manifest.Asymmetric
+		results = append(results, claims.Result{Pin: sourcePin(source), Target: target, Claims: []claims.Claim{claim}})
+	}
+	encodings := nbtencoding.Table{SchemaVersion: nbtencoding.SchemaVersion, Target: target,
+		Source: nbtencoding.Source{Repository: "https://example.invalid/oracle", Revision: strings.Repeat("a", 40), Locator: "fixture://encoding", SHA256: "sha256:" + strings.Repeat("b", 64)},
+		Fields: []nbtencoding.Entry{{PacketID: 1, PacketName: "Vocabulary", FieldOrdinal: 0, FieldName: "Value", Path: "decode", Encoding: manifest.NBTNetwork, Evidence: nbtencoding.Evidence{Locator: "fixture://encoding", Summary: "network encoding"}}}}
+	m, err := reconcile(target, results, nil, nil, &encodings)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if m.Packets[0].Fields[0].Decode.Encoding != string(manifest.NBTNetwork) {
+		t.Fatal("decode encoding was not applied")
 	}
 }

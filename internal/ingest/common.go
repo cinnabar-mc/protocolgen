@@ -1,10 +1,13 @@
 package ingest
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
+	"math/big"
 	"os"
 	"path/filepath"
 	"sort"
@@ -14,6 +17,23 @@ import (
 	"protocolgen/internal/claims"
 	"protocolgen/internal/manifest"
 )
+
+// decodeJSONNumbers retains exact integer values and rejects trailing JSON values.
+func decodeJSONNumbers(data []byte, value any) error {
+	decoder := json.NewDecoder(bytes.NewReader(data))
+	decoder.UseNumber()
+	if err := decoder.Decode(value); err != nil {
+		return err
+	}
+	var trailing any
+	if err := decoder.Decode(&trailing); err != io.EOF {
+		if err != nil {
+			return err
+		}
+		return fmt.Errorf("unexpected trailing JSON value")
+	}
+	return nil
+}
 
 func loadJSONFiles(root string) (map[string]any, error) {
 	entries, err := os.ReadDir(root)
@@ -34,7 +54,7 @@ func loadJSONFiles(root string) (map[string]any, error) {
 			return nil, fmt.Errorf("read %s: %w", name, err)
 		}
 		var value any
-		if err := json.Unmarshal(data, &value); err != nil {
+		if err := decodeJSONNumbers(data, &value); err != nil {
 			return nil, fmt.Errorf("parse %s: %w", name, err)
 		}
 		documents[name] = value
@@ -71,8 +91,14 @@ func asInt(value any) (int64, bool) {
 	case float64:
 		return int64(number), number == float64(int64(number))
 	case json.Number:
-		parsed, err := number.Int64()
-		return parsed, err == nil
+		if parsed, err := number.Int64(); err == nil {
+			return parsed, true
+		}
+		rational, ok := new(big.Rat).SetString(string(number))
+		if !ok || !rational.IsInt() || !rational.Num().IsInt64() {
+			return 0, false
+		}
+		return rational.Num().Int64(), true
 	case string:
 		var parsed int64
 		_, err := fmt.Sscanf(number, "%d", &parsed)
@@ -176,8 +202,34 @@ func replaceAt(root any, pointer string, replacement any) error {
 	return fmt.Errorf("invalid empty pointer %s", pointer)
 }
 
+// canonicalNumbers stabilizes numeric spellings without rounding int64 values.
+func canonicalNumbers(value any) any {
+	switch typed := value.(type) {
+	case json.Number:
+		if integer, ok := asInt(typed); ok {
+			return integer
+		}
+		if number, err := typed.Float64(); err == nil {
+			return number
+		}
+	case map[string]any:
+		result := make(map[string]any, len(typed))
+		for key, child := range typed {
+			result[key] = canonicalNumbers(child)
+		}
+		return result
+	case []any:
+		result := make([]any, len(typed))
+		for index, child := range typed {
+			result[index] = canonicalNumbers(child)
+		}
+		return result
+	}
+	return value
+}
+
 func canonicalDigest(value any) (string, error) {
-	data, err := json.Marshal(value)
+	data, err := json.Marshal(canonicalNumbers(value))
 	if err != nil {
 		return "", err
 	}
@@ -215,7 +267,7 @@ func applyCorrections(documents map[string]any, directory string, pin manifest.S
 			return nil, err
 		}
 		var patchFile map[string]any
-		if err := json.Unmarshal(data, &patchFile); err != nil {
+		if err := decodeJSONNumbers(data, &patchFile); err != nil {
 			return nil, fmt.Errorf("parse correction %s: %w", name, err)
 		}
 		operations, ok := asArray(patchFile["operations"])
@@ -250,6 +302,10 @@ func applyCorrections(documents map[string]any, directory string, pin manifest.S
 			if before != pre {
 				return nil, fmt.Errorf("stale correction %s: %s#%s pre-patch fingerprint is %s, current node is %s", id, file, pointer, pre, before)
 			}
+			context, err := correctionContextDigest(pin, file+"#"+pointer, node)
+			if err != nil {
+				return nil, err
+			}
 			if replacement, ok := operation["replace"]; ok {
 				if err := replaceAt(document, pointer, replacement); err != nil {
 					return nil, fmt.Errorf("apply correction %s: %w", id, err)
@@ -270,10 +326,6 @@ func applyCorrections(documents map[string]any, directory string, pin manifest.S
 			}
 			afterNode, _ := valueAt(document, pointer)
 			after, err := canonicalDigest(afterNode)
-			if err != nil {
-				return nil, err
-			}
-			context, err := correctionContextDigest(pin, file+"#"+pointer, node)
 			if err != nil {
 				return nil, err
 			}

@@ -946,3 +946,119 @@ func TestEndstoneCompactSwitchKeepsInnerTagsSeparate(t *testing.T) {
 		}
 	}
 }
+
+func TestSingletonAllOfRetainsOuterAndInnerConstraints(t *testing.T) {
+	lowerer := &mojangLowerer{documents: map[string]any{"String.json": map[string]any{"type": "string", "minLength": 2}}, active: map[string]bool{}}
+	for _, branch := range []map[string]any{{"type": "string", "minLength": 2}, {"$ref": "String.json"}} {
+		node := lowerer.lowerSchema(map[string]any{"allOf": []any{branch}, "maxLength": 4}, "Packet.json", "Value")
+		if node.Constraints == nil || node.Constraints.MaxLength == nil || *node.Constraints.MaxLength != 4 || node.Constraints.MinLength == nil || *node.Constraints.MinLength != 2 {
+			t.Fatalf("allOf constraints = %#v", node.Constraints)
+		}
+	}
+}
+
+func TestEndstoneUsesDiscoveredFileAndExactEnumIntegers(t *testing.T) {
+	root := t.TempDir()
+	for _, name := range []string{"packets", "types", "enums"} {
+		if err := os.Mkdir(filepath.Join(root, name), 0o755); err != nil {
+			t.Fatal(err)
+		}
+	}
+	writeJSON(t, filepath.Join(root, "enums", "Large.json"), map[string]any{"name": "Large", "values": []any{map[string]any{"name": "Exact", "value": int64(9007199254740993)}}})
+	writeJSON(t, filepath.Join(root, "packets", "A.json"), map[string]any{"name": "B", "id": 1, "fields": []any{map[string]any{"name": "Value", "type": "int64", "enum": "Large"}}})
+	writeJSON(t, filepath.Join(root, "packets", "B.json"), map[string]any{"name": "C", "id": 2, "fields": []any{map[string]any{"name": "Text", "type": "string"}}})
+	result, err := ParseEndstone(root, fixturePin("endstone"), "")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(result.Claims) != 2 {
+		t.Fatalf("claims = %#v", result.Claims)
+	}
+	first := result.Claims[0]
+	if first.PacketID != 1 || first.PacketName != "B" || first.Name != "Value" || first.Locator != "packets/A.json#/fields/0" {
+		t.Fatalf("first claim = %#v", first)
+	}
+	if first.Encode.Kind != manifest.KindEnum || first.Encode.Variants[0].Value != 9007199254740993 {
+		t.Fatalf("enum = %#v", first.Encode)
+	}
+	if result.Packets[0].Locator != "packets/A.json" || result.Claims[1].Locator != "packets/B.json#/fields/0" {
+		t.Fatal("incorrect source locators")
+	}
+}
+
+func TestCorrectionsRetainPrePatchContextAndExactNumbers(t *testing.T) {
+	for _, operation := range []string{"merge", "replace"} {
+		t.Run(operation, func(t *testing.T) {
+			node := map[string]any{"name": "Value"}
+			documents := map[string]any{"Packet.json": map[string]any{"field": node}}
+			pin := fixturePin("endstone")
+			before, err := canonicalDigest(node)
+			if err != nil {
+				t.Fatal(err)
+			}
+			context, err := correctionContextDigest(pin, "Packet.json#/field", node)
+			if err != nil {
+				t.Fatal(err)
+			}
+			patch := map[string]any{"id": "value", "file": "Packet.json", "pointer": "/field", "pre_patch_sha256": before, "why": "fixture", "evidence": []any{map[string]any{"locator": "fixture/runtime"}}}
+			value := map[string]any{"value": int64(9007199254740993)}
+			if operation == "replace" {
+				value["name"] = "Value"
+			}
+			patch[operation] = value
+			corrections := t.TempDir()
+			writeJSON(t, filepath.Join(corrections, "value.json"), map[string]any{"operations": []any{patch}})
+			proofs, err := applyCorrections(documents, corrections, pin)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if proofs[0].PrePatchContextSHA256 != context {
+				t.Error("context does not fingerprint original node")
+			}
+			updated, _ := valueAt(documents["Packet.json"], "/field/value")
+			if got, ok := asInt(updated); !ok || got != 9007199254740993 {
+				t.Fatalf("corrected integer = %v", updated)
+			}
+		})
+	}
+}
+
+func TestCorrectionDigestsCanonicalizeExactNumberSpellings(t *testing.T) {
+	for _, literal := range []string{"1.0", "1e0", "1", "9007199254740993"} {
+		var value any
+		if err := decodeJSONNumbers([]byte(literal), &value); err != nil {
+			t.Fatal(err)
+		}
+		want := any(int64(1))
+		if literal == "9007199254740993" {
+			want = int64(9007199254740993)
+		}
+		got, err := canonicalDigest(value)
+		if err != nil {
+			t.Fatal(err)
+		}
+		expected, err := canonicalDigest(want)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if got != expected {
+			t.Errorf("number %s has noncanonical digest", literal)
+		}
+	}
+}
+
+func TestJSONIntegerValuesRemainExactAcrossSpellings(t *testing.T) {
+	for _, tc := range []struct {
+		literal string
+		want    int64
+		valid   bool
+	}{
+		{"1.0", 1, true}, {"1e0", 1, true}, {"9007199254740993.0", 9007199254740993, true},
+		{"9223372036854775807", 9223372036854775807, true}, {"9223372036854775808", 0, false}, {"1.5", 0, false},
+	} {
+		got, ok := asInt(json.Number(tc.literal))
+		if ok != tc.valid || ok && got != tc.want {
+			t.Errorf("asInt(%s) = %d, %v", tc.literal, got, ok)
+		}
+	}
+}

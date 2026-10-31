@@ -828,12 +828,26 @@ func (e *extractor) conditionVariant(expr ast.Expr, method *marshalInfo, env map
 				result.Constraint = fmt.Sprintf("%s = %d", result.CompareTo, value)
 			}
 		}
+		if literal, ok := binary.Y.(*ast.Ident); ok && (literal.Name == "true" || literal.Name == "false") {
+			result.Value = 0
+			if literal.Name == "true" {
+				result.Value = 1
+			}
+			result.Negated = binary.Op == token.NEQ
+		} else if !result.Discriminant {
+			result.CompareTo = ""
+		}
 		return result
 	}
 	if unary, ok := expr.(*ast.UnaryExpr); ok && unary.Op == token.NOT {
 		result.CompareTo = e.fieldPath(unary.X, method, env, base)
 		result.Value = 0
 		result.Constraint = result.CompareTo + " = false"
+		return result
+	}
+	switch expr.(type) {
+	case *ast.Ident, *ast.SelectorExpr:
+	default:
 		return result
 	}
 	result.CompareTo = e.fieldPath(expr, method, env, base)
@@ -1375,8 +1389,23 @@ func (e *extractor) expandIOHelper(call *ast.CallExpr, name, field string, metho
 		return []sourceOperation{{Kind: "string", Field: field, Prefix: "i16le", Encoding: "utf8"}}
 	case "ByteSlice":
 		return []sourceOperation{{Kind: "bytes", Field: field, Prefix: "var_u32"}}
-	case "NBT", "NBTList", "RawNBT":
-		return []sourceOperation{{Kind: "primitive", Field: field, Code: "nbt_le"}}
+	case "NBT":
+		encoding := ""
+		if len(call.Args) > 1 {
+			if selector, ok := call.Args[1].(*ast.SelectorExpr); ok {
+				if qualifier, ok := selector.X.(*ast.Ident); ok && method.File.Imports[qualifier.Name] == "nbt" {
+					switch selector.Sel.Name {
+					case "NetworkLittleEndian":
+						encoding = "network"
+					case "LittleEndian":
+						encoding = "persistent"
+					}
+				}
+			}
+		}
+		return []sourceOperation{{Kind: "primitive", Field: field, Code: "nbt_le", Encoding: encoding}}
+	case "NBTList", "RawNBT":
+		return []sourceOperation{e.unresolved(call, method.Key, field, "NBT helper framing is not established", name)}
 	case "Bytes":
 		return []sourceOperation{{Kind: "primitive", Field: field, Code: "raw_bytes"}}
 	case "Bitset":

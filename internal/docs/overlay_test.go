@@ -1,6 +1,7 @@
 package docs
 
 import (
+	"reflect"
 	"strings"
 	"testing"
 
@@ -57,5 +58,23 @@ func TestLeadWithRewritesForeignIdentifier(t *testing.T) {
 		if got := LeadWith(c.text, c.from, c.to); got != c.want {
 			t.Fatalf("LeadWith(%q, %q, %q) = %q, want %q", c.text, c.from, c.to, got, c.want)
 		}
+	}
+}
+
+func TestCommentsPreserveParagraphs(t *testing.T) {
+	for _, tc := range []struct {
+		name   string
+		render func(string) []string
+		prefix string
+	}{
+		{"Go", GoComments, "//"}, {"Rust", RustComments, "///"},
+	} {
+		t.Run(tc.name, func(t *testing.T) {
+			got := tc.render("First paragraph.\r\n\r\nSecond paragraph.")
+			want := []string{tc.prefix + " First paragraph.", tc.prefix, tc.prefix + " Second paragraph."}
+			if !reflect.DeepEqual(got, want) {
+				t.Fatalf("comments = %q, want %q", got, want)
+			}
+		})
 	}
 }

@@ -18,7 +18,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:990e34399db66b336daec4cfd7e0b6e09f0e15e9dc27d14de6abbde5a4619e98"
+      "fingerprint": "sha256:52d73bde7d7dbda537f82fed6dd9fa52d8c50976786245ff588e3e0e8fc4132e"
     },
     {
       "id": 9,
@@ -35,7 +35,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:391f126992af6299ab7788ff179711361ff41528cabd5c0b7339aba1729e4646"
+      "fingerprint": "sha256:560db86a0202f6995d3adedb9dedd4dc459365c501cda59692aaea96803a2197"
     },
     {
       "id": 12,
@@ -52,7 +52,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:9165d4a6575a236ad58f2f7af1652c77c7b402004e0d096e9bb9663e4500e37e"
+      "fingerprint": "sha256:801de634955588d7dcce949014380dcde1cee24808967295b9685053502a0758"
     },
     {
       "id": 13,
@@ -69,7 +69,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:d729e1c5b6a52f4fb99b5695f25455aa7f4e973db7b8abceabc42b3ce5237752"
+      "fingerprint": "sha256:8fbad17d55670ee6c5dd7232349674190664a1603238c9179f144572177074af"
     },
     {
       "id": 15,
@@ -86,7 +86,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:6608c20d72225ea16e802e485189f9a05a83d7a03ad3c508ed77941aa3af65fe"
+      "fingerprint": "sha256:baef5ef7e95d3b94c88e694346de5dd3a9521d32339eb1cc22ab99f7e6131c21"
     },
     {
       "id": 30,
@@ -103,7 +103,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:87e415205ee749b00118c25aac5499cc1db3ec3b63705c98bf4d978cd2f46683"
+      "fingerprint": "sha256:c00319945dc78d4b0e230f624a32eb9a99fbc79a57349513168e1d5e12143c2d"
     },
     {
       "id": 31,
@@ -120,7 +120,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:20104426401485ff5b76fe9d84c6266accb63a0811af64e8fab496c4208983eb"
+      "fingerprint": "sha256:e50925d8eb0ede24c549944d52544f471ecb21cbd2880386142d6ecdd12517f2"
     },
     {
       "id": 32,
@@ -137,7 +137,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:a8d0708c5713fbd167b67091ecc0f357a4e9f1dd8c2f6dc5be35218cd0628b4f"
+      "fingerprint": "sha256:6838e66180e82c36b3cac84d794e9edf520e3b14a2133118eefa8464dbb5592f"
     },
     {
       "id": 39,
@@ -154,7 +154,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:118b517eb50ef66f761f0fa743826503276cc0376e6266462c97e57041860ce7"
+      "fingerprint": "sha256:6687d73a95e1bbaa62d857d87717731eb0fc856ba847435d90d353b0acaebead"
     },
     {
       "id": 49,
@@ -171,7 +171,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:d0fd3e2406c0bac0081110bfefa3bce610508bd897fb8ba6e72fdb3e2f05ed65"
+      "fingerprint": "sha256:465e2c6ea1f65e77218e26c401e64e5913349b49fe57387028f5879befa303a1"
     },
     {
       "id": 50,
@@ -188,24 +188,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:4b8ff503637755e17ff79d784f770c61a7a9429a3b052c21ee9aaca3955f6696"
-    },
-    {
-      "id": 52,
-      "name": "CraftingDataPacket",
-      "reason": "Modeling limitation: the canonical shaped-recipe ingredient (Endstone cerealizer<RecipeIngredient>::SerializedData) is a var_u32-counted string-to-string map followed by zigzag aux value and count, while the protocol 2225 ItemDescriptorCount and CloudburstMC readIngredient write a var_u32 descriptor kind, a descriptor-name string, a payload chosen by that name, then the zigzag count. The map is byte-identical for the default and invalid descriptors and diverges for molang and item-tag descriptors. A descriptor discriminated by a string is not expressible in the claim format, so no correction is possible without a manifest schema extension.",
-      "what_would_settle_it": "A manifest node kind for string-discriminated unions, or evidence that only default descriptors occur in CraftingData at protocol 2225.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/crafting_data.go",
-          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:d3cc9f37fa3d45d86b106abdbafca844931421a590ce862772f0018f7dab204f"
+      "fingerprint": "sha256:db15fe8110ea338d26df473f2104ec201ae9ffd772b3f9ebd46db467a9042669"
     },
     {
       "id": 63,
@@ -256,7 +239,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:6175b6289fa0767a71528153f1ecdeb3aad434fa6330b0349ecaf3d6cb33f467"
+      "fingerprint": "sha256:56f54d6b849e41df5e50fe00ba153d677e5d18f7d28d3824c78c944a473e670f"
     },
     {
       "id": 108,
@@ -273,58 +256,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:f937d0b5952200e3687eba0d8714e40265aa5adeea66b61d5b47fafe10d9cb8a"
-    },
-    {
-      "id": 144,
-      "name": "PlayerAuthInputPacket",
-      "reason": "Control-layout conflict, same as 147: the item stack request action selector, the per-action type byte and the switch annotation appear at different positions. The item-use framing difference recorded at protocol 2168 no longer occurs, because the protocol 2225 fork writes the actions array without the extra presence flag.",
-      "what_would_settle_it": "Evidence that either constant marker can be false on the wire, or an ingest rule that lowers a constant-true bool as a fixed byte instead of an optional.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/player_auth_input.go",
-          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:338121eb90be0ce4b63eb9c286eeb0ae60cb7a27ef0b3fc3efd1485ab73c079c"
-    },
-    {
-      "id": 145,
-      "name": "CreativeContentPacket",
-      "reason": "Extractor limitation: ItemInstance extra-data is decoded from one byte buffer and its canBePlacedOn/canBreak arrays are parsed inside it, so the extractor counts them as outer operations where the canonical manifest has one opaque user-data buffer.",
-      "what_would_settle_it": "Track IO receiver ownership so parsing the already-read item buffer contributes no additional outer operations.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/creative_content.go",
-          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:148a21a1d79a5cc844db498010ba084d29e7c9d182b4269717880a7a9aeeb498"
-    },
-    {
-      "id": 147,
-      "name": "ItemStackRequestPacket",
-      "reason": "Extractor/control-layout conflict: ItemStackRequest cereal action selector, legacy action byte and switch annotation appear at different positions; action-ID mappings also need exact evidence. Removing marker tokens would not prove the cases correspond.",
-      "what_would_settle_it": "Bind action switches to serialized discriminants and validate every action mapping and legacy byte against protocol 2225 source/captures.",
-      "evidence": [
-        {
-          "locator": "generated/1.26.60/manifest.json",
-          "summary": "The canonical 1.26.60 manifest contains the conflicting packet shape; this baseline acknowledges comparison debt, not wire correctness."
-        },
-        {
-          "locator": "https://github.com/hashimthearab/gophertunnel/blob/77149b94f8024826e34efda6f625c366596118d2/minecraft/protocol/packet/item_stack_request.go",
-          "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
-        }
-      ],
-      "fingerprint": "sha256:a2684a01edd80320a06510ccead7750bca2c2c0d92b9451338d38168ec3b49e3"
+      "fingerprint": "sha256:dd07e8a9c8c1b58299312d0168effacbce3ba490c69ead82d3b7a9b381d1a95f"
     },
     {
       "id": 174,
@@ -341,7 +273,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:7471121e674d723c0785018befe039eaf9958a2e82e3dd0ac8a1a431edddf29e"
+      "fingerprint": "sha256:f30fde5f186926320c02bf569c192a436932023ab51a8cfd32100369c5dfbb95"
     },
     {
       "id": 345,
@@ -358,7 +290,7 @@
           "summary": "The locked protocol 2225 source operations were compared with the canonical packet, including the differences described above."
         }
       ],
-      "fingerprint": "sha256:568a69b7739eae65abd89c3f64d3b9360661426bac1e72780bf8f3303bd8d075"
+      "fingerprint": "sha256:6dcaf9dd575bdd40118c37a9d491875d4d4205a4a75ac69630a685276f824268"
     }
   ]
 }
