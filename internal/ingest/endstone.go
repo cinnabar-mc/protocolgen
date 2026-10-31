@@ -79,7 +79,7 @@ func ParseEndstone(root string, pin manifest.SourcePin, corrections string) (cla
 			return claims.Result{}, fmt.Errorf("Endstone packet %s is not an object", file)
 		}
 		idValue, ok := asInt(document["id"])
-		if !ok || idValue < 0 {
+		if !ok || idValue < 0 || idValue > 1<<32-1 {
 			return claims.Result{}, fmt.Errorf("Endstone packet %s has invalid id", file)
 		}
 		name := asString(document["name"])
