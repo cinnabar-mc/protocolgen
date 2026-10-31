@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go/format"
+	"maps"
 	"os"
 	"path/filepath"
 	"sort"
@@ -464,10 +465,14 @@ func renderFieldSchema(schema map[string]any, schemas schemaSet, address, qualif
 			return "", "", false, err
 		}
 		if _, enum := target["enum"]; enum {
-			goType, method, err := primitive(target)
+			effective := maps.Clone(target)
+			if options, exists := schema["x-serialization-options"]; exists {
+				effective["x-serialization-options"] = options
+			}
+			goType, method, err := primitive(effective)
 			return goType, chooseStatement(address, method), false, err
 		}
-		return schemaName(target), qualifier + "Single(io, " + address + ")", true, nil
+		return qualifier + schemaName(target), qualifier + "Single(io, " + address + ")", true, nil
 	}
 	switch schema["type"] {
 	case "string":
