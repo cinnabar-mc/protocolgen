@@ -714,6 +714,16 @@ func encodeLength(buffer *bytes.Buffer, node *manifest.Node, length uint64) erro
 	if node == nil {
 		return fmt.Errorf("missing length prefix")
 	}
+	if node.Kind != manifest.KindPrimitive || node.Primitive == nil || node.Primitive.Width == 0 {
+		return fmt.Errorf("invalid length prefix")
+	}
+	bits := node.Primitive.Width
+	if node.Primitive.Signed {
+		bits--
+	}
+	if bits < 64 && length >= uint64(1)<<bits {
+		return fmt.Errorf("length %d does not fit %s", length, node.Primitive.Code)
+	}
 	return encodeNode(buffer, *node, length)
 }
 
