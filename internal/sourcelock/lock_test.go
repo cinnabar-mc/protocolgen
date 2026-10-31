@@ -75,3 +75,23 @@ func TestDirectoryDigestRejectsSymlinksIncludingGitMetadata(t *testing.T) {
 		})
 	}
 }
+
+func TestDirectoryDigestRejectsNonDirectoryRoots(t *testing.T) {
+	root := t.TempDir()
+	file := filepath.Join(root, "file")
+	if err := os.WriteFile(file, []byte("content"), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	link := filepath.Join(root, "link")
+	if err := os.Symlink(root, link); err != nil {
+		t.Fatal(err)
+	}
+	for _, path := range []string{file, link} {
+		if _, err := DigestDirectory(path); err == nil {
+			t.Errorf("accepted root %s", path)
+		}
+	}
+	if _, err := DigestDirectory(t.TempDir()); err != nil {
+		t.Fatal(err)
+	}
+}
