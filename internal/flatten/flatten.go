@@ -27,8 +27,17 @@ func Count(m manifest.Manifest) Usage {
 	usage := Usage{}
 	var walk func(node manifest.Node)
 	walk = func(node manifest.Node) {
-		if node.Kind == manifest.KindStruct {
+		switch node.Kind {
+		case manifest.KindStruct:
 			if id := TypeID(node); id != "" {
+				usage[id]++
+			}
+		case manifest.KindRecursive:
+			id := node.TypeID
+			if id == "" {
+				id = node.Target
+			}
+			if id != "" {
 				usage[id]++
 			}
 		}
