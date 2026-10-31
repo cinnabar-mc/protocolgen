@@ -611,7 +611,7 @@ func packetDependencies(ps, all map[string]*schema) map[string]set {
 	out := map[string]set{}
 	for name, p := range ps {
 		seen := set{}
-		walkRefs(refName(p.Ref), all, seen)
+		walkRawRefs(p.Raw, func(ref string) { walkRefs(refName(ref), all, seen) })
 		out[name] = seen
 	}
 	return out
