@@ -10,6 +10,7 @@ import (
 	"math"
 	"math/big"
 	"reflect"
+	"strings"
 
 	"protocolgen/internal/manifest"
 )
@@ -42,8 +43,15 @@ func Encode(node manifest.Node, value any) ([]byte, error) {
 	return buffer.Bytes(), nil
 }
 
+// DecodeAll uses a one-million-item budget for synthetic collection materialization.
 func DecodeAll(node manifest.Node, data []byte) (any, error) {
-	reader := decoder{data: data}
+	return DecodeAllWithBudget(node, data, 1<<20)
+}
+
+// DecodeAllWithBudget decodes with an explicit total array-element and map-entry budget.
+// The budget limits this interpreter's allocations; it is not a wire-format constraint.
+func DecodeAllWithBudget(node manifest.Node, data []byte, maxItems uint64) (any, error) {
+	reader := decoder{data: data, itemsLeft: maxItems}
 	value, err := reader.decodeNode(node)
 	if err != nil {
 		return nil, err
@@ -122,6 +130,9 @@ func encodeNode(buffer *bytes.Buffer, node manifest.Node, value any) error {
 		}
 		return encodeNode(buffer, *node.Value, inner)
 	case manifest.KindStruct:
+		if err := uniqueFieldNames(node.Fields); err != nil {
+			return err
+		}
 		object, ok := value.(map[string]any)
 		if !ok {
 			return fmt.Errorf("struct node received %T; use map[string]any", value)
@@ -268,8 +279,75 @@ func encodeBitset(buffer *bytes.Buffer, bits uint64, value any) error {
 }
 
 type decoder struct {
-	data []byte
-	off  int
+	data      []byte
+	off       int
+	itemsLeft uint64
+}
+
+// uniqueFieldNames protects the interpreter's map representation from silent overwrites.
+func uniqueFieldNames(fields []manifest.Field) error {
+	seen := make(map[string]bool, len(fields))
+	for _, field := range fields {
+		if seen[field.Name] {
+			return fmt.Errorf("duplicate struct field name %q", field.Name)
+		}
+		seen[field.Name] = true
+	}
+	return nil
+}
+
+// collectionCount separates byte framing from the interpreter's materialization budget.
+func (d *decoder) collectionCount(count, minimum uint64) error {
+	if minimum > 0 && count > uint64(d.remaining())/minimum {
+		return fmt.Errorf("collection count %d exceeds remaining input", count)
+	}
+	if count > uint64(^uint(0)>>1) || count > d.itemsLeft {
+		return fmt.Errorf("collection count %d exceeds materialization budget", count)
+	}
+	d.itemsLeft -= count
+	return nil
+}
+
+// minimumSize returns a conservative byte lower bound without assuming that an element consumes input.
+func minimumSize(node manifest.Node) uint64 {
+	switch node.Kind {
+	case manifest.KindPrimitive, manifest.KindEnum:
+		if node.Primitive == nil {
+			return 0
+		}
+		code := node.Primitive.Code
+		if code == "bool" || code == "nbt_le" || strings.HasPrefix(code, "var_") || strings.HasPrefix(code, "zigzag_") {
+			return 1
+		}
+		return uint64(node.Primitive.Width) / 8
+	case manifest.KindString, manifest.KindBytes, manifest.KindArray, manifest.KindMap, manifest.KindOptional, manifest.KindBitset:
+		return 1
+	case manifest.KindStruct:
+		var minimum uint64
+		for _, field := range node.Fields {
+			shape := field.Encode
+			if field.Decode != nil {
+				shape = *field.Decode
+			}
+			minimum = max(minimum, minimumSize(shape))
+		}
+		return minimum
+	case manifest.KindSequence:
+		var minimum uint64
+		for _, element := range node.Elements {
+			minimum = max(minimum, minimumSize(element))
+		}
+		return minimum
+	case manifest.KindFixedArray:
+		if node.Element != nil && node.Length > 0 {
+			return minimumSize(*node.Element)
+		}
+	case manifest.KindReserved, manifest.KindIgnored:
+		if node.Element != nil {
+			return minimumSize(*node.Element)
+		}
+	}
+	return 0
 }
 
 func (d *decoder) decodeBitset(bits uint64) ([]uint64, error) {
@@ -337,8 +415,11 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 				return nil, err
 			}
 		}
-		if length > uint64(d.remaining())*16+1<<20 {
-			return nil, fmt.Errorf("array length %d is unreasonable for remaining buffer %d", length, d.remaining())
+		if node.Element == nil {
+			return nil, fmt.Errorf("array has no element")
+		}
+		if err := d.collectionCount(length, minimumSize(*node.Element)); err != nil {
+			return nil, err
 		}
 		values := make([]any, 0, length)
 		for index := uint64(0); index < length; index++ {
@@ -380,6 +461,9 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 		value, err := d.decodeNode(*node.Value)
 		return OptionalValue{Present: true, Value: value}, err
 	case manifest.KindStruct:
+		if err := uniqueFieldNames(node.Fields); err != nil {
+			return nil, err
+		}
 		object := make(map[string]any, len(node.Fields))
 		for _, field := range node.Fields {
 			shape := field.Encode
@@ -396,6 +480,12 @@ func (d *decoder) decodeNode(node manifest.Node) (any, error) {
 	case manifest.KindMap:
 		length, err := d.decodeLength(node.Prefix)
 		if err != nil {
+			return nil, err
+		}
+		if node.Key == nil || node.Value == nil {
+			return nil, fmt.Errorf("map has no key/value")
+		}
+		if err := d.collectionCount(length, max(minimumSize(*node.Key), minimumSize(*node.Value))); err != nil {
 			return nil, err
 		}
 		entries := make([]MapEntry, 0)

@@ -64,7 +64,12 @@ func Validate(m Manifest) error {
 			return fmt.Errorf("packet %s has unknown direction", packet.Name)
 		}
 		previous := -1
+		names := map[string]bool{}
 		for fieldIndex, field := range packet.Fields {
+			if names[field.Name] {
+				return fmt.Errorf("packet %s has duplicate field name %q", packet.Name, field.Name)
+			}
+			names[field.Name] = true
 			path := fmt.Sprintf("packet %s field[%d]", packet.Name, fieldIndex)
 			if field.Ordinal < 0 || field.Ordinal <= previous {
 				return fmt.Errorf("%s ordinals are not strictly increasing", path)
@@ -203,7 +208,12 @@ func validateNode(node Node, path string, sourceIDs map[string]bool) error {
 		}
 	case KindStruct:
 		previous := -1
+		names := map[string]bool{}
 		for i, field := range node.Fields {
+			if names[field.Name] {
+				return fmt.Errorf("%s has duplicate field name %q", path, field.Name)
+			}
+			names[field.Name] = true
 			if field.Ordinal < 0 || field.Ordinal <= previous {
 				return fmt.Errorf("%s.fields[%d] ordinals are not strictly increasing", path, i)
 			}

@@ -316,3 +316,22 @@ func TestSchemaPatternsRequireEveryAlternativeToBeAnchored(t *testing.T) {
 		})
 	}
 }
+
+func TestValidateRejectsDuplicateFieldNames(t *testing.T) {
+	for _, nested := range []bool{false, true} {
+		value := adjudicatedFixture()
+		first := value.Packets[0].Fields[0]
+		second := first
+		second.Ordinal++
+		second.Encode = Primitive("u16le")
+		fields := []Field{first, second}
+		if nested {
+			value.Packets[0].Fields[0].Encode = Struct(fields...)
+		} else {
+			value.Packets[0].Fields = fields
+		}
+		if err := Validate(value); err == nil {
+			t.Fatal("accepted duplicate field names")
+		}
+	}
+}
