@@ -1,6 +1,10 @@
 package emitgo
 
 import (
+	"os"
+	"os/exec"
+	"path/filepath"
+	"protocolgen/internal/emitter"
 	"protocolgen/internal/manifest"
 	"protocolgen/internal/naming"
 	"protocolgen/internal/semantics"
@@ -97,7 +101,7 @@ func TestSynthesizedUnionNamesCannotAliasManifestTypes(t *testing.T) {
 	other := manifest.Struct(manifest.Field{Name: "Other", Encode: manifest.Primitive("u16le"), Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}})
 	other.TypeID = "ChoiceSecond"
 	for _, nodes := range [][]manifest.Node{{choice, other}, {other, choice}} {
-		files, err := Generate(identityFixture(nodes...), "wiregen")
+		files, err := Generate(identityFixture(nodes...), "fixture/protocol")
 		if err != nil {
 			continue
 		}
@@ -108,6 +112,7 @@ func TestSynthesizedUnionNamesCannotAliasManifestTypes(t *testing.T) {
 		if !strings.Contains(source, "Other uint16") {
 			t.Fatal("discarded manifest fields after a synthesized-name collision")
 		}
+		typeCheckGeneratedGo(t, files)
 	}
 }
 
@@ -129,5 +134,26 @@ func TestStructLayoutReuseIgnoresNonWireMetadata(t *testing.T) {
 	first.Fields[0].Encode.Constraints = &manifest.Constraints{Minimum: pointerTo(0.0)}
 	if _, err := Generate(identityFixture(first, second), "wiregen"); err != nil {
 		t.Fatal(err)
+	}
+}
+
+// typeCheckGeneratedGo builds successful collision fixtures against the embedded runtime.
+func typeCheckGeneratedGo(t *testing.T, files map[string]string) {
+	t.Helper()
+	for _, name := range []string{"go.mod", "go.sum"} {
+		data, err := os.ReadFile(filepath.Join("..", "..", name))
+		if err != nil {
+			t.Fatal(err)
+		}
+		files[name] = strings.Replace(string(data), "module protocolgen", "module fixture", 1)
+	}
+	directory := t.TempDir()
+	if err := emitter.WriteFiles(directory, files); err != nil {
+		t.Fatal(err)
+	}
+	command := exec.Command("go", "build", "./...")
+	command.Dir = directory
+	if output, err := command.CombinedOutput(); err != nil {
+		t.Fatalf("generated Go build: %v\n%s", err, output)
 	}
 }
