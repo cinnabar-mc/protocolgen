@@ -284,7 +284,11 @@ func (g *generator) goType(node manifest.Node, hint string) (string, error) {
 			return "", err
 		}
 		g.usedNames[name] = true
-		if _, exists := g.definitions[name]; !exists {
+		if existing, exists := g.definitions[name]; exists {
+			if existing.Kind != manifest.KindBitset {
+				return "", fmt.Errorf("bitset %s collides with %s definition", name, existing.Kind)
+			}
+		} else {
 			g.definitions[name] = typeDefinition{Name: name, Kind: manifest.KindBitset, BitLength: node.Length}
 		}
 		return name, nil
@@ -622,6 +626,9 @@ func (g *generator) registerIdentity(node manifest.Node, hint string) (string, e
 	name, err := g.resolver.Resolve(node, hint, exportName)
 	if err != nil {
 		return "", err
+	}
+	if existing, exists := g.definitions[name]; exists && existing.Kind != node.Kind {
+		return "", fmt.Errorf("public name %s has conflicting %s and %s definitions", name, existing.Kind, node.Kind)
 	}
 	key := naming.IdentityKeyFor(node, hint)
 	g.identity[key] = name

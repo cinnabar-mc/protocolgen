@@ -2,6 +2,7 @@ package emitgo
 
 import (
 	"protocolgen/internal/manifest"
+	"protocolgen/internal/naming"
 	"strings"
 	"testing"
 )
@@ -55,6 +56,23 @@ func TestBitsetNamesCannotReuseStructs(t *testing.T) {
 	for _, nodes := range [][]manifest.Node{{node, manifest.Bitset(8)}, {manifest.Bitset(8), node}} {
 		if _, err := Generate(identityFixture(nodes...), "wiregen"); err == nil {
 			t.Error("silently reused incompatible bitset definition")
+		}
+	}
+}
+
+func TestBitsetReservationsCannotAliasOpaqueTypeIDs(t *testing.T) {
+	nodes := []manifest.Node{
+		manifest.Struct(manifest.Field{Name: "Value", Encode: manifest.Primitive("u8"), Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}}),
+		manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 0, Name: "Entry", Encode: manifest.Void()}),
+		manifest.Enum("u8", manifest.EnumValue{Value: 0, Name: "Entry"}),
+	}
+	for _, node := range nodes {
+		node.TypeID = "reserved:bitset:Bitset8"
+		for _, ordered := range [][]manifest.Node{{node, manifest.Bitset(8)}, {manifest.Bitset(8), node}} {
+			_, err := GenerateWithOptions(identityFixture(ordered...), Options{ProtocolImportPath: "wiregen", Naming: naming.Overlay{Names: map[string]string{node.TypeID: "Bitset8"}}})
+			if err == nil {
+				t.Errorf("reused an incompatible %s definition through an opaque type ID", node.Kind)
+			}
 		}
 	}
 }
