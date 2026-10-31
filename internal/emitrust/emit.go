@@ -120,14 +120,14 @@ func prepareWithOptions(m manifest.Manifest, options Options) (*generator, []pac
 			return nil, nil, fmt.Errorf("packet %s: %w", packet.Name, err)
 		}
 		g.used[name] = true
-		used := map[string]bool{}
+		used, usedHints := map[string]bool{}, map[string]bool{}
 		fields := make([]rustFieldInfo, 0, len(packet.Fields))
 		for _, field := range packet.Fields {
 			if err := ensureCodecSymmetric(field); err != nil {
 				return nil, nil, fmt.Errorf("packet %s field %s: %w", packet.Name, field.Name, err)
 			}
 			fieldName := uniqueField(fieldName(field.Name), used)
-			hint := name + typeName(field.Name)
+			hint := uniqueTypeVariant(name+typeName(field.Name), usedHints)
 			typ, err := g.rustType(field.Encode, hint)
 			if err != nil {
 				return nil, nil, fmt.Errorf("packet %s field %s: %w", packet.Name, field.Name, err)
@@ -866,14 +866,14 @@ func (g *generator) rustFields(node manifest.Node, parentName string) ([]rustFie
 }
 
 func (g *generator) rustFieldsForUnion(node manifest.Node, parentName string, control *manifest.Node) ([]rustField, error) {
-	used := map[string]bool{}
+	used, usedHints := map[string]bool{}, map[string]bool{}
 	fields := make([]rustField, 0, len(node.Fields))
 	for _, field := range node.Fields {
 		if control != nil && isUnionDiscriminantField(field, *control) {
 			continue
 		}
 		fieldName := uniqueField(fieldName(field.Name), used)
-		hint := parentName + typeName(field.Name)
+		hint := uniqueTypeVariant(parentName+typeName(field.Name), usedHints)
 		typ, err := g.rustType(field.Encode, hint)
 		if err != nil {
 			return nil, err
