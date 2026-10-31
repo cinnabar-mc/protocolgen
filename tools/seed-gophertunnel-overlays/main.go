@@ -87,7 +87,7 @@ func fail(format string, args ...any) {
 func buildIdentityIndex(m manifest.Manifest, overlay naming.Overlay) (identityIndex, error) {
 	resolver := naming.NewResolver(overlay)
 	for _, packet := range m.Packets {
-		if err := resolver.Reserve(packet.Name, naming.PacketTypeName(packet.Name), goName); err != nil {
+		if err := resolver.Reserve(packet.Name, naming.PacketTypeName(packet.Name), naming.GoExportName); err != nil {
 			return identityIndex{}, err
 		}
 	}
@@ -109,7 +109,7 @@ func buildIdentityIndex(m manifest.Manifest, overlay naming.Overlay) (identityIn
 			typeID = naming.InferredTypeName(node)
 		}
 		if typeID != "" {
-			name, err := resolver.Resolve(node, "", goName)
+			name, err := resolver.Resolve(node, "", naming.GoExportName)
 			if err != nil {
 				return err
 			}
@@ -168,7 +168,7 @@ func buildIdentityIndex(m manifest.Manifest, overlay naming.Overlay) (identityIn
 			if neutral == "" {
 				neutral = naming.PublicTypeName(typeID)
 			}
-			index.Names[typeID] = goName(neutral)
+			index.Names[typeID] = naming.GoExportName(neutral)
 		}
 	}
 	return index, nil
@@ -291,7 +291,7 @@ func portDocs(m manifest.Manifest, index identityIndex, protocolTypes, packetTyp
 		report.positionalSkipped += skipped
 	}
 	for _, packet := range m.Packets {
-		name := goName(naming.PacketTypeName(packet.Name))
+		name := naming.GoExportName(naming.PacketTypeName(packet.Name))
 		source, ok := packetTypes[name]
 		if !ok {
 			continue
@@ -340,7 +340,9 @@ func portFieldDocs(owner string, fields []manifest.Field, source sourceType, ove
 		return 0, 0, 0
 	}
 	used := map[string]bool{}
-	for _, sourceField := range source.Fields {
+	usedSources := map[int]bool{}
+	positionalAligned := true
+	for sourceIndex, sourceField := range source.Fields {
 		if sourceField.Doc == "" {
 			continue
 		}
@@ -354,19 +356,23 @@ func portFieldDocs(owner string, fields []manifest.Field, source sourceType, ove
 			field := fields[matches[0]]
 			overlay.Fields[docs.FieldKey(owner, field.Name)] = docs.LeadWith(sourceField.Doc, sourceField.Name, naming.GoExportName(field.Name))
 			used[field.Name] = true
+			usedSources[sourceIndex] = true
+			if matches[0] != sourceIndex {
+				positionalAligned = false
+			}
 			ported++
 			continue
 		}
 		unmatched++
 	}
-	if unmatched == 0 || len(fields) != len(source.Fields) || !fieldTypesAlign(fields, source.Fields) {
+	if unmatched == 0 || !positionalAligned || len(fields) != len(source.Fields) || !fieldTypesAlign(fields, source.Fields) {
 		if unmatched != 0 {
 			positionalSkipped++
 		}
 		return
 	}
 	for index, sourceField := range source.Fields {
-		if sourceField.Doc == "" {
+		if sourceField.Doc == "" || usedSources[index] {
 			continue
 		}
 		field := fields[index]
@@ -376,8 +382,9 @@ func portFieldDocs(owner string, fields []manifest.Field, source sourceType, ove
 		}
 		overlay.Fields[key] = docs.LeadWith(sourceField.Doc, sourceField.Name, naming.GoExportName(field.Name))
 		ported++
+		unmatched--
 	}
-	return ported, 0, 0
+	return
 }
 
 func fieldTypesAlign(fields []manifest.Field, source []sourceField) bool {
@@ -537,42 +544,4 @@ func snake(value string) string {
 		}
 	}
 	return strings.Trim(b.String(), "_")
-}
-
-func goName(value string) string {
-	var b strings.Builder
-	upper := true
-	for _, r := range value {
-		if unicode.IsLetter(r) || unicode.IsDigit(r) {
-			if upper {
-				r = unicode.ToUpper(r)
-				upper = false
-			}
-			b.WriteRune(r)
-		} else {
-			upper = true
-		}
-	}
-	name := b.String()
-	if name == "" {
-		return "Generated"
-	}
-	if unicode.IsDigit([]rune(name)[0]) {
-		name = "Generated" + name
-	}
-	initialisms := map[string]string{"id": "ID", "uuid": "UUID", "ui": "UI", "url": "URL", "uri": "URI", "json": "JSON", "nbt": "NBT", "rgb": "RGB", "rgba": "RGBA", "api": "API", "uid": "UID", "molang": "MoLang"}
-	for lower, replacement := range initialisms {
-		name = replaceInitialism(name, lower, replacement)
-	}
-	return name
-}
-
-func replaceInitialism(value, lower, replacement string) string {
-	if strings.EqualFold(value, lower) {
-		return replacement
-	}
-	if strings.HasSuffix(strings.ToLower(value), lower) {
-		return value[:len(value)-len(lower)] + replacement
-	}
-	return value
 }
