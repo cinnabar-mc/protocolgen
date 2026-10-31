@@ -85,7 +85,7 @@ func TestIdentifierFieldsIgnoresCallFormatting(t *testing.T) {
 	source := `package packet
 func (p *Fixture) Marshal(io IO) {
  io.ActorRuntimeID( // runtime identity
- &p.Entity,
+ &(p.Entity),
  )
  OptionalFunc(io,
  &p.Unique,

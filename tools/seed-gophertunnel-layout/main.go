@@ -445,7 +445,7 @@ func identifierFields(fn *ast.FuncDecl) map[string]string {
 		}
 		semantic := ""
 		operation := func(expr ast.Expr) {
-			if selector, ok := expr.(*ast.SelectorExpr); ok {
+			if selector, ok := ast.Unparen(expr).(*ast.SelectorExpr); ok {
 				switch selector.Sel.Name {
 				case semantics.ActorUniqueID, semantics.ActorRuntimeID:
 					semantic = selector.Sel.Name
@@ -460,15 +460,15 @@ func identifierFields(fn *ast.FuncDecl) map[string]string {
 			return true
 		}
 		for _, argument := range call.Args {
-			address, ok := argument.(*ast.UnaryExpr)
+			address, ok := ast.Unparen(argument).(*ast.UnaryExpr)
 			if !ok || address.Op != token.AND {
 				continue
 			}
-			selector, ok := address.X.(*ast.SelectorExpr)
+			selector, ok := ast.Unparen(address.X).(*ast.SelectorExpr)
 			if !ok {
 				continue
 			}
-			variable, ok := selector.X.(*ast.Ident)
+			variable, ok := ast.Unparen(selector.X).(*ast.Ident)
 			if !ok {
 				continue
 			}
