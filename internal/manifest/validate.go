@@ -263,6 +263,11 @@ func validateNode(node Node, path string, sourceIDs map[string]bool) error {
 					return err
 				}
 			}
+			for j, child := range oneCase.Decode {
+				if err := validateNode(child, fmt.Sprintf("%s.cases[%d].decode[%d]", path, i, j), sourceIDs); err != nil {
+					return err
+				}
+			}
 		}
 		if node.Default != nil {
 			if err := validateNode(*node.Default, path+".default", sourceIDs); err != nil {
@@ -405,14 +410,14 @@ func validatePrefix(node Node, path string) error {
 	if !isIntegerPrimitive(node.Primitive.Code) {
 		return fmt.Errorf("%s has non-integer length codec %q", path, node.Primitive.Code)
 	}
-	return nil
+	return validateNode(node, path, nil)
 }
 
 func validateControl(node Node, path string) error {
 	if node.Kind != KindPrimitive || node.Primitive == nil || !isIntegerPrimitive(node.Primitive.Code) {
 		return fmt.Errorf("%s must be an explicit numeric discriminator codec", path)
 	}
-	return nil
+	return validateNode(node, path, nil)
 }
 
 func isIntegerPrimitive(code string) bool {
