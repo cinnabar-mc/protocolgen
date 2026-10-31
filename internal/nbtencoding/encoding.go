@@ -95,6 +95,7 @@ func (t Table) Validate(target manifest.Target, packets []manifest.Packet) error
 		packetByID[packets[index].ID] = &packets[index]
 	}
 	seen := make(map[string]bool, len(t.Fields))
+	assignments := make(map[*manifest.Node]manifest.NBTEncoding, len(t.Fields))
 	for _, entry := range t.Fields {
 		packet, ok := packetByID[entry.PacketID]
 		if !ok {
@@ -113,17 +114,21 @@ func (t Table) Validate(target manifest.Target, packets []manifest.Packet) error
 		if fieldIndex < 0 {
 			return fmt.Errorf("NBT encoding table references unknown field %d.%d", entry.PacketID, entry.FieldOrdinal)
 		}
-		field := packet.Fields[fieldIndex]
+		field := &packet.Fields[fieldIndex]
 		if field.Name != entry.FieldName {
 			return fmt.Errorf("NBT encoding table field %d.%d names %q, manifest names %q", entry.PacketID, entry.FieldOrdinal, entry.FieldName, field.Name)
 		}
-		node, err := nbtNodeAt(&field, entry.Path)
+		node, err := nbtNodeAt(field, entry.Path)
 		if err != nil {
 			return fmt.Errorf("NBT encoding table field %d.%d path %q: %w", entry.PacketID, entry.FieldOrdinal, entry.Path, err)
 		}
 		if !manifest.IsNBT(*node) {
 			return fmt.Errorf("NBT encoding table field %d.%d path %q does not name an NBT node", entry.PacketID, entry.FieldOrdinal, entry.Path)
 		}
+		if previous, ok := assignments[node]; ok && previous != entry.Encoding {
+			return fmt.Errorf("NBT encoding table assigns conflicting encodings to a shared node at %d.%d path %q", entry.PacketID, entry.FieldOrdinal, entry.Path)
+		}
+		assignments[node] = entry.Encoding
 		key := fmt.Sprintf("%d/%d/%s", entry.PacketID, entry.FieldOrdinal, entry.Path)
 		if seen[key] {
 			return fmt.Errorf("duplicate NBT encoding entry %s", key)

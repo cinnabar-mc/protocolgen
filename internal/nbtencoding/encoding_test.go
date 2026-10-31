@@ -114,3 +114,25 @@ func TestApplyCoversDecodeOverridesAtEveryLevel(t *testing.T) {
 		})
 	}
 }
+
+func TestApplyRejectsConflictingAssignmentsToSharedNodes(t *testing.T) {
+	shared := manifest.Optional(manifest.Primitive("nbt_le"))
+	m := manifest.Manifest{SchemaVersion: 2, Target: manifest.Target{MinecraftVersion: "fixture", ProtocolVersion: 1}, Sources: []manifest.SourcePin{{ID: "fixture", Kind: "synthetic", Revision: "1", Digest: "fixture"}}, Packets: []manifest.Packet{{ID: 1, Name: "Packet", Direction: manifest.DirectionClientbound, Fields: []manifest.Field{
+		{Ordinal: 0, Name: "First", Encode: shared, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}},
+		{Ordinal: 1, Name: "Second", Encode: shared, Symmetry: manifest.Symmetric, Provenance: manifest.Provenance{Pins: []string{"fixture"}}},
+	}}}}
+	table := Table{SchemaVersion: 1, Target: m.Target, Source: validSource(), Fields: []Entry{
+		{PacketID: 1, PacketName: "Packet", FieldOrdinal: 0, FieldName: "First", Path: "encode.value", Encoding: manifest.NBTNetwork, Evidence: validEvidence()},
+		{PacketID: 1, PacketName: "Packet", FieldOrdinal: 1, FieldName: "Second", Path: "encode.value", Encoding: manifest.NBTPersistent, Evidence: validEvidence()},
+	}}
+	if err := table.Apply(&m); err == nil {
+		t.Fatal("accepted conflicting assignments to one shared NBT node")
+	}
+	if shared.Value.Encoding != "" {
+		t.Fatal("failed application changed the shared node")
+	}
+	table.Fields[1].Encoding = manifest.NBTNetwork
+	if err := table.Apply(&m); err != nil {
+		t.Fatal(err)
+	}
+}
