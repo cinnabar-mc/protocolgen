@@ -75,9 +75,9 @@ func ValidateRequiredEntries(m manifest.Manifest, overlay Overlay) error {
 	}
 	for _, packet := range m.Packets {
 		for _, field := range packet.Fields {
-			collectVariantArtifacts(field.Encode, "", overlay, seen)
+			collectVariantArtifacts(field.Encode, field.TypeID, overlay, seen)
 			if field.Decode != nil {
-				collectVariantArtifacts(*field.Decode, "", overlay, seen)
+				collectVariantArtifacts(*field.Decode, field.TypeID, overlay, seen)
 			}
 		}
 	}
@@ -91,6 +91,7 @@ func ValidateRequiredEntries(m manifest.Manifest, overlay Overlay) error {
 	return fmt.Errorf("naming overlay required for artifact TypeIDs: %s", strings.Join(offenders, ", "))
 }
 
+// collectVariantArtifacts tracks the closest node or field identity that owns each variant.
 func collectVariantArtifacts(node manifest.Node, owner string, overlay Overlay, offenders map[string]bool) {
 	if node.TypeID != "" {
 		owner = node.TypeID
@@ -105,9 +106,13 @@ func collectVariantArtifacts(node manifest.Node, owner string, overlay Overlay, 
 		}
 	}
 	for _, field := range node.Fields {
-		collectVariantArtifacts(field.Encode, owner, overlay, offenders)
+		fieldOwner := owner
+		if field.TypeID != "" {
+			fieldOwner = field.TypeID
+		}
+		collectVariantArtifacts(field.Encode, fieldOwner, overlay, offenders)
 		if field.Decode != nil {
-			collectVariantArtifacts(*field.Decode, owner, overlay, offenders)
+			collectVariantArtifacts(*field.Decode, fieldOwner, overlay, offenders)
 		}
 	}
 	for _, child := range []*manifest.Node{node.Prefix, node.Element, node.Value, node.Key, node.Control, node.Default} {
@@ -119,7 +124,10 @@ func collectVariantArtifacts(node manifest.Node, owner string, overlay Overlay, 
 		collectVariantArtifacts(child, owner, overlay, offenders)
 	}
 	for _, oneCase := range node.Cases {
-		for _, child := range append(oneCase.Encode, oneCase.Decode...) {
+		for _, child := range oneCase.Encode {
+			collectVariantArtifacts(child, owner, overlay, offenders)
+		}
+		for _, child := range oneCase.Decode {
 			collectVariantArtifacts(child, owner, overlay, offenders)
 		}
 	}

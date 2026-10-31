@@ -106,3 +106,53 @@ func TestUnnamedUnionIdentityKeepsNestedNamedReferences(t *testing.T) {
 		t.Fatal("a shared named type changed its enclosing identity")
 	}
 }
+
+func TestSemanticIdentityIgnoresCallSiteHints(t *testing.T) {
+	node := manifest.Struct()
+	node.Semantic = "SharedValue"
+	resolver := NewResolver(Overlay{})
+	for _, hint := range []string{"First", "Second", "Third", "Fourth"} {
+		name, err := resolver.Resolve(node, hint, PublicTypeName)
+		if err != nil || name != "SharedValue" {
+			t.Errorf("Resolve(%s) = %q, %v", hint, name, err)
+		}
+	}
+}
+
+func TestUnqualifiedUnionIdentityIncludesWireShapes(t *testing.T) {
+	resolver := NewResolver(Overlay{})
+	first := manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 0, Name: "Value", Encode: manifest.Primitive("u8")})
+	second := manifest.Union(manifest.Primitive("u8"), manifest.Variant{Value: 0, Name: "Value", Encode: manifest.Primitive("u16le")})
+	name, err := resolver.Resolve(first, "Choice", PublicTypeName)
+	if err != nil {
+		t.Fatal(err)
+	}
+	other, err := resolver.Resolve(second, "Choice", PublicTypeName)
+	if err == nil && name == other {
+		t.Fatal("incompatible unnamed union reused the first public type")
+	}
+}
+
+func TestFieldOnlyArtifactOwnersRequireReview(t *testing.T) {
+	for _, nested := range []bool{false, true} {
+		for _, decode := range []bool{false, true} {
+			artifact := manifest.Enum("u8", manifest.EnumValue{Value: 0, Name: "Empty0"})
+			field := manifest.Field{TypeID: "Mode", Encode: artifact}
+			if decode {
+				field.Encode = manifest.Void()
+				field.Decode = &artifact
+			}
+			if nested {
+				field = manifest.Field{Encode: manifest.Struct(field)}
+				field.Encode.TypeID = "Container"
+			}
+			m := manifest.Manifest{Packets: []manifest.Packet{{Fields: []manifest.Field{field}}}}
+			if err := ValidateRequiredEntries(m, Overlay{}); err == nil {
+				t.Error("accepted unreviewed field-only identity")
+			}
+			if err := ValidateRequiredEntries(m, Overlay{Names: map[string]string{"Mode": "Mode"}}); err != nil {
+				t.Fatal(err)
+			}
+		}
+	}
+}

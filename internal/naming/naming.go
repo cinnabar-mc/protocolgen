@@ -127,17 +127,17 @@ func IdentityKeyFor(node manifest.Node, hint string) string {
 		return key
 	}
 	inferred := InferredTypeName(node)
-	identityHint := inferred
+	identityHint := node.Semantic
+	if identityHint == "" {
+		identityHint = inferred
+	}
 	if identityHint == "" {
 		identityHint = hint
 	}
 	if identityHint == "" {
-		identityHint = node.Semantic
-	}
-	if identityHint == "" {
 		identityHint = string(node.Kind)
 	}
-	if inferred != "" {
+	if node.Kind == manifest.KindUnion {
 		identityHint += "/" + UnionIdentity(node)
 	}
 	return fmt.Sprintf("%s/%s/%s", node.Kind, node.Semantic, identityHint)
