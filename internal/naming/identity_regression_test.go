@@ -156,3 +156,16 @@ func TestFieldOnlyArtifactOwnersRequireReview(t *testing.T) {
 		}
 	}
 }
+
+func TestReservedNamesCannotAliasManifestIdentityKeys(t *testing.T) {
+	const id = "reserved:runtime:Optional"
+	resolver := NewResolver(Overlay{Names: map[string]string{id: "Optional"}})
+	if err := resolver.Reserve("runtime:Optional", "Optional", PublicTypeName); err != nil {
+		t.Fatal(err)
+	}
+	node := manifest.Struct()
+	node.TypeID = id
+	if _, err := resolver.Resolve(node, "Value", PublicTypeName); err == nil {
+		t.Fatal("manifest identity impersonated a reserved symbol")
+	}
+}

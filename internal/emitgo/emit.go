@@ -6,7 +6,6 @@ package emitgo
 import (
 	"embed"
 	"fmt"
-	"go/ast"
 	"go/format"
 	"go/parser"
 	"go/token"
@@ -202,6 +201,13 @@ func GenerateWithOptions(m manifest.Manifest, options Options) (map[string]strin
 		name := exportName(neutral)
 		if err := packetResolver.Reserve(packet.Name, neutral, exportName); err != nil {
 			return nil, fmt.Errorf("packet %s: %w", packet.Name, err)
+		}
+		// Preserve established type disambiguation while allowing runtime names in the packet package.
+		if !g.usedNames[name] {
+			if err := g.resolver.Reserve(packet.Name, neutral, exportName); err != nil {
+				return nil, err
+			}
+			g.usedNames[name] = true
 		}
 		packetNames[packet.ID] = name
 		usedHints := map[string]bool{}
@@ -658,10 +664,7 @@ func (g *generator) reserveRuntimeNames() error {
 		if err != nil {
 			return err
 		}
-		for name, object := range file.Scope.Objects {
-			if object.Kind == ast.Pkg {
-				continue
-			}
+		for name := range file.Scope.Objects {
 			if err := g.resolver.Reserve("runtime:"+name, name, func(name string) string { return name }); err != nil {
 				return err
 			}

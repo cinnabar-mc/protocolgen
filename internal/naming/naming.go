@@ -37,7 +37,7 @@ func NewResolver(overlay Overlay) *Resolver {
 	return &Resolver{
 		overlay:   overlay,
 		identity:  map[string]string{},
-		usedNames: map[string]string{},
+		usedNames: map[string]nameOwner{},
 	}
 }
 
@@ -45,7 +45,13 @@ func NewResolver(overlay Overlay) *Resolver {
 type Resolver struct {
 	overlay   Overlay
 	identity  map[string]string
-	usedNames map[string]string
+	usedNames map[string]nameOwner
+}
+
+// nameOwner separates manifest identities from reserved symbols even when their text matches.
+type nameOwner struct {
+	identity string
+	reserved bool
 }
 
 // Resolve returns a reviewed or heuristically derived name. A collision is an
@@ -82,7 +88,7 @@ func (r *Resolver) Resolve(node manifest.Node, hint string, casing func(string) 
 	if name == "" {
 		return "", fmt.Errorf("type ID %q resolved to an empty public name", node.TypeID)
 	}
-	if owner, ok := r.usedNames[name]; ok && owner != key {
+	if owner, ok := r.usedNames[name]; ok && owner != (nameOwner{identity: key}) {
 		if node.TypeID == "" && inferred == "" {
 			for _, suffix := range []string{"PacketData", "Data"} {
 				candidate := casing(neutral + suffix)
@@ -92,23 +98,23 @@ func (r *Resolver) Resolve(node manifest.Node, hint string, casing func(string) 
 				}
 			}
 			if name == casing(neutral) {
-				return "", fmt.Errorf("public name %q collides between %s and %s; add naming overlay entries", name, owner, key)
+				return "", fmt.Errorf("public name %q collides between %s and %s; add naming overlay entries", name, owner.identity, key)
 			}
 		} else {
-			return "", fmt.Errorf("public name %q collides between %s and %s; add naming overlay entries", name, owner, key)
+			return "", fmt.Errorf("public name %q collides between %s and %s; add naming overlay entries", name, owner.identity, key)
 		}
 	}
 	r.identity[key] = name
-	r.usedNames[name] = key
+	r.usedNames[name] = nameOwner{identity: key}
 	return name, nil
 }
 
 // Reserve claims a public name for a packet or another non-node identity.
 func (r *Resolver) Reserve(source, neutral string, casing func(string) string) error {
 	name := casing(neutral)
-	owner := "reserved:" + source
+	owner := nameOwner{identity: source, reserved: true}
 	if previous, ok := r.usedNames[name]; ok && previous != owner {
-		return fmt.Errorf("public name %q collides between %s and %s; add naming overlay entries", name, previous, owner)
+		return fmt.Errorf("public name %q collides between %s and %s; add naming overlay entries", name, previous.identity, owner.identity)
 	}
 	r.usedNames[name] = owner
 	return nil
@@ -229,7 +235,7 @@ func UnionIdentity(node manifest.Node) string {
 // LayoutIdentity compares a definition's wire shape while retaining nested named references.
 func LayoutIdentity(node manifest.Node) string {
 	node.TypeID = ""
-	encoded, _ := json.Marshal(payloadIdentity(node))
+	encoded, _ := json.Marshal(inlineIdentity(node, true))
 	return fmt.Sprintf("%x", sha256.Sum256(encoded))
 }
 
@@ -238,16 +244,21 @@ func payloadIdentity(node manifest.Node) any {
 	if node.TypeID != "" {
 		return node.TypeID
 	}
+	return inlineIdentity(node, false)
+}
+
+// inlineIdentity decodes exact wire numbers before removing non-layout metadata.
+func inlineIdentity(node manifest.Node, wireOnly bool) any {
 	data, _ := json.Marshal(node)
 	decoder := json.NewDecoder(bytes.NewReader(data))
 	decoder.UseNumber()
 	var identity any
 	_ = decoder.Decode(&identity)
-	return stripIdentityMetadata(identity)
+	return stripIdentityMetadata(identity, wireOnly)
 }
 
 // stripIdentityMetadata retains named references and exact inline wire numbers.
-func stripIdentityMetadata(value any) any {
+func stripIdentityMetadata(value any, wireOnly bool) any {
 	switch value := value.(type) {
 	case map[string]any:
 		if _, node := value["kind"]; node {
@@ -256,13 +267,20 @@ func stripIdentityMetadata(value any) any {
 			}
 		}
 		delete(value, "provenance")
+		if wireOnly {
+			delete(value, "semantic")
+			delete(value, "constraints")
+			if _, node := value["kind"]; !node {
+				delete(value, "type_id")
+			}
+		}
 		for key, child := range value {
-			value[key] = stripIdentityMetadata(child)
+			value[key] = stripIdentityMetadata(child, wireOnly)
 		}
 		return value
 	case []any:
 		for index, child := range value {
-			value[index] = stripIdentityMetadata(child)
+			value[index] = stripIdentityMetadata(child, wireOnly)
 		}
 		return value
 	default:
